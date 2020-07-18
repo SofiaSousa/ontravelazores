@@ -1,0 +1,3153 @@
+/* 
+-   Base
+-   Font
+-   Icon
+-   Transition
+-   Main
+-   Label
+-   Qtip
+-   Button
+-   Button checkbox   
+-   Button navigation
+-   File upload
+-   Selectmenu
+-   Timepicker
+-   Datepicker
+-   Preloader 
+-   Layout
+    -   Layout / Layout 50x50
+    -   Layout / Layout 33x33x33
+    -   Layout / Layout 25x75
+    -   Layout / Layout 75x25
+-   Main navigation
+    -   Main navigation / Default
+-   Form panel
+-   Disable section  
+-   Form checkbox
+-   Form field 
+-   Vehicle filter 
+-   Vehicle list 
+-   Vehicle
+    -   Vehicle / Image 
+    -   Vehicle / Content
+        -   Vehicle / Content / Header  
+        -   Vehicle / Content / Meta             
+    -   Vehicle / Price
+    -   Vehicle / Description 
+    -   Vehicle / Attribute
+-   Google Map
+-   Summary
+-   Summary price
+-   Payment
+-   Agreement
+-   Coupon
+-   Client form
+-   Booking extra
+-   Booking complete
+-   Location detail frame 
+    -   Location detail frame / Header
+    -   Location detail frame / Meta 1
+    -   Location detail frame / Meta 2
+    -   Location detail frame / Button
+-   Responsive
+    -   Responsive / Layout 
+    -   Responsive / Summary field
+    -   Responsive / Main navigation
+    -   Responsive / Vehicle
+    -   Responsive / Button navigation 
+    -   Responsive / Booking extra
+    -   Responsive / Form field
+-   WooCommerce
+-   Bug fixes 
+-   Widget
+*/
+
+/******************************************************************************/
+/* Base                                                                       */
+/******************************************************************************/
+
+.crbs-main *,
+.ui-datepicker,
+.ui-datepicker *,
+.crbs-main .ui-timepicker-wrapper,
+.crbs-main .ui-timepicker-wrapper *,
+.crbs-main .ui-selectmenu-button span.ui-selectmenu-text
+{
+    outline:0;
+    line-height:150%;
+    box-sizing:border-box;
+}
+
+.crbs-main .crbs-clear-fix:after
+{
+	height:0;
+	clear:both;
+	content:" ";
+	font-size:0;
+	display:block;
+	visibility: hidden;
+}
+
+* html .crbs-clear-fix
+{
+	zoom:1; 
+} 
+
+.crbs-main .crbs-list-reset
+{
+    margin:0px;
+    padding:0px;
+    list-style:none;
+}
+
+.crbs-main .crbs-align-right
+{
+    text-align:right;
+}
+
+.crbs-main .crbs-hidden,
+.crbs-main.crbs-hidden
+{
+    display:none !important;
+}
+
+.crbs-main .ui-timepicker-wrapper
+{
+    -webkit-box-shadow:none;
+    -moz-box-shadow:none;
+    box-shadow:none;  
+}
+
+.ui-datepicker,
+.crbs-main .ui-selectmenu-menu,
+.crbs-main .ui-timepicker-wrapper
+{
+    -webkit-box-shadow:0px 18px 19px -20px rgba(0,0,0,0.1);
+    -moz-box-shadow:0px 18px 19px -20px rgba(0,0,0,0.1);
+    box-shadow:0px 18px 19px -20px rgba(0,0,0,0.1);
+}
+
+.crbs-main .crbs-circle
+{
+    text-align:center;
+    border-width:1px;
+    border-style:solid;
+    border-radius:9999em;
+    display:inline-block;                
+}
+
+.crbs-main img
+{
+    max-width:100%;
+    height:auto;
+    display:block;
+}
+
+.crbs-main a,
+.crbs-main a:hover
+{
+    box-shadow:none;
+    text-decoration:none;
+}
+
+.crbs-main label
+{
+    margin-bottom:0px;
+}
+
+.crbs-main input[type="submit"]
+{
+    cursor:pointer;
+}
+
+.crbs-booking-form-error
+{
+    color:red;
+}
+
+/******************************************************************************/
+/* Font                                                                       */
+/******************************************************************************/
+
+.crbs-main,
+.crbs-main input,
+.crbs-main select,
+.crbs-main textarea,
+.crbs-main .ui-menu .ui-menu-item,
+.crbs-main .ui-timepicker-wrapper,
+.ui-datepicker th,
+.ui-datepicker td,
+.ui-datepicker td a,
+.ui-datepicker td span
+{
+    font-family:'Lato';
+}
+
+.crbs-main,
+.crbs-main .ui-timepicker-wrapper
+{
+    font-size:16px;
+    font-weight:300;
+}
+
+/******************************************************************************/
+/* Header                                                                       */
+/******************************************************************************/
+
+.crbs-main h4.crbs-header
+{
+    font-size:26px;
+    font-weight:400;
+    line-height:37px;
+    margin-top:50px;
+    margin-bottom:0px;
+}
+
+/******************************************************************************/
+/* Icon                                                                       */
+/******************************************************************************/
+    
+@font-face 
+{
+    font-family:'crbs-meta-icon';
+    src:url('../font/meta-icon.eot?7cbga7');
+    src:url('../font/meta-icon.eot?7cbga7#iefix') format('embedded-opentype'),url('../font/meta-icon.ttf?7cbga7') format('truetype'),url('../font/meta-icon.woff?7cbga7') format('woff'),url('../font/meta-icon.svg?7cbga7#meta-icon') format('svg');
+    font-weight:normal;
+    font-style:normal;
+}
+
+[class^="crbs-meta-icon-"],
+[class*=" crbs-meta-icon-"],
+.ui-datepicker .ui-datepicker-prev,
+.ui-datepicker .ui-datepicker-next
+{
+    font-family:'crbs-meta-icon' !important;
+    speak:none;
+    font-style:normal;
+    font-weight:normal;
+    font-variant:normal;
+    text-transform:none;
+    line-height:1;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+}
+
+.crbs-main .crbs-meta-icon-car-key:before 
+{
+    content:"\63";
+}
+.crbs-main .crbs-meta-icon-car-price:before 
+{
+    content:"\62";
+}
+.crbs-main .crbs-meta-icon-car:before 
+{
+    content:"\61";
+}
+.crbs-main .crbs-meta-icon-close:before 
+{
+    content:"\67";
+}
+.crbs-main .crbs-meta-icon-seat:before 
+{
+    content:"\68";
+}
+.crbs-main .crbs-meta-icon-bag:before 
+{
+    content:"\69";
+}
+.crbs-main .crbs-meta-icon-transmission:before 
+{
+    content:"\6a";
+}
+.crbs-main .crbs-meta-icon-fuel:before 
+{
+    content:"\6b";
+}
+.crbs-main .crbs-meta-icon-tick:before 
+{
+    content:"\64";
+}
+.crbs-main .crbs-meta-icon-arrow-horizontal:before,
+.ui-datepicker .ui-datepicker-prev:before,
+.ui-datepicker .ui-datepicker-next:before
+{
+    content:"\65";
+}
+.crbs-main .crbs-meta-icon-arrow-vertical:before 
+{
+    content:"\66";
+} 
+.crbs-main .crbs-meta-icon-bank:before
+{
+    content:"\6d";
+}
+.crbs-main .crbs-meta-icon-wallet:before
+{
+    content:"\6c";
+}
+
+/******************************************************************************/
+/* Transition                                                                 */
+/******************************************************************************/
+
+.crbs-main .crbs-button.crbs-button-style-1,
+.crbs-main .crbs-button.crbs-button-style-2,
+.crbs-main .crbs-button.crbs-button-style-3,
+.crbs-main .crbs-button.crbs-button-style-1:hover,
+.crbs-main .crbs-button.crbs-button-style-2:hover,
+.crbs-main .crbs-button.crbs-button-style-3:hover,
+.crbs-main .crbs-location-add,
+.crbs-main .crbs-location-remove,
+.crbs-main .crbs-location-add:hover,
+.crbs-main .crbs-location-remove:hover,
+.crbs-main .crbs-vehicle .crbs-vehicle-content>.crbs-vehicle-content-meta a>span+span,
+.crbs-main .crbs-vehicle .crbs-vehicle-content>.crbs-vehicle-content-meta a:hover>span+span,
+.ui-datepicker .ui-datepicker-prev,
+.ui-datepicker .ui-datepicker-next,    
+.ui-datepicker .ui-datepicker-prev.ui-state-hover,
+.ui-datepicker .ui-datepicker-next.ui-state-hover   
+{
+    transition:all 150ms ease;
+}
+
+.crbs-main .crbs-vehicle .crbs-vehicle-content>.crbs-vehicle-content-meta a>span,
+.crbs-main .crbs-vehicle .crbs-vehicle-content>.crbs-vehicle-content-meta a:hover>span
+{
+    transition:background-color 150ms ease;
+}
+
+/******************************************************************************/
+/* Main                                                                       */
+/******************************************************************************/
+
+.crbs-main
+{
+    position:relative;
+}
+
+    .crbs-main .crbs-main-content
+    {
+        margin-top:50px;
+    }
+    
+    .crbs-main .crbs-main-content>div
+    {
+        display:none;
+    }
+    
+    .crbs-main .crbs-main-content>div:first-child
+    {
+        display:block;
+    }
+    
+    .crbs-main .crbs-main-content>div>div:last-child
+    {
+        margin-top:50px;
+    }
+
+/******************************************************************************/
+/* Label                                                                      */
+/******************************************************************************/
+
+.crbs-main label,
+.crbs-main .crbs-form-field>label a,
+.crbs-main .crbs-ride-info>div>span:first-child+span
+{
+    font-size:12px;
+    font-weight:400;
+    text-transform:uppercase;
+}
+
+.crbs-main .crbs-form-field>label a,
+.crbs-main .crbs-form-field>label a:hover
+{
+    text-decoration:underline;
+}
+
+.crbs-main .crbs-form-field>label a:hover
+{
+    opacity:0.6;
+}
+
+/******************************************************************************/
+/* Qtip         															  */
+/******************************************************************************/
+
+.crbs-main .crbs-qtip
+{
+    margin:0px 0px 0px 0px !important;
+}
+
+.crbs-main .crbs-qtip,
+.crbs-main .crbs-notice
+{
+    margin:0px;
+    padding:0px;
+    border:none;
+    box-shadow:none;
+    min-width:200px;
+    border-width:1px;
+    border-style:solid;	
+}
+
+.crbs-main .crbs-notice,
+.crbs-main .crbs-qtip .qtip-content
+{
+    font-size:13px;
+    font-weight:300;
+    padding:8px 15px 10px 15px;
+}
+   
+.crbs-main .crbs-notice
+{
+    width:100%;
+    margin:0px 0px 40px 0px;
+}
+
+/******************************************************************************/
+/* Button                                                                     */
+/******************************************************************************/
+
+.crbs-main .crbs-button,
+.crbs-main .crbs-button:hover
+{
+	cursor:pointer;
+    text-decoration:none;
+}
+
+.crbs-main .crbs-button.crbs-button-style-1,
+.crbs-main .crbs-button.crbs-button-style-2,
+.crbs-main .crbs-button.crbs-button-style-3
+{
+    font-size:14px;
+    font-weight:400;
+    border-width:2px;
+    border-style:solid;
+    border-radius:2px;
+    text-transform:uppercase;
+    padding:14px 32px 15px 32px;
+}
+
+.crbs-main .crbs-button.crbs-button-style-3
+{
+	font-size:12px;
+	padding:9px 16px 9px 16px;
+}
+
+    .crbs-main .crbs-button.crbs-button-step-next>span,
+    .crbs-main .crbs-button.crbs-button-step-prev>span
+    {
+        top:2px;
+        font-size:18px;
+        position:relative;
+        padding-left:12px;
+        display:inline-block;
+    }
+    
+    .crbs-main .crbs-button.crbs-button-step-prev>span
+    {
+        transform:scaleX(-1);
+        -moz-transform:scaleX(-1);
+        -o-transform:scaleX(-1);
+        -webkit-transform:scaleX(-1);
+        transform:scaleX(-1);
+        filter:FlipH;
+        -ms-filter:"FlipH";
+    }
+  
+.crbs-main .crbs-button.crbs-button-step-prev
+{
+    padding:14px 32px 16px 24px;
+}
+
+.crbs-main .crbs-button.crbs-button-step-next
+{
+    padding:14px 24px 16px 32px;
+}
+    
+.crbs-main .crbs-button span.crbs-meta-icon-tick
+{
+    display:none;
+}
+    
+.crbs-main .crbs-button.crbs-state-selected span.crbs-meta-icon-tick
+{
+    display:inline-block;
+}
+
+/******************************************************************************/
+/* Button checkbox                                                            */
+/******************************************************************************/
+
+.crbs-button-checkbox
+{
+    
+}
+
+    .crbs-button-checkbox>a
+    {
+        z-index:1;
+        float:left;
+        display:block;
+        font-size:12px;
+        font-weight:400;
+        position:relative;
+        border-width:1px;
+        border-style:solid;
+        text-transform:uppercase;
+        padding:17px 20px 17px 20px;
+    }
+    
+    .crbs-button-checkbox>a+a
+    {
+        left:-1px;
+    }
+    
+    .crbs-button-checkbox>a:first-child
+    {
+        border-top-left-radius:2px;
+        border-bottom-left-radius:2px;
+    }
+    
+    .crbs-button-checkbox>a:last-child
+    {
+        border-top-right-radius:2px;
+        border-bottom-right-radius:2px;       
+    }
+    
+    .crbs-button-checkbox>a.crbs-state-selected
+    {
+        z-index:2;
+    }
+
+/******************************************************************************/
+/* Button navigation                                                          */
+/******************************************************************************/
+
+.crbs-main .crbs-main-content-navigation-button
+{
+ 
+}
+
+    .crbs-main .crbs-main-content-navigation-button .crbs-button.crbs-button-step-prev
+    {
+        float:left;
+    }
+
+    .crbs-main .crbs-main-content-navigation-button .crbs-button.crbs-button-step-next
+    {
+        float:right;
+    }
+	
+/******************************************************************************/
+/* File upload		                                                          */
+/******************************************************************************/
+
+.crbs-file-upload
+{
+	overflow:hidden;
+	position:relative;
+	display:inline-block;
+}
+
+.crbs-form-field .crbs-file-upload,
+.crbs-form-field .crbs-file-remove
+{
+	margin:10px 0px 20px 20px;
+}
+
+	.crbs-file-upload>span
+	{	
+		
+	}
+
+	.crbs-file-upload input[type="file"]
+	{
+		top:0px;
+		left:0px;
+		opacity:0;
+		cursor:pointer;
+		position:absolute;
+		font-size:200px !important;
+	}
+
+.crbs-form-field .crbs-file-remove
+{
+	display:table;
+	vertical-align:middle;
+}
+
+	.crbs-form-field .crbs-file-remove>span
+	{
+		display:table-cell;
+	}
+	
+	.crbs-form-field .crbs-file-remove>span:first-child
+	{
+		padding-right:15px;
+	}
+	
+		.crbs-form-field .crbs-file-remove>span:first-child>span
+		{
+			font-weight:bold;
+			padding-left:5px;
+		}
+
+/******************************************************************************/
+/* Selectmenu                                                                 */
+/******************************************************************************/
+
+.crbs-main .ui-selectmenu-button
+{
+    display:block;
+    width:100% !important;
+    padding:0px 20px 20px 20px;
+}
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none)
+{
+    .crbs-main .ui-selectmenu-button
+    {
+        padding-bottom:15px;
+    }
+}
+
+    .crbs-main .ui-selectmenu-button .ui-selectmenu-text
+    {
+        padding:1px 0px 0px 0px;
+    }
+    
+    .crbs-main .ui-selectmenu-button .crbs-meta-icon-arrow-vertical
+    {
+        float:right;
+        margin-top:5px;
+        transform:scaleY(-1);
+    }
+    
+.crbs-main .ui-menu
+{
+    padding:0px;
+}
+
+    .crbs-main .ui-menu .ui-menu-item
+    {
+        font-size:16px;
+        font-weight:400;
+        border-style:solid;
+        padding:10px 20px 10px 20px;
+        border-width:1px 0px 0px 0px;
+    }
+    
+    .crbs-main .ui-menu .ui-menu-item:first-child
+    {
+        border-width:0px;
+    }
+    
+    .crbs-main .ui-menu .ui-state-focus,
+    .crbs-main .ui-menu .ui-state-active
+    {
+        margin:0px;
+    }
+        
+.crbs-main .ui-selectmenu-menu
+{
+    max-height:204px;
+    overflow-y:auto;
+    overflow-x:hidden;
+    border-width:1px;
+    border-style:solid;
+}
+
+/******************************************************************************/
+/* Timepicker                                                                 */
+/******************************************************************************/
+  
+.crbs-main .ui-timepicker-wrapper
+{
+    opacity:0;
+    z-index:2;
+    height:226px;
+    max-height:226px;
+    margin-left:-1px;
+}
+
+    .crbs-main .ui-timepicker-wrapper .ui-timepicker-list
+    {
+        
+    }
+    
+        .crbs-main .ui-timepicker-wrapper .ui-timepicker-list>li
+        {
+            font-size:16px;
+            font-weight:400;
+            border-style:solid;
+            padding:10px 20px 10px 20px;
+            border-width:1px 0px 0px 0px;
+        }
+        
+            .crbs-main .ui-timepicker-wrapper .ui-timepicker-list>li:first-child
+            {
+                border-width:0px;
+            }
+            
+/******************************************************************************/
+/* Datepicker                                                                 */
+/******************************************************************************/            
+
+.ui-datepicker
+{
+    z-index:3;
+    width:auto;
+    margin-left:-1px;
+    border-width:1px;
+    border-style:solid;
+    padding:20px 18px 30px 17px;
+}
+
+	html .ui-widget-content .ui-icon, .ui-widget-header .ui-icon
+	{
+		background:none;
+	}
+
+	html .ui-datepicker .ui-datepicker-header
+	{
+		padding:0px;
+	}
+	
+	html .ui-widget-header
+	{
+		border:0px;
+	}
+
+    .ui-datepicker .ui-datepicker-title
+    {
+        margin:0px;
+        font-size:18px;
+        font-weight:700;
+        line-height:24px;
+    }
+    
+    .ui-datepicker .ui-datepicker-today a
+    {
+        text-decoration:underline;
+    }
+    
+    .ui-datepicker thead
+    {
+        border-style:solid;
+        border-width:0px 0px 1px 0px;
+    }
+    
+    .ui-datepicker tbody
+    {
+        top:10px;
+        position:relative;
+    }
+    
+    .ui-datepicker th,
+    .ui-datepicker td,
+    .ui-datepicker td a,
+    .ui-datepicker td span
+    {
+        line-height:1;
+    }
+    
+    .ui-datepicker th
+    {
+        font-size:14px;
+        font-weight:400;
+        line-height:26px;
+        text-align:center;
+        text-transform:uppercase;
+        padding:20px 0px 20px 0px;
+		background-image:none;
+    }
+    
+    .ui-datepicker td
+    {
+        padding:0px !important;
+		border:none !important;
+    }
+    
+        .ui-datepicker td,
+        .ui-datepicker td a
+        {
+            font-size:16px;
+        }
+    
+        html .ui-datepicker td a,
+        html .ui-datepicker td span
+        {
+			padding:0px;
+			text-align:center;
+            width:55px !important;
+            height:55px !important;
+			line-height:54px !important;
+        }
+		
+		html .ui-datepicker td a.ui-state-highlight
+		{
+			border:none !important;
+			background:none !important;
+		}
+		
+        
+        .ui-datepicker td a.ui-state-hover
+        {
+            border-width:2px;
+            border-style:solid;
+            border-radius:9999em;
+			line-height:50px !important;
+        }
+        
+.ui-datepicker .ui-datepicker-prev,
+.ui-datepicker .ui-datepicker-next
+{
+    width:40px;
+    height:40px;
+    display:block;
+    cursor:pointer;
+    line-height:40px;
+    border-width:1px;
+    text-align:center;
+    border-style:solid;
+    border-radius:9999em;
+}
+
+.ui-datepicker .ui-datepicker-prev,
+.ui-datepicker .ui-datepicker-next,
+.ui-datepicker .ui-datepicker-prev-hover,
+.ui-datepicker .ui-datepicker-next-hover
+{
+    top:0px;
+}
+
+.ui-datepicker .ui-datepicker-prev,
+.ui-datepicker .ui-datepicker-prev-hover
+{
+    left:0px;
+    margin-left:7px;
+}
+
+.ui-datepicker .ui-datepicker-next,
+.ui-datepicker .ui-datepicker-next-hover
+{
+    right:0px;
+    margin-right:7px;
+}
+
+.ui-datepicker .ui-datepicker-prev
+{
+    transform:scaleX(-1);
+}
+
+/******************************************************************************/
+/* Preloader                                                                  */
+/******************************************************************************/    
+
+#crbs-preloader
+{
+    top:0px;
+    left:0px;
+    width:100%;
+    height:100%;
+    z-index:100;
+    display:none;
+    opacity:0.2;
+    cursor:not-allowed;
+    position:absolute;
+    background:#FFFFFF
+}
+
+/******************************************************************************/
+/* Layout                                                                     */
+/******************************************************************************/
+
+    /**************************************************************************/
+    /* Layout / Layout 50x50                                                  */
+    /**************************************************************************/
+
+    .crbs-main .crbs-layout-50x50
+    {
+        
+    }
+    
+        .crbs-main .crbs-layout-50x50>.crbs-layout-column-left,
+        .crbs-main .crbs-layout-50x50>.crbs-layout-column-right,
+        .crbs-main.crbs-width-480 #crbs-location-info-frame .crbs-layout-50x50>.crbs-layout-column-left,
+        .crbs-main.crbs-width-480 #crbs-location-info-frame .crbs-layout-50x50>.crbs-layout-column-right
+        {
+            width:48.36066%;
+        }
+    
+        .crbs-main .crbs-layout-50x50>.crbs-layout-column-left,
+        .crbs-main.crbs-width-480 #crbs-location-info-frame .crbs-layout-50x50>.crbs-layout-column-left
+        {
+            float:left;
+        }
+        
+        .crbs-main .crbs-layout-50x50>.crbs-layout-column-right,
+        .crbs-main.crbs-width-480 #crbs-location-info-frame .crbs-layout-50x50>.crbs-layout-column-right
+        {
+            float:right;
+        }
+        
+        .crbs-main.crbs-width-480 #crbs-location-info-frame .crbs-layout-50x50>.crbs-layout-column-left,
+        .crbs-main.crbs-width-480 #crbs-location-info-frame .crbs-layout-50x50>.crbs-layout-column-right
+        {
+            clear:none;
+            margin-bottom:0px;
+        }
+        
+    /**************************************************************************/
+    /* Layout / Layout 33x33x33                                               */
+    /**************************************************************************/
+        
+    .crbs-main .crbs-layout-33x33x33
+    {
+        
+    }
+    
+        .crbs-main .crbs-layout-33x33x33>.crbs-layout-column-left,
+        .crbs-main .crbs-layout-33x33x33>.crbs-layout-column-center,
+        .crbs-main .crbs-layout-33x33x33>.crbs-layout-column-right,
+        .crbs-main.crbs-width-480 #crbs-location-info-frame .crbs-layout-33x33x33>.crbs-layout-column-left,
+        .crbs-main.crbs-width-480 #crbs-location-info-frame .crbs-layout-33x33x33>.crbs-layout-column-center,
+        .crbs-main.crbs-width-480 #crbs-location-info-frame .crbs-layout-33x33x33>.crbs-layout-column-right
+        {
+            float:left;
+            width:31.1477%;
+        }
+            
+        .crbs-main .crbs-layout-33x33x33>.crbs-layout-column-left,
+        .crbs-main .crbs-layout-33x33x33>.crbs-layout-column-center,
+        .crbs-main.crbs-width-480 #crbs-location-info-frame .crbs-layout-33x33x33>.crbs-layout-column-left,
+        .crbs-main.crbs-width-480 #crbs-location-info-frame .crbs-layout-33x33x33>.crbs-layout-column-center
+        {
+            margin-right:3.2784%;
+        }
+
+        .crbs-main.crbs-width-480 #crbs-location-info-frame .crbs-layout-33x33x33>.crbs-layout-column-left,
+        .crbs-main.crbs-width-480 #crbs-location-info-frame .crbs-layout-33x33x33>.crbs-layout-column-center,
+        .crbs-main.crbs-width-480 #crbs-location-info-frame .crbs-layout-33x33x33>.crbs-layout-column-right
+        {
+            clear:none;
+            margin-bottom:0px;
+        }
+        
+    /**************************************************************************/
+    /* Layout / Layout 25x75                                                  */
+    /**************************************************************************/
+
+    .crbs-main .crbs-layout-25x75
+    {
+        
+    }
+    
+        .crbs-main .crbs-layout-25x75>.crbs-layout-column-left
+        {
+            float:left;
+            width:22.5410%;
+        }
+
+        .crbs-main .crbs-layout-25x75>.crbs-layout-column-right
+        {
+            float:right;
+            width:74.18033%;
+        }
+        
+    /**************************************************************************/
+    /* Layout / Layout 75x25                                                  */
+    /**************************************************************************/
+
+    .crbs-main .crbs-layout-75x25
+    {
+        
+    }
+    
+        .crbs-main .crbs-layout-75x25>.crbs-layout-column-left
+        {
+            float:left;
+            width:73.7705%;
+        }
+
+        .crbs-main .crbs-layout-75x25>.crbs-layout-column-right
+        {
+            float:right;
+            width:22.5410%;
+        }
+        
+/******************************************************************************/
+/* Step                                                                       */
+/******************************************************************************/       
+  
+.crbs-main .crbs-main-content .crbs-main-content-step-1>.crbs-layout-50x50
+{
+    display:flex;
+}
+
+.crbs-main .crbs-main-content .crbs-main-content-step-1>.crbs-layout-50x50>.crbs-layout-column-left
+{
+    padding:30px;
+    border-width:1px;
+    border-style:solid;
+}
+
+.crbs-main .crbs-main-content .crbs-main-content-step-1>.crbs-layout-50x50>.crbs-layout-column-left,
+.crbs-main .crbs-main-content .crbs-main-content-step-1>.crbs-layout-50x50>.crbs-layout-column-right
+{
+    width:50%;
+}
+
+/******************************************************************************/
+/* Main navigation                                                            */
+/******************************************************************************/
+
+    /**************************************************************************/
+    /* Main navigation / Default                                              */
+    /**************************************************************************/
+
+    .crbs-main .crbs-main-navigation-default
+    {
+        display:block;
+    }
+
+        .crbs-main .crbs-main-navigation-default>ul
+        {
+
+        }
+
+            .crbs-main .crbs-main-navigation-default>ul>li
+            {
+                width:25%;
+                float:left;
+                position:relative;  
+                text-align:center;
+            }
+            
+            .crbs-main .crbs-main-navigation-default[data-step-count="3"]>ul>li
+            {
+                width:33.33333333%;
+            }
+
+                .crbs-main .crbs-main-navigation-default>ul>li>div
+                {
+                    left:50%;
+                    top:25px;
+                    z-index:1;
+                    height:1px;
+                    width:100%;
+                    position:absolute;
+                }
+                
+                .crbs-main .crbs-main-navigation-default>ul>li:last-child>div
+                {
+                    display:none;
+                }
+                
+                .crbs-main .crbs-main-navigation-default>ul>li>a
+                {
+                    display:block;
+                }
+
+                .crbs-main .crbs-main-navigation-default>ul>li>a,
+                .crbs-main .crbs-main-navigation-default>ul>li>a:hover
+                {
+                    text-decoration:none;
+                }
+
+                    .crbs-main .crbs-main-navigation-default>ul>li>a>span
+                    {
+                        display:block;
+                        margin-left:auto;
+                        margin-right:auto; 
+                    }
+
+                    .crbs-main .crbs-main-navigation-default>ul>li>a>span:first-child
+                    {
+                        z-index:2;
+                        width:50px;
+                        height:50px;
+                        font-weight:700;
+                        position:relative;
+                        text-align:center;
+                        border-width:2px;
+                        border-radius:100%;
+                        border-style:solid;
+                    }
+      
+                        .crbs-main .crbs-main-navigation-default>ul>li>a>span:first-child>span:first-child
+                        {
+                            font-size:18px;
+                            line-height:46px;
+                        }
+                        
+                        .crbs-main .crbs-main-navigation-default>ul>li.crbs-state-completed>a>span:first-child>span:first-child
+                        {
+                            display:none;
+                        }
+                        
+                        .crbs-main .crbs-main-navigation-default>ul>li>a>span:first-child>span.crbs-meta-icon-tick
+                        {
+                            display:none;
+                            font-size:23px;
+                            line-height:48px;
+                        }
+                        
+                        .crbs-main .crbs-main-navigation-default>ul>li.crbs-state-completed>a>span:first-child>span.crbs-meta-icon-tick
+                        {
+                            display:block;
+                        }
+
+                    .crbs-main .crbs-main-navigation-default>ul>li>a>span:first-child+span
+                    {
+                        font-size:15px;
+                        font-weight:400;
+                        margin-top:15px;
+                    }
+                
+    /**************************************************************************/
+    /* Main navigation / Responsive                                           */
+    /**************************************************************************/
+
+    .crbs-main .crbs-main-navigation-responsive
+    {
+        display:none;
+    }
+    
+        .crbs-main .crbs-main-navigation-responsive>.crbs-form-field
+        {
+            border-top-width:1px;
+        }
+    
+/******************************************************************************/
+/* Form panel                                                                 */
+/******************************************************************************/     
+                    
+.crbs-form-panel
+{
+    margin-bottom:20px;
+}
+
+.crbs-form-panel:last-child
+{
+    margin-bottom:0px;
+}
+
+    .crbs-form-panel .crbs-form-panel-label
+    {
+        font-size:12px;
+        font-weight:400;
+        position:relative;
+        display:inline-block;
+        text-transform:uppercase;
+        padding:17px 21px 17px 21px;
+    }
+    
+    .crbs-form-panel .crbs-form-panel-label,
+    .crbs-form-panel .crbs-form-panel-label *
+    {
+       line-height:1; 
+    }
+    
+    .crbs-form-panel .crbs-form-panel-content
+    {
+        position:relative;
+        border-style:solid;
+        border-width:2px 0px 0px 0px;
+    }
+   
+/******************************************************************************/
+/* Disable section                                                            */
+/******************************************************************************/        
+    
+.crbs-disable-section
+{
+    top:0px;
+    left:0px;
+    width:100%;
+    height:100%;
+    opacity:0.5;
+    position:absolute;
+    background:#FFFFFF;
+}
+
+/******************************************************************************/
+/* Form checkbox                                                              */
+/******************************************************************************/
+
+.crbs-main .crbs-form-checkbox
+{
+    float:left;
+    width:30px;
+    height:30px;
+    display:block;
+    cursor:pointer;
+    margin-right:20px;
+    border-width:2px;
+    border-style:solid;
+}
+
+    .crbs-main .crbs-form-checkbox>.crbs-meta-icon-tick
+    {
+        display:none;
+        font-size:22px;
+        line-height:28px;
+        text-align:center;
+    }
+    
+    .crbs-main .crbs-form-checkbox.crbs-state-selected>.crbs-meta-icon-tick
+    {
+        display:block;
+    }
+    
+.crbs-main .crbs-form-checkbox+span
+{
+    margin-left:30px;
+}
+    
+.crbs-main .crbs-form-checkbox+span+input[type="checkbox"]
+{
+    opacity:0;
+}
+
+.crbs-main .crbs-form-panel-label .crbs-form-checkbox
+{
+    top:9px;
+    left:10px;
+    position:absolute;
+}
+
+.crbs-main .crbs-form-panel-label .crbs-form-checkbox+span
+{
+    top:1px;
+    position:relative;
+}
+
+/******************************************************************************/
+/* Form field                                                                 */
+/******************************************************************************/
+
+.crbs-main .crbs-form-field
+{
+    position:relative;
+    border-style:solid;
+    padding:16px 0px 0px 0px;
+    border-width:0px 1px 1px 1px;
+}
+
+.crbs-main .crbs-form-field.crbs-form-field-width-50
+{
+    width:50%;
+    float:left;
+}
+
+.crbs-main .crbs-form-field.crbs-form-field-width-33
+{
+    width:33.33333333%;
+    float:left;   
+}
+
+.crbs-main .crbs-form-field.crbs-form-field-width-50+.crbs-form-field-width-50,
+.crbs-main .crbs-form-field.crbs-form-field-width-33+.crbs-form-field-width-33
+{
+    border-left-width:0px;
+}
+
+    .crbs-main .crbs-form-field>label
+    {
+        clear:both;
+        display:block;
+        margin-bottom:7px;
+        margin-left:20px;
+    }    
+    
+    .crbs-main .crbs-form-field>input,
+    .crbs-main .crbs-form-field>textarea,
+    .crbs-main .crbs-form-field .ui-selectmenu-button
+    {
+        clear:both;
+        width:100%;
+    }
+    
+    .crbs-main .crbs-form-field>input,
+    .crbs-main .crbs-form-field>select,
+    .crbs-main .crbs-form-field>textarea
+    {
+        padding-left:20px;
+        padding-right:20px;
+        padding-bottom:20px;
+    }
+    
+    .crbs-main .crbs-form-field>input,
+    .crbs-main .crbs-form-field>textarea,
+    .crbs-main .crbs-form-field .ui-selectmenu-button
+    {
+        border:none;
+    }
+    
+    .crbs-main .crbs-form-field>input,
+    .crbs-main .crbs-form-field>textarea,
+    .crbs-main .crbs-form-field .ui-selectmenu-button,
+    .crbs-main .ui-selectmenu-menu
+    {
+        font-size:18px;
+        font-weight:700;
+    }
+
+    .crbs-main .crbs-form-field.crbs-form-field-location-switch>input
+    {
+        padding-right:110px;
+    }
+    
+    .crbs-main .crbs-form-field>textarea
+    {
+        resize:none;
+        overflow:auto;
+    }
+    
+    .crbs-main .crbs-form-field>input[type="checkbox"]
+    {
+        cursor:pointer;
+    }
+                    
+/******************************************************************************/
+/* Vehicle filter                                                             */
+/******************************************************************************/
+                    
+.crbs-main .crbs-vehicle-filter
+{
+    margin-bottom:40px;
+}
+
+/******************************************************************************/
+/* Vehicle list                                                               */
+/******************************************************************************/
+
+.crbs-main .crbs-vehicle-list
+{
+   
+}
+
+    .crbs-main .crbs-vehicle-list>ul
+    {
+        
+    }
+
+        .crbs-main .crbs-vehicle-list>ul>li
+        {
+            margin-top:20px;
+        }
+        
+        .crbs-main .crbs-vehicle-list>ul>li:first-child
+        {
+            margin-top:0px;
+        }
+
+/******************************************************************************/
+/* Vehicle                                                                    */
+/******************************************************************************/
+
+.crbs-main .crbs-vehicle
+{
+    display:flex;
+    flex-wrap:wrap;
+    margin-top:20px;
+    border-width:1px;
+    border-style:solid;
+}
+
+.crbs-main .crbs-vehicle:first-child
+{
+    margin-top:0px;
+}
+
+    /**************************************************************************/
+    /* Vehicle / Image                                                        */
+    /**************************************************************************/
+
+    .crbs-main .crbs-vehicle .crbs-vehicle-image
+    {
+        opacity:0;
+        width:37%;
+        padding:20px 15px 20px 20px;
+    }
+    
+        .crbs-main .crbs-vehicle .crbs-vehicle-image>img
+        {
+            max-width:100%;
+        }
+    
+    /**************************************************************************/
+    /* Vehicle / Content                                                      */
+    /**************************************************************************/    
+    
+    .crbs-main .crbs-vehicle .crbs-vehicle-content
+    {
+        width:63%;
+        padding:20px 30px 30px 30px;
+    }
+    
+    .crbs-main .crbs-vehicle .crbs-vehicle-image+.crbs-vehicle-content
+    {
+        width:41%;
+        padding-left:15px;
+    }
+    
+        /**********************************************************************/
+        /* Vehicle / Content / Header                                         */
+        /**********************************************************************/   
+    
+        .crbs-main .crbs-vehicle .crbs-vehicle-content .crbs-vehicle-header
+        {
+            display:block;
+            font-size:26px;
+            font-weight:400;
+        }
+        
+			.crbs-main .crbs-vehicle .crbs-vehicle-content .crbs-vehicle-header>div
+            {
+                display:inline;
+            }
+        
+            .crbs-main .crbs-vehicle .crbs-vehicle-content .crbs-vehicle-header>span
+            {
+                font-size:14px;
+                padding-left:5px;
+            }
+        
+        /**********************************************************************/
+        /* Vehicle / Content / Meta                                           */
+        /**********************************************************************/   
+    
+        .crbs-main .crbs-vehicle .crbs-vehicle-content .crbs-vehicle-meta
+        {
+            margin-top:25px;
+        }
+        
+            .crbs-main .crbs-vehicle .crbs-vehicle-content .crbs-vehicle-meta>ul
+            {
+                margin:0px;
+                padding:0px;
+                list-style:none;
+            }
+            
+                .crbs-main .crbs-vehicle .crbs-vehicle-content .crbs-vehicle-meta>ul>li
+                {
+                    width:50%;
+                    float:left;
+                    margin-bottom:18px;
+                }
+                
+                    .crbs-main .crbs-vehicle .crbs-vehicle-content .crbs-vehicle-meta>ul>li>span:first-child
+                    {
+                        font-size:24px;
+                    }
+                    
+                    .crbs-main .crbs-vehicle .crbs-vehicle-content .crbs-vehicle-meta>ul>li>span:first-child+span
+                    {
+                        top:-3px;
+                        left:15px;
+                        font-size:15px;
+                        font-weight:400;
+                        position:relative;
+                    }                    
+    
+    /**************************************************************************/
+    /* Vehicle / Price                                                        */
+    /**************************************************************************/        
+        
+    .crbs-main .crbs-vehicle .crbs-vehicle-price
+    {
+        width:22%;
+        padding:20px;
+		min-height:220px;
+        position:relative;
+        text-align:center;
+    }
+    
+        .crbs-main .crbs-vehicle .crbs-vehicle-price>div:first-child
+        {
+            font-size:26px;
+            font-weight:400;
+        }
+        
+        .crbs-main .crbs-vehicle .crbs-vehicle-price>div:first-child+div
+        {
+            font-size:15px;
+            font-weight:400;
+            margin-top:20px;
+        }
+    
+        .crbs-main .crbs-vehicle .crbs-vehicle-price .crbs-button
+        {
+            left:30px;
+            right:30px;
+            bottom:30px;
+            display:block;
+            position:absolute;
+            text-align:center;
+            background:transparent;
+            padding:14px 0px 15px 0px;
+        }
+    
+    /**************************************************************************/
+    /* Vehicle / Description                                                  */
+    /**************************************************************************/   
+
+    .crbs-main .crbs-vehicle .crbs-vehicle-description-button
+    {
+        display:block;
+        font-size:15px;
+        font-weight:400;
+        margin-top:10px;
+    }
+    
+    .crbs-main .crbs-vehicle .crbs-vehicle-description-button:hover
+    {
+        text-decoration:underline;
+    }
+    
+        .crbs-main .crbs-vehicle .crbs-vehicle-description-button>span:first-child
+        {
+            display:block;
+        }
+    
+        .crbs-main .crbs-vehicle .crbs-vehicle-description-button>span:first-child+span
+        {
+            display:none;
+        }
+ 
+        .crbs-main .crbs-vehicle .crbs-vehicle-description-button.crbs-state-open>span:first-child
+        {
+            display:none;
+        }
+        
+        .crbs-main .crbs-vehicle .crbs-vehicle-description-button.crbs-state-open>span:first-child+span
+        {
+            display:block;
+        }
+    
+    .crbs-main .crbs-vehicle .crbs-vehicle-description
+    {
+        width:100%;
+        height:0px;
+        overflow:hidden;
+    }
+ 
+    .crbs-main .crbs-vehicle .crbs-vehicle-image+.crbs-vehicle-content+.crbs-vehicle-price+.crbs-vehicle-description
+    {
+        margin-left:37%;
+        padding-left:15px;
+    }
+
+        .crbs-main .crbs-vehicle .crbs-vehicle-description>div
+        {
+            margin:30px 30px 30px 0px;
+        }
+
+            .crbs-main .crbs-vehicle .crbs-vehicle-description>div>p
+            {
+                margin:0px;
+                font-size:16px;
+                font-weight:300;
+            }
+
+            .crbs-main .crbs-vehicle .crbs-vehicle-description>div>p:first-child
+            {
+                padding:0px;
+            }
+
+    /**************************************************************************/
+    /* Vehicle / Attribute                                                    */
+    /**************************************************************************/               
+    
+    .crbs-main .crbs-vehicle .crbs-vehicle-attribute
+    {
+        margin-top:30px;
+        margin-bottom:30px;
+    }
+
+        .crbs-main .crbs-vehicle .crbs-vehicle-attribute>ul
+        {
+            float:left;
+            width:47.5%;
+        }
+
+        .crbs-main .crbs-vehicle .crbs-vehicle-attribute>ul+ul
+        {
+            float:right;
+        }
+
+            .crbs-main .crbs-vehicle .crbs-vehicle-attribute>ul>li
+            {
+                border-style:solid;
+                padding:10px 0px 10px 0px;
+                border-width:0px 0px 1px 0px;
+            }
+
+            .crbs-main .crbs-vehicle .crbs-vehicle-attribute>ul>li:last-child
+            {
+                border-bottom-width:0px;
+            }
+
+                .crbs-main .crbs-vehicle .crbs-vehicle-attribute>ul>li>div
+                {
+                    width:49%;
+                    font-weight:400;
+                    line-height:inherit;
+                }
+
+                .crbs-main .crbs-vehicle .crbs-vehicle-attribute>ul>li>div:first-child
+                {
+                    float:left;
+                    font-size:12px;
+                    text-transform:uppercase;
+                }
+
+                .crbs-main .crbs-vehicle .crbs-vehicle-attribute>ul>li>div:first-child+div
+                {
+                    float:right;
+                    font-size:15px;
+                    text-align:right;
+                }
+
+/******************************************************************************/
+/* Google Map                                                                 */
+/******************************************************************************/
+
+.crbs-main #crbs_google_map
+{
+    width:100%;
+}
+
+.crbs-main .crbs-google-map
+{
+    position:relative;
+}
+
+.crbs-main .crbs-google-map #crbs_google_map
+{
+    height:719px;
+}
+
+.crbs-main .crbs-google-map-summary #crbs_google_map
+{
+    height:250px !important;
+}
+
+/******************************************************************************/
+/* Summary                                                                    */
+/******************************************************************************/
+
+.crbs-main .crbs-summary
+{
+    padding:28px 20px 20px 20px;
+}
+
+.crbs-main .crbs-summary+.crbs-summary
+{
+    margin-top:40px;
+}
+
+    .crbs-main .crbs-summary .crbs-summary-header
+    {
+        padding-bottom:5px;
+    }
+    
+        .crbs-main .crbs-summary .crbs-summary-header>h4
+        {
+            margin:0px;
+            font-size:18px;
+            font-weight:700;
+            line-height:30px;
+            display:inline-block;
+        }
+        
+        .crbs-main .crbs-summary .crbs-summary-header>a
+        {
+            float:right;
+            font-size:13px;
+            font-weight:400;
+            border-width:1px;
+            border-style:solid;
+            border-radius:999em;
+            display:inline-block;
+            padding:3px 12px 3px 12px;
+        }
+        
+        .crbs-main .crbs-summary .crbs-summary-header>a,
+        .crbs-main .crbs-summary .crbs-summary-header>a:hover
+        {
+            text-decoration:none;
+        }
+    
+    .crbs-main .crbs-summary .crbs-summary-field
+    {
+        margin-top:15px;
+        padding-bottom:20px;
+        border-style:solid;
+        border-width:0px 0px 1px 0px;
+    }
+    
+    .crbs-main .crbs-summary .crbs-summary-field:last-child
+    {
+        border:none;
+        padding-bottom:0px;
+    }
+    
+        .crbs-main .crbs-summary .crbs-summary-field .crbs-summary-field-name
+        {
+            font-size:12px;
+            font-weight:400;
+            line-height:26px;
+            margin-bottom:5px;
+            text-transform:uppercase;
+        }
+        
+        .crbs-main .crbs-summary .crbs-summary-field .crbs-summary-field-value
+        {
+            font-size:15px;
+            font-weight:400;
+            line-height:24px;
+        }
+        
+/******************************************************************************/
+/* Summary price element                                                      */
+/******************************************************************************/
+
+.crbs-main .crbs-summary-price-element
+{
+    margin-top:40px;
+}
+
+    .crbs-main .crbs-summary-price-element>div
+    {
+        
+    }
+    
+        .crbs-main .crbs-summary-price-element>div span
+        {
+            font-size:15px;
+            font-weight:400;
+            line-height:24px;            
+        }
+
+        .crbs-main .crbs-summary-price-element>div>span:first-child
+        {
+            
+        }
+        
+        .crbs-main .crbs-summary-price-element>div>span:first-child+span
+        {
+            float:right;
+        }
+        
+        .crbs-main .crbs-summary-price-element>div.crbs-summary-price-element-total
+        {
+            margin-top:20px;
+            padding-top:20px;
+            position:relative;
+            border-style:solid;
+            border-width:1px 0px 0px 0px;       
+        }
+        
+        .crbs-main .crbs-summary-price-element>div.crbs-summary-price-element-total>span
+        {
+            font-size:18px;
+            font-weight:700;
+            line-height:30px;
+            display:inline-block;            
+        }
+        
+        .crbs-main .crbs-summary-price-element>div.crbs-summary-price-element-total>span:first-child+span
+        {
+            top:-1px;
+            right:0px;
+            float:right;
+            padding-top:21px;
+            position:absolute;
+            border-style:solid;
+            border-width:1px 0px 0px 0px;               
+        }
+
+/******************************************************************************/
+/* Payment                                                                    */
+/******************************************************************************/
+
+.crbs-main #crbs-payment
+{
+    
+}
+
+.crbs-main #crbs-payment>ul
+{
+    display:flex;
+    flex-wrap:wrap;
+    flex-direction:row;
+    align-items:flex-start;
+    margin:30px -20px 0px 0px;
+}
+
+    .crbs-main #crbs-payment>ul>li
+    {
+        height:130px;
+        flex-grow:1;
+        flex-basis:274px;
+        margin:15px 20px 15px 0px;
+    }
+    
+    .crbs-main #crbs-payment>ul>li:first-child
+    {
+        margin-left:0px;
+    }
+    
+        .crbs-main #crbs-payment>ul>li>a
+        {
+            width:100%;
+            height:100%;
+            display:block;
+            position:relative;
+            text-align:center;
+            border-width:2px;
+            border-style:solid;
+            background-repeat:no-repeat;
+            background-position:center center;
+        }
+        
+        .crbs-main #crbs-payment>ul>li>a,
+        .crbs-main #crbs-payment>ul>li>a:hover
+        {
+            text-decoration:none;
+        }
+		
+        .crbs-main .crbs-payment>li>a.crbs-payment-background-image
+        {
+            background-size:contain;
+            background-repeat:no-repeat;
+            background-position:center center;
+        }
+        
+            .crbs-main .crbs-payment>li>a.crbs-payment-background-image>span.crbs-payment-name,
+            .crbs-main .crbs-payment>li>a.crbs-payment-background-image>span.crbs-meta-icon-bank,
+            .crbs-main .crbs-payment>li>a.crbs-payment-background-image>span.crbs-meta-icon-wallet
+            {
+                display:none;
+            }
+		
+            .crbs-main #crbs-payment>ul>li>a>span.crbs-payment-name,
+            .crbs-main #crbs-payment>ul>li>a>span.crbs-meta-icon-bank,
+            .crbs-main #crbs-payment>ul>li>a>span.crbs-meta-icon-wallet
+            {
+                font-size:48px;
+                line-height:130px;
+            }
+            
+            .crbs-main #crbs-payment>ul>li>a>span.crbs-payment-name
+            {
+                font-size:18px;
+                font-weight:700;
+                position:relative;
+            }
+            
+            .crbs-main #crbs-payment>ul>li>a.crbs-payment-type-1>span.crbs-payment-name
+            {
+                top:-10px;
+                left:10px;                
+            }
+            
+            .crbs-main #crbs-payment>ul>li>a>span.crbs-meta-icon-tick
+            {
+                left:50%;
+                width:38px;
+                height:38px;
+                bottom:-19px;
+                display:none;
+                font-size:18px;
+                line-height:38px;
+                position:absolute;
+                text-align:center;
+                margin-left:-19px;
+                border-radius:9999em;
+            }
+            
+            .crbs-main #crbs-payment>ul>li>a.crbs-state-selected>span.crbs-meta-icon-tick
+            {
+                display:block;
+            }
+            
+        .crbs-main #crbs-payment>ul>li>a.crbs-state-selected
+        {
+          
+        }
+        
+        .crbs-main #crbs-payment>ul>li>a.crbs-payment-type-2
+        {
+            background-image:url('../media/image/public/stripe.png');
+        }
+        
+        .crbs-main #crbs-payment>ul>li>a.crbs-payment-type-3
+        {
+            background-image:url('../media/image/public/paypal.png');
+        }
+        
+        .crbs-main #crbs-payment>ul>li>a.crbs-payment-type-2+span.crbs-payment-name,
+        .crbs-main #crbs-payment>ul>li>a.crbs-payment-type-3+span.crbs-payment-name
+        {
+            top:-15px;
+            left:10px;            
+        }
+        
+/******************************************************************************/
+/* Agreement                                                                  */
+/******************************************************************************/        
+
+.crbs-agreement
+{
+    margin-top:50px;
+}
+
+    .crbs-agreement>div
+    {
+        margin-top:15px;
+    }
+    
+        .crbs-agreement>div>.crbs-form-checkbox
+        {
+            
+        }
+        
+        .crbs-agreement>div>.crbs-form-checkbox+span
+        {
+            top:3px;
+            margin-left:0px;
+            position:relative;
+        }
+
+/******************************************************************************/
+/* Coupon                                                                     */
+/******************************************************************************/            
+        
+.crbs-main .crbs-coupon-code-section
+{
+    margin-top:40px;
+}
+
+    .crbs-main .crbs-coupon-code-section .crbs-form-field
+    {
+        border-top-width:1px;
+    }
+
+    .crbs-main .crbs-coupon-code-section a.crbs-button.crbs-button-style-2
+    {
+        float:right;
+        margin-top:10px;
+        display:inline-block;
+    }
+    
+        .crbs-main .crbs-coupon-code-section a.crbs-button.crbs-button-style-2 span
+        {
+            display:none;
+        }
+    
+/******************************************************************************/
+/* Client form                                                                */
+/******************************************************************************/
+              
+.crbs-client-form
+{
+    
+}
+
+    .crbs-client-form .crbs-client-form-sign-in
+    {
+
+    }
+
+        .crbs-client-form .crbs-client-form-sign-in .crbs-form-panel+div
+        {
+            margin-top:30px;
+            margin-bottom:30px;
+            text-align:right;
+        }
+        
+        .crbs-client-form .crbs-client-form-sign-in .crbs-form-panel+div>a
+        {
+            display:inline-block;
+        }
+
+/******************************************************************************/
+/* Booking extra                                                              */
+/******************************************************************************/
+
+.crbs-main .crbs-booking-extra-header
+{
+    margin-bottom:0px;
+}
+
+    .crbs-main .crbs-booking-extra-header>span:first-child
+    {
+        width:56px;
+        height:56px;
+        font-size:32px;
+        line-height:54px;
+    }
+    
+    .crbs-main .crbs-booking-extra-header>span:first-child+span
+    {
+        font-size:26px;
+        font-weight:400;
+        line-height:37px;
+        padding-left:20px;
+    }
+
+.crbs-main .crbs-booking-extra-list
+{
+    margin-top:40px;
+}
+
+    .crbs-main .crbs-booking-extra-list>ul
+    {
+        width:100%;
+        display:table;
+    }
+    
+        .crbs-main .crbs-booking-extra-list>ul>li
+        {
+            display:table-row-group;
+        }
+        
+            .crbs-main .crbs-booking-extra-list>ul>li>div
+            {
+                border-style:solid;
+                display:table-cell;
+                vertical-align:middle;
+                padding:20px 0px 20px 0px;
+                border-width:1px 0px 0px 1px;
+            }
+            
+            .crbs-main .crbs-booking-extra-list>ul>li:last-child>div
+            {
+                border-bottom-width:1px;
+            }
+            
+            .crbs-main .crbs-booking-extra-list>ul>li>div.crbs-column-1
+            {
+                width:65%;
+                border-left:none;
+                padding-right:20px;
+            }
+
+                .crbs-main .crbs-booking-extra-list>ul>li>div.crbs-column-1>.booking-form-extra-name,
+                .crbs-main .crbs-booking-extra-list>ul>li>div.crbs-column-1>.booking-form-extra-price
+                {
+                    font-size:18px;
+                    font-weight:700;
+                    line-height:30px;
+                }
+
+                .crbs-main .crbs-booking-extra-list>ul>li>div.crbs-column-1>.booking-form-extra-name
+                {
+                    margin-right:20px;
+                }
+                
+                .crbs-main .crbs-booking-extra-list>ul>li>div.crbs-column-1>.booking-form-extra-price
+                {
+                    display:inline-block;
+                }
+
+                .crbs-main .crbs-booking-extra-list>ul>li>div.crbs-column-1>.booking-form-extra-description
+                {
+                    clear:both;
+                    display:block;
+                    font-size:16px;
+                    margin-top:5px;
+                    font-weight:300;
+                    line-height:26px;
+                }
+
+            .crbs-main .crbs-booking-extra-list>ul>li>div.crbs-column-2
+            {
+                width:15%;
+            }
+            
+            .crbs-main .crbs-booking-extra-list>ul>li>div.crbs-column-2:empty
+            {
+                border-left-width:none;
+            }
+
+                .crbs-main .crbs-booking-extra-list>ul>li>div.crbs-column-2>.crbs-form-field
+                {
+                    border:none;
+                    padding-top:0px;
+                }
+                
+                    .crbs-main .crbs-booking-extra-list>ul>li>div.crbs-column-2>.crbs-form-field>input
+                    {
+                        padding-bottom:0px;
+                    }
+
+            .crbs-main .crbs-booking-extra-list>ul>li>div.crbs-column-3
+            {
+                width:20%;
+                text-align:right;
+                border-right-width:0px;
+            }
+            
+                .crbs-main .crbs-booking-extra-list>ul>li>div.crbs-column-3>a
+                {
+                    display:inline-block;
+                }
+
+            .crbs-main .crbs-booking-extra-list>ul>li>div.crbs-column-1+.crbs-column-3
+            {
+                width:32%;
+            }
+            
+/******************************************************************************/
+/* Booking complete                                                           */
+/******************************************************************************/
+
+.crbs-main .crbs-booking-complete
+{
+    text-align:center;
+    margin:200px auto 200px auto !important;
+}
+
+    .crbs-main .crbs-booking-complete .crbs-meta-icon-tick
+    {
+        width:100px;
+        height:100px;
+        font-size:32px;
+        line-height:100px;
+        position:relative;
+        margin-left:auto;
+        margin-right:auto;
+    }
+    
+    .crbs-main .crbs-booking-complete .crbs-meta-icon-tick:before
+    {
+        z-index:3;
+        position:relative;
+    }
+        
+        .crbs-main .crbs-booking-complete .crbs-meta-icon-tick>div
+        {
+            top:0px;
+            z-index:1;
+            width:100%;
+            height:100%;
+            border-width:2px;
+            position:absolute;
+            border-style:solid;
+            border-radius:999em;
+        }
+    
+        .crbs-main .crbs-booking-complete .crbs-meta-icon-tick>div:first-child
+        {
+            left:0px;
+            z-index:2;
+        }
+        
+        .crbs-main .crbs-booking-complete .crbs-meta-icon-tick>div:first-child+div
+        {
+            left:10px;
+        }
+    
+	.crbs-main .crbs-booking-complete h3
+	{
+		margin:0px;
+		padding:0px;
+        font-size:26px;
+        font-weight:400;
+        margin-top:30px;
+        line-height:37px;		
+	}
+		
+	.crbs-main .crbs-booking-complete .crbs-booking-complete-payment 
+	{
+		
+	}
+	
+		.crbs-main .crbs-booking-complete .crbs-booking-complete-payment>div
+		{
+			display:none;
+			font-size:18px;
+			font-weight:300;
+			line-height:30px;
+			padding-top:10px;  
+		}
+    
+			.crbs-main .crbs-booking-complete .crbs-booking-complete-payment>div>span
+			{
+				font-weight:400;
+			}
+        
+			.crbs-main .crbs-booking-complete .crbs-booking-complete-payment>div>a
+			{
+				margin-top:20px;
+				display:inline-block;
+			}
+
+.crbs-main form[name="crbs-form-stripe"]
+{
+    display:none !important;
+}
+
+/******************************************************************************/
+/* Location detail frame                                                      */
+/******************************************************************************/
+
+#crbs-location-info-frame
+{
+    top:0px;
+    left:0px;
+    z-index:2;
+    font-size:15px;
+    position:absolute;
+    background:rgba(158,168,178,0.2);
+}
+
+#crbs-location-info-frame,
+#crbs-location-info-frame>div
+{
+    width:100%;
+    height:100%;
+    display:none;
+    padding:30px;
+}
+
+    #crbs-location-info-frame>div
+    {
+        position:relative;
+        background:#FFFFFF;
+        padding-bottom:85px;
+        -webkit-box-shadow:0px 18px 19px -20px rgba(0,0,0,0.1);
+        -moz-box-shadow:0px 18px 19px -20px rgba(0,0,0,0.1);
+        box-shadow:0px 18px 19px -20px rgba(0,0,0,0.1);
+    }
+    
+    /**************************************************************************/
+    /* Location detail frame / Header                                         */
+    /**************************************************************************/
+
+    #crbs-location-info-frame .crbs-location-info-frame-header
+    {
+        
+    }
+    
+        #crbs-location-info-frame .crbs-location-info-frame-header h4
+        {
+            display:inline;
+            margin-top:0px;
+            padding-right:60px;
+        }
+
+        #crbs-location-info-frame .crbs-location-info-frame-header a
+        {
+            top:30px;
+            right:30px;
+            float:right;
+            font-size:18px;
+            position:absolute;
+        }
+        
+    /**************************************************************************/
+    /* Location detail frame / Meta 1                                         */
+    /**************************************************************************/
+      
+    #crbs-location-info-frame .crbs-location-info-frame-meta-1
+    {
+        margin-top:35px;
+        padding-bottom:30px;
+        border-style:solid;
+        border-width:0px 0px 1px 0px;
+    }
+    
+        #crbs-location-info-frame .crbs-location-info-frame-meta-1 .crbs-layout-33x33x33 .crbs-layout-column-left,
+        #crbs-location-info-frame .crbs-location-info-frame-meta-1 .crbs-layout-33x33x33 .crbs-layout-column-center,
+        #crbs-location-info-frame .crbs-location-info-frame-meta-1 .crbs-layout-33x33x33 .crbs-layout-column-right
+        {
+            text-align:center;
+        }
+        
+            #crbs-location-info-frame .crbs-location-info-frame-meta-1 .crbs-layout-33x33x33 .crbs-layout-column-left div,
+            #crbs-location-info-frame .crbs-location-info-frame-meta-1 .crbs-layout-33x33x33 .crbs-layout-column-center div,
+            #crbs-location-info-frame .crbs-location-info-frame-meta-1 .crbs-layout-33x33x33 .crbs-layout-column-right div
+            {
+                font-size:18px;
+                font-weight:700;
+                margin-top:15px;
+            }
+    
+        #crbs-location-info-frame .crbs-location-info-frame-meta-1 .crbs-meta-icon-car,
+        #crbs-location-info-frame .crbs-location-info-frame-meta-1 .crbs-meta-icon-car-key,
+        #crbs-location-info-frame .crbs-location-info-frame-meta-1 .crbs-meta-icon-car-price
+        {
+            font-size:64px;
+        }
+
+    /**************************************************************************/
+    /* Location detail frame / Meta 2                                         */
+    /**************************************************************************/
+        
+    #crbs-location-info-frame .crbs-location-info-frame-meta-2
+    {
+        font-weight:400;
+        line-height:24px;
+    }
+    
+        #crbs-location-info-frame .crbs-location-info-frame-meta-2 ul
+        {
+            margin:0px;
+            padding:0px;
+            list-style-type:none;
+        }
+        
+            #crbs-location-info-frame .crbs-location-info-frame-meta-2 ul>li
+            {
+                
+            }
+            
+                #crbs-location-info-frame .crbs-location-info-frame-meta-2 ul>li>span:first-child
+                {
+                    
+                }
+            
+                #crbs-location-info-frame .crbs-location-info-frame-meta-2 ul>li>span:first-child+span
+                {
+                    float:right
+                } 
+                
+        #crbs-location-info-frame .crbs-location-info-frame-meta-2 label
+        {
+            display:block;
+            margin-top:30px;
+            margin-bottom:5px;
+        }
+    
+    /**************************************************************************/
+    /* Location detail frame / Button                                         */
+    /**************************************************************************/
+    
+    #crbs-location-info-frame .crbs-location-info-frame-button
+    {
+        width:100%;
+        bottom:0px;
+        position:absolute;
+        padding:0px 60px 30px 0px;
+    }
+    
+        #crbs-location-info-frame .crbs-location-info-frame-button>a
+        {
+            float:right;
+        }
+
+/******************************************************************************/
+/* Responsive                                                                 */
+/******************************************************************************/
+
+    /**************************************************************************/
+    /* Responsive / Button                                                    */
+    /**************************************************************************/
+
+    .crbs-main.crbs-width-300 .crbs-button.crbs-button-style-1,
+    .crbs-main.crbs-width-300 .crbs-button.crbs-button-style-2,
+    .crbs-main.crbs-width-480 .crbs-button.crbs-button-style-1,
+    .crbs-main.crbs-width-480 .crbs-button.crbs-button-style-2
+    {
+        padding:10px 26px 12px 26px;
+    }
+    
+    .crbs-main.crbs-width-300 .crbs-button-checkbox>a,
+    .crbs-main.crbs-width-480 .crbs-button-checkbox>a
+    {
+        padding:13px 20px 14px 20px;
+    }
+    
+    .crbs-main.crbs-width-300 .crbs-button.crbs-button-step-prev,
+    .crbs-main.crbs-width-480 .crbs-button.crbs-button-step-prev
+    {
+        padding:10px 26px 12px 18px;
+    }
+    
+    .crbs-main.crbs-width-300 .crbs-button.crbs-button-step-next,
+    .crbs-main.crbs-width-480 .crbs-button.crbs-button-step-next
+    {
+        padding:10px 18px 12px 26px;
+    }
+
+    /**************************************************************************/
+    /* Responsive / Layout                                                    */
+    /**************************************************************************/
+
+    .crbs-main.crbs-width-480 .crbs-main-content-step-1>div,
+    .crbs-main.crbs-width-300 .crbs-main-content-step-1>div
+    {
+        display:block;
+    }
+    
+    .crbs-main.crbs-width-480 .crbs-layout-50x50 .crbs-layout-column-left,
+    .crbs-main.crbs-width-480 .crbs-layout-50x50 .crbs-layout-column-right,
+    .crbs-main.crbs-width-300 .crbs-layout-50x50 .crbs-layout-column-left,
+    .crbs-main.crbs-width-300 .crbs-layout-50x50 .crbs-layout-column-right,
+    .crbs-main.crbs-width-480 .crbs-layout-25x75>.crbs-layout-column-left,
+    .crbs-main.crbs-width-480 .crbs-layout-25x75>.crbs-layout-column-right,
+    .crbs-main.crbs-width-300 .crbs-layout-25x75>.crbs-layout-column-left,
+    .crbs-main.crbs-width-300 .crbs-layout-25x75>.crbs-layout-column-right,
+    .crbs-main.crbs-width-480 .crbs-layout-33x33x33>.crbs-layout-column-left,
+    .crbs-main.crbs-width-480 .crbs-layout-33x33x33>.crbs-layout-column-center,
+    .crbs-main.crbs-width-480 .crbs-layout-33x33x33>.crbs-layout-column-right,
+    .crbs-main.crbs-width-300 .crbs-layout-33x33x33>.crbs-layout-column-left,
+    .crbs-main.crbs-width-300 .crbs-layout-33x33x33>.crbs-layout-column-center,
+    .crbs-main.crbs-width-300 .crbs-layout-33x33x33>.crbs-layout-column-right,
+    .crbs-main.crbs-width-480 .crbs-main-content-step-1>div>.crbs-layout-column-left,
+    .crbs-main.crbs-width-480 .crbs-main-content-step-1>div>.crbs-layout-column-right,
+    .crbs-main.crbs-width-300 .crbs-main-content-step-1>div>.crbs-layout-column-left,
+    .crbs-main.crbs-width-300 .crbs-main-content-step-1>div>.crbs-layout-column-right
+    {
+        clear:both;
+        width:100%;
+        float:none;
+        margin-left:0px;
+        margin-right:0px;
+    }
+
+    .crbs-main.crbs-width-480 .crbs-layout-25x75>.crbs-layout-column-left,
+    .crbs-main.crbs-width-300 .crbs-layout-25x75>.crbs-layout-column-left,
+    .crbs-main.crbs-width-480 .crbs-layout-50x50 .crbs-layout-column-left,
+    .crbs-main.crbs-width-300 .crbs-layout-50x50 .crbs-layout-column-left,
+    .crbs-main.crbs-width-480 .crbs-layout-33x33x33>.crbs-layout-column-left,
+    .crbs-main.crbs-width-480 .crbs-layout-33x33x33>.crbs-layout-column-center,
+    .crbs-main.crbs-width-300 .crbs-layout-33x33x33>.crbs-layout-column-left,
+    .crbs-main.crbs-width-300 .crbs-layout-33x33x33>.crbs-layout-column-center
+    {
+        margin-bottom:40px;
+    }
+    
+    .crbs-main.crbs-width-300 .crbs-layout-25x75,
+    .crbs-main.crbs-width-480 .crbs-layout-25x75
+    {
+        display:flex;
+        flex-direction:column-reverse;
+    }
+    
+    .crbs-main.crbs-width-300 .crbs-layout-25x75>.crbs-layout-column-left,
+    .crbs-main.crbs-width-480 .crbs-layout-25x75>.crbs-layout-column-left
+    {
+        margin-top:40px;
+    }
+    
+    /**************************************************************************/
+    /* Responsive / Summary field                                             */
+    /**************************************************************************/
+
+    .crbs-main.crbs-width-300 .crbs-summary-field .crbs-layout-50x50 .crbs-layout-column-left,
+    .crbs-main.crbs-width-480 .crbs-summary-field .crbs-layout-50x50 .crbs-layout-column-left
+    {
+        margin-bottom:20px;
+    }
+    
+    /**************************************************************************/
+    /* Responsive / Main navigation                                           */
+    /**************************************************************************/
+
+    .crbs-main.crbs-width-300 .crbs-main-navigation-default
+    {
+        display:none;
+    }
+
+    .crbs-main.crbs-width-300 .crbs-main-navigation-responsive
+    {
+        display:block;
+    }
+
+    .crbs-main.crbs-width-300 .crbs-tab.ui-tabs .ui-tabs-nav>li
+    {
+        float:none;
+        width:100%;
+    }
+
+        .crbs-main.crbs-width-300 .crbs-tab.ui-tabs .ui-tabs-nav>li>a
+        {
+            border-right-width:1px;
+        }
+        
+    /**************************************************************************/
+    /* Responsive / Step                                                      */
+    /**************************************************************************/
+
+    .crbs-main.crbs-width-300 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left
+    {
+        border:none;
+        padding:0px;
+    }
+    
+    .crbs-main.crbs-width-480 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left,
+    .crbs-main.crbs-width-768 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left
+    {
+        margin-bottom:0px;
+    }
+    
+    .crbs-main.crbs-width-300 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-right
+    {
+        border:none;
+    }
+    
+    /**************************************************************************/
+    /* Responsive / Vehicle                                                   */
+    /**************************************************************************/
+
+    .crbs-width-300.crbs-main .crbs-vehicle .crbs-vehicle-content
+    {
+        padding-top:0px;
+    }
+    
+    .crbs-width-300.crbs-main .crbs-vehicle .crbs-vehicle-price>div:first-child+div
+    {
+        margin-top:10px;
+    }
+    
+    .crbs-width-768.crbs-main .crbs-vehicle .crbs-vehicle-price>div:first-child,
+    .crbs-width-768.crbs-main .crbs-vehicle .crbs-vehicle-content .crbs-vehicle-header,
+    .crbs-width-480.crbs-main .crbs-vehicle .crbs-vehicle-price>div:first-child,
+    .crbs-width-480.crbs-main .crbs-vehicle .crbs-vehicle-content .crbs-vehicle-header,
+    .crbs-width-300.crbs-main .crbs-vehicle .crbs-vehicle-price>div:first-child,
+    .crbs-width-300.crbs-main .crbs-vehicle .crbs-vehicle-content .crbs-vehicle-header
+    {
+        font-size:24px;
+    }
+    
+    .crbs-width-768.crbs-main .crbs-vehicle .crbs-vehicle-content .crbs-vehicle-meta>ul>li>span:first-child+span,
+    .crbs-width-480.crbs-main .crbs-vehicle .crbs-vehicle-content .crbs-vehicle-meta>ul>li>span:first-child+span,
+    .crbs-width-300.crbs-main .crbs-vehicle .crbs-vehicle-content .crbs-vehicle-meta>ul>li>span:first-child+span
+    {
+        top:-2px;
+        font-size:14px;
+    }
+    
+    .crbs-width-768.crbs-main .crbs-vehicle .crbs-vehicle-description-button,
+    .crbs-width-768.crbs-main .crbs-vehicle .crbs-vehicle-attribute>ul>li>div:first-child+div,
+    .crbs-width-480.crbs-main .crbs-vehicle .crbs-vehicle-description-button,
+    .crbs-width-480.crbs-main .crbs-vehicle .crbs-vehicle-attribute>ul>li>div:first-child+div,
+    .crbs-width-300.crbs-main .crbs-vehicle .crbs-vehicle-description-button,
+    .crbs-width-300.crbs-main .crbs-vehicle .crbs-vehicle-attribute>ul>li>div:first-child+div   
+    {
+        font-size:14px;
+    }
+    
+    .crbs-width-768.crbs-main .crbs-vehicle .crbs-vehicle-attribute>ul>li>div:first-child,
+    .crbs-width-480.crbs-main .crbs-vehicle .crbs-vehicle-attribute>ul>li>div:first-child,
+    .crbs-width-300.crbs-main .crbs-vehicle .crbs-vehicle-attribute>ul>li>div:first-child
+    {
+        font-size:11px;
+    }
+    
+    /***/
+    
+    .crbs-widthlt-960.crbs-main .crbs-vehicle .crbs-vehicle-image,
+    .crbs-widthlt-960.crbs-main .crbs-vehicle .crbs-vehicle-content,
+    .crbs-widthlt-960.crbs-main .crbs-vehicle .crbs-vehicle-image+.crbs-vehicle-content,
+    .crbs-widthlt-960.crbs-main .crbs-vehicle .crbs-vehicle-price
+    {
+        width:100%;
+    }
+    
+    .crbs-widthlt-960.crbs-main .crbs-vehicle .crbs-vehicle-image,
+    .crbs-widthlt-960.crbs-main .crbs-vehicle .crbs-vehicle-content
+    {
+        padding-left:20px;
+        padding-right:20px;
+    }
+    
+        .crbs-widthlt-960.crbs-main .crbs-vehicle .crbs-vehicle-image>img
+        {
+            max-width:100%
+        }
+       
+        .crbs-widthlt-960.crbs-main .crbs-vehicle .crbs-vehicle-price>.crbs-button
+        {
+            position:static;
+            margin-top:30px;
+        }
+  
+    .crbs-widthlt-960.crbs-main .crbs-vehicle .crbs-vehicle-image+.crbs-vehicle-content+.crbs-vehicle-price+.crbs-vehicle-description
+    {
+        margin-left:20px;
+        padding-left:0px;
+    }
+    
+        .crbs-widthlt-960.crbs-main .crbs-vehicle .crbs-vehicle-image+.crbs-vehicle-content+.crbs-vehicle-price+.crbs-vehicle-description>div
+        {
+            margin-top:0px;
+            margin-right:20px;
+        }
+   
+    .crbs-widthlt-960.crbs-main .crbs-vehicle .crbs-vehicle-content .crbs-vehicle-meta>ul>li
+    {
+        width:25%;
+    }
+    
+    .crbs-width-300.crbs-main .crbs-vehicle .crbs-vehicle-content .crbs-vehicle-meta>ul>li
+    {
+        width:50%;
+    }   
+    
+    /***/
+        
+    .crbs-widthlt-960.crbs-main .crbs-vehicle
+    {
+        display:flex;
+    }
+    
+    .crbs-widthlt-960.crbs-main .crbs-vehicle .crbs-vehicle-image
+    {
+        order:1;
+    }
+    
+    .crbs-widthlt-960.crbs-main .crbs-vehicle .crbs-vehicle-content
+    {
+        order:2;
+    }
+
+    .crbs-widthlt-960.crbs-main .crbs-vehicle .crbs-vehicle-price
+    {
+        order:4;
+    }
+    
+    .crbs-widthlt-960.crbs-main .crbs-vehicle .crbs-vehicle-description
+    {
+        order:3;
+    }
+    
+    /***/
+    
+    .crbs-widthlt-960.crbs-main .crbs-vehicle .crbs-vehicle-attribute>ul,
+    .crbs-widthlt-960.crbs-main .crbs-vehicle .crbs-vehicle-attribute>ul+ul
+    {
+        clear:both;
+        float:none;
+        width:100%;
+    }
+       
+    /**************************************************************************/
+    /* Responsive / Button navigation                                         */
+    /**************************************************************************/    
+    
+    .crbs-main.crbs-width-300 .crbs-main-content-navigation-button
+    {
+        display:flex;
+        flex-direction:column;
+    }
+  
+        .crbs-main.crbs-width-300 .crbs-main-content-navigation-button a
+        {
+            width:100%;
+            float:none;
+            text-align:center;
+        }
+
+        .crbs-main.crbs-width-300 .crbs-main-content-navigation-button .crbs-button.crbs-button-step-prev
+        {
+            order:2;
+            margin-top:10px;
+        }
+
+        .crbs-main.crbs-width-300 .crbs-main-content-navigation-button .crbs-button.crbs-button-step-next
+        {
+            order:1;
+            margin:10px 0px 0px 0px;
+        }
+        
+    /**************************************************************************/
+    /* Responsive / Booking extra                                             */
+    /**************************************************************************/
+
+    .crbs-main.crbs-width-480 .crbs-booking-extra-list>ul>li,
+    .crbs-main.crbs-width-300 .crbs-booking-extra-list>ul>li
+    {
+        width:100%;
+        display:table;
+        border-bottom:0px;
+    }
+
+    .crbs-main.crbs-width-480 .crbs-booking-extra-list>ul>li>div.crbs-column-1,
+    .crbs-main.crbs-width-300 .crbs-booking-extra-list>ul>li>div.crbs-column-1
+    {
+        width:100%;
+        padding-right:0px;
+        display:table-caption;
+        border-bottom-width:0px;
+    }
+    
+    .crbs-main.crbs-width-300 .crbs-booking-extra-list>ul>li>div.crbs-column-1,
+    .crbs-main.crbs-width-480 .crbs-booking-extra-list>ul>li:first-child>div.crbs-column-1
+    {
+        border-top-width:0px;
+    }
+
+    .crbs-main.crbs-width-480 .crbs-booking-extra-list>ul>li>div.crbs-column-2,
+    .crbs-main.crbs-width-300 .crbs-booking-extra-list>ul>li>div.crbs-column-2,
+    .crbs-main.crbs-width-480 .crbs-booking-extra-list>ul>li>div.crbs-column-3,
+    .crbs-main.crbs-width-300 .crbs-booking-extra-list>ul>li>div.crbs-column-3
+    {
+        width:50%;
+        display:table-cell;
+    }
+    
+    .crbs-main.crbs-width-300 .crbs-booking-extra-list>ul>li>div.crbs-column-2,
+    .crbs-main.crbs-width-300 .crbs-booking-extra-list>ul>li>div.crbs-column-3
+    {
+        width:100%;
+        display:block;
+    }
+    
+    .crbs-main.crbs-width-300 .crbs-booking-extra-list>ul>li>div.crbs-column-2
+    {
+        display:none;
+    }
+    
+    .crbs-main.crbs-width-300 .crbs-booking-extra-list>ul>li.crbs-booking-extra-list-item-quantity-enable>div.crbs-column-2
+    {
+        display:block;
+        border-right-width:1px;
+        border-bottom-width:1px;
+    }
+    
+    .crbs-main.crbs-width-300 .crbs-booking-extra-list>ul>li>div.crbs-column-3
+    {
+        border:none;
+    }
+    
+        .crbs-main.crbs-width-300 .crbs-booking-extra-list>ul>li>div.crbs-column-3 .crbs-button
+        {
+            width:100%;
+            text-align:center;
+        }
+
+    /**************************************************************************/
+    /* Responsive / Form field                                                */
+    /**************************************************************************/    
+    
+    .crbs-main.crbs-width-300 .crbs-form-field.crbs-form-field-width-50
+    {
+        width:100%;
+        float:none;
+    }
+
+    .crbs-main.crbs-width-300 .crbs-form-field.crbs-form-field-width-50+.crbs-form-field.crbs-form-field-width-50
+    {
+        border-left-width:1px;
+    }
+    
+    .crbs-width-300.crbs-main .crbs-form-field-width-33,
+    .crbs-width-300.crbs-main .crbs-form-field-width-33+.crbs-form-field-width-33,
+    .crbs-width-300.crbs-main .crbs-form-field-width-33+.crbs-form-field-width-33+.crbs-form-field-width-33
+    {
+        width:100%;
+        float:none;
+        border-left-width:1px;
+    }
+    
+    /**************************************************************************/
+    /* Responsive / Vehicle filter                                            */
+    /**************************************************************************/
+
+    .crbs-main.crbs-width-300 .crbs-vehicle-filter .crbs-form-field.crbs-form-field-width-33+.crbs-form-field-width-33
+    {
+        border-left-width:1px;
+    }
+    
+    /**************************************************************************/
+    /* Responsive / Location detail frame                                     */
+    /**************************************************************************/      
+    
+    .crbs-main.crbs-width-768 #crbs-location-info-frame
+    {
+        font-size:14px;
+    }
+    
+    .crbs-main.crbs-width-300 #crbs-location-info-frame
+    {
+        font-size:13px;
+    }
+    
+    .crbs-main.crbs-width-300 #crbs-location-info-frame .crbs-location-info-frame-meta-1
+    {
+        display:none;
+    }
+  
+    .crbs-main.crbs-width-768 #crbs-location-info-frame,
+    .crbs-main.crbs-width-480 #crbs-location-info-frame
+    {
+        padding:20px;
+    }
+    
+    .crbs-main.crbs-width-300 #crbs-location-info-frame
+    {
+        padding:10px;
+    }
+
+        .crbs-main.crbs-width-300 #crbs-location-info-frame>div
+        {
+            padding:20px;
+        }
+        
+        .crbs-main.crbs-width-300  #crbs-location-info-frame label
+        {
+            margin-top:20px;
+        }
+    
+    .crbs-main.crbs-width-300 #crbs-location-info-frame .crbs-layout-50x50 .crbs-layout-column-left
+    {
+        margin-bottom:0px;
+    }
+    
+    .crbs-main.crbs-width-300 #crbs-location-info-frame .crbs-location-info-frame-header
+    {
+        margin-bottom:10px;
+    }
+    
+        .crbs-main.crbs-width-300 #crbs-location-info-frame .crbs-location-info-frame-header h4
+        {
+            font-size:18px;
+            line-height:28px;
+        }
+    
+    .crbs-main.crbs-width-300 #crbs-location-info-frame .crbs-location-info-frame-button 
+    {
+        padding-right:40px;
+        padding-bottom:20px;
+    }
+    
+        .crbs-main.crbs-width-300 #crbs-location-info-frame .crbs-location-info-frame-button a
+        {
+            width:100%;
+            text-align:center;
+        }
+        
+        .crbs-main.crbs-width-300 #crbs-location-info-frame .crbs-location-info-frame-button .crbs-button-checkbox 
+        {
+            height:100%;
+            overflow:hidden;
+            margin-bottom:10px;
+        }
+
+            .crbs-main.crbs-width-300 #crbs-location-info-frame .crbs-location-info-frame-button .crbs-button-checkbox a
+            {
+                width:50%;
+            }
+    
+@media screen and (max-width:460px)
+{
+
+    .ui-datepicker
+    {
+        padding:15px 10px 15px 10px;
+    }
+
+    .ui-datepicker td a, 
+    .ui-datepicker td span
+    {
+        width:34px;
+        height:34px;
+        line-height:34px;
+    }
+
+    .ui-datepicker td a.ui-state-hover
+    {
+        line-height:30px
+    }
+
+    .ui-datepicker td,
+    .ui-datepicker td a 
+    {
+        font-size:14px;
+    }
+
+    .ui-datepicker .ui-datepicker-title 
+    {
+        font-size:14px;
+    }
+
+    .ui-datepicker .ui-datepicker-next, 
+    .ui-datepicker .ui-datepicker-next-hover 
+    {
+        margin-right:0px;
+    }
+
+    .ui-datepicker .ui-datepicker-prev,
+    .ui-datepicker .ui-datepicker-prev-hover
+    {
+        margin-left:0px;
+    }
+
+    .ui-datepicker .ui-datepicker-header 
+    {
+        padding:0.7em 0px;
+    }  
+
+}
+
+/******************************************************************************/
+/* WooCommerce                                                                */
+/******************************************************************************/
+
+html .crbs-main #payment
+{
+    border-radius:0px;
+}
+
+html .crbs-main #payment,
+html .crbs-main #payment .form-row
+{
+    background:none;
+}
+
+html .crbs-main #payment .form-row
+{
+    padding:0px;
+    padding-top:20px;
+}
+
+html .crbs-main #payment .wc_payment_methods
+{
+    border:none;
+    background-color:#F9F9F9;
+    padding:28px 20px 28px 20px;
+}
+
+    html .crbs-main #payment .wc_payment_methods .wc_payment_method
+    {
+        
+    }
+    
+        html .crbs-main #payment .wc_payment_methods .wc_payment_method input[type="radio"]
+        {
+            cursor:pointer;
+        }
+    
+        html .crbs-main #payment .wc_payment_methods .wc_payment_method label
+        {
+            
+        }
+    
+            html .crbs-main #payment .wc_payment_methods .wc_payment_method label a,
+            html .crbs-main #payment .wc_payment_methods .wc_payment_method label img
+            {
+                display:none;
+            }
+
+        html .crbs-main #payment .wc_payment_methods .wc_payment_method .payment_box
+        {
+            margin:0px;
+            border:none;
+            padding:0px;
+            position:static;
+            background:none;
+            padding-left:30px;
+        }
+
+        html .crbs-main #payment .payment_box::before
+        {
+            border:none;
+        }
+
+            html .crbs-main #payment .payment_box p
+            {
+                opacity:0.5;
+                margin-top:0px;
+                padding-top:5px;
+            }
+            
+html .crbs-main .woocommerce-notice
+{
+    margin:0px;
+    padding:10px;
+    font-size:13px;
+    font-weight:500;
+    border-style:solid;
+    border-width:0px 0px 0px 4px;
+}
+
+html .crbs-main .woocommerce-notice.woocommerce-notice--success,
+html .crbs-main .woocommerce-notice.woocommerce-notice--error
+{
+    background-color:#F9F9F9;
+    border-left-color:#E9E9E9;
+}
+
+/******************************************************************************/
+/* Bug fixes                                                                  */
+/******************************************************************************/
+
+#ui-datepicker-div,
+.crbs-main .ui-selectmenu-menu,
+.crbs-main .ui-timepicker-wrapper
+{
+    z-index:99999 !important;
+}
+
+.gmnoprint
+{
+    font-size:14px !important;
+    font-weight:400 !important;
+    font-family:Lato !important;
+}
+
+.gm-style
+{
+    font:400 14px Lato !important;
+}
+
+/******************************************************************************/
+/* Widget                                                                     */
+/******************************************************************************/
+
+    /**************************************************************************/
+    /* Widget style 1                                                         */
+    /**************************************************************************/
+
+    /**************************************************************************/
+    /* Widget style 2                                                         */
+    /**************************************************************************/
+
+    .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left
+    {
+        display:flex;
+    }
+    
+    .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1 .crbs-main-content-navigation-button
+    {
+        clear:both;
+        margin-top:10px;
+    }
+    
+        .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1 .crbs-main-content-navigation-button a
+        {
+            float:right;
+            display:block;
+        }
+    
+        .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel
+        {
+            flex-grow:1;
+            margin-bottom:0px;
+        }
+        
+            .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel .crbs-form-panel-content
+            {
+                display:flex;
+            }
+            
+                .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel .crbs-form-panel-content>*
+                {
+                    flex-grow:1;
+                }
+                
+                    .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child>.crbs-form-panel-content>div:last-child>.crbs-form-field,
+                    .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child+.crbs-form-panel>.crbs-form-panel-content>div:last-child>.crbs-form-field,  
+                    .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child+.crbs-form-panel>.crbs-form-panel-content>div.crbs-form-field:first-child,
+                    .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child+.crbs-form-panel+.crbs-form-panel>.crbs-form-panel-content>div.crbs-form-field:first-child              
+                    {
+                        border-left-width:0px;
+                    }
+                    
+                    .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel .crbs-form-panel-content .crbs-customer-location
+                    {
+                        top:0px;
+                        left:1px;
+                        position:absolute;
+                        background:#FFFFFF;
+                    }
+                    
+                        .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel .crbs-form-panel-content .crbs-customer-location .crbs-form-field
+                        {
+                            border:none;
+                        }
+                    
+                    .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child>.crbs-form-panel-content>.crbs-form-field:first-child,
+                    .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child+.crbs-form-panel>.crbs-form-panel-content>.crbs-form-field:first-child
+                    {
+                        max-width:250px;
+                        min-width:250px;
+                    }
+                    
+                    .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel .crbs-form-panel-content .crbs-customer-location
+                    {
+                        width:210px;
+                    }
+            
+                    .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child+.crbs-form-panel+.crbs-form-panel>.crbs-form-panel-content>.crbs-form-field:first-child
+                    {
+                        min-width:140px;
+                        max-width:140px;
+                    }
+                    
+                        .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child+.crbs-form-panel+.crbs-form-panel>.crbs-form-panel-content>.crbs-form-field:first-child .crbs-customer-location
+                        {
+                            min-width:100px;
+                            max-width:100px;
+                        }
+   
+        .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-widthlt-960 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child+.crbs-form-panel>.crbs-form-panel-content>.crbs-form-field:first-child,
+        .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-widthlt-960 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child+.crbs-form-panel+.crbs-form-panel>.crbs-form-panel-content>div.crbs-form-field:first-child,   
+        .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-width-300 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child>.crbs-form-panel-content>div:last-child>.crbs-form-field,
+        .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-width-300 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child+.crbs-form-panel>.crbs-form-panel-content>div:last-child>.crbs-form-field 
+        {
+            border-left-width:1px;
+        }
+        
+        .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-widthlt-960 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child+.crbs-form-panel+.crbs-form-panel>.crbs-form-panel-content>.crbs-form-field:first-child
+        {
+            min-width:100%;
+            max-width:100%;
+        }   
+        
+            .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-widthlt-960 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child+.crbs-form-panel+.crbs-form-panel>.crbs-form-panel-content>.crbs-form-field:first-child .crbs-customer-location
+            {
+                min-width:calc(100% - 60px);
+                max-width:calc(100% - 60px);
+            }
+               
+        .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-widthlt-960 .crbs-main-content-step-1>div>.crbs-layout-column-left,
+        .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-width-300 .crbs-main-content-step-1 .crbs-layout-50x50>.crbs-layout-column-left .crbs-form-panel .crbs-form-panel-content,
+        .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-width-300 .crbs-main-content-step-1 .crbs-layout-50x50>.crbs-layout-column-left .crbs-form-panel .crbs-form-panel-content>*
+        {
+            display:block;
+        }
+        
+        .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-widthlt-960 .crbs-main-content-step-1 .crbs-layout-50x50>.crbs-layout-column-left .crbs-form-panel+.crbs-form-panel .crbs-form-panel-content,
+        .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-widthlt-960 .crbs-main-content-step-1 .crbs-layout-50x50>.crbs-layout-column-left .crbs-form-panel+.crbs-form-panel+.crbs-form-panel .crbs-form-panel-content
+        {
+            border-top:none;
+        }  
+
+            .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-width-300 .crbs-main-content-step-1 .crbs-layout-50x50 .crbs-layout-column-left .crbs-form-panel .crbs-form-panel-content .crbs-form-field
+            {
+                width:100%;
+            }
+            
+                    .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-width-300 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child>.crbs-form-panel-content>.crbs-form-field:first-child,
+                    .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-width-300 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child+.crbs-form-panel>.crbs-form-panel-content>.crbs-form-field:first-child
+                    {
+                        max-width:100%;
+                        min-width:100%;
+                    }
+                    
+                    .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-width-300 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel .crbs-form-panel-content .crbs-customer-location
+                    {
+                        width:calc(100% - 60px);
+                    }
+         
+        .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-width-300 .crbs-main-content .crbs-main-content-step-1 .crbs-main-content-navigation-button
+        {
+            margin-top:-30px;
+        }
+                    
+            .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-width-300 .crbs-main-content .crbs-main-content-step-1 .crbs-main-content-navigation-button a
+            {
+                width:100%;
+                text-align:center;
+            }

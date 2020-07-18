@@ -1,0 +1,900 @@
+# Copyright (C) 2019 Email Customizer For WooCommerce
+# This file is distributed under the same license as the Smart Emails package.
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Email Customizer For WooCommerce 1.5.0\n"
+"Report-Msgid-Bugs-To: https://www.storeapps.org/support/contact-us/\n"
+"POT-Creation-Date: 2020-01-02 05:44+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: \n"
+"Language-Team: StoreApps <support@storeapps.org>\n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"X-Generator: Loco https://localise.biz/"
+
+#: includes/class-sa-se-admin-notifications.php:77
+msgid ""
+"<a href=\"https://www.storeapps.org/product/smart-emails/\" "
+"target=\"_blank\">Email Customizer For WooCommerce</a> plugin has updated "
+"text in emails. If you have translated any email text, you might want to <b>"
+"check and update your translations</b>."
+msgstr ""
+
+#: includes/class-sa-se-admin-notifications.php:79
+msgid "Okay, got it"
+msgstr ""
+
+#: includes/class-sa-se-customize-classic-style.php:55
+#: includes/class-sa-se-customize-deluxe-style.php:55
+#: includes/class-sa-se-customize-elegant-style.php:53
+#: includes/class-sa-se-customize-simple-style.php:89
+msgid "Email Background"
+msgstr ""
+
+#: includes/class-sa-se-customize-classic-style.php:65
+#: includes/class-sa-se-customize-simple-style.php:57
+msgid "Header"
+msgstr ""
+
+#: includes/class-sa-se-customize-classic-style.php:75
+#: includes/class-sa-se-customize-deluxe-style.php:65
+#: includes/class-sa-se-customize-elegant-style.php:62
+msgid "Email Body"
+msgstr ""
+
+#: includes/class-sa-se-customize-classic-style.php:85
+msgid "Footer"
+msgstr ""
+
+#: includes/class-sa-se-customize-classic-style.php:117
+#: includes/class-sa-se-customize-deluxe-style.php:96
+#: includes/class-sa-se-customize-elegant-style.php:93
+#: includes/class-sa-se-customize-simple-style.php:167
+msgid "Email Background Color"
+msgstr ""
+
+#: includes/class-sa-se-customize-classic-style.php:140
+msgid "Top Border Color"
+msgstr ""
+
+#: includes/class-sa-se-customize-classic-style.php:163
+#: includes/class-sa-se-customize-simple-style.php:121
+msgid "Header Color"
+msgstr ""
+
+#: includes/class-sa-se-customize-classic-style.php:186
+#: includes/class-sa-se-customize-deluxe-style.php:119
+msgid "Email Border Color"
+msgstr ""
+
+#: includes/class-sa-se-customize-classic-style.php:209
+#: includes/class-sa-se-customize-deluxe-style.php:142
+#: includes/class-sa-se-customize-elegant-style.php:139
+msgid "Body Color"
+msgstr ""
+
+#: includes/class-sa-se-customize-classic-style.php:231
+msgid "Promotional Image"
+msgstr ""
+
+#: includes/class-sa-se-customize-classic-style.php:234
+msgid ""
+"This image will be added to all of the emails that are sent from your store. "
+"You can add offers, discounts, documentation, guides and any other "
+"promotional content image."
+msgstr ""
+
+#: includes/class-sa-se-customize-classic-style.php:254
+msgid "Promotional Image Link"
+msgstr ""
+
+#: includes/class-sa-se-customize-classic-style.php:257
+msgid ""
+"On clicking the Promotional Image the user will be redirected to the "
+"following link."
+msgstr ""
+
+#: includes/class-sa-se-customize-classic-style.php:278
+msgid "Footer Color"
+msgstr ""
+
+#: includes/class-sa-se-customize-classic-style.php:301
+msgid "Footer Text Color"
+msgstr ""
+
+#: includes/class-sa-se-customize-elegant-style.php:116
+msgid "Body Background Color"
+msgstr ""
+
+#: includes/class-sa-se-customize-simple-style.php:67
+msgid "Header Style"
+msgstr ""
+
+#: includes/class-sa-se-customize-simple-style.php:78
+#: includes/class-sa-se-customize-simple-style.php:189
+msgid "Header Text"
+msgstr ""
+
+#: includes/class-sa-se-customize-simple-style.php:144
+msgid "Header Text Color"
+msgstr ""
+
+#: includes/class-sa-se-customizer.php:291
+msgid "Email Styles"
+msgstr ""
+
+#: includes/class-sa-se-customizer.php:311
+msgid "Choose Style"
+msgstr ""
+
+#: includes/class-sa-se-customizer.php:333
+msgid "Brand Identity"
+msgstr ""
+
+#: includes/class-sa-se-customizer.php:343
+msgid "Brand Logo"
+msgstr ""
+
+#: includes/class-sa-se-customizer.php:354
+msgid "Menu Bar"
+msgstr ""
+
+#: includes/class-sa-se-customizer.php:365
+msgid "Social Links"
+msgstr ""
+
+#: includes/class-sa-se-customizer.php:376
+#: includes/class-sa-se-customizer.php:569
+msgid "Footer Text"
+msgstr ""
+
+#: includes/class-sa-se-customizer.php:413
+msgid "Logo"
+msgstr ""
+
+#: includes/class-sa-se-customizer.php:416
+msgid "Add Your Brand Logo."
+msgstr ""
+
+#: includes/class-sa-se-customizer.php:436
+msgid "Twitter Logo"
+msgstr ""
+
+#: includes/class-sa-se-customizer.php:458
+msgid "Twitter Link"
+msgstr ""
+
+#: includes/class-sa-se-customizer.php:480
+msgid "Facebook Logo"
+msgstr ""
+
+#: includes/class-sa-se-customizer.php:502
+msgid "Facebook Link"
+msgstr ""
+
+#: includes/class-sa-se-customizer.php:524
+msgid "Instagram Logo"
+msgstr ""
+
+#: includes/class-sa-se-customizer.php:546
+msgid "Instagram Link"
+msgstr ""
+
+#. translators: placeholder is to indicate current url number
+#: includes/class-sa-se-customizer.php:594
+#, php-format
+msgid "URL %s"
+msgstr ""
+
+#. translators: placeholder is to indicate current url number
+#: includes/class-sa-se-customizer.php:617
+#, php-format
+msgid "Text %s"
+msgstr ""
+
+#: includes/class-sa-se-customizer.php:667
+msgid "Send Test Email"
+msgstr ""
+
+#: includes/class-sa-se-customizer.php:688
+msgid "Send Mail"
+msgstr ""
+
+#: includes/class-sa-se-customizer.php:690
+msgid "Sends test email of the currently previewed template"
+msgstr ""
+
+#: includes/class-sa-se-customizer.php:735
+msgid "WooCommerce Test Email"
+msgstr ""
+
+#: includes/class-sa-se-customizer.php:759
+msgid "Email address"
+msgstr ""
+
+#: includes/class-sa-se-customizer.php:766
+msgid "Phone"
+msgstr ""
+
+#: includes/class-sa-se-select-email-style.php:42
+msgid "Active email style"
+msgstr ""
+
+#: includes/class-sa-se-select-email-style.php:64
+msgid "Use this"
+msgstr ""
+
+#: includes/class-sa-se-send-test-email.php:33
+msgid "Email Address"
+msgstr ""
+
+#: includes/class-sa-se-send-test-email.php:36
+msgid "Send"
+msgstr ""
+
+#: includes/class-sa-smart-emails.php:130
+msgid "Important - "
+msgstr ""
+
+#: includes/class-sa-smart-emails.php:131
+msgid ""
+"Email Customizer For WooCommerce (Smart Emails) is active but it will only "
+"work with WooCommerce 3.0+."
+msgstr ""
+
+#: includes/class-sa-smart-emails.php:133
+msgid "Please update WooCommerce to the latest version"
+msgstr ""
+
+#: includes/class-sa-smart-emails.php:168
+msgid "Smart Emails needs WooCommerce"
+msgstr ""
+
+#: includes/class-sa-smart-emails.php:170
+msgid "WooCommerce"
+msgstr ""
+
+#: includes/class-sa-smart-emails.php:171
+msgid "must be active for Smart Emails to work"
+msgstr ""
+
+#: includes/class-sa-smart-emails.php:172
+msgid "Please install & activate WooCommerce."
+msgstr ""
+
+#: includes/class-sa-smart-emails.php:221
+msgid ""
+"Email Customizer For WooCommerce (Smart Emails) is inactive due to conflicts"
+msgstr ""
+
+#: includes/class-sa-smart-emails.php:222
+msgid ""
+"It may not function properly with these plugins and cannot be used while "
+"they are active"
+msgstr ""
+
+#. #-#-#-#-#  smart-emails.pot (Smart Emails 1.3.0)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: includes/class-sa-smart-emails.php:237
+msgid "Smart Emails"
+msgstr ""
+
+#. placeholder is active emails style
+#: includes/class-sa-smart-emails.php:301
+#, php-format
+msgid "WooCommerce Emails - %s!"
+msgstr ""
+
+#: includes/class-sa-smart-emails.php:302
+msgid ""
+"The Customizer allows you to preview live changes to your WooCommere Emails. "
+"You can select different WooCommerce Email Templates and Styles to preview "
+"and customize."
+msgstr ""
+
+#: includes/class-sa-smart-emails.php:303
+msgid ""
+"Are you sure you want to use this email theme for all of the WooCommmere "
+"emails sent from your site?"
+msgstr ""
+
+#: includes/class-sa-smart-emails.php:304
+msgid "Test email sent successfully."
+msgstr ""
+
+#: includes/class-sa-smart-emails.php:305
+msgid "Please enter a valid email id."
+msgstr ""
+
+#: templates/sa-se-preview.php:13
+msgid "You do not have permission to access this page"
+msgstr ""
+
+#: templates/sa-se-preview.php:36
+msgid ""
+"You should have at least one order placed to preview and customize "
+"WooCommerce emails"
+msgstr ""
+
+#. %s: Customer first name
+#. %s Customer first name
+#. %s: Customer first name
+#. %s: Customer first name
+#. %s: Customer first name
+#. %s: Customer first name
+#. %s: Customer first name
+#. %s: Customer first name
+#. %s: Customer first name
+#. %s Customer first name
+#. %s: Customer first name
+#. %s: Customer first name
+#. %s: Customer first name
+#. %s: Customer first name
+#. %s: Customer first name
+#. %s: Customer first name
+#. %s: Customer first name
+#. %s Customer first name
+#. %s: Customer first name
+#. %s: Customer first name
+#. %s: Customer first name
+#. %s: Customer first name
+#. %s: Customer first name
+#. %s: Customer first name
+#. %s: Customer first name
+#. %s Customer first name
+#. %s: Customer first name
+#. %s: Customer first name
+#. %s: Customer first name
+#. %s: Customer first name
+#. %s: Customer first name
+#: templates/classic/customer-completed-order.php:28
+#: templates/classic/customer-invoice.php:31
+#: templates/classic/customer-new-account.php:31
+#: templates/classic/customer-note.php:29
+#: templates/classic/customer-on-hold-order.php:29
+#: templates/classic/customer-processing-order.php:29
+#: templates/classic/customer-refunded-order.php:29
+#: templates/classic/customer-reset-password.php:29
+#: templates/deluxe/customer-completed-order.php:29
+#: templates/deluxe/customer-invoice.php:31
+#: templates/deluxe/customer-new-account.php:31
+#: templates/deluxe/customer-note.php:29
+#: templates/deluxe/customer-on-hold-order.php:29
+#: templates/deluxe/customer-processing-order.php:29
+#: templates/deluxe/customer-refunded-order.php:29
+#: templates/deluxe/customer-reset-password.php:31
+#: templates/elegant/customer-completed-order.php:29
+#: templates/elegant/customer-invoice.php:31
+#: templates/elegant/customer-new-account.php:31
+#: templates/elegant/customer-note.php:29
+#: templates/elegant/customer-on-hold-order.php:29
+#: templates/elegant/customer-processing-order.php:29
+#: templates/elegant/customer-refunded-order.php:29
+#: templates/elegant/customer-reset-password.php:31
+#: templates/simple/customer-completed-order.php:29
+#: templates/simple/customer-invoice.php:31
+#: templates/simple/customer-new-account.php:31
+#: templates/simple/customer-note.php:29
+#: templates/simple/customer-on-hold-order.php:29
+#: templates/simple/customer-processing-order.php:29
+#: templates/simple/customer-refunded-order.php:29
+#: templates/simple/customer-reset-password.php:31
+#: templates/classic/woocommerce-subscriptions/customer-completed-renewal-order.php:17
+#: templates/classic/woocommerce-subscriptions/customer-completed-switch-order.php:17
+#: templates/classic/woocommerce-subscriptions/customer-processing-renewal-order.php:17
+#: templates/classic/woocommerce-subscriptions/customer-renewal-invoice.php:17
+#: templates/deluxe/woocommerce-subscriptions/customer-completed-renewal-order.php:17
+#: templates/deluxe/woocommerce-subscriptions/customer-completed-switch-order.php:17
+#: templates/deluxe/woocommerce-subscriptions/customer-processing-renewal-order.php:17
+#: templates/deluxe/woocommerce-subscriptions/customer-renewal-invoice.php:17
+#: templates/elegant/woocommerce-subscriptions/customer-completed-renewal-order.php:17
+#: templates/elegant/woocommerce-subscriptions/customer-completed-switch-order.php:17
+#: templates/elegant/woocommerce-subscriptions/customer-processing-renewal-order.php:17
+#: templates/elegant/woocommerce-subscriptions/customer-renewal-invoice.php:17
+#: templates/simple/woocommerce-subscriptions/customer-completed-renewal-order.php:17
+#: templates/simple/woocommerce-subscriptions/customer-completed-switch-order.php:17
+#: templates/simple/woocommerce-subscriptions/customer-processing-renewal-order.php:17
+#: templates/simple/woocommerce-subscriptions/customer-renewal-invoice.php:17
+#, php-format
+msgid "Hi %s,"
+msgstr ""
+
+#. %s: Site title
+#: templates/classic/customer-completed-order.php:30
+#: templates/deluxe/customer-completed-order.php:31
+#: templates/elegant/customer-completed-order.php:31
+#: templates/simple/customer-completed-order.php:31
+msgid "We have finished processing your order."
+msgstr ""
+
+#: templates/classic/customer-completed-order.php:62
+#: templates/deluxe/customer-completed-order.php:63
+#: templates/elegant/customer-completed-order.php:63
+#: templates/simple/customer-completed-order.php:63
+#: templates/classic/woocommerce-subscriptions/customer-completed-renewal-order.php:37
+#: templates/classic/woocommerce-subscriptions/customer-completed-switch-order.php:45
+#: templates/deluxe/woocommerce-subscriptions/customer-completed-renewal-order.php:37
+#: templates/deluxe/woocommerce-subscriptions/customer-completed-switch-order.php:45
+#: templates/elegant/woocommerce-subscriptions/customer-completed-renewal-order.php:37
+#: templates/elegant/woocommerce-subscriptions/customer-completed-switch-order.php:45
+#: templates/simple/woocommerce-subscriptions/customer-completed-renewal-order.php:37
+#: templates/simple/woocommerce-subscriptions/customer-completed-switch-order.php:45
+msgid "Thanks for shopping with us."
+msgstr ""
+
+#. %1$s Site title, %2$s Order pay link
+#: templates/classic/customer-invoice.php:39
+#: templates/deluxe/customer-invoice.php:39
+#: templates/elegant/customer-invoice.php:39
+#: templates/simple/customer-invoice.php:39
+#, php-format
+msgid ""
+"An order has been created for you on %1$s. Your invoice is below, with a "
+"link to make payment when you’re ready: %2$s"
+msgstr ""
+
+#: templates/classic/customer-invoice.php:47
+#: templates/deluxe/customer-invoice.php:47
+#: templates/elegant/customer-invoice.php:47
+#: templates/simple/customer-invoice.php:47
+msgid "Pay for this order"
+msgstr ""
+
+#. %s Order date
+#: templates/classic/customer-invoice.php:56
+#: templates/deluxe/customer-invoice.php:56
+#: templates/elegant/customer-invoice.php:56
+#: templates/simple/customer-invoice.php:56
+#, php-format
+msgid "Here are the details of your order placed on %s:"
+msgstr ""
+
+#: templates/classic/customer-invoice.php:97
+#: templates/classic/customer-note.php:66
+#: templates/classic/customer-reset-password.php:63
+#: templates/deluxe/customer-invoice.php:97
+#: templates/deluxe/customer-note.php:66
+#: templates/deluxe/customer-reset-password.php:53
+#: templates/elegant/customer-invoice.php:97
+#: templates/elegant/customer-note.php:66
+#: templates/elegant/customer-reset-password.php:53
+#: templates/simple/customer-invoice.php:97
+#: templates/simple/customer-note.php:66
+#: templates/simple/customer-reset-password.php:65
+#: templates/classic/woocommerce-subscriptions/customer-renewal-invoice.php:69
+#: templates/deluxe/woocommerce-subscriptions/customer-renewal-invoice.php:69
+#: templates/elegant/woocommerce-subscriptions/customer-renewal-invoice.php:69
+#: templates/simple/woocommerce-subscriptions/customer-renewal-invoice.php:69
+msgid "Thanks for reading."
+msgstr ""
+
+#. %1$s: Site title, %2$s: Username, %3$s: My account link
+#: templates/classic/customer-new-account.php:33
+#: templates/deluxe/customer-new-account.php:33
+#: templates/elegant/customer-new-account.php:33
+#: templates/simple/customer-new-account.php:33
+#, php-format
+msgid ""
+"Thanks for creating an account on %1$s. Your username is %2$s. You can "
+"access your account area to view orders, change your password, and more at: "
+"%3$s"
+msgstr ""
+
+#. translators: %s is user's password
+#: templates/classic/customer-new-account.php:37
+#: templates/deluxe/customer-new-account.php:37
+#: templates/elegant/customer-new-account.php:37
+#: templates/simple/customer-new-account.php:37
+#, php-format
+msgid "Your password has been automatically generated: %s"
+msgstr ""
+
+#: templates/classic/customer-new-account.php:50
+#: templates/deluxe/customer-new-account.php:50
+#: templates/elegant/customer-new-account.php:50
+#: templates/simple/customer-new-account.php:50
+msgid "We look forward to seeing you soon."
+msgstr ""
+
+#: templates/classic/customer-note.php:30 templates/deluxe/customer-note.php:30
+#: templates/elegant/customer-note.php:30 templates/simple/customer-note.php:30
+msgid "The following note has been added to your order:"
+msgstr ""
+
+#: templates/classic/customer-note.php:34 templates/deluxe/customer-note.php:34
+#: templates/elegant/customer-note.php:34 templates/simple/customer-note.php:34
+msgid "As a reminder, here are your order details:"
+msgstr ""
+
+#: templates/classic/customer-on-hold-order.php:30
+#: templates/deluxe/customer-on-hold-order.php:30
+#: templates/elegant/customer-on-hold-order.php:30
+#: templates/simple/customer-on-hold-order.php:30
+msgid ""
+"Thanks for your order. It’s on-hold until we confirm that payment has been "
+"received. In the meantime, here’s a reminder of what you ordered:"
+msgstr ""
+
+#: templates/classic/customer-on-hold-order.php:63
+#: templates/deluxe/customer-on-hold-order.php:63
+#: templates/elegant/customer-on-hold-order.php:63
+#: templates/simple/customer-on-hold-order.php:63
+msgid "We look forward to fulfilling your order soon."
+msgstr ""
+
+#. %s: Order number
+#: templates/classic/customer-processing-order.php:31
+#: templates/deluxe/customer-processing-order.php:31
+#: templates/elegant/customer-processing-order.php:31
+#: templates/simple/customer-processing-order.php:31
+#, php-format
+msgid ""
+"Just to let you know &mdash; we've received your order #%s, and it is now "
+"being processed:"
+msgstr ""
+
+#: templates/classic/customer-processing-order.php:64
+#: templates/deluxe/customer-processing-order.php:64
+#: templates/elegant/customer-processing-order.php:64
+#: templates/simple/customer-processing-order.php:64
+#: templates/classic/woocommerce-subscriptions/customer-processing-renewal-order.php:38
+#: templates/deluxe/woocommerce-subscriptions/customer-processing-renewal-order.php:38
+#: templates/elegant/woocommerce-subscriptions/customer-processing-renewal-order.php:38
+#: templates/simple/woocommerce-subscriptions/customer-processing-renewal-order.php:38
+msgid "Thanks!"
+msgstr ""
+
+#. %s: Site title
+#: templates/classic/customer-refunded-order.php:35
+#: templates/deluxe/customer-refunded-order.php:35
+#: templates/elegant/customer-refunded-order.php:35
+#: templates/simple/customer-refunded-order.php:35
+#, php-format
+msgid ""
+"Your order on %s has been partially refunded. There are more details below "
+"for your reference:"
+msgstr ""
+
+#. %s: Site title
+#: templates/classic/customer-refunded-order.php:38
+#: templates/deluxe/customer-refunded-order.php:38
+#: templates/elegant/customer-refunded-order.php:38
+#: templates/simple/customer-refunded-order.php:38
+#, php-format
+msgid ""
+"Your order on %s has been refunded. There are more details below for your "
+"reference:"
+msgstr ""
+
+#: templates/classic/customer-refunded-order.php:73
+#: templates/deluxe/customer-refunded-order.php:73
+#: templates/elegant/customer-refunded-order.php:73
+#: templates/simple/customer-refunded-order.php:73
+msgid "We hope to see you again soon."
+msgstr ""
+
+#. %s: Store name
+#: templates/classic/customer-reset-password.php:31
+#: templates/deluxe/customer-reset-password.php:33
+#: templates/elegant/customer-reset-password.php:33
+#: templates/simple/customer-reset-password.php:33
+#, php-format
+msgid "Someone has requested a new password for the following account on %s:"
+msgstr ""
+
+#. translators: %s is username of the user
+#: templates/classic/customer-reset-password.php:33
+#: templates/deluxe/customer-reset-password.php:35
+#: templates/elegant/customer-reset-password.php:35
+#: templates/simple/customer-reset-password.php:35
+#, php-format
+msgid "Username: %s"
+msgstr ""
+
+#: templates/classic/customer-reset-password.php:34
+#: templates/deluxe/customer-reset-password.php:36
+#: templates/elegant/customer-reset-password.php:36
+#: templates/simple/customer-reset-password.php:36
+msgid ""
+"If you didn't make this request, just ignore this email. If you'd like to "
+"proceed:"
+msgstr ""
+
+#: templates/classic/customer-reset-password.php:49
+#: templates/deluxe/customer-reset-password.php:39
+#: templates/elegant/customer-reset-password.php:39
+#: templates/simple/customer-reset-password.php:51
+msgid "Click here to reset your password"
+msgstr ""
+
+#: templates/classic/email-addresses.php:30
+#: templates/deluxe/email-addresses.php:30
+#: templates/elegant/email-addresses.php:30
+#: templates/simple/email-addresses.php:30
+msgid "Billing address"
+msgstr ""
+
+#: templates/classic/email-addresses.php:38
+#: templates/deluxe/email-addresses.php:38
+#: templates/elegant/email-addresses.php:38
+#: templates/simple/email-addresses.php:38
+msgid "Shipping address"
+msgstr ""
+
+#: templates/classic/email-customer-details.php:29
+#: templates/deluxe/email-customer-details.php:31
+#: templates/elegant/email-customer-details.php:29
+#: templates/simple/email-customer-details.php:29
+msgid "Customer details"
+msgstr ""
+
+#: templates/classic/email-downloads.php:26
+#: templates/deluxe/email-downloads.php:33
+#: templates/elegant/email-downloads.php:26
+#: templates/simple/email-downloads.php:26
+msgid "Downloads"
+msgstr ""
+
+#: templates/classic/email-downloads.php:68
+#: templates/deluxe/email-downloads.php:75
+#: templates/elegant/email-downloads.php:68
+#: templates/simple/email-downloads.php:68
+msgid "Never"
+msgstr ""
+
+#. %s: Order ID.
+#: templates/classic/email-order-details.php:39
+#: templates/classic/email-order-details.php:46
+#: templates/classic/email-order-details.php:55
+#: templates/deluxe/email-order-details.php:44
+#: templates/deluxe/email-order-details.php:51
+#: templates/deluxe/email-order-details.php:60
+#: templates/elegant/email-order-details.php:38
+#: templates/elegant/email-order-details.php:45
+#: templates/elegant/email-order-details.php:54
+#: templates/simple/email-order-details.php:39
+#: templates/simple/email-order-details.php:46
+#: templates/simple/email-order-details.php:55
+#, php-format
+msgid "[Order #%s]"
+msgstr ""
+
+#: templates/classic/email-order-details.php:71
+#: templates/deluxe/email-order-details.php:76
+#: templates/elegant/email-order-details.php:69
+#: templates/simple/email-order-details.php:71
+msgid "Product"
+msgstr ""
+
+#: templates/classic/email-order-details.php:73
+#: templates/deluxe/email-order-details.php:78
+#: templates/elegant/email-order-details.php:71
+#: templates/simple/email-order-details.php:73
+msgid "Quantity"
+msgstr ""
+
+#: templates/classic/email-order-details.php:74
+#: templates/deluxe/email-order-details.php:79
+#: templates/elegant/email-order-details.php:72
+#: templates/simple/email-order-details.php:74
+msgid "Price"
+msgstr ""
+
+#: templates/classic/email-order-details.php:110
+#: templates/deluxe/email-order-details.php:116
+#: templates/elegant/email-order-details.php:108
+#: templates/simple/email-order-details.php:114
+#: templates/classic/woocommerce-subscriptions/email-order-details.php:76
+#: templates/deluxe/woocommerce-subscriptions/email-order-details.php:82
+#: templates/elegant/woocommerce-subscriptions/email-order-details.php:76
+#: templates/simple/woocommerce-subscriptions/email-order-details.php:80
+msgid "Note"
+msgstr ""
+
+#: templates/simple/email-addresses.php:52
+msgid "Order Total"
+msgstr ""
+
+#. $1-$2: opening and closing <a> tags $3: order's order number $4: date of order in <time> element.
+#: templates/classic/woocommerce-subscriptions/email-order-details.php:23
+#: templates/deluxe/woocommerce-subscriptions/email-order-details.php:28
+#: templates/elegant/woocommerce-subscriptions/email-order-details.php:23
+#: templates/simple/woocommerce-subscriptions/email-order-details.php:23
+#, php-format
+msgctxt "Used in email notification"
+msgid "[Order #%1$s] (%2$s)"
+msgstr ""
+
+#. $1-$3: opening and closing <a> tags $2: subscription's order number.
+#: templates/classic/woocommerce-subscriptions/email-order-details.php:26
+#: templates/deluxe/woocommerce-subscriptions/email-order-details.php:31
+#: templates/elegant/woocommerce-subscriptions/email-order-details.php:26
+#: templates/simple/woocommerce-subscriptions/email-order-details.php:26
+#, php-format
+msgctxt "Used in email notification"
+msgid "Subscription %1$s#%2$s%3$s"
+msgstr ""
+
+#: templates/classic/woocommerce-subscriptions/email-order-details.php:35
+#: templates/deluxe/woocommerce-subscriptions/email-order-details.php:40
+#: templates/elegant/woocommerce-subscriptions/email-order-details.php:35
+#: templates/simple/woocommerce-subscriptions/email-order-details.php:35
+msgctxt "table headings in notification email"
+msgid "Product"
+msgstr ""
+
+#: templates/classic/woocommerce-subscriptions/email-order-details.php:37
+#: templates/deluxe/woocommerce-subscriptions/email-order-details.php:42
+#: templates/elegant/woocommerce-subscriptions/email-order-details.php:37
+#: templates/simple/woocommerce-subscriptions/email-order-details.php:37
+msgctxt "table headings in notification email"
+msgid "Quantity"
+msgstr ""
+
+#: templates/classic/woocommerce-subscriptions/email-order-details.php:38
+#: templates/deluxe/woocommerce-subscriptions/email-order-details.php:43
+#: templates/elegant/woocommerce-subscriptions/email-order-details.php:38
+#: templates/simple/woocommerce-subscriptions/email-order-details.php:38
+msgctxt "table headings in notification email"
+msgid "Price"
+msgstr ""
+
+#: templates/classic/woocommerce-subscriptions/customer-completed-renewal-order.php:18
+#: templates/deluxe/woocommerce-subscriptions/customer-completed-renewal-order.php:18
+#: templates/elegant/woocommerce-subscriptions/customer-completed-renewal-order.php:18
+#: templates/simple/woocommerce-subscriptions/customer-completed-renewal-order.php:18
+msgid "We have finished processing your subscription renewal order."
+msgstr ""
+
+#: templates/classic/woocommerce-subscriptions/customer-completed-switch-order.php:18
+#: templates/deluxe/woocommerce-subscriptions/customer-completed-switch-order.php:18
+#: templates/elegant/woocommerce-subscriptions/customer-completed-switch-order.php:18
+#: templates/simple/woocommerce-subscriptions/customer-completed-switch-order.php:18
+msgid ""
+"You have successfully changed your subscription items. Your new order and "
+"subscription details are shown below for your reference:"
+msgstr ""
+
+#: templates/classic/woocommerce-subscriptions/customer-completed-switch-order.php:26
+#: templates/deluxe/woocommerce-subscriptions/customer-completed-switch-order.php:26
+#: templates/elegant/woocommerce-subscriptions/customer-completed-switch-order.php:26
+#: templates/simple/woocommerce-subscriptions/customer-completed-switch-order.php:26
+msgid "New subscription details"
+msgstr ""
+
+#. %s: Order number
+#: templates/classic/woocommerce-subscriptions/customer-processing-renewal-order.php:19
+#: templates/deluxe/woocommerce-subscriptions/customer-processing-renewal-order.php:19
+#: templates/elegant/woocommerce-subscriptions/customer-processing-renewal-order.php:19
+#: templates/simple/woocommerce-subscriptions/customer-processing-renewal-order.php:19
+#, php-format
+msgid ""
+"Just to let you know &mdash; we've received your subscription renewal order "
+"#%s, and it is now being processed:"
+msgstr ""
+
+#. %1$s: name of the blog, %2$s: link to checkout payment url, note: no full stop due to url at the end.
+#: templates/classic/woocommerce-subscriptions/customer-renewal-invoice.php:25
+#: templates/deluxe/woocommerce-subscriptions/customer-renewal-invoice.php:25
+#: templates/elegant/woocommerce-subscriptions/customer-renewal-invoice.php:25
+#: templates/simple/woocommerce-subscriptions/customer-renewal-invoice.php:25
+#, php-format
+msgctxt "In customer renewal invoice email"
+msgid ""
+"An order has been created for you to renew your subscription on %1$s. To pay "
+"for this invoice please use the following link: %2$s"
+msgstr ""
+
+#: templates/classic/woocommerce-subscriptions/customer-renewal-invoice.php:27
+#: templates/classic/woocommerce-subscriptions/customer-renewal-invoice.php:41
+#: templates/deluxe/woocommerce-subscriptions/customer-renewal-invoice.php:27
+#: templates/deluxe/woocommerce-subscriptions/customer-renewal-invoice.php:41
+#: templates/elegant/woocommerce-subscriptions/customer-renewal-invoice.php:27
+#: templates/elegant/woocommerce-subscriptions/customer-renewal-invoice.php:41
+#: templates/simple/woocommerce-subscriptions/customer-renewal-invoice.php:27
+#: templates/simple/woocommerce-subscriptions/customer-renewal-invoice.php:41
+msgid "Pay Now &raquo;"
+msgstr ""
+
+#. %1$s: name of the blog, %2$s: link to checkout payment url, note: no full stop due to url at the end.
+#: templates/classic/woocommerce-subscriptions/customer-renewal-invoice.php:39
+#: templates/deluxe/woocommerce-subscriptions/customer-renewal-invoice.php:39
+#: templates/elegant/woocommerce-subscriptions/customer-renewal-invoice.php:39
+#: templates/simple/woocommerce-subscriptions/customer-renewal-invoice.php:39
+#, php-format
+msgctxt "In customer renewal invoice email"
+msgid ""
+"The automatic payment to renew your subscription with %1$s has failed. To "
+"reactivate the subscription, please log in and pay for the renewal from your "
+"account page: %2$s"
+msgstr ""
+
+#. %s Order date
+#: templates/classic/woocommerce-subscriptions/customer-renewal-invoice.php:51
+#: templates/deluxe/woocommerce-subscriptions/customer-renewal-invoice.php:51
+#: templates/elegant/woocommerce-subscriptions/customer-renewal-invoice.php:51
+#: templates/simple/woocommerce-subscriptions/customer-renewal-invoice.php:51
+#, php-format
+msgid "Here are the details of your renewal order placed on %s:"
+msgstr ""
+
+#: templates/classic/woocommerce-subscriptions/subscription-info.php:15
+#: templates/deluxe/woocommerce-subscriptions/subscription-info.php:15
+#: templates/elegant/woocommerce-subscriptions/subscription-info.php:15
+#: templates/simple/woocommerce-subscriptions/subscription-info.php:15
+msgid "Subscription information"
+msgstr ""
+
+#: templates/classic/woocommerce-subscriptions/subscription-info.php:19
+#: templates/deluxe/woocommerce-subscriptions/subscription-info.php:19
+#: templates/elegant/woocommerce-subscriptions/subscription-info.php:19
+#: templates/simple/woocommerce-subscriptions/subscription-info.php:19
+msgid "Subscription"
+msgstr ""
+
+#: templates/classic/woocommerce-subscriptions/subscription-info.php:20
+#: templates/deluxe/woocommerce-subscriptions/subscription-info.php:20
+#: templates/elegant/woocommerce-subscriptions/subscription-info.php:20
+#: templates/simple/woocommerce-subscriptions/subscription-info.php:20
+msgctxt "table heading"
+msgid "Start date"
+msgstr ""
+
+#: templates/classic/woocommerce-subscriptions/subscription-info.php:21
+#: templates/deluxe/woocommerce-subscriptions/subscription-info.php:21
+#: templates/elegant/woocommerce-subscriptions/subscription-info.php:21
+#: templates/simple/woocommerce-subscriptions/subscription-info.php:21
+msgctxt "table heading"
+msgid "End date"
+msgstr ""
+
+#: templates/classic/woocommerce-subscriptions/subscription-info.php:22
+#: templates/deluxe/woocommerce-subscriptions/subscription-info.php:22
+#: templates/elegant/woocommerce-subscriptions/subscription-info.php:22
+#: templates/simple/woocommerce-subscriptions/subscription-info.php:22
+msgctxt "table heading"
+msgid "Price"
+msgstr ""
+
+#. %s: Subscription ID.
+#: templates/classic/woocommerce-subscriptions/subscription-info.php:28
+#: templates/deluxe/woocommerce-subscriptions/subscription-info.php:28
+#: templates/elegant/woocommerce-subscriptions/subscription-info.php:28
+#: templates/simple/woocommerce-subscriptions/subscription-info.php:28
+#, php-format
+msgctxt "subscription number in email table. (eg: #106)"
+msgid "#%s"
+msgstr ""
+
+#: templates/classic/woocommerce-subscriptions/subscription-info.php:30
+#: templates/deluxe/woocommerce-subscriptions/subscription-info.php:30
+#: templates/elegant/woocommerce-subscriptions/subscription-info.php:30
+#: templates/simple/woocommerce-subscriptions/subscription-info.php:30
+msgctxt "Used as end date for an indefinite subscription"
+msgid "When cancelled"
+msgstr ""
+
+#. Name of the plugin
+msgid "Email Customizer For WooCommerce (Smart Emails)"
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"Customize the emails - styling, colors, logo and text - sent from your store."
+msgstr ""
+
+#. URI of the plugin
+msgid "https://www.storeapps.org/product/email-customizer-for-woocommerce/"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "StoreApps"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://www.storeapps.org/"
+msgstr ""

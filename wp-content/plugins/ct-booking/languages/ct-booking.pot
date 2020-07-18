@@ -1,0 +1,887 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-09-13 15:09+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ct-booking.php:59
+msgctxt "Post Type General Name"
+msgid "Hotels"
+msgstr ""
+
+#: ct-booking.php:60
+msgctxt "Post Type Singular Name"
+msgid "Hotel"
+msgstr ""
+
+#: ct-booking.php:61
+msgid "Hotels"
+msgstr ""
+
+#: ct-booking.php:62
+msgid "All Hotels"
+msgstr ""
+
+#: ct-booking.php:63
+msgid "View Hotel"
+msgstr ""
+
+#: ct-booking.php:64
+msgid "Add New Hotel"
+msgstr ""
+
+#: ct-booking.php:65
+msgid "New Hotel"
+msgstr ""
+
+#: ct-booking.php:66
+msgid "Edit Hotels"
+msgstr ""
+
+#: ct-booking.php:67
+msgid "Update Hotels"
+msgstr ""
+
+#: ct-booking.php:68
+msgid "Search Hotels"
+msgstr ""
+
+#: ct-booking.php:69
+msgid "No Hotels found"
+msgstr ""
+
+#: ct-booking.php:70
+msgid "No Hotels found in Trash"
+msgstr ""
+
+#: ct-booking.php:73
+msgid "hotel"
+msgstr ""
+
+#: ct-booking.php:74
+msgid "Hotel information pages"
+msgstr ""
+
+#: ct-booking.php:106
+msgctxt "Post Type Name"
+msgid "Room Types"
+msgstr ""
+
+#: ct-booking.php:107
+msgctxt "Post Type Singular Name"
+msgid "Room Type"
+msgstr ""
+
+#: ct-booking.php:108
+msgid "Room Types"
+msgstr ""
+
+#: ct-booking.php:109
+msgid "All Room Types"
+msgstr ""
+
+#: ct-booking.php:110
+msgid "View Room Type"
+msgstr ""
+
+#: ct-booking.php:111
+msgid "Add New Room"
+msgstr ""
+
+#: ct-booking.php:112
+msgid "New Room Types"
+msgstr ""
+
+#: ct-booking.php:113
+msgid "Edit Room Types"
+msgstr ""
+
+#: ct-booking.php:114
+msgid "Update Room Types"
+msgstr ""
+
+#: ct-booking.php:115
+msgid "Search Room Types"
+msgstr ""
+
+#: ct-booking.php:116
+msgid "No Room Types found"
+msgstr ""
+
+#: ct-booking.php:117
+msgid "No Room Types found in Trash"
+msgstr ""
+
+#: ct-booking.php:120
+msgid "room types"
+msgstr ""
+
+#: ct-booking.php:121
+msgid "Room Type information pages"
+msgstr ""
+
+#: ct-booking.php:150
+msgctxt "taxonomy general name"
+msgid "Districts"
+msgstr ""
+
+#: ct-booking.php:151
+msgctxt "taxonomy singular name"
+msgid "District"
+msgstr ""
+
+#: ct-booking.php:152
+msgid "Districts"
+msgstr ""
+
+#: ct-booking.php:153
+msgid "All Districts"
+msgstr ""
+
+#: ct-booking.php:156
+msgid "New District"
+msgstr ""
+
+#: ct-booking.php:157
+msgid "Add New District"
+msgstr ""
+
+#: ct-booking.php:158
+msgid "Edit District"
+msgstr ""
+
+#: ct-booking.php:159
+msgid "Update District"
+msgstr ""
+
+#: ct-booking.php:160
+msgid "Separate Districts with commas"
+msgstr ""
+
+#: ct-booking.php:161
+msgid "Search Districts"
+msgstr ""
+
+#: ct-booking.php:162
+msgid "Add or remove Districts"
+msgstr ""
+
+#: ct-booking.php:163
+msgid "Choose from the most used Districts"
+msgstr ""
+
+#: ct-booking.php:164
+msgid "No Districts found."
+msgstr ""
+
+#: ct-booking.php:182
+msgctxt "taxonomy general name"
+msgid "Hotel Facilities"
+msgstr ""
+
+#: ct-booking.php:183
+msgctxt "taxonomy singular name"
+msgid "Hotel Facility"
+msgstr ""
+
+#: ct-booking.php:184
+msgid "Hotel Facilities"
+msgstr ""
+
+#: ct-booking.php:185
+msgid "All Hotel Facilities"
+msgstr ""
+
+#: ct-booking.php:188
+msgid "New Hotel Facility"
+msgstr ""
+
+#: ct-booking.php:189
+msgid "Add New Hotel Facility"
+msgstr ""
+
+#: ct-booking.php:190
+msgid "Edit Hotel Facility"
+msgstr ""
+
+#: ct-booking.php:191
+msgid "Update Hotel Facility"
+msgstr ""
+
+#: ct-booking.php:192
+msgid "Separate hotel facilities with commas"
+msgstr ""
+
+#: ct-booking.php:193
+msgid "Search Hotel Facilities"
+msgstr ""
+
+#: ct-booking.php:194
+msgid "Add or remove hotel facilities"
+msgstr ""
+
+#: ct-booking.php:195
+msgid "Choose from the most used hotel facilities"
+msgstr ""
+
+#: ct-booking.php:196
+msgid "No hotel facilities found."
+msgstr ""
+
+#: ct-booking.php:218
+msgctxt "Post Type General Name"
+msgid "Tours"
+msgstr ""
+
+#: ct-booking.php:219
+msgctxt "Post Type Singular Name"
+msgid "Tour"
+msgstr ""
+
+#: ct-booking.php:220
+msgid "Tours"
+msgstr ""
+
+#: ct-booking.php:221
+msgid "All Tours"
+msgstr ""
+
+#: ct-booking.php:222
+msgid "View Tour"
+msgstr ""
+
+#: ct-booking.php:223
+msgid "Add New Tour"
+msgstr ""
+
+#: ct-booking.php:224
+msgid "New Tour"
+msgstr ""
+
+#: ct-booking.php:225
+msgid "Edit Tours"
+msgstr ""
+
+#: ct-booking.php:226
+msgid "Update Tours"
+msgstr ""
+
+#: ct-booking.php:227
+msgid "Search Tours"
+msgstr ""
+
+#: ct-booking.php:228
+msgid "No Tours found"
+msgstr ""
+
+#: ct-booking.php:229
+msgid "No Tours found in Trash"
+msgstr ""
+
+#: ct-booking.php:232
+msgid "tour"
+msgstr ""
+
+#: ct-booking.php:233
+msgid "Tour information pages"
+msgstr ""
+
+#: ct-booking.php:265
+msgctxt "taxonomy general name"
+msgid "Tour Types"
+msgstr ""
+
+#: ct-booking.php:266
+msgctxt "taxonomy singular name"
+msgid "Tour Type"
+msgstr ""
+
+#: ct-booking.php:267
+msgid "Tour Types"
+msgstr ""
+
+#: ct-booking.php:268
+msgid "All Tour Types"
+msgstr ""
+
+#: ct-booking.php:271
+msgid "New Tour Type"
+msgstr ""
+
+#: ct-booking.php:272
+msgid "Add New Tour Type"
+msgstr ""
+
+#: ct-booking.php:273
+msgid "Edit Tour Type"
+msgstr ""
+
+#: ct-booking.php:274
+msgid "Update Tour Type"
+msgstr ""
+
+#: ct-booking.php:275
+msgid "Separate tour types with commas"
+msgstr ""
+
+#: ct-booking.php:276
+msgid "Search Tour Types"
+msgstr ""
+
+#: ct-booking.php:277
+msgid "Add or remove tour types"
+msgstr ""
+
+#: ct-booking.php:278
+msgid "Choose from the most used tour types"
+msgstr ""
+
+#: ct-booking.php:279
+msgid "No tour types found."
+msgstr ""
+
+#: ct-booking.php:298
+msgctxt "taxonomy general name"
+msgid "Tour Facilities"
+msgstr ""
+
+#: ct-booking.php:299
+msgctxt "taxonomy singular name"
+msgid "Tour Facility"
+msgstr ""
+
+#: ct-booking.php:300
+msgid "Tour Facilities"
+msgstr ""
+
+#: ct-booking.php:301
+msgid "All Tour Facilities"
+msgstr ""
+
+#: ct-booking.php:304
+msgid "New Tour Facility"
+msgstr ""
+
+#: ct-booking.php:305
+msgid "Add New Tour Facility"
+msgstr ""
+
+#: ct-booking.php:306
+msgid "Edit Tour Facility"
+msgstr ""
+
+#: ct-booking.php:307
+msgid "Update Tour Facility"
+msgstr ""
+
+#: ct-booking.php:308
+msgid "Separate tour facilities with commas"
+msgstr ""
+
+#: ct-booking.php:309
+msgid "Search Tour Facilities"
+msgstr ""
+
+#: ct-booking.php:310
+msgid "Add or remove tour facilities"
+msgstr ""
+
+#: ct-booking.php:311
+msgid "Choose from the most used tour facilities"
+msgstr ""
+
+#: ct-booking.php:312
+msgid "No tour facilities found."
+msgstr ""
+
+#: ct-booking.php:333
+msgctxt "Post Type General Name"
+msgid "Cars"
+msgstr ""
+
+#: ct-booking.php:334
+msgctxt "Post Type Singular Name"
+msgid "Car"
+msgstr ""
+
+#: ct-booking.php:335
+msgid "Cars"
+msgstr ""
+
+#: ct-booking.php:336
+msgid "All Cars"
+msgstr ""
+
+#: ct-booking.php:337
+msgid "View Car"
+msgstr ""
+
+#: ct-booking.php:338
+msgid "Add New Car"
+msgstr ""
+
+#: ct-booking.php:339
+msgid "New Car"
+msgstr ""
+
+#: ct-booking.php:340
+msgid "Edit Cars"
+msgstr ""
+
+#: ct-booking.php:341
+msgid "Update Cars"
+msgstr ""
+
+#: ct-booking.php:342
+msgid "Search Cars"
+msgstr ""
+
+#: ct-booking.php:343
+msgid "No Cars found"
+msgstr ""
+
+#: ct-booking.php:344
+msgid "No Cars found in Trash"
+msgstr ""
+
+#: ct-booking.php:347
+msgid "car"
+msgstr ""
+
+#: ct-booking.php:348
+msgid "Car information pages"
+msgstr ""
+
+#: ct-booking.php:380
+msgctxt "taxonomy general name"
+msgid "Car Transfer Types"
+msgstr ""
+
+#: ct-booking.php:381
+msgctxt "taxonomy singular name"
+msgid "Car Transfer Type"
+msgstr ""
+
+#: ct-booking.php:382
+msgid "Car Transfer Types"
+msgstr ""
+
+#: ct-booking.php:383
+msgid "All Car Transfer Types"
+msgstr ""
+
+#: ct-booking.php:386
+msgid "New Car Transfer Type"
+msgstr ""
+
+#: ct-booking.php:387
+msgid "Add New Car Transfer Type"
+msgstr ""
+
+#: ct-booking.php:388
+msgid "Edit Car Transfer Type"
+msgstr ""
+
+#: ct-booking.php:389
+msgid "Update Car Transfer Type"
+msgstr ""
+
+#: ct-booking.php:390
+msgid "Separate car transfer types with commas"
+msgstr ""
+
+#: ct-booking.php:391
+msgid "Search Car Transfer Types"
+msgstr ""
+
+#: ct-booking.php:392
+msgid "Add or remove car transfer types"
+msgstr ""
+
+#: ct-booking.php:393
+msgid "Choose from the most used car transfer types"
+msgstr ""
+
+#: ct-booking.php:394
+msgid "No car transfer types found."
+msgstr ""
+
+#: ct-booking.php:413
+msgctxt "taxonomy general name"
+msgid "Car Facilities"
+msgstr ""
+
+#: ct-booking.php:414
+msgctxt "taxonomy singular name"
+msgid "Car Facility"
+msgstr ""
+
+#: ct-booking.php:415
+msgid "Car Facilities"
+msgstr ""
+
+#: ct-booking.php:416
+msgid "All Car Facilities"
+msgstr ""
+
+#: ct-booking.php:419
+msgid "New Car Facility"
+msgstr ""
+
+#: ct-booking.php:420
+msgid "Add New Car Facility"
+msgstr ""
+
+#: ct-booking.php:421
+msgid "Edit Car Facility"
+msgstr ""
+
+#: ct-booking.php:422
+msgid "Update Car Facility"
+msgstr ""
+
+#: ct-booking.php:423
+msgid "Separate car facilities with commas"
+msgstr ""
+
+#: ct-booking.php:424
+msgid "Search Car Facilities"
+msgstr ""
+
+#: ct-booking.php:425
+msgid "Add or remove car facilities"
+msgstr ""
+
+#: ct-booking.php:426
+msgid "Choose from the most used car facilities"
+msgstr ""
+
+#: ct-booking.php:427
+msgid "No car facilities found."
+msgstr ""
+
+#: lib/importer/importer.php:34
+msgid "Successfully imported theme options!"
+msgstr ""
+
+#: lib/importer/importer.php:50
+msgid "Successfully reset menus!"
+msgstr ""
+
+#: lib/importer/importer.php:81
+msgid "Successfully reset widgets!"
+msgstr ""
+
+#: lib/importer/importer.php:243
+msgid "Successfully imported widgets!"
+msgstr ""
+
+#: lib/importer/parsers.php:45 lib/importer/parsers.php:75
+#: lib/importer/parsers.php:83
+msgid "There was an error when reading this WXR file"
+msgstr ""
+
+#: lib/importer/parsers.php:46
+msgid ""
+"Details are shown above. The importer will now try again with a different "
+"parser..."
+msgstr ""
+
+#: lib/importer/parsers.php:87 lib/importer/parsers.php:92
+#: lib/importer/parsers.php:295 lib/importer/parsers.php:529
+msgid ""
+"This does not appear to be a WXR file, missing/invalid WXR version number"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:168
+msgid "Imported categories"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:173
+msgid "Imported tags"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:178
+msgid "Imported terms"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:184
+msgid "Imported posts"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:191
+msgid "Importing posts"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:200
+msgid "Importing menus"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:206
+#: lib/importer/wordpress-importer.php:214
+#: lib/importer/wordpress-importer.php:219
+msgid "Processing menus"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:226
+msgid "Successfully imported dummy content!"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:271
+#: lib/importer/wordpress-importer.php:280
+#: lib/importer/wordpress-importer.php:331
+#: lib/importer/wordpress-importer.php:335
+#: lib/importer/wordpress-importer.php:344
+msgid "Sorry, there has been an error."
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:272
+msgid "The file does not exist, please try again."
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:336
+#, php-format
+msgid ""
+"The export file could not be found at <code>%s</code>. It is likely that "
+"this was caused by a permissions problem."
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:352
+#, php-format
+msgid ""
+"This WXR file (version %s) may not be supported by this version of the "
+"importer. Please consider updating."
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:377
+#, php-format
+msgid ""
+"Failed to import author %s. Their posts will be attributed to the current "
+"user."
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:403
+msgid "Assign Authors"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:404
+msgid ""
+"To make it easier for you to edit and save the imported content, you may "
+"want to reassign the author of the imported item to an existing user of this "
+"site. For example, you may want to import all the entries as <code>admin</"
+"code>s entries."
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:406
+#, php-format
+msgid ""
+"If a new user is created by WordPress, a new password will be randomly "
+"generated and the new user&#8217;s role will be set as %s. Manually changing "
+"the new user&#8217;s details will be necessary."
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:416
+msgid "Import Attachments"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:419
+msgid "Download and import file attachments"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:423
+msgid "Submit"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:436
+msgid "Import author:"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:447
+msgid "or create new user with login name:"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:450
+msgid "as a new user:"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:458
+msgid "assign posts to an existing user:"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:460
+msgid "or assign posts to an existing user:"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:461
+msgid "- Select -"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:511
+#, php-format
+msgid ""
+"Failed to create new user for %s. Their posts will be attributed to the "
+"current user."
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:568
+#, php-format
+msgid "Failed to import category %s"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:619
+#, php-format
+msgid "Failed to import post tag %s"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:688
+#: lib/importer/wordpress-importer.php:970
+#, php-format
+msgid "Failed to import %s %s"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:783
+#, php-format
+msgid "Failed to import &#8220;%s&#8221;: Invalid post type %s"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:866
+#: lib/importer/wordpress-importer.php:934
+#, php-format
+msgid "Failed to import %s &#8220;%s&#8221;"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:1119
+msgid "Menu item skipped due to missing menu slug"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:1126
+#, php-format
+msgid "Menu item skipped due to invalid menu slug: %s"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:1191
+msgid "Fetching attachments is not enabled"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:1204
+msgid "Invalid file type"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:1249
+msgid "Remote server did not respond"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:1256
+#, php-format
+msgid "Remote server returned error response %1$d %2$s"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:1264
+msgid "Remote file is incorrect size"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:1269
+msgid "Zero size file downloaded"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:1275
+#, php-format
+msgid "Remote file is too large, limit is %s"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:1384
+msgid "Import WordPress"
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:1391
+#, php-format
+msgid ""
+"A new version of this importer is available. Please update to version %s to "
+"ensure compatibility with newer export files."
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:1406
+msgid ""
+"Howdy! Upload your WordPress eXtended RSS (WXR) file and we&#8217;ll import "
+"the posts, pages, comments, custom fields, categories, and tags into this "
+"site."
+msgstr ""
+
+#: lib/importer/wordpress-importer.php:1407
+msgid "Choose a WXR (.xml) file to upload, then click Upload file and import."
+msgstr ""
+
+#: lib/metaboxes/metaboxes.php:77
+msgid "Pop-up Informations"
+msgstr ""
+
+#: lib/metaboxes/metaboxes.php:289
+msgid "Additional Services"
+msgstr ""
+
+#: lib/shortcodes/shortcodes.php:1026 lib/shortcodes/shortcodes.php:1251
+msgid "Placeholder"
+msgstr ""
+
+#: lib/shortcodes/shortcodes.php:1029
+msgid "Tour"
+msgstr ""
+
+#: lib/shortcodes/shortcodes.php:1031 lib/shortcodes/shortcodes.php:1256
+msgid "From "
+msgstr ""
+
+#: lib/shortcodes/shortcodes.php:1254
+msgid "Car"
+msgstr ""
+
+#: lib/tax-meta-class/Tax-meta-class.php:251
+msgid "Delete this image"
+msgstr ""
+
+#: lib/tax-meta-class/Tax-meta-class.php:251
+#: lib/tax-meta-class/Tax-meta-class.php:882
+msgid "Delete"
+msgstr ""
+
+#: lib/tax-meta-class/Tax-meta-class.php:358
+msgid "Cannot delete file. Something's wrong."
+msgstr ""
+
+#: lib/tax-meta-class/Tax-meta-class.php:582
+#: lib/tax-meta-class/Tax-meta-class.php:629
+msgid "Remove"
+msgstr ""
+
+#: lib/tax-meta-class/Tax-meta-class.php:595
+msgid "Add"
+msgstr ""
+
+#: lib/tax-meta-class/Tax-meta-class.php:878
+msgid "Uploaded files"
+msgstr ""
+
+#: lib/tax-meta-class/Tax-meta-class.php:889
+msgid "Upload new files"
+msgstr ""
+
+#: lib/tax-meta-class/Tax-meta-class.php:895
+msgid "Add more files"
+msgstr ""
+
+#: lib/tax-meta-class/Tax-meta-class.php:947
+msgid "Select a color"
+msgstr ""

@@ -1,0 +1,7 @@
+.schedule-header { width:40%; float:left; }
+.schedule-header label { width: 50px; display: inline-block; }
+.schedule-wrapper .rwmb-clone { margin-top: 20px; border: 1px solid #999; padding: 20px;}
+
+.rwmb-clone-wrapper:after{ clear: both; content: ""; display: block; }
+.rwmb-clone-input { width: 75%; vertical-align: top; float: left; }
+.rwmb-clone{ border-bottom: 1px solid #eee; padding: 10px;}

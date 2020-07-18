@@ -1,0 +1,76 @@
+2020.01.02 - version 1.5.0
+* New: Compatibility with [WooCommerce Subscriptions](https://woocommerce.com/products/woocommerce-subscriptions/?aff=5475) emails
+* New: Show active email style name when editing email templates
+* Fix: Incorrect CSS for footer text and social media icons
+* Update: Only apply center layout to email body text in WC + WSC emails [WC > 3.6.0]
+* Update: Minor updates
+* Update: POT file
+
+2019.12.07 - version 1.4.1
+* New: WooCommerce 3.8.1 compatible
+* Update: Compatibility with latest WordPress Coding Standards
+* Update: StoreApps Connector
+* Update: POT file
+
+2019.09.24 - version 1.4.0
+* New: WooCommerce 3.7.0 compatible
+* Update: Remove support for WooCommerce 2.5 and WooCommerce 2.6
+* Update: StoreApps Connector
+* Update: POT file
+
+2019.06.28 - version 1.3.3
+* New: WooCommerce 3.6.4 compatible
+* Fix: Email designs not rendered correctly when viewing in Outlook
+* Fix: Email heading shows HTML when used with WooCommerce Smart Coupons plugin
+* Fix: Do not hardcode plugin version while registering js and css
+* Update: Tested upto WordPress 5.2.2
+* Update: StoreApps Connector
+* Update: POT file
+
+2018.11.01 - version 1.3.2
+* New: Compatibility with WooCommerce 3.5.0+
+* Fix: Variable products not displaying variants correctly
+* Fix: Incorrect text domain of few strings
+* Update: POT file
+
+2018.09.06 - version 1.3.1
+* Fix: Fatal error when trying to place an order [WooCommerce less than v3.3.0]
+* Update: POT file
+
+2018.09.05 - version 1.3.0
+* New: WordPress Coding Standards
+* Fix: PHP Notice:  Undefined variable: table_head in classic/email-downloads.php
+* Fix: Customer Details block not visible in emails
+* Update: Email templates for all styles
+* Update: StoreApps Connector
+* Update: POT file
+
+2018.06.26 - version 1.2.2
+* New: WooCommerce 3.4+ compatible
+* Fix: Store Connection pop-up not visible
+* Update: StoreApps Connector
+* Update: POT file
+
+2018.05.21 - version 1.2.1
+* Update: StoreApps Connector
+* Update: POT file
+
+2017.08.10 - version 1.2.0
+* New: Added new email style ELEGANT
+* New: WooCommerce 3.1+ compatible
+* Update: Few CSS tweaks
+
+2017.05.02 - version 1.1.1
+* New: Added new email style CLASSIC
+* Fix: Email not sending issue with Yith Abandoned Cart plugin
+* Update: StoreApps Upgrade file
+
+2017.04.13 - version 1.1
+* New: WooCommerce 3.0+ compatible
+* New: Feature to add social icon image
+* Update: CSS tweaks and few modifications in Simple & Deluxe styles
+* Update: Menu bar option moved to brand identity settings
+* Update: POT File
+
+2016.10.24 - version 1.0
+* Initial release
