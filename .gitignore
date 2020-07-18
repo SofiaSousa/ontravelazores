@@ -1,0 +1,39 @@
+# START WP-CLI BUILD BLOCK
+# ------------------------------------------------------------
+# This block is auto generated every time you run 'wp build-generate'
+# Rules: Exclude everything from Git except for your custom plugins and themes (that is: those that are not on wordpress.org)
+# ------------------------------------------------------------
+/*
+!.gitignore
+!build.json
+!wp-content
+wp-content/*
+!wp-content/plugins
+wp-content/plugins/*
+!wp-content/themes
+wp-content/themes/*
+# ------------------------------------------------------------
+# Your custom themes/plugins
+# Added automagically by WP-CLI Build (wp build-generate)
+# ------------------------------------------------------------
+!wp-content/plugins/advanced-custom-fields-pro/
+!wp-content/plugins/car-rental-booking-system/
+!wp-content/plugins/chauffeur-booking-system/
+!wp-content/plugins/ct-booking/
+!wp-content/plugins/smart-emails/
+!wp-content/plugins/sliderpro/
+!wp-content/plugins/revslider/
+!wp-content/plugins/woocommerce-checkout-field-editor/
+!wp-content/plugins/woocommerce-google-merchant-center-customer-reviews/
+!wp-content/plugins/woocommerce-multilingual/
+!wp-content/plugins/woocommerce-additional-fees/
+!wp-content/plugins/woocommerce-smart-coupons/
+!wp-content/plugins/js_composer/
+!wp-content/plugins/sitepress-multilingual-cms/
+!wp-content/plugins/wpml-string-translation/
+!wp-content/plugins/wpml-translation-management/
+!wp-content/plugins/wp-seo-multilingual/
+!wp-content/themes/citytours-child/
+!wp-content/themes/citytours/
+# ------------------------------------------------------------
+# END WP-CLI BUILD BLOCK
