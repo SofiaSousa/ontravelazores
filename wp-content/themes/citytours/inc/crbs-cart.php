@@ -68,7 +68,8 @@ function ot_go_to_step() {
 					foreach ( $billing['detail'] as $detail ) {
 						$product = $woo_commerce->prepareProduct(
 							array(
-								'post' => array( 'post_title' => $detail['name'] ),
+								// 'post' => array( 'post_title' => $detail['name'] ),
+								'post' => array( 'post_title' => get_the_title( $data['vehicle_id'] ) ),
 								'meta' => array(
 									'crbs_price_gross' => $detail['value_gross'],
 									'crbs_tax_value'   => $detail['tax_value'],
