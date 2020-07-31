@@ -32,6 +32,7 @@ function ot_crbs_init() {
 	add_action( 'woocommerce_cart_item_removed', 'ot_wc_cart_item_removed', 10, 2 );
 	add_filter( 'woocommerce_get_item_data', 'ot_wc_get_item_data', 10, 2 );
 	add_action( 'woocommerce_checkout_create_order_line_item', 'ot_wc_checkout_create_order_line_item', 20, 4 );
+	add_filter( 'woocommerce_cart_item_permalink', 'ot_wc_cart_item_permalink', 10, 3 );
 
 	add_action( 'wp_footer', 'ot_crbs_remove_billing_form' );
 }
@@ -249,3 +250,22 @@ function ot_crbs_remove_billing_form() {
 	<?php
 }
 
+/**
+ * Remove permalink for rental booking cart item.
+ *
+ * @param String $product_get_permalink_cart_item The item.
+ * @param Array  $cart_item     The cart item.
+ * @param String $cart_item_key The cart item key.
+ */
+function ot_wc_cart_item_permalink( $product_get_permalink_cart_item, $cart_item, $cart_item_key ) {
+	$product_id = $cart_item['product_id'];
+
+	// CRBS booking.
+	$booking_id = get_post_meta( $product_id, 'crbs_booking_id', true );
+
+	if ( ! empty( $booking_id ) ) {
+		return false;
+	}
+
+	return $product_get_permalink_cart_item;
+}
