@@ -11,7 +11,7 @@
 add_action( 'init', 'ot_crbs_init' );
 
 /**
- * Add Temp Product product's category and add actions.
+ * Add Temp Product product's category, and add actions and filters.
  */
 function ot_crbs_init() {
 	if ( ! term_exists( 'ot-temp-product', 'product_cat' ) ) {
@@ -26,13 +26,13 @@ function ot_crbs_init() {
 		);
 	}
 
-	add_action( 'wp_ajax_' . PLUGIN_CRBS_CONTEXT . '_go_to_step', 'ot_go_to_step', 1, 0 );
-	add_action( 'wp_ajax_nopriv_' . PLUGIN_CRBS_CONTEXT . '_go_to_step', 'ot_go_to_step', 1, 0 );
+	add_action( 'wp_ajax_' . PLUGIN_CRBS_CONTEXT . '_go_to_step', 'ot_crbs_go_to_step', 1, 0 );
+	add_action( 'wp_ajax_nopriv_' . PLUGIN_CRBS_CONTEXT . '_go_to_step', 'ot_crbs_go_to_step', 1, 0 );
 
 	add_action( 'woocommerce_cart_item_removed', 'ot_wc_cart_item_removed', 10, 2 );
-	add_filter( 'woocommerce_get_item_data', 'ot_wc_get_item_data', 10, 2 );
-	add_action( 'woocommerce_checkout_create_order_line_item', 'ot_wc_checkout_create_order_line_item', 20, 4 );
-	add_filter( 'woocommerce_cart_item_permalink', 'ot_wc_cart_item_permalink', 10, 3 );
+	add_filter( 'woocommerce_get_item_data', 'ot_crbs_wc_get_item_data', 10, 2 );
+	add_action( 'woocommerce_checkout_create_order_line_item', 'ot_crbs_wc_checkout_create_order_line_item', 20, 4 );
+	add_filter( 'woocommerce_cart_item_permalink', 'ot_crbs_wc_cart_item_permalink', 10, 3 );
 
 	add_action( 'wp_footer', 'ot_crbs_remove_billing_form' );
 }
@@ -41,7 +41,7 @@ function ot_crbs_init() {
  * Workaround to override the step 5 of CRBS reservation wizard, in order to
  * add the bookings' items to the chart before doing the checkout manually.
  */
-function ot_go_to_step() {
+function ot_crbs_go_to_step() {
 	if ( class_exists( 'CRBSHelper' ) && class_exists( 'CRBSBooking' ) ) {
 		$booking_form = new CRBSBookingForm();
 		$booking_form->init();
@@ -161,7 +161,7 @@ function ot_wc_cart_item_removed( $cart_item_key, $cart ) {
  * @param Array $item_data The item data.
  * @param Array $cart_item The cart item.
  */
-function ot_wc_get_item_data( $item_data, $cart_item ) {
+function ot_crbs_wc_get_item_data( $item_data, $cart_item ) {
 	$product_id = $cart_item['product_id'];
 
 	// CRBS booking.
@@ -206,7 +206,7 @@ function ot_wc_get_item_data( $item_data, $cart_item ) {
  * @param Array  $values         The values.
  * @param Array  $order          The order.
  */
-function ot_wc_checkout_create_order_line_item( $item, $cart_item_key, $values, $order ) {
+function ot_crbs_wc_checkout_create_order_line_item( $item, $cart_item_key, $values, $order ) {
 	$product_id = $item->get_variation_id() ? $item->get_variation_id() : $item->get_product_id();
 
 	// CRBS booking.
@@ -229,6 +229,26 @@ function ot_wc_checkout_create_order_line_item( $item, $cart_item_key, $values, 
 }
 
 /**
+ * Remove permalink for rental booking cart item.
+ *
+ * @param String $product_get_permalink_cart_item The item.
+ * @param Array  $cart_item     The cart item.
+ * @param String $cart_item_key The cart item key.
+ */
+function ot_crbs_wc_cart_item_permalink( $product_get_permalink_cart_item, $cart_item, $cart_item_key ) {
+	$product_id = $cart_item['product_id'];
+
+	// CRBS booking.
+	$booking_id = get_post_meta( $product_id, 'crbs_booking_id', true );
+
+	if ( ! empty( $booking_id ) ) {
+		return false;
+	}
+
+	return $product_get_permalink_cart_item;
+}
+
+/**
  * Remove billing form from dom (step 3 in wizard).
  */
 function ot_crbs_remove_billing_form() {
@@ -248,24 +268,4 @@ function ot_crbs_remove_billing_form() {
 		});
 	</script>
 	<?php
-}
-
-/**
- * Remove permalink for rental booking cart item.
- *
- * @param String $product_get_permalink_cart_item The item.
- * @param Array  $cart_item     The cart item.
- * @param String $cart_item_key The cart item key.
- */
-function ot_wc_cart_item_permalink( $product_get_permalink_cart_item, $cart_item, $cart_item_key ) {
-	$product_id = $cart_item['product_id'];
-
-	// CRBS booking.
-	$booking_id = get_post_meta( $product_id, 'crbs_booking_id', true );
-
-	if ( ! empty( $booking_id ) ) {
-		return false;
-	}
-
-	return $product_get_permalink_cart_item;
 }

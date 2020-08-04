@@ -33,6 +33,7 @@ if ( ! isset( $redux_demo ) ) {
 require_once( CT_INC_DIR . '/woocommerce/woocommerce.php');
 
 require_once( CT_INC_DIR . '/crbs-cart.php' );
+require_once( CT_INC_DIR . '/chbs-cart.php' );
 
 require_once( CT_INC_DIR . '/admin/main.php');
 require_once( CT_INC_DIR . '/lib/multiple_sidebars.php' );
