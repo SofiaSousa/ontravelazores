@@ -58,7 +58,7 @@ function ot_chbs_go_to_step() {
 				$term = get_term_by( 'slug', 'ot-temp-product', 'product_cat' );
 
 				if ( ! empty( $booking_id ) ) {
-					$product_name = get_the_title( $data['vehicle_id'] );
+					$product_name = 'Transfer - ' . get_the_title( $data['vehicle_id'] );
 					$image_id     = get_post_meta( $data['vehicle_id'], '_thumbnail_id', true );
 
 					$billing = $booking->createBilling( $booking_id );
@@ -157,7 +157,7 @@ function ot_chbs_wc_get_item_data( $item_data, $cart_item ) {
 	// CHBS booking.
 	$booking_id = get_post_meta( $product_id, 'chbs_booking_id', true );
 
-	if ( ! empty( $booking_id ) ) {
+	if ( ! empty( $booking_id ) && strpos( $cart_item['data']->name, 'Extra' ) === false ) {
 		$pickup_date = get_post_meta( $booking_id, 'chbs_pickup_datetime', true );
 		$item_data[] = array(
 			'name'  => __( 'Pick Up Date', 'citytours' ),
@@ -207,12 +207,13 @@ function ot_chbs_wc_get_item_data( $item_data, $cart_item ) {
  * @param Array  $order          The order.
  */
 function ot_chbs_wc_checkout_create_order_line_item( $item, $cart_item_key, $values, $order ) {
+	$product    = $values['data'];
 	$product_id = $item->get_variation_id() ? $item->get_variation_id() : $item->get_product_id();
 
 	// CHBS booking.
 	$booking_id = get_post_meta( $product_id, 'chbs_booking_id', true );
 
-	if ( ! empty( $booking_id ) ) {
+	if ( ! empty( $booking_id ) && strpos( $product->get_name(), 'Extra' ) === false ) {
 		$pickup_date = get_post_meta( $booking_id, 'chbs_pickup_datetime', true );
 		$item->update_meta_data( __( 'Pick Up Date', 'citytours' ), $pickup_date );
 
