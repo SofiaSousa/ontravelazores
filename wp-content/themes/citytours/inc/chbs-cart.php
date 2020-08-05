@@ -63,16 +63,34 @@ function ot_chbs_go_to_step() {
 
 					$billing = $booking->createBilling( $booking_id );
 
-					foreach ( $billing['detail'] as $detail ) {
-						if ( 'Chauffeur service' === $detail['name'] ) {
-							$name = $product_name;
-						} else {
-							$name = $product_name . ' - Extra: ' . $detail['name'];
-						}
+					$products_details = array(
+						array(
+							'name'        => $product_name,
+							'value_gross' => 0,
+							'tax_value'   => 0,
+							'value_net'   => 0,
+						),
+					);
 
+					foreach ( $billing['detail'] as $detail ) {
+						if ( 'Initial fee' === $detail['name'] || 'Chauffeur service' === $detail['name'] || 'Chauffeur service (return)' === $detail['name'] ) {
+							$products_details[0]['value_gross'] += floatval( $detail['value_gross'] );
+							$products_details[0]['tax_value']   += floatval( $detail['tax_value'] );
+							$products_details[0]['value_net']   += floatval( $detail['value_net'] );
+						} else {
+							$products_details[] = array(
+								'name'        => $product_name . ' - Extra: ' . $detail['name'],
+								'value_gross' => floatval( $detail['value_gross'] ),
+								'tax_value'   => floatval( $detail['tax_value'] ),
+								'value_net'   => floatval( $detail['value_net'] ),
+							);
+						}
+					}
+
+					foreach ( $products_details as $detail ) {
 						$product = $woo_commerce->prepareProduct(
 							array(
-								'post' => array( 'post_title' => $name ),
+								'post' => array( 'post_title' => $detail['name'] ),
 								'meta' => array(
 									'chbs_booking_id'  => $booking_id,
 									'chbs_price_gross' => $detail['value_gross'],
@@ -146,7 +164,7 @@ function ot_chbs_wc_get_item_data( $item_data, $cart_item ) {
 			'value' => $pickup_date,
 		);
 
-		$coordinate  = get_post_meta( $booking_id, 'chbs_coordinate', true );
+		$coordinate = get_post_meta( $booking_id, 'chbs_coordinate', true );
 
 		foreach ( $coordinate as $key => $value ) {
 			if ( $value ) {
@@ -198,15 +216,28 @@ function ot_chbs_wc_checkout_create_order_line_item( $item, $cart_item_key, $val
 		$pickup_date = get_post_meta( $booking_id, 'chbs_pickup_datetime', true );
 		$item->update_meta_data( __( 'Pick Up Date', 'citytours' ), $pickup_date );
 
-		$pickup_loc = get_post_meta( $booking_id, 'chbs_pickup_location_name', true );
-		$item->update_meta_data( __( 'Pick Up Location', 'citytours' ), $pickup_loc );
+		$coordinate = get_post_meta( $booking_id, 'chbs_coordinate', true );
+
+		foreach ( $coordinate as $key => $value ) {
+			if ( $value ) {
+				if ( 0 == $key ) {
+					$name = __( 'Pick Up Location', 'citytours' );
+				} elseif ( count( $coordinate ) - 1 == $key ) {
+					$name = __( 'Drop Off Location', 'citytours' );
+				} else {
+					$name = __( 'Waypoint', 'citytours' );
+				}
+
+				$item->update_meta_data( $name, $coordinate[ $key ]['formatted_address'] );
+			}
+		}
 
 		$return_date = get_post_meta( $booking_id, 'chbs_return_date', true );
 		$return_time = get_post_meta( $booking_id, 'chbs_return_time', true );
-		$item->update_meta_data( __( 'Drop Off Date', 'citytours' ), $return_date . ' ' . $return_time );
 
-		$return_loc = get_post_meta( $booking_id, 'chbs_return_location_name', true );
-		$item->update_meta_data( __( 'Drop Off Location', 'citytours' ), $return_loc );
+		if ( $return_date && $return_time ) {
+			$item->update_meta_data( __( 'Drop Off Date', 'citytours' ), $return_date . ' ' . $return_time );
+		}
 	}
 }
 
