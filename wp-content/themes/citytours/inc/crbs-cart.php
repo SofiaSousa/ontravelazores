@@ -77,7 +77,7 @@ function ot_crbs_go_to_step() {
 					$billing = $booking->createBilling( $booking_id );
 
 					foreach ( $billing['detail'] as $detail ) {
-						if ( 'Rental fee per day' === $detail['name'] ) {
+						if ( 'rental_per_day' === $detail['type'] ) {
 							$name = $product_name;
 						} else {
 							$name = $product_name . ' - Extra: ' . $detail['name'];

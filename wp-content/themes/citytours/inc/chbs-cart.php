@@ -73,7 +73,7 @@ function ot_chbs_go_to_step() {
 					);
 
 					foreach ( $billing['detail'] as $detail ) {
-						if ( 'Initial fee' === $detail['name'] || 'Chauffeur service' === $detail['name'] || 'Chauffeur service (return)' === $detail['name'] ) {
+						if ( 'initial_fee' === $detail['type'] || 'chauffeur_service' === $detail['type'] || 'chauffeur_service_return' === $detail['type'] ) {
 							$products_details[0]['value_gross'] += floatval( $detail['value_gross'] );
 							$products_details[0]['tax_value']   += floatval( $detail['tax_value'] );
 							$products_details[0]['value_net']   += floatval( $detail['value_net'] );
@@ -158,10 +158,11 @@ function ot_chbs_wc_get_item_data( $item_data, $cart_item ) {
 	$booking_id = get_post_meta( $product_id, 'chbs_booking_id', true );
 
 	if ( ! empty( $booking_id ) && strpos( $cart_item['data']->name, 'Extra' ) === false ) {
-		$pickup_date = get_post_meta( $booking_id, 'chbs_pickup_datetime', true );
+		$pickup_date = get_post_meta( $booking_id, 'chbs_pickup_date', true );
+		$pickup_time = get_post_meta( $booking_id, 'chbs_pickup_time', true );
 		$item_data[] = array(
 			'name'  => __( 'Pick Up Date', 'citytours' ),
-			'value' => $pickup_date,
+			'value' => $pickup_date . ' ' . $pickup_time,
 		);
 
 		$coordinate = get_post_meta( $booking_id, 'chbs_coordinate', true );
@@ -186,7 +187,7 @@ function ot_chbs_wc_get_item_data( $item_data, $cart_item ) {
 		$return_date = get_post_meta( $booking_id, 'chbs_return_date', true );
 		$return_time = get_post_meta( $booking_id, 'chbs_return_time', true );
 
-		if ( $return_date && $return_time ) {
+		if ( $return_date && '00-00-0000' !== $return_date && $return_time ) {
 			$item_data[] = array(
 				'name'  => __( 'Drop Off Date', 'citytours' ),
 				'value' => $return_date . ' ' . $return_time,
