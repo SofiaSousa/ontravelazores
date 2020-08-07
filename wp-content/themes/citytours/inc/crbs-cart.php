@@ -80,7 +80,7 @@ function ot_crbs_go_to_step() {
 						if ( 'rental_per_day' === $detail['type'] ) {
 							$name = $product_name;
 						} else {
-							$name = $product_name . ' - Extra: ' . $detail['name'];
+							$name = 'Extra: ' . $detail['name'];
 						}
 
 						$product = $woo_commerce->prepareProduct(

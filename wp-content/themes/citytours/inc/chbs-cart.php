@@ -79,7 +79,7 @@ function ot_chbs_go_to_step() {
 							$products_details[0]['value_net']   += floatval( $detail['value_net'] );
 						} else {
 							$products_details[] = array(
-								'name'        => $product_name . ' - Extra: ' . $detail['name'],
+								'name'        => 'Extra: ' . $detail['name'],
 								'value_gross' => floatval( $detail['value_gross'] ),
 								'tax_value'   => floatval( $detail['tax_value'] ),
 								'value_net'   => floatval( $detail['value_net'] ),
@@ -189,7 +189,7 @@ function ot_chbs_wc_get_item_data( $item_data, $cart_item ) {
 
 		if ( $return_date && '00-00-0000' !== $return_date && $return_time ) {
 			$item_data[] = array(
-				'name'  => __( 'Drop Off Date', 'citytours' ),
+				'name'  => __( 'Return Date', 'citytours' ),
 				'value' => $return_date . ' ' . $return_time,
 			);
 		}
