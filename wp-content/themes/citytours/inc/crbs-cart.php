@@ -34,7 +34,7 @@ function ot_crbs_init() {
 	add_action( 'woocommerce_checkout_create_order_line_item', 'ot_crbs_wc_checkout_create_order_line_item', 20, 4 );
 	add_filter( 'woocommerce_cart_item_permalink', 'ot_crbs_wc_cart_item_permalink', 10, 3 );
 
-	add_action( 'wp_footer', 'ot_crbs_remove_billing_form' );
+	add_action( 'wp_footer', 'ot_crbs_remove_form' );
 }
 
 /**
@@ -251,18 +251,23 @@ function ot_crbs_wc_cart_item_permalink( $product_get_permalink_cart_item, $cart
 /**
  * Remove billing form from dom (step 3 in wizard).
  */
-function ot_crbs_remove_billing_form() {
+function ot_crbs_remove_form() {
 	?>
 	<script type="text/javascript">
 		jQuery( document ).ajaxComplete(function() {
 			var step = jQuery('.crbs-main-content-step-3');
 
 			if (step) {
-				var input = step.find('[name="crbs_client_billing_detail_enable"]');
+				var billing = step.find('[name="crbs_client_billing_detail_enable"]');
+				var comment = step.find('[name="crbs_comment"]');
 
-				if (input) {
-					input.val(0);
-					input.parent().parent().remove();
+				if (billing) {
+					billing.val(0);
+					billing.parent().parent().remove(); // remove form.
+				}
+
+				if (comment) {
+					comment.parent().parent().remove(); // remove textarea.
 				}
 			}
 		});
