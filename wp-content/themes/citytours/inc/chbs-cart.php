@@ -215,8 +215,9 @@ function ot_chbs_wc_checkout_create_order_line_item( $item, $cart_item_key, $val
 	$booking_id = get_post_meta( $product_id, 'chbs_booking_id', true );
 
 	if ( ! empty( $booking_id ) && strpos( $product->get_name(), 'Extra' ) === false ) {
-		$pickup_date = get_post_meta( $booking_id, 'chbs_pickup_datetime', true );
-		$item->update_meta_data( __( 'Pick Up Date', 'citytours' ), $pickup_date );
+		$pickup_date = get_post_meta( $booking_id, 'chbs_pickup_date', true );
+		$pickup_time = get_post_meta( $booking_id, 'chbs_pickup_time', true );
+		$item->update_meta_data( __( 'Pick Up Date', 'citytours' ), $pickup_date . ' ' . $pickup_time );
 
 		$coordinate = get_post_meta( $booking_id, 'chbs_coordinate', true );
 
@@ -237,7 +238,7 @@ function ot_chbs_wc_checkout_create_order_line_item( $item, $cart_item_key, $val
 		$return_date = get_post_meta( $booking_id, 'chbs_return_date', true );
 		$return_time = get_post_meta( $booking_id, 'chbs_return_time', true );
 
-		if ( $return_date && $return_time ) {
+		if ( $return_date && '00-00-0000' !== $return_date && $return_time ) {
 			$item->update_meta_data( __( 'Drop Off Date', 'citytours' ), $return_date . ' ' . $return_time );
 		}
 	}
