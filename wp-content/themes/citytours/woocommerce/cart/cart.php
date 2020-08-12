@@ -195,7 +195,7 @@ var _egoiaq = _egoiaq || [];
 	_egoiaq.push(['setListId', "Sample"]); // List Identifier
 	_egoiaq.push(['setSubscriber', "Sample"]); // You can use the uid (unique identifier) or the email or the phone number
 	_egoiaq.push(['setCampaignId', "Sample"]); // Campaign Identifier
-	// _egoiaq.push(['setTrackerUrl', u+'collect']);
+	_egoiaq.push(['setTrackerUrl', u+'collect']);
 	_egoiaq.push(['trackEcommerceCartUpdate',
 	    {{GRAND TOTAL}} // (required) Cart grandTotal (typically the sum of all items prices)
 	]);
