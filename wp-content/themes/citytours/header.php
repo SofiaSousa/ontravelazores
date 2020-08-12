@@ -221,7 +221,7 @@ global $ct_options;
                         <?php
                         if ( class_exists('WooCommerce') && $ct_options['cart_show_mini_cart'] ) {
                             ?>
-                            <div>
+                            <div class="visible-xs-block">
                                 <ul>
                                     <li>
                                         <a href="<?php echo wc_get_cart_url(); ?>">
