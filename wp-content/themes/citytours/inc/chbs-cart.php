@@ -8,6 +8,10 @@
  * @package ChauffeurBookingSystem
  */
 
+if ( ! define( 'PLUGIN_CHBS_CONTEXT' ) ) {
+	define( 'PLUGIN_CHBS_CONTEXT', 'chbs' );
+}
+
 add_action( 'init', 'ot_chbs_init' );
 
 /**
@@ -157,7 +161,7 @@ function ot_chbs_wc_get_item_data( $item_data, $cart_item ) {
 	// CHBS booking.
 	$booking_id = get_post_meta( $product_id, 'chbs_booking_id', true );
 
-	if ( ! empty( $booking_id ) && strpos( $cart_item['data']->name, 'Extra' ) === false ) {
+	if ( ! empty( $booking_id ) && strpos( $cart_item['data']->get_name(), 'Extra' ) === false ) {
 		$pickup_date = get_post_meta( $booking_id, 'chbs_pickup_date', true );
 		$pickup_time = get_post_meta( $booking_id, 'chbs_pickup_time', true );
 		$item_data[] = array(

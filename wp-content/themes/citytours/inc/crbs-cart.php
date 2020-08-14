@@ -8,6 +8,10 @@
  * @package CarRentalBookingSystem
  */
 
+if ( ! define( 'PLUGIN_CRBS_CONTEXT' ) ) {
+	define( 'PLUGIN_CRBS_CONTEXT', 'crbs' );
+}
+
 add_action( 'init', 'ot_crbs_init' );
 
 /**
