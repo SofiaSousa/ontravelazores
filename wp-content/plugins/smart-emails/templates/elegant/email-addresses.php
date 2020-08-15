@@ -27,7 +27,7 @@ $shipping = $order->get_formatted_shipping_address();
 <table id="addresses" cellspacing="0" cellpadding="0" border="0">
 	<tr>
 		<td class="td" style="font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;" valign="top" width="50%">
-			<h3><?php esc_html_e( 'Customer Details', 'smart-emails' ); ?></h3>
+			<h3><?php esc_html_e( 'Billing address', 'smart-emails' ); ?></h3>
 
 			<p class="address" style="text-align:left"><?php echo wp_kses_post( $address ); ?></p>
 		</td>

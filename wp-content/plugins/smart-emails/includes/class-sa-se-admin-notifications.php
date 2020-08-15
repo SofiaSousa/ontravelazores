@@ -4,7 +4,7 @@
  *
  * @author      StoreApps
  * @since       1.3.2
- * @version     1.0
+ * @version     1.0.1
  * @package     Smart Emails
  */
 
@@ -76,7 +76,7 @@ if ( ! class_exists( 'SA_SE_Admin_Notifications' ) ) {
 
 				$admin_notice_text = __( '<a href="https://www.storeapps.org/product/smart-emails/" target="_blank">Email Customizer For WooCommerce</a> plugin has updated text in emails. If you have translated any email text, you might want to <b>check and update your translations</b>.', 'smart-emails' );
 
-				echo '<div class="notice notice-warning se-upgrade"><p>' . $admin_notice_text . '<a style="display:inline-block" class="se-admin-btn-secondary" href="?smart_emails_dismiss_admin_notice=1&option_name=sa_text_change_notice">' . esc_html__( 'Okay, got it', 'smart-emails' ) . '</a></p></div>'; // phpcs:ignore
+				echo '<div class="notice notice-warning se-upgrade"><p>' . wp_kses_post( $admin_notice_text ) . '<a style="display:inline-block" class="se-admin-btn-secondary" href="?smart_emails_dismiss_admin_notice=1&option_name=sa_text_change_notice">' . esc_html__( 'Okay, got it', 'smart-emails' ) . '</a></p></div>'; // phpcs:ignore
 			}
 
 		}

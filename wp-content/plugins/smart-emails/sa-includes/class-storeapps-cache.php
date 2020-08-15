@@ -2,10 +2,7 @@
 /**
  * Cache StoreApps Quick Help
  *
- * @category    Class
- * @package     /sa-includes/
- * @author      StoreApps
- * @version     1.1.0
+ * @package /sa-includes
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

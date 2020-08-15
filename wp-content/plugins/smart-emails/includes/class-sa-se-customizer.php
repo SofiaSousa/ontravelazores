@@ -2,10 +2,9 @@
 /**
  * Include Email Style specific controls
  *
- * @category    Class
  * @package     smart-emails/includes
  * @author      StoreApps
- * @version     1.1.0
+ * @version     1.1.1
  * @since       1.0.0
  */
 
@@ -75,14 +74,14 @@ if ( ! class_exists( 'SA_SE_Customizer' ) ) {
 		 * @return mixed Result of function call.
 		 */
 		public function __call( $function_name, $arguments = array() ) {
-			if ( ! is_callable( 'SA_WC_Compatibility_3_7', $function_name ) ) {
+			if ( ! is_callable( 'SA_WC_Compatibility_4_3', $function_name ) ) {
 				return;
 			}
 
 			if ( ! empty( $arguments ) ) {
-				return call_user_func_array( 'SA_WC_Compatibility_3_7::' . $function_name, $arguments );
+				return call_user_func_array( 'SA_WC_Compatibility_4_3::' . $function_name, $arguments );
 			} else {
-				return call_user_func( 'SA_WC_Compatibility_3_7::' . $function_name );
+				return call_user_func( 'SA_WC_Compatibility_4_3::' . $function_name );
 			}
 		}
 
@@ -90,11 +89,10 @@ if ( ! class_exists( 'SA_SE_Customizer' ) ) {
 		 * Include files that adds template and email theme/style dependent panels, sections, settings and controls
 		 */
 		public function se_includes() {
-
-			include_once 'class-sa-se-customize-simple-style.php';
-			include_once 'class-sa-se-customize-deluxe-style.php';
 			include_once 'class-sa-se-customize-classic-style.php';
+			include_once 'class-sa-se-customize-deluxe-style.php';
 			include_once 'class-sa-se-customize-elegant-style.php';
+			include_once 'class-sa-se-customize-simple-style.php';
 		}
 
 		/**
@@ -111,9 +109,12 @@ if ( ! class_exists( 'SA_SE_Customizer' ) ) {
 			$se_saved_template = get_option( 'se_current_template' );
 			$se_saved_style    = get_option( 'se_current_style' );
 
-			if ( ! empty( $_POST['sa_se_email_template'] ) && ! empty( $_POST['sa_se_email_style'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-				$se_current_template = sanitize_text_field( wp_unslash( $_POST['sa_se_email_template'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
-				$se_current_style    = sanitize_text_field( wp_unslash( $_POST['sa_se_email_style'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
+			$current_email_template = ( isset( $_POST['sa_se_email_template'], $_POST['sa_smart_emails'] ) && wp_verify_nonce( sanitize_key( $_POST['sa_smart_emails'] ), 'sa_smart_emails' ) ) ? sanitize_text_field( wp_unslash( $_POST['sa_se_email_template'] ) ) : '';
+			$current_email_style    = ( isset( $_POST['sa_se_email_style'], $_POST['sa_smart_emails'] ) && wp_verify_nonce( sanitize_key( $_POST['sa_smart_emails'] ), 'sa_smart_emails' ) ) ? sanitize_text_field( wp_unslash( $_POST['sa_se_email_style'] ) ) : '';
+
+			if ( ! empty( $current_email_template ) && ! empty( $current_email_style ) ) {
+				$se_current_template = sanitize_text_field( wp_unslash( $current_email_template ) );
+				$se_current_style    = sanitize_text_field( wp_unslash( $current_email_style ) );
 			} elseif ( ! empty( $se_saved_template ) && ! empty( $se_saved_style ) ) {
 				$se_current_template = $se_saved_template;
 				$se_current_style    = $se_saved_style;
@@ -122,8 +123,8 @@ if ( ! class_exists( 'SA_SE_Customizer' ) ) {
 				$se_current_style    = $se_default_style;
 			}
 
-			update_option( 'se_current_template', $se_current_template );
-			update_option( 'se_current_style', $se_current_style );
+			update_option( 'se_current_template', $se_current_template, 'no' );
+			update_option( 'se_current_style', $se_current_style, 'no' );
 		}
 
 		/**
@@ -201,8 +202,10 @@ if ( ! class_exists( 'SA_SE_Customizer' ) ) {
 		public function enqueue_customizer_live_preview_script() {
 			global $se_current_template;
 
-			wp_register_script( 'sa-se-customizer', SA_SE_PLUGIN_URL . 'assets/js/sa-se-customizer.js', array( 'jquery', 'customize-preview' ), '1.3.0', true );
+			$plugin_data = SA_Smart_Emails::get_smart_emails_plugin_data();
+			$version     = $plugin_data['Version'];
 
+			wp_register_script( 'sa-se-customizer', SA_SE_PLUGIN_URL . 'assets/js/sa-se-customizer.js', array( 'jquery', 'customize-preview' ), $version, true );
 			if ( ! wp_script_is( 'sa-se-customizer' ) ) {
 				wp_enqueue_script( 'sa-se-customizer' );
 			}
@@ -244,17 +247,17 @@ if ( ! class_exists( 'SA_SE_Customizer' ) ) {
 			$se_brand_identity = self::get_brand_identity_updated_values();
 
 			switch ( $se_current_style ) {
-				case 'simple':
-						$se_style_settings = SA_SE_Customize_Simple_Style::get_updated_values_simple();
+				case 'classic':
+						$se_style_settings = SA_SE_Customize_Classic_Style::get_updated_values_classic();
 					break;
 				case 'deluxe':
 						$se_style_settings = SA_SE_Customize_Deluxe_Style::get_updated_values_deluxe();
 					break;
-				case 'classic':
-						$se_style_settings = SA_SE_Customize_Classic_Style::get_updated_values_classic();
-					break;
 				case 'elegant':
 						$se_style_settings = SA_SE_Customize_Elegant_Style::get_updated_values_elegant();
+					break;
+				case 'simple':
+						$se_style_settings = SA_SE_Customize_Simple_Style::get_updated_values_simple();
 					break;
 			}
 
@@ -636,17 +639,17 @@ if ( ! class_exists( 'SA_SE_Customizer' ) ) {
 			// Add controls depending on email style selected.
 			if ( ! empty( $se_current_style ) ) {
 				switch ( $se_current_style ) {
-					case 'simple':
-						new SA_SE_Customize_Simple_Style( $wp_customize, $se_current_template );
+					case 'classic':
+						new SA_SE_Customize_Classic_Style( $wp_customize );
 						break;
 					case 'deluxe':
 						new SA_SE_Customize_Deluxe_Style( $wp_customize );
 						break;
-					case 'classic':
-						new SA_SE_Customize_Classic_Style( $wp_customize );
-						break;
 					case 'elegant':
 						new SA_SE_Customize_Elegant_Style( $wp_customize );
+						break;
+					case 'simple':
+						new SA_SE_Customize_Simple_Style( $wp_customize, $se_current_template );
 						break;
 				}
 			}

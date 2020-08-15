@@ -2,10 +2,9 @@
 /**
  * StoreApps In app offer
  *
- * @category    Class
  * @author      StoreApps
+ *
  * @package     StoreApps
- * @version     1.1.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -129,7 +128,7 @@ class SA_In_App_Offer {
 		$end             = strtotime( $this->end );
 		if ( ( $current_date >= $start ) && ( $current_date <= $end ) ) {
 			$option_value  = get_option( $this->option_name, 'yes' );
-			$get_post_type = isset( $_GET['post_type'] ) ? sanitize_text_field( wp_unslash( $_GET['post_type'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification
+			$get_post_type = isset( $_GET['post_type'] ) ? sanitize_text_field( wp_unslash( $_GET['post_type'] ) ) : ''; // phpcs:ignore
 
 			if ( ( 'product' === $get_post_type || $this->is_plugin_page ) && 'yes' === $option_value ) {
 				return true;

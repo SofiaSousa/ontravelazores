@@ -109,6 +109,12 @@ img {
 	color: #607d8b;
 }
 
+table#se-order-downloads {
+	width: 100% !important;
+	font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif !important;
+	margin-bottom: 40px !important;
+}
+
 #se-order-downloads td {
 	border-bottom: 1px solid #dcdcdc !important;
 }

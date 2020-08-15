@@ -27,11 +27,11 @@ do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 
 <?php /* translators: %s: Customer first name */ ?>
 <p><?php printf( esc_html__( 'Hi %s,', 'smart-emails' ), esc_html( $order->get_billing_first_name() ) ); ?></p>
-<p><?php esc_html_e( 'The following note has been added to your booking:', 'smart-emails' ); ?></p>
+<p><?php esc_html_e( 'The following note has been added to your order:', 'smart-emails' ); ?></p>
 
 <blockquote><?php echo wp_kses_post( wpautop( wptexturize( make_clickable( $customer_note ) ) ) ); ?></blockquote>
 
-<p><?php esc_html_e( 'As a reminder, here are your booking details:', 'smart-emails' ); ?></p>
+<p><?php esc_html_e( 'As a reminder, here are your order details:', 'smart-emails' ); ?></p>
 
 <?php
 

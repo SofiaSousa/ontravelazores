@@ -32,10 +32,10 @@ do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 <?php
 if ( $partial_refund ) {
 	/* translators: %s: Site title */
-	printf( esc_html__( 'Your booking on %s has been partially refunded. There are more details below for your reference:', 'smart-emails' ), esc_html( wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ) ) );
+	printf( esc_html__( 'Your order on %s has been partially refunded. There are more details below for your reference:', 'smart-emails' ), esc_html( wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ) ) );
 } else {
 	/* translators: %s: Site title */
-	printf( esc_html__( 'Your booking on %s has been refunded. There are more details below for your reference:', 'smart-emails' ), esc_html( wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ) ) );
+	printf( esc_html__( 'Your order on %s has been refunded. There are more details below for your reference:', 'smart-emails' ), esc_html( wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ) ) );
 }
 ?>
 </p>
@@ -60,11 +60,20 @@ do_action( 'woocommerce_email_order_meta', $order, $sent_to_admin, $plain_text, 
  */
 do_action( 'woocommerce_email_customer_details', $order, $sent_to_admin, $plain_text, $email );
 
-?>
-<p>
-<?php esc_html_e( '', 'smart-emails' ); ?>
-</p>
-<?php
+if ( SA_WC_Compatibility_3_7::is_wc_gte_37() ) {
+	/**
+	 * Show user-defined additonal content - this is set in each email's settings.
+	 */
+	if ( $additional_content ) {
+		echo wp_kses_post( wpautop( wptexturize( $additional_content ) ) );
+	}
+} else {
+	?>
+	<p>
+	<?php esc_html_e( 'We hope to see you again soon.', 'smart-emails' ); ?>
+	</p>
+	<?php
+}
 
 /*
  * @hooked WC_Emails::email_footer() Output the email footer

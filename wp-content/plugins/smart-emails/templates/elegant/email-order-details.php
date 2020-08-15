@@ -35,14 +35,14 @@ do_action( 'woocommerce_email_before_order_table', $order, $sent_to_admin, $plai
 			$after  = '';
 		}
 		/* translators: %s: Order ID. */
-		echo wp_kses_post( $before . sprintf( __( '[Booking #%s]', 'smart-emails' ) . $after . ' (<time datetime="%s">%s</time>)', $order->get_order_number(), $order->get_date_created()->format( 'c' ), wc_format_datetime( $order->get_date_created() ) ) );
+		echo wp_kses_post( $before . sprintf( __( '[Order #%s]', 'smart-emails' ) . $after . ' (<time datetime="%s">%s</time>)', $order->get_order_number(), $order->get_date_created()->format( 'c' ), wc_format_datetime( $order->get_date_created() ) ) );
 	} else {
 		if ( ! $sent_to_admin ) {
 			?>
 			<h2>
 				<?php
 				/* translators: %s: Order ID. */
-				printf( esc_html__( '[Booking #%s]', 'smart-emails' ), wp_kses_post( $order->get_order_number() ) );
+				printf( esc_html__( '[Order #%s]', 'smart-emails' ), wp_kses_post( $order->get_order_number() ) );
 				?>
 				(<?php printf( '<time datetime="%s">%s</time>', wp_kses_post( $order->get_date_created()->format( 'c' ) ), wp_kses_post( wc_format_datetime( $order->get_date_created() ) ) ); ?>)
 			</h2>
@@ -51,7 +51,7 @@ do_action( 'woocommerce_email_before_order_table', $order, $sent_to_admin, $plai
 				<a class="link" href="<?php echo esc_url( admin_url( 'post.php?post=' . $order->get_id() . '&action=edit' ) ); ?>">
 					<?php
 					/* translators: %s: Order ID. */
-					printf( esc_html__( '[Booking #%s]', 'smart-emails' ), wp_kses_post( $order->get_order_number() ) );
+					printf( esc_html__( '[Order #%s]', 'smart-emails' ), wp_kses_post( $order->get_order_number() ) );
 					?>
 				</a>
 				(<?php printf( '<time datetime="%s">%s</time>', wp_kses_post( $order->get_date_created()->format( 'c' ) ), wp_kses_post( wc_format_datetime( $order->get_date_created() ) ) ); ?>)
@@ -74,14 +74,16 @@ do_action( 'woocommerce_email_before_order_table', $order, $sent_to_admin, $plai
 		</thead>
 		<tbody>
 			<?php
-				echo wc_get_email_order_items( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					$order,
-					array(
-						'show_sku'      => $sent_to_admin,
-						'show_image'    => true,
-						'image_size'    => array( 80, 100 ),
-						'plain_text'    => $plain_text,
-						'sent_to_admin' => $sent_to_admin,
+				echo wp_kses_post(
+					wc_get_email_order_items(
+						$order,
+						array(
+							'show_sku'      => $sent_to_admin,
+							'show_image'    => true,
+							'image_size'    => array( 80, 100 ),
+							'plain_text'    => $plain_text,
+							'sent_to_admin' => $sent_to_admin,
+						)
 					)
 				);
 				?>

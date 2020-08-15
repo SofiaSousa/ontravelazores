@@ -3,9 +3,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Email Customizer For WooCommerce 1.5.0\n"
+"Project-Id-Version: Email Customizer For WooCommerce 1.5.1\n"
 "Report-Msgid-Bugs-To: https://www.storeapps.org/support/contact-us/\n"
-"POT-Creation-Date: 2020-01-02 05:44+0000\n"
+"POT-Creation-Date: 2020-07-17 06:16+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -15,6 +15,22 @@ msgstr ""
 "Language: \n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "X-Generator: Loco https://localise.biz/"
+
+#: smart-emails.php:114
+msgid "Email Customizer for WooCommerce needs WooCommerce."
+msgstr ""
+
+#: smart-emails.php:116
+msgid "WooCommerce"
+msgstr ""
+
+#: smart-emails.php:117
+msgid "must be active for Email Customizer for WooCommerce to work"
+msgstr ""
+
+#: smart-emails.php:118
+msgid "Please install & activate WooCommerce."
+msgstr ""
 
 #: includes/class-sa-se-admin-notifications.php:77
 msgid ""
@@ -28,203 +44,203 @@ msgstr ""
 msgid "Okay, got it"
 msgstr ""
 
-#: includes/class-sa-se-customize-classic-style.php:55
-#: includes/class-sa-se-customize-deluxe-style.php:55
-#: includes/class-sa-se-customize-elegant-style.php:53
-#: includes/class-sa-se-customize-simple-style.php:89
+#: includes/class-sa-se-customize-classic-style.php:54
+#: includes/class-sa-se-customize-deluxe-style.php:54
+#: includes/class-sa-se-customize-elegant-style.php:52
+#: includes/class-sa-se-customize-simple-style.php:88
 msgid "Email Background"
 msgstr ""
 
-#: includes/class-sa-se-customize-classic-style.php:65
-#: includes/class-sa-se-customize-simple-style.php:57
+#: includes/class-sa-se-customize-classic-style.php:64
+#: includes/class-sa-se-customize-simple-style.php:56
 msgid "Header"
 msgstr ""
 
-#: includes/class-sa-se-customize-classic-style.php:75
-#: includes/class-sa-se-customize-deluxe-style.php:65
-#: includes/class-sa-se-customize-elegant-style.php:62
+#: includes/class-sa-se-customize-classic-style.php:74
+#: includes/class-sa-se-customize-deluxe-style.php:64
+#: includes/class-sa-se-customize-elegant-style.php:61
 msgid "Email Body"
 msgstr ""
 
-#: includes/class-sa-se-customize-classic-style.php:85
+#: includes/class-sa-se-customize-classic-style.php:84
 msgid "Footer"
 msgstr ""
 
-#: includes/class-sa-se-customize-classic-style.php:117
-#: includes/class-sa-se-customize-deluxe-style.php:96
-#: includes/class-sa-se-customize-elegant-style.php:93
-#: includes/class-sa-se-customize-simple-style.php:167
+#: includes/class-sa-se-customize-classic-style.php:116
+#: includes/class-sa-se-customize-deluxe-style.php:95
+#: includes/class-sa-se-customize-elegant-style.php:92
+#: includes/class-sa-se-customize-simple-style.php:166
 msgid "Email Background Color"
 msgstr ""
 
-#: includes/class-sa-se-customize-classic-style.php:140
+#: includes/class-sa-se-customize-classic-style.php:139
 msgid "Top Border Color"
 msgstr ""
 
-#: includes/class-sa-se-customize-classic-style.php:163
-#: includes/class-sa-se-customize-simple-style.php:121
+#: includes/class-sa-se-customize-classic-style.php:162
+#: includes/class-sa-se-customize-simple-style.php:120
 msgid "Header Color"
 msgstr ""
 
-#: includes/class-sa-se-customize-classic-style.php:186
-#: includes/class-sa-se-customize-deluxe-style.php:119
+#: includes/class-sa-se-customize-classic-style.php:185
+#: includes/class-sa-se-customize-deluxe-style.php:118
 msgid "Email Border Color"
 msgstr ""
 
-#: includes/class-sa-se-customize-classic-style.php:209
-#: includes/class-sa-se-customize-deluxe-style.php:142
-#: includes/class-sa-se-customize-elegant-style.php:139
+#: includes/class-sa-se-customize-classic-style.php:208
+#: includes/class-sa-se-customize-deluxe-style.php:141
+#: includes/class-sa-se-customize-elegant-style.php:138
 msgid "Body Color"
 msgstr ""
 
-#: includes/class-sa-se-customize-classic-style.php:231
+#: includes/class-sa-se-customize-classic-style.php:230
 msgid "Promotional Image"
 msgstr ""
 
-#: includes/class-sa-se-customize-classic-style.php:234
+#: includes/class-sa-se-customize-classic-style.php:233
 msgid ""
 "This image will be added to all of the emails that are sent from your store. "
 "You can add offers, discounts, documentation, guides and any other "
 "promotional content image."
 msgstr ""
 
-#: includes/class-sa-se-customize-classic-style.php:254
+#: includes/class-sa-se-customize-classic-style.php:253
 msgid "Promotional Image Link"
 msgstr ""
 
-#: includes/class-sa-se-customize-classic-style.php:257
+#: includes/class-sa-se-customize-classic-style.php:256
 msgid ""
 "On clicking the Promotional Image the user will be redirected to the "
 "following link."
 msgstr ""
 
-#: includes/class-sa-se-customize-classic-style.php:278
+#: includes/class-sa-se-customize-classic-style.php:277
 msgid "Footer Color"
 msgstr ""
 
-#: includes/class-sa-se-customize-classic-style.php:301
+#: includes/class-sa-se-customize-classic-style.php:300
 msgid "Footer Text Color"
 msgstr ""
 
-#: includes/class-sa-se-customize-elegant-style.php:116
+#: includes/class-sa-se-customize-elegant-style.php:115
 msgid "Body Background Color"
 msgstr ""
 
-#: includes/class-sa-se-customize-simple-style.php:67
+#: includes/class-sa-se-customize-simple-style.php:66
 msgid "Header Style"
 msgstr ""
 
-#: includes/class-sa-se-customize-simple-style.php:78
-#: includes/class-sa-se-customize-simple-style.php:189
+#: includes/class-sa-se-customize-simple-style.php:77
+#: includes/class-sa-se-customize-simple-style.php:188
 msgid "Header Text"
 msgstr ""
 
-#: includes/class-sa-se-customize-simple-style.php:144
+#: includes/class-sa-se-customize-simple-style.php:143
 msgid "Header Text Color"
 msgstr ""
 
-#: includes/class-sa-se-customizer.php:291
+#: includes/class-sa-se-customizer.php:294
 msgid "Email Styles"
 msgstr ""
 
-#: includes/class-sa-se-customizer.php:311
+#: includes/class-sa-se-customizer.php:314
 msgid "Choose Style"
 msgstr ""
 
-#: includes/class-sa-se-customizer.php:333
+#: includes/class-sa-se-customizer.php:336
 msgid "Brand Identity"
 msgstr ""
 
-#: includes/class-sa-se-customizer.php:343
+#: includes/class-sa-se-customizer.php:346
 msgid "Brand Logo"
 msgstr ""
 
-#: includes/class-sa-se-customizer.php:354
+#: includes/class-sa-se-customizer.php:357
 msgid "Menu Bar"
 msgstr ""
 
-#: includes/class-sa-se-customizer.php:365
+#: includes/class-sa-se-customizer.php:368
 msgid "Social Links"
 msgstr ""
 
-#: includes/class-sa-se-customizer.php:376
-#: includes/class-sa-se-customizer.php:569
+#: includes/class-sa-se-customizer.php:379
+#: includes/class-sa-se-customizer.php:572
 msgid "Footer Text"
 msgstr ""
 
-#: includes/class-sa-se-customizer.php:413
+#: includes/class-sa-se-customizer.php:416
 msgid "Logo"
 msgstr ""
 
-#: includes/class-sa-se-customizer.php:416
+#: includes/class-sa-se-customizer.php:419
 msgid "Add Your Brand Logo."
 msgstr ""
 
-#: includes/class-sa-se-customizer.php:436
+#: includes/class-sa-se-customizer.php:439
 msgid "Twitter Logo"
 msgstr ""
 
-#: includes/class-sa-se-customizer.php:458
+#: includes/class-sa-se-customizer.php:461
 msgid "Twitter Link"
 msgstr ""
 
-#: includes/class-sa-se-customizer.php:480
+#: includes/class-sa-se-customizer.php:483
 msgid "Facebook Logo"
 msgstr ""
 
-#: includes/class-sa-se-customizer.php:502
+#: includes/class-sa-se-customizer.php:505
 msgid "Facebook Link"
 msgstr ""
 
-#: includes/class-sa-se-customizer.php:524
+#: includes/class-sa-se-customizer.php:527
 msgid "Instagram Logo"
 msgstr ""
 
-#: includes/class-sa-se-customizer.php:546
+#: includes/class-sa-se-customizer.php:549
 msgid "Instagram Link"
 msgstr ""
 
-#. translators: placeholder is to indicate current url number
-#: includes/class-sa-se-customizer.php:594
+#. placeholder is to indicate current url number
+#: includes/class-sa-se-customizer.php:597
 #, php-format
 msgid "URL %s"
 msgstr ""
 
-#. translators: placeholder is to indicate current url number
-#: includes/class-sa-se-customizer.php:617
+#. placeholder is to indicate current url number
+#: includes/class-sa-se-customizer.php:620
 #, php-format
 msgid "Text %s"
 msgstr ""
 
-#: includes/class-sa-se-customizer.php:667
+#: includes/class-sa-se-customizer.php:670
 msgid "Send Test Email"
 msgstr ""
 
-#: includes/class-sa-se-customizer.php:688
+#: includes/class-sa-se-customizer.php:691
 msgid "Send Mail"
 msgstr ""
 
-#: includes/class-sa-se-customizer.php:690
+#: includes/class-sa-se-customizer.php:693
 msgid "Sends test email of the currently previewed template"
 msgstr ""
 
-#: includes/class-sa-se-customizer.php:735
+#: includes/class-sa-se-customizer.php:738
 msgid "WooCommerce Test Email"
 msgstr ""
 
-#: includes/class-sa-se-customizer.php:759
+#: includes/class-sa-se-customizer.php:762
 msgid "Email address"
 msgstr ""
 
-#: includes/class-sa-se-customizer.php:766
+#: includes/class-sa-se-customizer.php:769
 msgid "Phone"
 msgstr ""
 
-#: includes/class-sa-se-select-email-style.php:42
+#: includes/class-sa-se-select-email-style.php:45
 msgid "Active email style"
 msgstr ""
 
-#: includes/class-sa-se-select-email-style.php:64
+#: includes/class-sa-se-select-email-style.php:67
 msgid "Use this"
 msgstr ""
 
@@ -236,121 +252,75 @@ msgstr ""
 msgid "Send"
 msgstr ""
 
-#: includes/class-sa-smart-emails.php:130
+#: includes/class-sa-smart-emails.php:147
 msgid "Important - "
 msgstr ""
 
-#: includes/class-sa-smart-emails.php:131
+#: includes/class-sa-smart-emails.php:148
 msgid ""
 "Email Customizer For WooCommerce (Smart Emails) is active but it will only "
 "work with WooCommerce 3.0+."
 msgstr ""
 
-#: includes/class-sa-smart-emails.php:133
+#: includes/class-sa-smart-emails.php:150
 msgid "Please update WooCommerce to the latest version"
 msgstr ""
 
-#: includes/class-sa-smart-emails.php:168
-msgid "Smart Emails needs WooCommerce"
-msgstr ""
-
-#: includes/class-sa-smart-emails.php:170
-msgid "WooCommerce"
-msgstr ""
-
-#: includes/class-sa-smart-emails.php:171
-msgid "must be active for Smart Emails to work"
-msgstr ""
-
-#: includes/class-sa-smart-emails.php:172
-msgid "Please install & activate WooCommerce."
-msgstr ""
-
-#: includes/class-sa-smart-emails.php:221
+#: includes/class-sa-smart-emails.php:198
 msgid ""
 "Email Customizer For WooCommerce (Smart Emails) is inactive due to conflicts"
 msgstr ""
 
-#: includes/class-sa-smart-emails.php:222
+#: includes/class-sa-smart-emails.php:199
 msgid ""
 "It may not function properly with these plugins and cannot be used while "
 "they are active"
 msgstr ""
 
-#. #-#-#-#-#  smart-emails.pot (Smart Emails 1.3.0)  #-#-#-#-#
-#. Plugin Name of the plugin/theme
-#: includes/class-sa-smart-emails.php:237
+#: includes/class-sa-smart-emails.php:214
 msgid "Smart Emails"
 msgstr ""
 
 #. placeholder is active emails style
-#: includes/class-sa-smart-emails.php:301
+#: includes/class-sa-smart-emails.php:281
 #, php-format
 msgid "WooCommerce Emails - %s!"
 msgstr ""
 
-#: includes/class-sa-smart-emails.php:302
+#: includes/class-sa-smart-emails.php:282
 msgid ""
 "The Customizer allows you to preview live changes to your WooCommere Emails. "
 "You can select different WooCommerce Email Templates and Styles to preview "
 "and customize."
 msgstr ""
 
-#: includes/class-sa-smart-emails.php:303
+#: includes/class-sa-smart-emails.php:283
 msgid ""
 "Are you sure you want to use this email theme for all of the WooCommmere "
 "emails sent from your site?"
 msgstr ""
 
-#: includes/class-sa-smart-emails.php:304
+#: includes/class-sa-smart-emails.php:284
 msgid "Test email sent successfully."
 msgstr ""
 
-#: includes/class-sa-smart-emails.php:305
+#: includes/class-sa-smart-emails.php:285
 msgid "Please enter a valid email id."
 msgstr ""
 
-#: templates/sa-se-preview.php:13
+#: templates/sa-se-preview.php:12
 msgid "You do not have permission to access this page"
 msgstr ""
 
-#: templates/sa-se-preview.php:36
+#: templates/sa-se-preview.php:35
 msgid ""
 "You should have at least one order placed to preview and customize "
 "WooCommerce emails"
 msgstr ""
 
 #. %s: Customer first name
-#. %s Customer first name
-#. %s: Customer first name
-#. %s: Customer first name
-#. %s: Customer first name
-#. %s: Customer first name
-#. %s: Customer first name
-#. %s: Customer first name
-#. %s: Customer first name
-#. %s Customer first name
-#. %s: Customer first name
-#. %s: Customer first name
-#. %s: Customer first name
-#. %s: Customer first name
-#. %s: Customer first name
-#. %s: Customer first name
-#. %s: Customer first name
-#. %s Customer first name
-#. %s: Customer first name
-#. %s: Customer first name
-#. %s: Customer first name
-#. %s: Customer first name
-#. %s: Customer first name
-#. %s: Customer first name
-#. %s: Customer first name
-#. %s Customer first name
-#. %s: Customer first name
-#. %s: Customer first name
-#. %s: Customer first name
-#. %s: Customer first name
-#. %s: Customer first name
+#. %s Customer username
+#. %s: Customer username
 #: templates/classic/customer-completed-order.php:28
 #: templates/classic/customer-invoice.php:31
 #: templates/classic/customer-new-account.php:31
@@ -484,7 +454,7 @@ msgid ""
 "%3$s"
 msgstr ""
 
-#. translators: %s is user's password
+#. %s Auto generated password
 #: templates/classic/customer-new-account.php:37
 #: templates/deluxe/customer-new-account.php:37
 #: templates/elegant/customer-new-account.php:37
@@ -586,7 +556,7 @@ msgstr ""
 msgid "Someone has requested a new password for the following account on %s:"
 msgstr ""
 
-#. translators: %s is username of the user
+#. %s: Customer username
 #: templates/classic/customer-reset-password.php:33
 #: templates/deluxe/customer-reset-password.php:35
 #: templates/elegant/customer-reset-password.php:35
@@ -684,10 +654,10 @@ msgstr ""
 msgid "Price"
 msgstr ""
 
-#: templates/classic/email-order-details.php:110
-#: templates/deluxe/email-order-details.php:116
-#: templates/elegant/email-order-details.php:108
-#: templates/simple/email-order-details.php:114
+#: templates/classic/email-order-details.php:112
+#: templates/deluxe/email-order-details.php:118
+#: templates/elegant/email-order-details.php:110
+#: templates/simple/email-order-details.php:116
 #: templates/classic/woocommerce-subscriptions/email-order-details.php:76
 #: templates/deluxe/woocommerce-subscriptions/email-order-details.php:82
 #: templates/elegant/woocommerce-subscriptions/email-order-details.php:76
@@ -697,50 +667,6 @@ msgstr ""
 
 #: templates/simple/email-addresses.php:52
 msgid "Order Total"
-msgstr ""
-
-#. $1-$2: opening and closing <a> tags $3: order's order number $4: date of order in <time> element.
-#: templates/classic/woocommerce-subscriptions/email-order-details.php:23
-#: templates/deluxe/woocommerce-subscriptions/email-order-details.php:28
-#: templates/elegant/woocommerce-subscriptions/email-order-details.php:23
-#: templates/simple/woocommerce-subscriptions/email-order-details.php:23
-#, php-format
-msgctxt "Used in email notification"
-msgid "[Order #%1$s] (%2$s)"
-msgstr ""
-
-#. $1-$3: opening and closing <a> tags $2: subscription's order number.
-#: templates/classic/woocommerce-subscriptions/email-order-details.php:26
-#: templates/deluxe/woocommerce-subscriptions/email-order-details.php:31
-#: templates/elegant/woocommerce-subscriptions/email-order-details.php:26
-#: templates/simple/woocommerce-subscriptions/email-order-details.php:26
-#, php-format
-msgctxt "Used in email notification"
-msgid "Subscription %1$s#%2$s%3$s"
-msgstr ""
-
-#: templates/classic/woocommerce-subscriptions/email-order-details.php:35
-#: templates/deluxe/woocommerce-subscriptions/email-order-details.php:40
-#: templates/elegant/woocommerce-subscriptions/email-order-details.php:35
-#: templates/simple/woocommerce-subscriptions/email-order-details.php:35
-msgctxt "table headings in notification email"
-msgid "Product"
-msgstr ""
-
-#: templates/classic/woocommerce-subscriptions/email-order-details.php:37
-#: templates/deluxe/woocommerce-subscriptions/email-order-details.php:42
-#: templates/elegant/woocommerce-subscriptions/email-order-details.php:37
-#: templates/simple/woocommerce-subscriptions/email-order-details.php:37
-msgctxt "table headings in notification email"
-msgid "Quantity"
-msgstr ""
-
-#: templates/classic/woocommerce-subscriptions/email-order-details.php:38
-#: templates/deluxe/woocommerce-subscriptions/email-order-details.php:43
-#: templates/elegant/woocommerce-subscriptions/email-order-details.php:38
-#: templates/simple/woocommerce-subscriptions/email-order-details.php:38
-msgctxt "table headings in notification email"
-msgid "Price"
 msgstr ""
 
 #: templates/classic/woocommerce-subscriptions/customer-completed-renewal-order.php:18
@@ -822,61 +748,131 @@ msgstr ""
 msgid "Here are the details of your renewal order placed on %s:"
 msgstr ""
 
-#: templates/classic/woocommerce-subscriptions/subscription-info.php:15
-#: templates/deluxe/woocommerce-subscriptions/subscription-info.php:15
-#: templates/elegant/woocommerce-subscriptions/subscription-info.php:15
-#: templates/simple/woocommerce-subscriptions/subscription-info.php:15
-msgid "Subscription information"
+#. $1-$2: opening and closing <a> tags $3: order's order number $4: date of order in <time> element.
+#: templates/classic/woocommerce-subscriptions/email-order-details.php:23
+#: templates/deluxe/woocommerce-subscriptions/email-order-details.php:28
+#: templates/elegant/woocommerce-subscriptions/email-order-details.php:23
+#: templates/simple/woocommerce-subscriptions/email-order-details.php:23
+#, php-format
+msgctxt "Used in email notification"
+msgid "[Order #%1$s] (%2$s)"
 msgstr ""
 
-#: templates/classic/woocommerce-subscriptions/subscription-info.php:19
-#: templates/deluxe/woocommerce-subscriptions/subscription-info.php:19
-#: templates/elegant/woocommerce-subscriptions/subscription-info.php:19
-#: templates/simple/woocommerce-subscriptions/subscription-info.php:19
-msgid "Subscription"
+#. $1-$3: opening and closing <a> tags $2: subscription's order number.
+#: templates/classic/woocommerce-subscriptions/email-order-details.php:26
+#: templates/deluxe/woocommerce-subscriptions/email-order-details.php:31
+#: templates/elegant/woocommerce-subscriptions/email-order-details.php:26
+#: templates/simple/woocommerce-subscriptions/email-order-details.php:26
+#, php-format
+msgctxt "Used in email notification"
+msgid "Subscription %1$s#%2$s%3$s"
 msgstr ""
 
-#: templates/classic/woocommerce-subscriptions/subscription-info.php:20
-#: templates/deluxe/woocommerce-subscriptions/subscription-info.php:20
-#: templates/elegant/woocommerce-subscriptions/subscription-info.php:20
-#: templates/simple/woocommerce-subscriptions/subscription-info.php:20
-msgctxt "table heading"
-msgid "Start date"
+#: templates/classic/woocommerce-subscriptions/email-order-details.php:35
+#: templates/deluxe/woocommerce-subscriptions/email-order-details.php:40
+#: templates/elegant/woocommerce-subscriptions/email-order-details.php:35
+#: templates/simple/woocommerce-subscriptions/email-order-details.php:35
+msgctxt "table headings in notification email"
+msgid "Product"
+msgstr ""
+
+#: templates/classic/woocommerce-subscriptions/email-order-details.php:37
+#: templates/deluxe/woocommerce-subscriptions/email-order-details.php:42
+#: templates/elegant/woocommerce-subscriptions/email-order-details.php:37
+#: templates/simple/woocommerce-subscriptions/email-order-details.php:37
+msgctxt "table headings in notification email"
+msgid "Quantity"
+msgstr ""
+
+#: templates/classic/woocommerce-subscriptions/email-order-details.php:38
+#: templates/deluxe/woocommerce-subscriptions/email-order-details.php:43
+#: templates/elegant/woocommerce-subscriptions/email-order-details.php:38
+#: templates/simple/woocommerce-subscriptions/email-order-details.php:38
+msgctxt "table headings in notification email"
+msgid "Price"
 msgstr ""
 
 #: templates/classic/woocommerce-subscriptions/subscription-info.php:21
 #: templates/deluxe/woocommerce-subscriptions/subscription-info.php:21
 #: templates/elegant/woocommerce-subscriptions/subscription-info.php:21
 #: templates/simple/woocommerce-subscriptions/subscription-info.php:21
+msgid "Subscription information"
+msgstr ""
+
+#: templates/classic/woocommerce-subscriptions/subscription-info.php:25
+#: templates/deluxe/woocommerce-subscriptions/subscription-info.php:25
+#: templates/elegant/woocommerce-subscriptions/subscription-info.php:25
+#: templates/simple/woocommerce-subscriptions/subscription-info.php:25
+msgid "Subscription"
+msgstr ""
+
+#: templates/classic/woocommerce-subscriptions/subscription-info.php:26
+#: templates/deluxe/woocommerce-subscriptions/subscription-info.php:26
+#: templates/elegant/woocommerce-subscriptions/subscription-info.php:26
+#: templates/simple/woocommerce-subscriptions/subscription-info.php:26
+msgctxt "table heading"
+msgid "Start date"
+msgstr ""
+
+#: templates/classic/woocommerce-subscriptions/subscription-info.php:27
+#: templates/deluxe/woocommerce-subscriptions/subscription-info.php:27
+#: templates/elegant/woocommerce-subscriptions/subscription-info.php:27
+#: templates/simple/woocommerce-subscriptions/subscription-info.php:27
 msgctxt "table heading"
 msgid "End date"
 msgstr ""
 
-#: templates/classic/woocommerce-subscriptions/subscription-info.php:22
-#: templates/deluxe/woocommerce-subscriptions/subscription-info.php:22
-#: templates/elegant/woocommerce-subscriptions/subscription-info.php:22
-#: templates/simple/woocommerce-subscriptions/subscription-info.php:22
+#: templates/classic/woocommerce-subscriptions/subscription-info.php:28
+#: templates/deluxe/woocommerce-subscriptions/subscription-info.php:28
+#: templates/elegant/woocommerce-subscriptions/subscription-info.php:28
+#: templates/simple/woocommerce-subscriptions/subscription-info.php:28
 msgctxt "table heading"
 msgid "Price"
 msgstr ""
 
 #. %s: Subscription ID.
-#: templates/classic/woocommerce-subscriptions/subscription-info.php:28
-#: templates/deluxe/woocommerce-subscriptions/subscription-info.php:28
-#: templates/elegant/woocommerce-subscriptions/subscription-info.php:28
-#: templates/simple/woocommerce-subscriptions/subscription-info.php:28
+#: templates/classic/woocommerce-subscriptions/subscription-info.php:35
+#: templates/deluxe/woocommerce-subscriptions/subscription-info.php:35
+#: templates/elegant/woocommerce-subscriptions/subscription-info.php:35
+#: templates/simple/woocommerce-subscriptions/subscription-info.php:35
 #, php-format
 msgctxt "subscription number in email table. (eg: #106)"
 msgid "#%s"
 msgstr ""
 
-#: templates/classic/woocommerce-subscriptions/subscription-info.php:30
-#: templates/deluxe/woocommerce-subscriptions/subscription-info.php:30
-#: templates/elegant/woocommerce-subscriptions/subscription-info.php:30
-#: templates/simple/woocommerce-subscriptions/subscription-info.php:30
+#: templates/classic/woocommerce-subscriptions/subscription-info.php:37
+#: templates/deluxe/woocommerce-subscriptions/subscription-info.php:37
+#: templates/elegant/woocommerce-subscriptions/subscription-info.php:37
+#: templates/simple/woocommerce-subscriptions/subscription-info.php:37
 msgctxt "Used as end date for an indefinite subscription"
 msgid "When cancelled"
 msgstr ""
+
+#. Placeholder is next payment date of subscription.
+#: templates/classic/woocommerce-subscriptions/subscription-info.php:45
+#: templates/deluxe/woocommerce-subscriptions/subscription-info.php:45
+#: templates/elegant/woocommerce-subscriptions/subscription-info.php:45
+#: templates/simple/woocommerce-subscriptions/subscription-info.php:45
+#, php-format
+msgid "Next payment: %s"
+msgstr ""
+
+#. Placeholders are opening and closing My Account link tags.
+#: templates/classic/woocommerce-subscriptions/subscription-info.php:67
+#: templates/deluxe/woocommerce-subscriptions/subscription-info.php:67
+#: templates/elegant/woocommerce-subscriptions/subscription-info.php:67
+#: templates/simple/woocommerce-subscriptions/subscription-info.php:68
+#, php-format
+msgid ""
+"This subscription is set to renew automatically using your payment method on "
+"file. You can manage or cancel this subscription from your %1$smy account "
+"page%2$s."
+msgid_plural ""
+"These subscriptions are set to renew automatically using your payment method "
+"on file. You can manage or cancel your subscriptions from your %1$smy "
+"account page%2$s."
+msgstr[0] ""
+msgstr[1] ""
 
 #. Name of the plugin
 msgid "Email Customizer For WooCommerce (Smart Emails)"
@@ -891,10 +887,10 @@ msgstr ""
 msgid "https://www.storeapps.org/product/email-customizer-for-woocommerce/"
 msgstr ""
 
-#. Author of the plugin/theme
+#. Author of the plugin
 msgid "StoreApps"
 msgstr ""
 
-#. Author URI of the plugin/theme
+#. Author URI of the plugin
 msgid "https://www.storeapps.org/"
 msgstr ""

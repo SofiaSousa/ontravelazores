@@ -2,10 +2,9 @@
 /**
  * Allows to select email styles in Customizer
  *
- * @category    Class
  * @package     smart-emails/includes
  * @author      StoreApps
- * @version     1.0.1
+ * @version     1.0.2
  * @since       1.0.0
  */
 
@@ -35,10 +34,10 @@ if ( ! class_exists( 'SA_SE_Select_Email_Style' ) ) {
 			global $se_current_style;
 
 			$styles = array(
-				'simple'  => SA_SE_PLUGIN_URL . 'assets/images/simple/simple.png',
-				'deluxe'  => SA_SE_PLUGIN_URL . 'assets/images/deluxe/deluxe.png',
 				'classic' => SA_SE_PLUGIN_URL . 'assets/images/classic/classic.png',
+				'deluxe'  => SA_SE_PLUGIN_URL . 'assets/images/deluxe/deluxe.png',
 				'elegant' => SA_SE_PLUGIN_URL . 'assets/images/elegant/elegant.png',
+				'simple'  => SA_SE_PLUGIN_URL . 'assets/images/simple/simple.png',
 			);
 			?>
 
