@@ -530,6 +530,7 @@ return array(
     'WPML\\PB\\Gutenberg\\StringsInBlock\\StringsInBlock' => $vendorDir . '/wpml/page-builders-gutenberg/src/strings-in-block/interface-strings-in-block.php',
     'WPML\\PB\\Gutenberg\\XPath' => $vendorDir . '/wpml/page-builders-gutenberg/src/XPath.php',
     'WPML\\PB\\ShortCodesInGutenbergBlocks' => $vendorDir . '/wpml/page-builders/src/st/ShortCodesInGutenbergBlocks.php',
+    'WPML\\PB\\Shortcode\\StringCleanUp' => $vendorDir . '/wpml/page-builders/src/st/strategy/shortcode/StringCleanUp.php',
     'WPML\\PB\\TranslateLinks' => $vendorDir . '/wpml/page-builders/src/st/TranslateLinks.php',
     'WPML\\Plugins' => $baseDir . '/classes/plugins/Plugins.php',
     'WPML\\Requirements\\WordPress' => $baseDir . '/classes/requirements/WordPress.php',

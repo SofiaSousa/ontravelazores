@@ -1,7 +1,9 @@
 <?php
 
 use \WPML\FP\Fns;
+use WPML\PB\Shortcode\StringCleanUp;
 use function WPML\FP\invoke;
+use function WPML\Container\make;
 
 /**
  * Class WPML_PB_Integration
@@ -17,6 +19,9 @@ class WPML_PB_Integration {
 	private $is_registering_string = false;
 
 	private $strategies = array();
+
+	/** @var StringCleanUp[]  */
+	private $stringCleanUp = [];
 
 	/**
 	 * @var WPML_PB_Integration_Rescan
@@ -172,6 +177,9 @@ class WPML_PB_Integration {
 		add_action( 'wpml_pb_register_all_strings_for_translation', [ $this, 'register_all_strings_for_translation' ] );
 		add_filter( 'wpml_pb_register_strings_in_content', [ $this, 'register_strings_in_content' ], 10, 3 );
 		add_filter( 'wpml_pb_update_translations_in_content', [ $this, 'update_translations_in_content'], 10, 2 );
+
+		add_action( 'wpml_start_GB_register_strings', [ $this, 'initialize_string_clean_up' ], 10, 1 );
+		add_action( 'wpml_end_GB_register_strings', [ $this, 'clean_up_strings' ], 10, 1 );
 	}
 
 	/**
@@ -300,18 +308,29 @@ class WPML_PB_Integration {
 	 * @param bool $registered
 	 * @param string|int $post_id
 	 * @param string $content
+	 * @param WPML\PB\Shortcode\StringCleanUp $stringCleanUp
 	 *
 	 * @return bool
 	 */
 	public function register_strings_in_content( $registered, $post_id, $content ) {
 		foreach ( $this->strategies as $strategy ) {
-			$registered = $strategy->register_strings_in_content( $post_id, $content, false ) || $registered;
+			$registered = $strategy->register_strings_in_content( $post_id, $content, $this->stringCleanUp[ $post_id ] ) || $registered;
 		}
 		return $registered;
 	}
 
 	public function get_factory() {
 		return $this->factory;
+	}
+
+	public function initialize_string_clean_up( WP_Post $post ) {
+		$shortcodeStrategy = make( WPML_PB_Shortcode_Strategy::class );
+		$shortcodeStrategy->set_factory( $this->factory );
+		$this->stringCleanUp[ $post->ID ] = new StringCleanUp( $post->ID, $shortcodeStrategy );
+	}
+
+	public function clean_up_strings( WP_Post $post ) {
+		$this->stringCleanUp[ $post->ID ]->cleanUp();
 	}
 
 	/**

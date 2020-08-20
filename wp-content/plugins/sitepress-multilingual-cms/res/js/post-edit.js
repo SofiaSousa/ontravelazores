@@ -166,7 +166,7 @@ jQuery(document).ready(function ($) {
 				var set_as_source_checkbox = $('<input type="checkbox" value="1" name="set_as_source" />');
 
 				if(!translation_set_has_source_language) {
-					set_as_source_checkbox.attr('checked', 'checked');
+					set_as_source_checkbox.prop('checked', true);
 				}
 				var action = $('<label>').append(set_as_source_checkbox).append(postEdit.$connect_translations_dialog.data('set_as_source-text'));
 				action.appendTo($list);
