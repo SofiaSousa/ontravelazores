@@ -52,29 +52,32 @@ class WPML_WPSEO_XML_Sitemaps_Filter implements IWPML_Action {
 		global $wpml_query_filter;
 
 		if ( $this->is_per_domain() ) {
-			add_filter( 'wpml_get_home_url', array( $this, 'get_home_url_filter' ), 10, 4 );
-			add_filter( 'wpseo_posts_join', array( $wpml_query_filter, 'filter_single_type_join' ), 10, 2 );
-			add_filter( 'wpseo_posts_where', array( $wpml_query_filter, 'filter_single_type_where' ), 10, 2 );
-			add_filter( 'wpseo_typecount_join', array( $wpml_query_filter, 'filter_single_type_join' ), 10, 2 );
-			add_filter( 'wpseo_typecount_where', array( $wpml_query_filter, 'filter_single_type_where' ), 10, 2 );
+			add_filter( 'wpml_get_home_url', [ $this, 'get_home_url_filter' ], 10, 4 );
+			add_filter( 'wpseo_posts_join', [ $wpml_query_filter, 'filter_single_type_join' ], 10, 2 );
+			add_filter( 'wpseo_posts_where', [ $wpml_query_filter, 'filter_single_type_where' ], 10, 2 );
+			add_filter( 'wpseo_typecount_join', [ $wpml_query_filter, 'filter_single_type_join' ], 10, 2 );
+			add_filter( 'wpseo_typecount_where', [ $wpml_query_filter, 'filter_single_type_where' ], 10, 2 );
 		} else {
 			// Add translated archives.
-			add_filter( self::FILTER_PREFIX . 'post' . self::FILTER_SUFFIX, array( $this, 'add_languages_to_sitemap' ) );
-			add_filter( self::FILTER_PREFIX . 'page' . self::FILTER_SUFFIX, array( $this, 'add_languages_to_sitemap' ) );
-			add_filter( 'wpseo_sitemap_post_type_archive_link', array( $this, 'init_hooks_when_custom_post_types_are_available' ), PHP_INT_MAX, 2 );
+			add_filter( self::FILTER_PREFIX . 'post' . self::FILTER_SUFFIX, [ $this, 'add_languages_to_sitemap' ] );
+			add_filter( self::FILTER_PREFIX . 'page' . self::FILTER_SUFFIX, [ $this, 'add_languages_to_sitemap' ] );
+			add_filter( 'wpseo_sitemap_post_type_archive_link', [ $this, 'init_hooks_when_custom_post_types_are_available' ], PHP_INT_MAX, 2 );
 
 			// Remove posts under hidden language.
-			add_filter( 'wpseo_xml_sitemap_post_url', array( $this, 'exclude_hidden_language_posts' ), 10, 2 );
+			add_filter( 'wpseo_xml_sitemap_post_url', [ $this, 'exclude_hidden_language_posts' ], 10, 2 );
+
+			// Remove sitemaps from secondary language folders.
+			add_action( 'parse_query', [ $this, 'remove_sitemap_from_non_default_languages' ] );
 		}
 
 		if ( $this->is_per_directory() ) {
-			add_filter( 'wpml_get_home_url', array( $this, 'maybe_return_original_url_in_get_home_url_filter' ), 10, 2 );
+			add_filter( 'wpml_get_home_url', [ $this, 'maybe_return_original_url_in_get_home_url_filter' ], 10, 2 );
 		}
 
-		add_filter( 'wpseo_enable_xml_sitemap_transient_caching', array( $this, 'transient_cache_filter' ), 10, 0 );
-		add_filter( 'wpseo_build_sitemap_post_type', array( $this, 'wpseo_build_sitemap_post_type_filter' ) );
-		add_action( 'wpseo_xmlsitemaps_config', array( $this, 'list_domains' ) );
-		add_filter( 'wpseo_exclude_from_sitemap_by_post_ids', array( $this, 'exclude_translations_of_static_pages' ), 10, 3 );
+		add_filter( 'wpseo_enable_xml_sitemap_transient_caching', [ $this, 'transient_cache_filter' ], 10, 0 );
+		add_filter( 'wpseo_build_sitemap_post_type', [ $this, 'wpseo_build_sitemap_post_type_filter' ] );
+		add_action( 'wpseo_xmlsitemaps_config', [ $this, 'list_domains' ] );
+		add_filter( 'wpseo_exclude_from_sitemap_by_post_ids', [ $this, 'exclude_translations_of_static_pages' ], 10, 3 );
 	}
 
 	/**
@@ -86,7 +89,7 @@ class WPML_WPSEO_XML_Sitemaps_Filter implements IWPML_Action {
 	 */
 	public function init_hooks_when_custom_post_types_are_available( $link, $post_type ) {
 		if ( ! empty( $link ) && is_string( $post_type ) ) {
-			add_filter( self::FILTER_PREFIX . $post_type . self::FILTER_SUFFIX, array( $this, 'add_languages_to_sitemap' ) );
+			add_filter( self::FILTER_PREFIX . $post_type . self::FILTER_SUFFIX, [ $this, 'add_languages_to_sitemap' ] );
 		}
 
 		return $link;
@@ -227,10 +230,10 @@ class WPML_WPSEO_XML_Sitemaps_Filter implements IWPML_Action {
 		$sitepress_settings['auto_adjust_ids'] = 0;
 
 		if ( ! $this->is_per_domain() ) {
-			remove_filter( 'terms_clauses', array( $this->sitepress, 'terms_clauses' ) );
+			remove_filter( 'terms_clauses', [ $this->sitepress, 'terms_clauses' ] );
 		}
 
-		remove_filter( 'category_link', array( $this->sitepress, 'category_link_adjust_id' ), 1 );
+		remove_filter( 'category_link', [ $this->sitepress, 'category_link_adjust_id' ], 1 );
 
 		return $type;
 	}
@@ -250,7 +253,7 @@ class WPML_WPSEO_XML_Sitemaps_Filter implements IWPML_Action {
 		}
 
 		// Get list of hidden languages.
-		$hidden_languages = $this->sitepress->get_setting( 'hidden_languages', array() );
+		$hidden_languages = $this->sitepress->get_setting( 'hidden_languages', [] );
 
 		// If there are no hidden languages return original URL.
 		if ( empty( $hidden_languages ) ) {
@@ -307,7 +310,7 @@ class WPML_WPSEO_XML_Sitemaps_Filter implements IWPML_Action {
 	 * @return array
 	 */
 	public function exclude_translations_of_static_pages( $excluded_post_ids ) {
-		$static_pages = array( 'page_on_front', 'page_for_posts' );
+		$static_pages = [ 'page_on_front', 'page_for_posts' ];
 		foreach ( $static_pages as $static_page ) {
 			$page_id = (int) get_option( $static_page );
 			if ( $page_id ) {
@@ -327,14 +330,16 @@ class WPML_WPSEO_XML_Sitemaps_Filter implements IWPML_Action {
 	 * @return string
 	 */
 	public function maybe_return_original_url_in_get_home_url_filter( $home_url, $original_url ) {
-		$places = array(
-			array( 'WPSEO_Watcher', 'format_redirect_url' ),
-			array( 'WPSEO_Post_Type_Sitemap_Provider', 'get_home_url' ),
-			array( 'WPSEO_Post_Type_Sitemap_Provider', 'get_classifier' ),
-			array( 'WPSEO_Sitemaps_Router', 'get_base_url' ),
-			array( 'WPSEO_Sitemaps_Renderer', '__construct' ),
-			array( 'WPSEO_Redirect_Accessible_Validation', 'parse_target' ),
-		);
+		$places = [
+			[ 'WPSEO_Watcher', 'format_redirect_url' ],
+			[ 'WPSEO_Post_Watcher', 'get_target_url' ],
+			[ 'WPSEO_Post_Type_Sitemap_Provider', 'get_home_url' ],
+			[ 'WPSEO_Post_Type_Sitemap_Provider', 'get_classifier' ],
+			[ 'WPSEO_Sitemaps_Router', 'get_base_url' ],
+			[ 'WPSEO_Sitemaps_Renderer', '__construct' ],
+			[ 'WPSEO_Redirect_Accessible_Validation', 'parse_target' ],
+			[ 'WPSEO_Redirect_Subdirectory_Validation', 'get_subdirectory' ],
+		];
 
 		foreach ( $places as $place ) {
 			if ( $this->get_back_trace()->is_class_function_in_call_stack( $place[0], $place[1] ) ) {
@@ -415,6 +420,23 @@ class WPML_WPSEO_XML_Sitemaps_Filter implements IWPML_Action {
 		}
 
 		return $images;
+	}
+
+	/**
+	 * Removes the sitemap query_var on non-default languages.
+	 * This will only run when the language URL format is not per domain.
+	 *
+	 * @param WP_Query $wp_query Passed WP query object.
+	 */
+	public function remove_sitemap_from_non_default_languages( &$wp_query ) {
+		if (
+				$wp_query->get( 'sitemap' )
+				&& $this->sitepress->get_current_language() !== $this->sitepress->get_default_language()
+			) {
+			unset( $wp_query->query_vars['sitemap'] );
+			$wp_query->set_404();
+			status_header( 404 );
+		}
 	}
 
 }

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb555938040711059feb676ec019d5453
+class ComposerStaticInit85059719cef80b88a237533eafb4d730
 {
     public static $files = array (
         '5f5b8f7c1db2e892006e8805f0ed573c' => __DIR__ . '/..' . '/wpml/collect/src/Illuminate/Support/helpers.php',
@@ -603,6 +603,7 @@ class ComposerStaticInitb555938040711059feb676ec019d5453
         'WPML\\PB\\Gutenberg\\StringsInBlock\\StringsInBlock' => __DIR__ . '/..' . '/wpml/page-builders-gutenberg/src/strings-in-block/interface-strings-in-block.php',
         'WPML\\PB\\Gutenberg\\XPath' => __DIR__ . '/..' . '/wpml/page-builders-gutenberg/src/XPath.php',
         'WPML\\PB\\ShortCodesInGutenbergBlocks' => __DIR__ . '/..' . '/wpml/page-builders/src/st/ShortCodesInGutenbergBlocks.php',
+        'WPML\\PB\\Shortcode\\StringCleanUp' => __DIR__ . '/..' . '/wpml/page-builders/src/st/strategy/shortcode/StringCleanUp.php',
         'WPML\\PB\\TranslateLinks' => __DIR__ . '/..' . '/wpml/page-builders/src/st/TranslateLinks.php',
         'WPML\\Plugins' => __DIR__ . '/../..' . '/classes/plugins/Plugins.php',
         'WPML\\Requirements\\WordPress' => __DIR__ . '/../..' . '/classes/requirements/WordPress.php',
@@ -1355,10 +1356,10 @@ class ComposerStaticInitb555938040711059feb676ec019d5453
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb555938040711059feb676ec019d5453::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb555938040711059feb676ec019d5453::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitb555938040711059feb676ec019d5453::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitb555938040711059feb676ec019d5453::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit85059719cef80b88a237533eafb4d730::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit85059719cef80b88a237533eafb4d730::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit85059719cef80b88a237533eafb4d730::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit85059719cef80b88a237533eafb4d730::$classMap;
 
         }, null, ClassLoader::class);
     }

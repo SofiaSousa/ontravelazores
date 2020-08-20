@@ -1,6 +1,6 @@
 <?php
 
-use WPML\Compatibility\Yoast\Utils;
+use WPML\WPSEO\Utils;
 
 /**
  * Class WPML_WPSEO_Should_Create_Redirect

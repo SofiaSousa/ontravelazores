@@ -393,7 +393,7 @@ echo '</textarea>';
 		});
 
 		jQuery('#icl_fix_languages').click(function () {
-			jQuery(this).attr('disabled', 'disabled');
+			jQuery(this).prop('disabled', true);
 			jQuery(this).after(icl_ajxloaderimg);
 
 
@@ -405,7 +405,7 @@ echo '</textarea>';
 				url: location.href + '&debug_action=fix_languages&nonce=<?php echo wp_create_nonce('fix_languages'); ?>',
 				timeout: 60000,
 				success: function () {
-					icl_fix_languages.removeAttr('disabled');
+					icl_fix_languages.prop('disabled', false);
 					alert('<?php echo esc_js(__('Done', 'sitepress')) ?>');
 					icl_fix_languages.next().fadeOut();
 					location.reload();
@@ -431,10 +431,10 @@ echo '</textarea>';
 
 		jQuery('#icl_remove_ghost').click(function () {
             var self = jQuery(this);
-            self.attr('disabled', 'disabled');
+            self.prop('disabled', true);
             self.after(icl_ajxloaderimg);
 			jQuery.post(location.href + '&debug_action=ghost_clean&nonce=<?php echo wp_create_nonce('ghost_clean'); ?>', function () {
-                self.removeAttr('disabled');
+                self.prop('disabled', false);
 				alert('<?php echo esc_js(__('Done', 'sitepress')) ?>');
                 self.next().fadeOut();
 
@@ -453,7 +453,7 @@ echo '</textarea>';
 		function assign_translation_status_to_duplicates() {
 
 			if (assign_translation_status_to_duplicates_cycles == 0) {
-				assign_translation_status_to_duplicates_element.attr('disabled', 'disabled');
+				assign_translation_status_to_duplicates_element.prop('disabled', true);
 				response_element.text('');
 				response_element.show();
 				assign_translation_status_to_duplicates_element.after(assign_translation_status_to_duplicates_loader);
@@ -481,7 +481,7 @@ echo '</textarea>';
 							assign_translation_status_to_duplicates_loader.fadeOut(function() {
 								assign_translation_status_to_duplicates_element.remove(assign_translation_status_to_duplicates_loader);
 							});
-							assign_translation_status_to_duplicates_element.removeAttr('disabled');
+							assign_translation_status_to_duplicates_element.prop('disabled', false);
 
 							//Reset counters
 							assign_translation_status_to_duplicates_cycles = 0;
@@ -505,7 +505,7 @@ echo '</textarea>';
 						assign_translation_status_to_duplicates_loader.fadeOut(function() {
 							assign_translation_status_to_duplicates_element.remove(assign_translation_status_to_duplicates_loader);
 						});
-						assign_translation_status_to_duplicates_element.removeAttr('disabled');
+						assign_translation_status_to_duplicates_element.prop('disabled', false);
 					}
 				},
 				error: function (xhr, status, error) {
@@ -522,10 +522,10 @@ echo '</textarea>';
 
 		jQuery('#icl_add_missing_lang').click(function () {
             var self = jQuery(this);
-            self.attr('disabled', 'disabled');
+            self.prop('disabled', true);
             self.after(icl_ajxloaderimg);
 			jQuery.post(location.href + '&debug_action=icl_ts_add_missing_language&nonce=<?php echo wp_create_nonce('icl_ts_add_missing_language'); ?>', function () {
-                self.removeAttr('disabled');
+                self.prop('disabled', false);
 				alert('<?php echo esc_js(__('Done', 'sitepress')) ?>');
                 self.next().fadeOut();
 
@@ -533,10 +533,10 @@ echo '</textarea>';
 		});
 
 		jQuery('#icl_fix_collation').click(function () {
-			jQuery(this).attr('disabled', 'disabled');
+			jQuery(this).prop('disabled', true);
 			jQuery(this).after(icl_ajxloaderimg);
 			jQuery.post(location.href + '&debug_action=icl_fix_collation&nonce=<?php echo wp_create_nonce('icl_fix_collation'); ?>', function () {
-				jQuery('#icl_fix_collation').removeAttr('disabled');
+				jQuery('#icl_fix_collation').prop('disabled', false);
 				alert('<?php echo esc_js(__('Done', 'sitepress')) ?>');
 				jQuery('#icl_fix_collation').next().fadeOut();
 
@@ -545,10 +545,10 @@ echo '</textarea>';
 
 		jQuery('#icl_fix_terms_count').click(function () {
             var self = jQuery(this);
-            self.attr('disabled', 'disabled');
+            self.prop('disabled', true);
             self.after(icl_ajxloaderimg);
 			jQuery.post(location.href + '&debug_action=icl_fix_terms_count&nonce=<?php echo wp_create_nonce('icl_fix_terms_count'); ?>', function () {
-                self.removeAttr('disabled');
+                self.prop('disabled', false);
 				alert('<?php echo esc_js(__('Done', 'sitepress')) ?>');
                 self.next().fadeOut();
 
@@ -557,10 +557,10 @@ echo '</textarea>';
 
 		jQuery('#icl_remove_st_db_cache_logs').click(function () {
 			var self = jQuery(this);
-			self.attr('disabled', 'disabled');
+			self.prop('disabled', true);
 			self.after(icl_ajxloaderimg);
 			jQuery.post(location.href + '&debug_action=icl_remove_st_db_cache_logs&nonce=<?php echo wp_create_nonce('icl_remove_st_db_cache_logs'); ?>', function () {
-				self.removeAttr('disabled');
+				self.prop('disabled', false);
 				alert('<?php echo esc_js(__('Done', 'sitepress')) ?>');
 				self.next().fadeOut();
 
@@ -808,7 +808,7 @@ echo WPML_Troubleshooting_Terms_Menu::display_terms_with_suffix();
 			echo '</p>';
 			echo '<label><input type="checkbox" name="icl-reset-all" ';
 			if ( !function_exists( 'is_super_admin' ) || is_super_admin() ) {
-				echo 'onchange="if(this.checked) jQuery(\'#reset-all-but\').removeAttr(\'disabled\'); else  jQuery(\'#reset-all-but\').attr(\'disabled\',\'disabled\');"';
+				echo 'onchange="if(this.checked) jQuery(\'#reset-all-but\').prop(\'disabled\', false); else  jQuery(\'#reset-all-but\').prop(\'disabled\', true);"';
 			}
 			echo ' /> ' . __( 'I am about to reset all translation and language data.', 'sitepress' ) . '</label><br /><br />';
 

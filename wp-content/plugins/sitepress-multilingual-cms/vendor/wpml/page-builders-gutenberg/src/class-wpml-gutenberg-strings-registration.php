@@ -48,6 +48,7 @@ class WPML_Gutenberg_Strings_Registration {
 	 */
 	public function register_strings( WP_Post $post, $package_data ) {
 		do_action( 'wpml_start_string_package_registration', $package_data );
+		do_action( 'wpml_start_GB_register_strings', $post, $package_data );
 
 		$this->leftover_strings = $original_strings = $this->string_translation->get_package_strings( $package_data );
 		$this->string_location  = 1;
@@ -62,6 +63,7 @@ class WPML_Gutenberg_Strings_Registration {
 
 		$this->reuse_translations->find_and_reuse_translations( $original_strings, $current_strings, $this->leftover_strings );
 
+		do_action( 'wpml_end_GB_register_strings', $post, $package_data );
 		do_action( 'wpml_delete_unused_package_strings', $package_data );
 	}
 

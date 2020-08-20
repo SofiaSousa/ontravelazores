@@ -4,7 +4,7 @@ session_start();
 }
 
 //constants
-define( 'CT_VERSION', '3.2.3' );
+define( 'CT_VERSION', '3.2.4' );
 define( 'CT_DB_VERSION', '1.5.1' );
 define( 'CT_TEMPLATE_DIRECTORY_URI', get_template_directory_uri() );
 define( 'CT_IMAGE_URL', CT_TEMPLATE_DIRECTORY_URI . '/img' );
@@ -60,7 +60,7 @@ if ( version_compare( $wp_version, '4.1', '>=' ) ) {
 
 if ( ! isset( $content_width ) ) $content_width = 900;
 
-/* Add custom Image sizes */
+/* Add custom Image sizes */ 
 add_image_size( 'ct-room-gallery', 200, 133, true );
 add_image_size( 'ct-list-thumb', 400, 267, true );
 add_image_size( 'ct-map-thumb', 280, 140, true );
@@ -93,18 +93,18 @@ remove_action( 'admin_enqueue_scripts', 'wp_auth_check_load' );
 function check_product_category(){
 	$arr_ids = array();
     foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
-		$product_id = apply_filters( 'woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key );
+		$product_id = apply_filters( 'woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key ); 
 		$product_title = get_the_title($product_id);
 		$product_permalink = get_permalink($product_id);
 
-		$args = array('post_type'=>'tour', 'posts_per_page'=>'-1');
-		$result = new WP_Query($args);
+		$args = array('post_type'=>'tour', 'posts_per_page'=>'-1'); 
+		$result = new WP_Query($args); 
 		if ($result->have_posts()) :
 			while ($result->have_posts()) : $result->the_post();
 				$tour_permalink = get_permalink();
 				$tour_id = get_the_ID();
 				if ($tour_permalink == $product_permalink) {
-					$check_exists_fields = have_rows('tours_extraFields_repeater',  $tour_id);
+					$check_exists_fields = have_rows('tours_extraFields_repeater',  $tour_id); 
 					if ($check_exists_fields) {
 						array_push($arr_ids, $tour_id);
 					}
@@ -116,6 +116,7 @@ function check_product_category(){
     return $arr_ids;
 }
 
+
 // Adicionar campos personalizados no checkout
 add_action( 'woocommerce_before_order_notes', 'sdc_custom_checkout_field' );
 function sdc_custom_checkout_field( $checkout ) {
@@ -125,11 +126,22 @@ function sdc_custom_checkout_field( $checkout ) {
 	if ( count($products_with_extrafields_ids) ) {
 
 		foreach ($products_with_extrafields_ids as $key => $value) {
+			/*
 			if ($wpml_language_code == 'pt-pt') {
 				echo '<div class="col-sm-12"><div class="default-title"><h2>' . __( 'Mais informações - "'. get_the_title($value) . '"</h2></div></div><div>');
 			} else if ($wpml_language_code == 'en') {
 				echo '<div class="col-sm-12"><div class="default-title"><h2>' . __( 'More information - "'. get_the_title($value) . '"</h2></div></div><div>');
 			}
+			*/
+
+			$checkout_mais_informacoes = get_field('checkout_mais_informacoes', 'option');
+
+			if ( !empty($checkout_mais_informacoes) ):
+				echo '<div class="col-sm-12"><div class="default-title"><h2>' . $checkout_mais_informacoes . ' - "' .  get_the_title($value) . '"</h2></div></div><div>';
+			else:
+				echo '<div class="col-sm-12"><div class="default-title"><h2>' . get_the_title($value) . '</h2></div></div><div>';
+			endif;
+
 				if( have_rows('tours_extraFields_repeater', $value) ):
 					while ( have_rows('tours_extraFields_repeater', $value) ) : the_row();
 						$title = get_sub_field('tours_extraFields_title', $value);
@@ -157,7 +169,7 @@ function sdc_custom_checkout_field( $checkout ) {
 
 // Validação dos campos personalizados
 add_action( 'woocommerce_checkout_process', 'bbloomer_validate_new_checkout_field' );
-function bbloomer_validate_new_checkout_field() {
+function bbloomer_validate_new_checkout_field() {    
 	$wpml_language_code = ICL_LANGUAGE_CODE;
 	$products_with_extrafields_ids = check_product_category();
 	if ( count($products_with_extrafields_ids) ) {
@@ -210,13 +222,13 @@ function my_custom_checkout_field_update_order_meta( $order_id ) {
 
 // Mostrar os valores dos campos personalizados - na Administração (Woocommerce)
 add_action( 'woocommerce_admin_order_data_after_billing_address', 'bbloomer_show_new_checkout_field_order', 10, 1 );
-function bbloomer_show_new_checkout_field_order( $order ) {
-
+function bbloomer_show_new_checkout_field_order( $order ) {    
+	
 	$order_id = $order->get_id();
-
+	
 	foreach ($order->get_items() as $item_key => $item ):
 		$item_id 	= $item->get_id();
-		$product    = $item->get_product();
+		$product    = $item->get_product(); 
 		$product_id	= $item->get_product_id();
 
 		$tour_id = 0;
@@ -224,14 +236,14 @@ function bbloomer_show_new_checkout_field_order( $order ) {
 		$product_title = get_the_title($product_id);
 		$product_permalink = get_permalink($product_id);
 
-		$args = array('post_type'=>'tour', 'posts_per_page'=>'-1');
-		$result = new WP_Query($args);
+		$args = array('post_type'=>'tour', 'posts_per_page'=>'-1'); 
+		$result = new WP_Query($args); 
 		if ($result->have_posts()) :
 			while ($result->have_posts()) : $result->the_post();
 				$tour_permalink	= get_permalink();
 				$temp_tour_id 		= get_the_ID();
 				if ($tour_permalink == $product_permalink) {
-					$check_exists_fields = have_rows('tours_extraFields_repeater',  $temp_tour_id);
+					$check_exists_fields = have_rows('tours_extraFields_repeater',  $temp_tour_id); 
 					if ($check_exists_fields) {
 						$tour_id = $temp_tour_id;
 					}
@@ -259,14 +271,14 @@ function bbloomer_show_new_checkout_field_order( $order ) {
 
 add_action( 'woocommerce_email_after_order_table', 'bbloomer_show_new_checkout_field_emails', 20, 4 );
 function bbloomer_show_new_checkout_field_emails( $order, $sent_to_admin, $plain_text, $email ) {
-
+    
 	$order_id = $order->get_id();
 
 	$array_fields = array();
 
 	foreach ($order->get_items() as $item_key => $item ):
 		$item_id 	= $item->get_id();
-		$product    = $item->get_product();
+		$product    = $item->get_product(); 
 		$product_id	= $item->get_product_id();
 
 		$tour_id = 0;
@@ -274,14 +286,14 @@ function bbloomer_show_new_checkout_field_emails( $order, $sent_to_admin, $plain
 		$product_title = get_the_title($product_id);
 		$product_permalink = get_permalink($product_id);
 
-		$args = array('post_type'=>'tour', 'posts_per_page'=>'-1', 'suppress_filters'=>true);
-		$result = new WP_Query($args);
+		$args = array('post_type'=>'tour', 'posts_per_page'=>'-1', 'suppress_filters'=>true); 
+		$result = new WP_Query($args); 
 		if ($result->have_posts()) :
 			while ($result->have_posts()) : $result->the_post();
 				$tour_permalink	= get_permalink();
 				$temp_tour_id 		= get_the_ID();
 				if ($tour_permalink == $product_permalink) {
-					$check_exists_fields = have_rows('tours_extraFields_repeater',  $temp_tour_id);
+					$check_exists_fields = have_rows('tours_extraFields_repeater',  $temp_tour_id); 
 					if ($check_exists_fields) {
 						$tour_id = $temp_tour_id;
 					}
@@ -324,8 +336,21 @@ if( function_exists('acf_add_options_page') ) {
 		'icon_url' 		=> 'dashicons-schedule',
 		'redirect'		=> false
 	));
+
+	acf_add_options_page(array(
+		'page_title' 	=> 'Woocommerce (Emails)',
+		'menu_title'	=> 'Woocommerce (Emails)',
+		'menu_slug' 	=> 'theme-general-settings-wc',
+		'capability' 	=> 'edit_posts',
+		'icon_url' 		=> 'dashicons-schedule',
+		'redirect'		=> false
+	));
 }
 
+
+function translate_woocommerce_emails($text, $code_language) {
+
+}
 
 
 
@@ -340,7 +365,8 @@ function save_custom_fields_as_order_item_meta($item, $cart_item_key, $values, $
 	$booking_details = get_post_meta( $product_id, '_ct_booking_info', true );
 	$booking_date = get_post_meta( $product_id, '_ct_booking_date', true );
 	$booking_time = get_post_meta( $product_id, '_ct_booking_time', true );
-
+	
+	/*
 	if ($wpml_language_code == 'pt-pt') {
 		$item->update_meta_data( __('Data', $text_domain), $booking_date );
 		$item->update_meta_data( __('Hora', $text_domain), $booking_time );
@@ -354,15 +380,35 @@ function save_custom_fields_as_order_item_meta($item, $cart_item_key, $values, $
 		$item->update_meta_data( __('Childrens (3 - 10 Years)', $text_domain), $booking_details['kids'] );
 		$item->update_meta_data( __('Infants (0 - 2 Years)', $text_domain), $booking_details['infants'] );
 	}
+	*/
+
+	$wc_email_data 				= get_field('data', 'option');
+	$wc_email_hora				= get_field('hora', 'option');
+	$wc_email_adultos11anos 	= get_field('adultos_11_anos', 'option');
+	$wc_email_criancas310anos	= get_field('criancas_3_10_anos', 'option');
+	$wc_email_bebes02anos		= get_field('bebes_0_2_anos', 'option');
+
+	$wc_email_data 				= (!empty($wc_email_data) ? $wc_email_data : 'Data' );
+	$wc_email_hora				= (!empty($wc_email_hora) ? $wc_email_hora : 'Hora' );
+	$wc_email_adultos11anos 	= (!empty($wc_email_adultos11anos) ? $wc_email_adultos11anos : 'Adultos (+ 11 anos)' );
+	$wc_email_criancas310anos	= (!empty($wc_email_criancas310anos) ? $wc_email_criancas310anos : 'Crianças (3 - 10 anos)' );
+	$wc_email_bebes02anos		= (!empty($wc_email_bebes02anos) ? $wc_email_bebes02anos : 'Bebés (0 - 2 anos)' );
+
+	$item->update_meta_data( $wc_email_data, $booking_date );
+	$item->update_meta_data( $wc_email_hora, $booking_time );
+	$item->update_meta_data( $wc_email_adultos11anos, $booking_details['adults'] );
+	$item->update_meta_data( $wc_email_criancas310anos, $booking_details['kids'] );
+	$item->update_meta_data( $wc_email_bebes02anos, $booking_details['infants'] );
+
 
 	if ( ! empty( $add_services ) ) :
-
+	
 		foreach ( $add_services as $service ) :
 			$service_id = esc_attr( $service['service_id'] );
 			$title = esc_attr( $service['title'] );
 			$quantity = esc_attr( $service['qty'] );
 			$price = esc_attr( $service['price'] );
-
+			
 			$item->update_meta_data( __($title . '&nbsp;(+'.$price.'&nbsp;€)', $text_domain), $quantity );
 
 		endforeach;
@@ -435,8 +481,8 @@ add_action( 'init', 'custom_post_type', 0 );
 /* ---- TESTES 03-06-2020 ----- */
 function wcontravel_coupons_dynamic( $post_tour_id, $product_id ) {
 
-	$args = array('post_type'=>'wcontravel_coupons', 'posts_per_page'=>'-1');
-	$result = new WP_Query($args);
+	$args = array('post_type'=>'wcontravel_coupons', 'posts_per_page'=>'-1'); 
+	$result = new WP_Query($args); 
 	if ( $result->have_posts() ) :
 		while ( $result->have_posts() ) : $result->the_post();
 
@@ -452,8 +498,8 @@ function wcontravel_coupons_dynamic( $post_tour_id, $product_id ) {
 			$coupon_minimumSpend 		= get_field( 'gasto_minimo', $coupon_guid );
 			$coupon_maximumSpend 		= get_field( 'gasto_maximo', $coupon_guid );
 			$coupon_individualUseOnly	= get_field( 'apenas_uso_individual', $coupon_guid );
-			$coupon_includeProducts 	= get_field( 'incluir_produtos', $coupon_guid );
-
+			$coupon_includeProducts 	= get_field( 'incluir_produtos', $coupon_guid );	
+			
 			$not_found = true;
 			foreach ($coupon_includeProducts as $key => $value) {
 				if ($value == $post_tour_id) {
@@ -472,7 +518,7 @@ function wcontravel_coupons_dynamic( $post_tour_id, $product_id ) {
 					'post_type'        => 'shop_coupon',
 					'post_status'      => 'publish',
 				);
-
+					
 				$get_coupons_wc = get_posts( $args_coupons_wc );
 
 				$found_coupon_wc = false;
@@ -496,7 +542,7 @@ function wcontravel_coupons_dynamic( $post_tour_id, $product_id ) {
 				else:
 
 					/* Criar o cupão dinâmico para esse produto */
-					$coupon_code 	= $coupon_title;
+					$coupon_code 	= $coupon_title; 
 					$coupon = array(
 						'post_title' 	=> $coupon_code,
 						'post_content'	=> '',
@@ -506,7 +552,7 @@ function wcontravel_coupons_dynamic( $post_tour_id, $product_id ) {
 					);
 					$new_coupon_id = wp_insert_post( $coupon );
 
-					/*
+					/* 
 					** +  Atualizar informações extras do coupon  +
 					*/
 					// Tipo de desconto (Percentagem - percent, Fixo no carrinho - fixed_cart, Fixo no produto - fixed_product)
@@ -522,7 +568,7 @@ function wcontravel_coupons_dynamic( $post_tour_id, $product_id ) {
 					update_post_meta( $new_coupon_id, 'usage_limit', $coupon_usageLimitPerCoupon );
 
 					// Aplicar cupão se valor da encomenda tiver esse valor MÍNIMO
-					update_post_meta( $new_coupon_id, 'minimum_amount', $coupon_minimumSpend );
+					update_post_meta( $new_coupon_id, 'minimum_amount', $coupon_minimumSpend );	
 
 					// Aplicar cupão se valor da encomenda tiver esse valor MÁXIMO
 					update_post_meta( $new_coupon_id, 'maximum_amount', $coupon_maximumSpend );
@@ -534,7 +580,7 @@ function wcontravel_coupons_dynamic( $post_tour_id, $product_id ) {
 					if ( !empty($coupon_expiryDate) ) {
 						$expire = date('Y-m-d', strtotime($coupon_expiryDate. ' + 1 days'));
 						update_post_meta( $new_coupon_id, 'expiry_date', $expire );
-					}
+					} 
 
 					// Produtos a aplicar desconto (passar os seus IDS, caso seja vazio colocar só '')
 					$tmp_coupon_includeProducts = '';
@@ -632,9 +678,9 @@ function custom_sidebar_footer_column04() {
 add_action( 'woocommerce_before_cart', 'apply_matched_coupons' );
 function apply_matched_coupons() {
 	global $woocommerce;
-
-	$args = array('post_type'=>'wcontravel_coupons', 'posts_per_page'=>'-1');
-	$result = new WP_Query($args);
+	
+	$args = array('post_type'=>'wcontravel_coupons', 'posts_per_page'=>'-1'); 
+	$result = new WP_Query($args); 
 	if ( $result->have_posts() ) :
 		while ( $result->have_posts() ) : $result->the_post();
 
