@@ -2,7 +2,5 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/ontravelazores/public_html/
-    - /bin/cp -R * $DEPLOYPATH
-    - wp package install front/wp-cli-build
-    - wp build
+    - /bin/cp build.json $DEPLOYPATH
 
