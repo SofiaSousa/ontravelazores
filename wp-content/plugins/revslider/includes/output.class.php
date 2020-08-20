@@ -360,8 +360,11 @@ class RevSliderOutput extends RevSliderFunctions {
 	 * get the HTML ID
 	 * @before: RevSliderOutput::getSliderHtmlID
 	 */
-	public function get_html_id(){
-		return apply_filters('revslider_get_html_id', $this->html_id, $this);
+	public function get_html_id($raw = true){
+		$html_id = $this->html_id;
+		$html_id = (!$raw) ? preg_replace("/[^a-zA-Z0-9]/", "", $html_id) : $html_id;
+		
+		return apply_filters('revslider_get_html_id', $html_id, $this, $raw);
 	}
 	
 	/**
@@ -1948,7 +1951,7 @@ class RevSliderOutput extends RevSliderFunctions {
 			case 'streamvimeo':
 			case 'streamvimeoboth':
 				$vid = (in_array($video_type, array('streamvimeo', 'streamvimeoboth'), true)) ? $this->slide->get_param(array('bg', 'vimeo'), '') : $vid;
-				$vid = ($this->get_val($layer, array('media', 'videoFromStream'), false) === true) ? $this->slide->get_param(array('bg', 'youtube'), '') : $vid;
+				$vid = ($this->get_val($layer, array('media', 'videoFromStream'), false) === true) ? $this->slide->get_param(array('bg', 'vimeo'), '') : $vid;
 				
 				return (empty($vid)) ?  false : true;
 			break;
@@ -4912,16 +4915,20 @@ rs-module .material-icons {
 	
 	/**
 	 * get layer toggle data
+	 * @change 6.2.16:
+	 *	- added idle -> whiteSpace setting
+	 *	- added moved do_shortcode() to a later step
 	 **/
 	public function get_toggle_data(){
 		$layer			 = $this->get_layer();
 		$toggle			 = array();
+		$type			 = $this->get_val($layer, array('type', 'text'));
 		$text_toggle	 = $this->get_val($layer, array('toggle', 'text'));
 		$toggle['allow'] = $this->get_val($layer, array('toggle', 'set'), false);
 		$toggle['inverse_content'] = $this->get_val($layer, array('toggle', 'inverse'), false);
 		$toggle['html']	 = '';
 		
-		if(!in_array($this->get_val($layer, 'type', 'text'), array('shape', 'svg', 'image'), true)){
+		if(!in_array($type, array('shape', 'svg', 'image'), true)){
 			if(function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')){ //use qTranslate
 				$text_toggle = qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($text_toggle);
 			}elseif(function_exists('ppqtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')){ //use qTranslate plus
@@ -4930,7 +4937,7 @@ rs-module .material-icons {
 				$text_toggle = qtranxf_useCurrentLanguageIfNotFoundUseDefaultLanguage($text_toggle);
 			}
 			
-			$toggle['html'] = do_shortcode(stripslashes($text_toggle));
+			$toggle['html'] = $text_toggle;
 		}
 		
 		global $fa_icon_var, $fa_var, $pe_7s_var;
@@ -4940,6 +4947,20 @@ rs-module .material-icons {
 				$$font_var = true;
 			}
 		}
+		
+		//Replace Placeholders
+		$toggle['html'] = $this->set_placeholders($toggle['html']);
+		
+		if($this->adv_resp_sizes == true){
+			$ws = $this->normalize_device_settings($this->get_val($layer, array('idle', 'whiteSpace')), $this->enabled_sizes, 'html-array', array('nowrap'));
+		}else{
+			$ws	= $this->get_biggest_device_setting($this->get_val($layer, array('idle', 'whiteSpace'), 'nowrap'), $this->enabled_sizes);
+		}
+		
+		//replace new lines with <br />
+		$toggle['html'] = (strpos($ws, 'content') !== false || strpos($ws, 'full') !== false) ? nl2br($toggle['html']) : $toggle['html'];
+		//do shortcodes here, so that nl2br is not done within the shortcode content
+		$toggle['html'] = (!in_array($type, array('image', 'svg', 'column', 'shape'), true)) ? do_shortcode(stripslashes($toggle['html'])) : $toggle['html'];
 		
 		return $toggle;
 	}
@@ -5389,6 +5410,7 @@ rs-module .material-icons {
 		if($loop === 'loop') $vpt = true;
 
 		$nsae	= $slide->get_param(array('bg', 'video', 'nextSlideAtEnd'), false);
+		$sat	= $slide->get_param(array('bg', 'video', 'startAfterTransition'), false);
 		$vsa	= $slide->get_param(array('bg', 'video', 'startAt'), '');
 		$vea	= $slide->get_param(array('bg', 'video', 'endAt'), '');
 		
@@ -5397,6 +5419,7 @@ rs-module .material-icons {
 		if(!in_array($vea, array('', '-1', -1), true)) $data['video']['end'] = $vea;
 		if(!in_array($ratio, array('', '16:9'), true)) $data['video']['ar'] = $ratio;
 		if($nsae === false) $data['video']['nse'] = 'false';
+		if($sat === true) $data['video']['sat'] = 'true';
 		if($slide->get_param(array('bg', 'video', 'forceRewind'), true) === false)
 			$data['video']['rwd'] = false;
 		
@@ -6605,6 +6628,7 @@ rs-module .material-icons {
 		$layout = $this->slider->get_param('layouttype');
 		$sid	= $this->slider->get_id();
 		$html_id = $this->get_html_id();
+		$html_id_trimmed = $this->get_html_id(false);
 		$fw = ($layout == 'fullwidth') ? 'on' : 'off';
 		$fw = ($layout == 'fullscreen') ? 'off' : $fw;
 		$fs = ($layout == 'fullscreen') ? 'on' : 'off';		
@@ -6613,9 +6637,10 @@ rs-module .material-icons {
 		$html .= RS_T5.$this->get_html_js_start_size($fw, $fs)."\n";
 		$html .= RS_T5.'var	revapi'. $sid .','."\n";
 		$html .= RS_T6.'tpj;'."\n";
+		$html .= RS_T5.'function revinit_'.$html_id_trimmed .'() {'."\n"; 
 		$html .= RS_T5.'jQuery(function() {'."\n";
 		$html .= RS_T6.'tpj = jQuery;'."\n";
-		$html .= RS_T6.'revapi'. $sid.' = tpj("#'. $html_id .'")'."\n";
+		$html .= RS_T6.'revapi'. $sid.' = tpj("#'. $html_id .'");'."\n";
 		$html .= ($this->slider->get_param(array('troubleshooting', 'jsNoConflict'), true) === true) ? RS_T6.'tpj.noConflict();'."\n" : ''; 
 		$html .= RS_T6.'if(revapi'. $sid.'==undefined || revapi'. $sid.'.revolution == undefined){'."\n";
 		$html .= RS_T7.'revslider_showDoubleJqueryError("'.$html_id.'");'."\n";
@@ -6631,8 +6656,10 @@ rs-module .material-icons {
 	 * get the JavaScript Post
 	 **/
 	public function js_get_base_post(){
+		$sid = $this->slider->get_id();
+		$html_id = $this->get_html_id();
+		$html_id_trimmed = $this->get_html_id(false);
 		$html = '';
-		
 		ob_start();
 		do_action('revslider_fe_javascript_option_output', $this->slider);
 		$js_action = ob_get_contents();
@@ -6657,6 +6684,8 @@ rs-module .material-icons {
 		$html .= $js_action;
 		$html .= "\n";
 		$html .= RS_T5.'});'."\n";
+		$html .= RS_T5.'} // End of RevInitScript'."\n";
+		$html .= RS_T4.'if (document.readyState === "loading") window.addEventListener(\'DOMContentLoaded\',function() { revinit_'.$html_id_trimmed .'();}); else revinit_'.$html_id_trimmed .'();'."\n";
 		$html .= RS_T4.'</script>'."\n";
 		
 		return $html;
@@ -6728,7 +6757,7 @@ rs-module .material-icons {
 			case '2':
 				if(!is_admin()){
 					$html .= RS_T4.'<script>'."\n";
-					$html .= RS_T5."var htmlDivCss = ' #".$this->get_html_id()."_wrapper rs-loader.spinner".$spinner."{ background-color: ". $color ." !important; } '"."\n";
+					$html .= RS_T5."var htmlDivCss = ' #".$this->get_html_id()."_wrapper rs-loader.spinner".$spinner."{ background-color: ". $color ." !important; } ';"."\n";
 					$html .= RS_T5."var htmlDiv = document.getElementById('rs-plugin-settings-inline-css');"."\n";
 					$html .= RS_T5."if(htmlDiv) {"."\n";
 					$html .= RS_T6."htmlDiv.innerHTML = htmlDiv.innerHTML + htmlDivCss;"."\n";

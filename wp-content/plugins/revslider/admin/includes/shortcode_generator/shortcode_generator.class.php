@@ -28,7 +28,9 @@ class RevSliderShortcodeWizard extends RevSliderFunctions {
 		wp_enqueue_style('revslider-material-icons', RS_PLUGIN_URL . 'admin/assets/icons/material-icons.css', array(), RS_REVISION);
 		wp_enqueue_style('revslider-basics-css', RS_PLUGIN_URL . 'admin/assets/css/basics.css', array(), RS_REVISION);
 		wp_enqueue_style('rs-color-picker-css', RS_PLUGIN_URL . 'admin/assets/css/tp-color-picker.css', array(), RS_REVISION);
-		wp_enqueue_style('revbuilder-select2RS', RS_PLUGIN_URL . 'admin/assets/css/select2RS.css', array(), RS_REVISION);			
+		wp_enqueue_style('revbuilder-select2RS', RS_PLUGIN_URL . 'admin/assets/css/select2RS.css', array(), RS_REVISION);
+		wp_enqueue_style('rs-roboto', '//fonts.googleapis.com/css?family=Roboto');
+		wp_enqueue_style('tp-material-icons', '//fonts.googleapis.com/icon?family=Material+Icons');
 	}
 
 	public static function add_scripts($elementor = false){
@@ -87,7 +89,7 @@ class RevSliderShortcodeWizard extends RevSliderFunctions {
 			wp_enqueue_script('revbuilder-utils', RS_PLUGIN_URL . 'admin/assets/js/plugins/utils.min.js', array('jquery','wp-color-picker'), RS_REVISION, false);
 		}
 
-		wp_enqueue_script('tp-tools', RS_PLUGIN_URL . 'public/assets/js/rbtools.min.js', array('jquery'), RS_REVISION, true);
+		wp_enqueue_script('tp-tools', RS_PLUGIN_URL . 'public/assets/js/rbtools.min.js', array('jquery'), RS_TP_TOOLS, true);
 
 		// object library translations
 		wp_localize_script('revbuilder-utils', 'RVS_LANG', array(			
@@ -235,14 +237,14 @@ class RevSliderShortcodeWizard extends RevSliderFunctions {
 			RVS.ENV.selling		= <?php echo ($rsaf->get_addition('selling') === true) ? 'true' : 'false'; ?>;
 			
 			window.addEventListener('load', function(){
-				RVS.ENV.output_compress	= <?php echo (!empty($rs_compression)) ? 'jQuery.parseJSON('. $rsaf->json_encode_client_side($rs_compression) .')' : '[]'; ?>;
+				RVS.ENV.output_compress	= <?php echo (!empty($rs_compression)) ? 'JSON.parse('. $rsaf->json_encode_client_side($rs_compression) .')' : '[]'; ?>;
 				<?php if(!empty($rsa)){ ?>
-				RVS.LIB.OBJ = {shortcode_generator: true, types: jQuery.parseJSON(<?php echo $obj; ?>)};
+				RVS.LIB.OBJ = {shortcode_generator: true, types: JSON.parse(<?php echo $obj; ?>)};
 				<?php }else{ ?>
 				RVS.LIB.OBJ = {};
 				<?php }
 				if(!empty($favs)){ ?>
-				RS_SHORTCODE_FAV = jQuery.parseJSON(<?php echo $favs; ?>);
+				RS_SHORTCODE_FAV = JSON.parse(<?php echo $favs; ?>);
 				<?php } ?>
 			});
 
