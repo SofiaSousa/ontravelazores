@@ -3,8 +3,8 @@ Contributors: storeapps, niravmehta, Mansi Shah
 Donate link: https://www.storeapps.org/product/email-customizer-for-woocommerce/
 Tags: woocommerce, wordpress customizer, woocommerce emails, customizer, emails
 Requires at least: 4.9.0
-Tested up to: 5.3.2
-Stable tag: 1.5.0
+Tested up to: 5.4.2
+Stable tag: 1.5.1
 License: GPLv3
 
 == Description ==

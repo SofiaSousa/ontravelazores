@@ -17,6 +17,7 @@ jQuery( document ).ready(
 		var send_notice      = sa_se_params.se_email_send_notice;
 		var error_notice     = sa_se_params.se_email_error_notice;
 		var ajax_url         = sa_se_params.ajax_url;
+		var security         = sa_se_params.se_security;
 
 		var sa_se_form = '<table class="customize_form">' +
 							'<tr>' +
@@ -33,7 +34,8 @@ jQuery( document ).ready(
 												'</td>' +
 											'</tr>' +
 										'</table>' +
-											'<input type="hidden" value="' + current_style + '" id="sa_se_email_style" name="sa_se_email_style">' +
+											'<input type="hidden" name="sa_se_email_style" id="sa_se_email_style" value="' + current_style + '" />' +
+											'<input type="hidden" name="sa_smart_emails" id="sa_smart_emails" value="' + security + '"/>' +
 									'</form>' +
 								'</td>' +
 							'</tr>' +
@@ -83,7 +85,7 @@ jQuery( document ).ready(
 			}
 		);
 
-		// Change cutomizer title and decription.
+		// Change customizer title and decription.
 		if ( jQuery( '.customize_form' ).length == 1 ) {
 			// Replace the text that shows the site name in the customizer.
 			jQuery( '.accordion-section-title .preview-notice .panel-title' ).html( '<i>' + customizer_title + '</i>' );

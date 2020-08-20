@@ -1,7 +1,7 @@
 <?php
 /* Main Header Template */
-if ( ! defined( 'ABSPATH' ) ) { 
-    exit; 
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
 }
 
 global $ct_options;
@@ -13,7 +13,7 @@ global $ct_options;
 <!--[if IE   ]>    <html class="ie" <?php language_attributes(); ?>> <![endif]-->
 <!--[if lt IE 9]><script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 <html <?php language_attributes(); ?>>
-    
+
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-163950422-1"></script>
 <script>
@@ -73,7 +73,7 @@ global $ct_options;
 
                     <div class="col-md-6 col-sm-6 col-xs-6">
                         <ul id="top_links">
-                            <?php 
+                            <?php
                             if ( ( isset($ct_options['header_top_bar_enable_custom']) && ! empty($ct_options['header_top_bar_enable_custom']) ) || ! isset($ct_options['header_top_bar_enable_custom']) ) {
                                 if( isset( $ct_options['header_top_bar_custom'] ) ) {
                                 ?>
@@ -86,33 +86,33 @@ global $ct_options;
                                 }
                             }
                             ?>
-                            
-                            <?php 
+
+                            <?php
                             if ( ( isset($ct_options['header_top_bar_wishlist']) && ! empty($ct_options['header_top_bar_wishlist']) ) || ! isset($ct_options['header_top_bar_wishlist']) ) :
                                 $wishlist_link = ct_wishlist_page_url();
                                 $class = ( $wishlist_link == '#' ) ? 'ct-modal-login' : '';
 
-                                if ( ! empty( $wishlist_link ) ) : 
+                                if ( ! empty( $wishlist_link ) ) :
                                     ?>
 
                                     <li>
                                         <a href="<?php echo esc_url( $wishlist_link ); ?>" id="wishlist_link" class="<?php echo esc_attr( $class ) ?>"><?php esc_html_e( 'Wishlist', 'citytours' ) ?></a>
                                     </li>
 
-                                    <?php 
-                                endif; 
+                                    <?php
+                                endif;
                             endif;
                             ?>
 
-                            <?php 
+                            <?php
                             if ( ( isset($ct_options['header_top_bar_login']) && ! empty($ct_options['header_top_bar_login']) ) || ! isset($ct_options['header_top_bar_login']) ) :
-                                if ( is_user_logged_in() ) { 
+                                if ( is_user_logged_in() ) {
                                     ?>
 
                                     <li><a href="<?php echo esc_url( wp_logout_url( ct_get_current_page_url() ) ); ?>"><?php esc_html_e( 'Log out', 'citytours' ) ?></a></li>
 
-                                    <?php 
-                                } else { 
+                                    <?php
+                                } else {
                                     ?>
 
                                     <li>
@@ -145,8 +145,8 @@ global $ct_options;
                                                         <?php } ?>
                                                     </form>
 
-                                                    <?php 
-                                                    if ( get_option('users_can_register') ) { 
+                                                    <?php
+                                                    if ( get_option('users_can_register') ) {
                                                         ?>
 
                                                         <form name="registerform" action="<?php echo esc_url( wp_registration_url() )?>" method="post" class="signupform">
@@ -164,8 +164,8 @@ global $ct_options;
                                                             <a class="button_drop outline login-btn" href="#"><?php esc_html_e( 'Log in', 'citytours' ) ?></a>
                                                         </form>
 
-                                                        <?php 
-                                                    } 
+                                                        <?php
+                                                    }
                                                     ?>
                                                 </div>
                                             </div><!-- End Dropdown access -->
@@ -174,9 +174,9 @@ global $ct_options;
                                         <?php } ?>
                                     </li>
 
-                                    <?php 
-                                } 
-                            endif; 
+                                    <?php
+                                }
+                            endif;
                             ?>
                         </ul>
                     </div>
@@ -203,10 +203,10 @@ global $ct_options;
 
                         <a href="#" class="open_close" id="close_in"><i class="icon_set_1_icon-77"></i></a>
 
-                        <?php 
+                        <?php
                         if ( has_nav_menu( 'header-menu' ) ) {
-                            wp_nav_menu( array( 'theme_location' => 'header-menu' ) ); 
-                        } else { 
+                            wp_nav_menu( array( 'theme_location' => 'header-menu' ) );
+                        } else {
                             ?>
                             <div>
                                 <ul>
@@ -214,8 +214,26 @@ global $ct_options;
                                     <li class="menu-item"><a href="<?php echo esc_url( admin_url('nav-menus.php') ); ?>"><?php esc_html_e( 'Configure', 'citytours'); ?></a></li>
                                 </ul>
                             </div>
-                            <?php 
-                        } 
+                            <?php
+                        }
+                        ?>
+
+                        <?php
+                        if ( class_exists('WooCommerce') && $ct_options['cart_show_mini_cart'] ) {
+                            ?>
+                            <div class="visible-xs-block">
+                                <ul>
+                                    <li>
+                                        <a href="<?php echo wc_get_cart_url(); ?>">
+                                            <i class=" icon-basket-1"></i>
+                                            <?php _e( 'Cart', 'citytours' ); ?>
+                                            (<span class="cart-item-qty"><?php echo WC()->cart->cart_contents_count; ?></span>)
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <?php
+                        }
                         ?>
                     </div><!-- End main-menu -->
 
@@ -233,14 +251,14 @@ global $ct_options;
                         </li>
                         <?php endif; ?>
 
-                        <?php 
-                        if ( class_exists('WooCommerce') && $ct_options['cart_show_mini_cart'] ) { 
+                        <?php
+                        if ( class_exists('WooCommerce') && $ct_options['cart_show_mini_cart'] ) {
                             ?>
 
                             <li>
                                 <div class="dropdown dropdown-cart">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                        <i class=" icon-basket-1"></i><?php _e( 'Cart', 'citytours' ) ?> 
+                                        <i class=" icon-basket-1"></i><?php _e( 'Cart', 'citytours' ) ?>
                                         (<span class="cart-item-qty"><?php echo WC()->cart->cart_contents_count; ?></span>)
                                     </a>
                                     <ul class="dropdown-menu" id="cart_items">

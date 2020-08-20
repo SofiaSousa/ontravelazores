@@ -1,3 +1,11 @@
+2020.07.17- version 1.5.1
+* New: WooCommerce 3.9.3, 4.0.1, 4.1.1, 4.2.2, 4.3.0 compatible
+* Fix: Fatal error when previewing AutomateWoo emails
+* Update: Email templates for all styles
+* Update: Code improvements
+* Update: StoreApps Connector
+* Update: POT file
+
 2020.01.02 - version 1.5.0
 * New: Compatibility with [WooCommerce Subscriptions](https://woocommerce.com/products/woocommerce-subscriptions/?aff=5475) emails
 * New: Show active email style name when editing email templates

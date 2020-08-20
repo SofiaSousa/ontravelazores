@@ -62,7 +62,7 @@ $text_align = is_rtl() ? 'right' : 'left';
 							case 'download-expires':
 								if ( ! empty( $download['access_expires'] ) ) {
 									?>
-									<time datetime="<?php echo esc_attr( date( 'Y-m-d', strtotime( $download['access_expires'] ) ) ); ?>" title="<?php echo esc_attr( strtotime( $download['access_expires'] ) ); ?>"><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $download['access_expires'] ) ) ); // phpcs:ignore ?></time>
+									<time datetime="<?php echo esc_attr( gmdate( 'Y-m-d', strtotime( $download['access_expires'] ) ) ); ?>" title="<?php echo esc_attr( strtotime( $download['access_expires'] ) ); ?>"><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $download['access_expires'] ) ) ); // phpcs:ignore ?></time>
 									<?php
 								} else {
 									esc_html_e( 'Never', 'smart-emails' );

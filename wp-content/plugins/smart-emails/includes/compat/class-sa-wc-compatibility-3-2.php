@@ -2,7 +2,6 @@
 /**
  * Compatibility class for WooCommerce 3.2.0
  *
- * @category    Class
  * @package     WC-compat
  * @author      StoreApps
  * @version     1.0.0

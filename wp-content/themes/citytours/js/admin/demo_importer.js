@@ -1,7 +1,7 @@
-(function($){ 
+(function($){
     "use strict";
 
-    $(document).ready( function() { 
+    $(document).ready( function() {
 
         function showImportMessage( selected_demo, message, count, index ) {
             var html = '', percent = 0;
@@ -32,9 +32,9 @@
 
             if ( options.import_options ) {
                 var demo = options.demo,
-                    data = { 
-                        'action': 'ct_import_options', 
-                        'demo': demo 
+                    data = {
+                        'action': 'ct_import_options',
+                        'demo': demo
                     };
 
                 showImportMessage( demo, 'Importing theme options' );
@@ -104,8 +104,8 @@
         }
 
         // import dummy content
-        var dummy_index = 0, 
-            dummy_count = 0, 
+        var dummy_index = 0,
+            dummy_count = 0,
             dummy_process = 'import_start';
 
         function ct_import_dummy( options ) {
@@ -115,8 +115,8 @@
 
             if ( options.import_dummy ) {
                 var data = {
-                        'action': 'ct_import_dummy', 
-                        'process':'import_start', 
+                        'action': 'ct_import_dummy',
+                        'process':'import_start',
                         'demo': options.demo
                     };
 
@@ -193,7 +193,7 @@
             if ( options.import_widgets ) {
                 var demo = options.demo,
                     data = {
-                        'action': 'ct_import_widgets', 
+                        'action': 'ct_import_widgets',
                         'demo': demo
                     };
 
@@ -224,7 +224,7 @@
         }
 
         // tab switch ( Demo Importer / System Status )
-        $('.citytours-theme-demo .demo-tab-switch').click( function(e) { 
+        $('.citytours-theme-demo .demo-tab-switch').click( function(e) {
             e.preventDefault();
 
             $('.citytours-theme-demo .demo-tab-switch').removeClass('active');
@@ -237,7 +237,7 @@
             $(container_id).show();
         } );
 
-        $('.status_toggle2').click( function(e) { 
+        $('.status_toggle2').click( function(e) {
             e.preventDefault();
 
             $('.citytours-theme-demo .demo-tab-switch').removeClass('active');
@@ -250,7 +250,7 @@
         } );
 
         // Install Demo
-        $('.citytours-install-demo-button1').on('click', function(e) { 
+        $('.citytours-install-demo-button1').on('click', function(e) {
             e.preventDefault();
 
             var selected_demo = $(this).data('demo-id');
@@ -275,7 +275,7 @@
                 $('.importer-notice').hide();
 
                 $.post(ajaxurl, data, function(response) {
-                    if( (response && response.indexOf('imported') != -1 ) ) 
+                    if( (response && response.indexOf('imported') != -1 ) )
                     {
                         $('.import-success').attr('style','display:block !important');
                     }
@@ -283,7 +283,7 @@
                     {
                         $('.import-failed').attr('style','display:block !important');
                     }
-                    
+
                 }).fail(function() {
                     $('.import-failed').attr('style','display:block !important');
                 }).always(function(response) {
@@ -294,7 +294,8 @@
         });
 
         // install demo
-        $( '.citytours-install-demo-button' ).live( 'click', function(e) {
+        $( document ).on( 'click', '.citytours-install-demo-button', function(e) {
+        // $( '.citytours-install-demo-button' ).live( 'click', function(e) {
             e.preventDefault();
 
             var $this = $(this),

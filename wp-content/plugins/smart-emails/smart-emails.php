@@ -3,13 +3,13 @@
  * Plugin Name: Email Customizer For WooCommerce (Smart Emails)
  * Plugin URI: https://www.storeapps.org/product/email-customizer-for-woocommerce/
  * Description: Customize the emails - styling, colors, logo and text - sent from your store.
- * Version: 1.5.0
+ * Version: 1.5.1
  * Author: StoreApps
  * Author URI: https://www.storeapps.org/
  * Requires at least: 4.9.0
- * Tested up to: 5.3.2
+ * Tested up to: 5.4.2
  * WC requires at least: 3.0.0
- * WC tested up to: 3.8.1
+ * WC tested up to: 4.3.0
  * Text Domain: smart-emails
  * Domain Path: /languages/
  * Copyright (c) 2016-2020 StoreApps. All rights reserved.
@@ -37,7 +37,7 @@ if ( ! function_exists( 'get_latest_storeapps_upgrade_class' ) ) {
 				return strpos( $class_name, 'StoreApps_Upgrade_' ) === 0;
 			}
 		);
-		$latest_class              = 'StoreApps_Upgrade_3_5';
+		$latest_class              = 'StoreApps_Upgrade_3_6';
 		$latest_version            = 0;
 		foreach ( $available_upgrade_classes as $class ) {
 			$exploded    = explode( '_', $class );
@@ -62,7 +62,6 @@ if ( ! function_exists( 'get_latest_storeapps_upgrade_class' ) ) {
  * Initialize Smart Emails
  */
 function initialize_smart_emails() {
-	global $smart_emails;
 
 	$active_plugins = (array) get_option( 'active_plugins', array() );
 	if ( is_multisite() ) {
@@ -94,16 +93,43 @@ function initialize_smart_emails() {
 	require_once 'includes/compat/class-sa-wc-compatibility-3-5.php';
 	require_once 'includes/compat/class-sa-wc-compatibility-3-6.php';
 	require_once 'includes/compat/class-sa-wc-compatibility-3-7.php';
+	require_once 'includes/compat/class-sa-wc-compatibility-3-8.php';
+	require_once 'includes/compat/class-sa-wc-compatibility-3-9.php';
+	require_once 'includes/compat/class-sa-wc-compatibility-4-0.php';
+	require_once 'includes/compat/class-sa-wc-compatibility-4-1.php';
+	require_once 'includes/compat/class-sa-wc-compatibility-4-2.php';
+	require_once 'includes/compat/class-sa-wc-compatibility-4-3.php';
 
 	// Instance of main class.
-	$smart_emails = new SA_Smart_Emails( $active_plugins );
+	if ( ( in_array( 'woocommerce/woocommerce.php', $active_plugins, true ) || array_key_exists( 'woocommerce/woocommerce.php', $active_plugins ) ) ) {
+		$GLOBALS['smart_emails'] = SA_Smart_Emails::get_instance();
+	} else {
+		if ( is_admin() ) {
+			?>
+			<div id="message" class="error">
+				<p>
+				<?php
+					printf(
+						'<strong>%1$s</strong><br> <a href="%2$s" target="_blank">%3$s</a> %4$s. %5$s',
+						esc_html__( 'Email Customizer for WooCommerce needs WooCommerce.', 'smart-emails' ),
+						esc_url( 'https://wordpress.org/plugins/woocommerce/', 'smart-emails' ),
+						esc_html__( 'WooCommerce', 'smart-emails' ),
+						esc_html__( 'must be active for Email Customizer for WooCommerce to work', 'smart-emails' ),
+						esc_html__( 'Please install & activate WooCommerce.', 'smart-emails' )
+					);
+				?>
+				</p>
+			</div>
+			<?php
+		}
+	}
 
 	if ( is_admin() ) {
 		require_once 'includes/class-sa-se-admin-notifications.php';
 	}
 
-	if ( ! class_exists( 'StoreApps_Upgrade_3_5' ) ) {
-		require_once 'sa-includes/class-storeapps-upgrade-3-5.php';
+	if ( ! class_exists( 'StoreApps_Upgrade_3_6' ) ) {
+		require_once 'sa-includes/class-storeapps-upgrade-3-6.php';
 	}
 
 	$latest_upgrade_class = get_latest_storeapps_upgrade_class();

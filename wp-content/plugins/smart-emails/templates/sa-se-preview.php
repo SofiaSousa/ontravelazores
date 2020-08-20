@@ -2,10 +2,9 @@
 /**
  * Allow previewing email styles on last order.
  *
- * @category
  * @package     smart-emails/templates
  * @author      StoreApps
- * @version     1.1.0
+ * @version     1.1.1
  * @since       1.0.0
  */
 
@@ -37,8 +36,8 @@ if ( empty( $order_collection ) ) {
 	return;
 }
 
-$latest_order = current( $order_collection )->ID;
-$order        = new WC_Order( $latest_order ); // phpcs:ignore
+$latest_order  = current( $order_collection )->ID;
+$current_order        = new WC_Order( $latest_order ); // phpcs:ignore
 
 if ( ! empty( $mails ) ) {
 	foreach ( $mails as $mail ) {
@@ -52,7 +51,7 @@ if ( ! empty( $mails ) ) {
 			}
 
 			// Get a product from the order. If it doesnt exist anymore then get the latest product.
-			$items = $order->get_items();
+			$items = $current_order->get_items();
 			foreach ( $items as $item ) {
 				$product_id = $item['product_id'];
 				if ( null !== get_post( $product_id ) ) {
@@ -96,7 +95,8 @@ if ( ! empty( $mails ) ) {
 				case 'customer_completed_renewal_order':
 				case 'customer_renewal_invoice':
 				case 'customer_completed_switch_order':
-					$mail->object = $order;
+				case 'customer_on_hold_renewal_order':
+					$mail->object = $current_order;
 					break;
 			}
 

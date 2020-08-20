@@ -5,19 +5,19 @@
  * @category    Class
  * @package     StoreApps Connector
  * @author      StoreApps
- * @version     3.5
+ * @version     3.6
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! class_exists( 'StoreApps_Upgrade_3_5' ) ) {
+if ( ! class_exists( 'StoreApps_Upgrade_3_6' ) ) {
 
 	/**
 	 * Main class for StoreApps Upgrade
 	 */
-	class StoreApps_Upgrade_3_5 {
+	class StoreApps_Upgrade_3_6 {
 
 		/**
 		 * Base name
@@ -218,6 +218,7 @@ if ( ! class_exists( 'StoreApps_Upgrade_3_5' ) ) {
 			add_action( 'wp_ajax_' . $this->prefix . '_get_authorization_code', array( $this, 'get_authorization_code' ) );
 			add_action( 'wp_ajax_' . $this->prefix . '_save_token', array( $this, 'save_token' ) );
 			add_action( 'wp_ajax_' . $this->prefix . '_save_data', array( $this, 'save_data' ) );
+			add_action( 'wp_ajax_' . $this->prefix . '_save_error_data', array( $this, 'save_error_data' ) );
 			add_action( 'wp_ajax_' . $this->prefix . '_disconnect_storeapps', array( $this, 'disconnect_storeapps' ) );
 
 			if ( has_action( 'wp_ajax_get_storeapps_updates', array( $this, 'get_storeapps_updates' ) ) === false ) {
@@ -253,6 +254,8 @@ if ( ! class_exists( 'StoreApps_Upgrade_3_5' ) ) {
 			add_filter( 'storeapps_upgrade_miscellaneous_info', array( $this, 'storeapps_upgrade_miscellaneous_info' ), 10, 2 );
 
 			add_action( 'admin_notices', array( $this, 'show_plugin_update_notification' ) );
+			add_action( 'admin_notices', array( $this, 'show_reconnect_notification' ) );
+			add_action( 'admin_init', array( $this, 'handle_re_authentication' ) );
 
 			add_action( 'admin_init', array( $this, 'check_store_connection' ) );
 			add_action( 'admin_menu', array( $this, 'add_storeapps_plugins_page' ) );
@@ -1401,13 +1404,10 @@ if ( ! class_exists( 'StoreApps_Upgrade_3_5' ) ) {
 
 			$sa_is_page_for_notifications = apply_filters( 'sa_is_page_for_notifications', false, $this );
 
-			if ( $sa_is_page_for_notifications && ! in_array( strtolower( $this->sku ), array( 'sm', 'so', 'bvm', 'saff', 'se' ), true ) ) {
-
-				$auto_connect = get_option( '_storeapps_auto_connected', 'no' );
+			if ( $sa_is_page_for_notifications && ! in_array( strtolower( $this->sku ), array( 'sm', 'so', 'bvm', 'saff', 'se', 'bn' ), true ) ) {
 
 				$access_token = get_option( '_storeapps_connector_access_token' );
 				$token_expiry = get_option( '_storeapps_connector_token_expiry' );
-				$is_connected = get_option( '_storeapps_connected', 'no' );
 
 				$protocol = 'https';
 
@@ -1473,10 +1473,6 @@ if ( ! class_exists( 'StoreApps_Upgrade_3_5' ) ) {
 					</div>
 					<?php
 					do_action( 'connect_storeapps_org_notification' );
-				}
-
-				if ( 'yes' === $is_connected && 'yes' !== $auto_connect ) {
-					update_option( '_storeapps_connected', 'no', 'no' );
 				}
 			}
 		}
@@ -1665,7 +1661,6 @@ if ( ! class_exists( 'StoreApps_Upgrade_3_5' ) ) {
 						$token_expiry = ( ! empty( $offset ) ) ? $present + $offset : $present;
 						if ( ! empty( $access_token ) ) {
 							update_option( '_storeapps_connector_access_token', $access_token, 'no' );
-							update_option( '_storeapps_connected', 'yes', 'no' );
 							$this->check_update_timeout = $this->get_check_update_timeout_seconds();
 							$this->last_checked         = $this->reset_last_checked_to( strtotime( '-' . ( $this->get_check_update_timeout_minutes() - 2 ) . ' minutes' ) );
 							$this->log( 'debug', __( 'Saved access token', $this->text_domain ) . ' ' . $this->upgrade_file_path . ' ' . __LINE__ ); // phpcs:ignore
@@ -1713,7 +1708,6 @@ if ( ! class_exists( 'StoreApps_Upgrade_3_5' ) ) {
 			$token_expiry = ( ! empty( $offset ) ) ? $present + $offset : $present;
 			if ( ! empty( $access_token ) ) {
 				update_option( '_storeapps_connector_access_token', $access_token, 'no' );
-				update_option( '_storeapps_connected', 'yes', 'no' );
 				$this->check_update_timeout = $this->get_check_update_timeout_seconds();
 				$this->last_checked         = $this->reset_last_checked_to( strtotime( '-' . ( $this->get_check_update_timeout_minutes() - 2 ) . ' minutes' ) );
 				$this->log( 'debug', __( 'Saved access token', $this->text_domain ) . ' ' . $this->upgrade_file_path . ' ' . __LINE__ ); // phpcs:ignore
@@ -1754,6 +1748,23 @@ if ( ! class_exists( 'StoreApps_Upgrade_3_5' ) ) {
 			} else {
 				$this->log( 'error', __( 'Empty response data', $this->text_domain ) . ' ' . $this->upgrade_file_path . ' ' . __LINE__ ); // phpcs:ignore
 			}
+
+			wp_send_json( array( 'success' => 'yes' ) );
+
+		}
+
+		/**
+		 * Save data received via ajax
+		 */
+		public function save_error_data() {
+
+			check_ajax_referer( $this->prefix . '-save-error-data', 'security' );
+
+			$code = ( ! empty( $_POST['code'] ) ) ? wc_clean( wp_unslash( $_POST['code'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+
+			update_option( '_storeapps_connector_status', $code, 'no' );
+
+			$this->last_checked = $this->reset_last_checked_to( time() );
 
 			wp_send_json( array( 'success' => 'yes' ) );
 
@@ -1847,6 +1858,8 @@ if ( ! class_exists( 'StoreApps_Upgrade_3_5' ) ) {
 				} else {
 					$this->log( 'error', sprintf(__( 'Response code, message mismatch. Response code: %s, Response message: %s.', $this->text_domain ), $code, $message ) . ' ' . $this->upgrade_file_path . ' ' . __LINE__ ); // phpcs:ignore
 				}
+				update_option( '_storeapps_connector_status', $code, 'no' );
+				$this->last_checked = $this->reset_last_checked_to( time() );
 			} else {
 				update_option( 'ajax_request_storeapps_data', 'yes', 'no' );
 				$this->last_checked = $this->reset_last_checked_to( strtotime( '-' . ( $this->get_check_update_timeout_minutes() - 2 ) . ' minutes' ) );
@@ -1861,20 +1874,36 @@ if ( ! class_exists( 'StoreApps_Upgrade_3_5' ) ) {
 		}
 
 		/**
+		 * Delete options added by this class
+		 */
+		public function delete_options() {
+			delete_option( '_storeapps_connector_data' );
+			delete_option( '_storeapps_connector_access_token' );
+			delete_option( '_storeapps_connector_token_expiry' );
+			delete_option( '_storeapps_connector_status' );
+			delete_option( '_retry_storeapps_connection' );
+			delete_option( '_storeapps_connector_onboarding_redirect_url' );
+			delete_option( '_storeapps_failed_connection_reported_on' );
+
+			$is_connected = get_option( '_storeapps_connected' );
+			if ( false !== $is_connected ) {
+				delete_option( '_storeapps_connected' );
+			}
+
+			$is_auto_connected = get_option( '_storeapps_auto_connected' );
+			if ( false !== $is_auto_connected ) {
+				delete_option( '_storeapps_auto_connected' );
+			}
+		}
+
+		/**
 		 * Disconnect from StoreApps
 		 */
 		public function disconnect_storeapps() {
 
 			check_ajax_referer( 'disconnect-storeapps', 'security' );
 
-			delete_option( '_storeapps_connector_data' );
-			delete_option( '_storeapps_connector_access_token' );
-			delete_option( '_storeapps_connector_token_expiry' );
-			delete_option( '_storeapps_connected' );
-			delete_option( '_storeapps_auto_connected' );
-			delete_option( '_retry_storeapps_connection' );
-			delete_option( '_storeapps_connector_onboarding_redirect_url' );
-			delete_option( '_storeapps_failed_connection_reported_on' );
+			$this->delete_options();
 
 			wp_send_json(
 				array(
@@ -1978,12 +2007,7 @@ if ( ! class_exists( 'StoreApps_Upgrade_3_5' ) ) {
 							jQuery.ajax({
 								url: '<?php echo esc_url( $url ); ?>',
 								method: 'POST',
-								// async: false,
 								dataType: 'json',
-								crossDomain: true,
-								xhrFields: {
-									withCredentials: true
-								},
 								headers: {
 									'Authorization': 'Bearer <?php echo $access_token; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>',
 								},
@@ -2010,6 +2034,23 @@ if ( ! class_exists( 'StoreApps_Upgrade_3_5' ) ) {
 											});
 										}
 									}
+								},
+								error: function( jqXHR, textStatus, errorThrown ) {
+									jQuery.ajax({
+										url: '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>',
+										method: 'POST',
+										dataType: 'json',
+										data: {
+											action: '<?php echo $this->prefix; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>_save_error_data',
+											code: jqXHR.status,
+											security: '<?php echo wp_create_nonce( $this->prefix . '-save-error-data' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>'
+										},
+										success: function( res ) {
+											if ( res != undefined && res != '' && res.success != undefined && res.success == 'yes' ) {
+												// All done.
+											}
+										}
+									});
 								}
 							});
 						});
@@ -2209,11 +2250,66 @@ if ( ! class_exists( 'StoreApps_Upgrade_3_5' ) ) {
 		}
 
 		/**
+		 * Show notification if reconnect to store is needed
+		 */
+		public function show_reconnect_notification() {
+
+			$code = get_option( '_storeapps_connector_status', 0 );
+			$code = absint( $code );
+
+			$sa_is_page_for_notifications = apply_filters( 'sa_is_page_for_notifications', false, $this );
+
+			if ( true === $sa_is_page_for_notifications && 401 === $code ) {
+				$plugin_name = ( ! empty( $this->plugin_data['Name'] ) ) ? $this->plugin_data['Name'] : '';
+
+				if ( ! empty( $plugin_name ) ) {
+					?>
+					<div class="notice notice-error" style="background-color: #ffd5d5;">
+						<p><?php echo '<span class="dashicons dashicons-warning" style="color: #753d81; vertical-align: middle;"></span>&nbsp;&nbsp;<strong>' . esc_html__( 'Re-authentication required:', $this->text_domain ) . '</strong> ' . esc_html__( 'A problem occurred while trying to fetch updates for', $this->text_domain ) . ' <strong>' . esc_html( $plugin_name ) . '</strong>. ' . esc_html__( 'You need to re-authenticate your StoreApps account', $this->text_domain ) . '. <a href="' . esc_url( add_query_arg( array( 're-authenticate-' . $this->sku => 'yes', 'security' => wp_create_nonce( 'storeapps-re-authenticate' ) ) ) ) . '" class="button button-primary">' . esc_html__( 'Re-authenticate', $this->text_domain ) . '</a>'; // phpcs:ignore ?></p>
+					</div>
+					<?php
+				}
+			}
+
+		}
+
+		/**
+		 * Handle re-authentication
+		 */
+		public function handle_re_authentication() {
+			$query_arg          = 're-authenticate-' . $this->sku;
+			$is_re_authenticate = ( ! empty( $_GET[ $query_arg ] ) ) ? sanitize_text_field( wp_unslash( $_GET[ $query_arg ] ) ) : 'no';
+			if ( 'yes' === $is_re_authenticate ) {
+				$security   = ( ! empty( $_GET['security'] ) ) ? sanitize_text_field( wp_unslash( $_GET['security'] ) ) : '';
+				$is_proceed = wp_verify_nonce( $security, 'storeapps-re-authenticate' );
+				if ( false !== $is_proceed ) {
+					$this->delete_options();
+					$current_url = remove_query_arg( array( $query_arg, 'security' ) );
+					if ( ! empty( $current_url ) ) {
+						$current_url = ( isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http' ) . '://' . $_SERVER['HTTP_HOST'] . $current_url; // phpcs:ignore
+						update_option( '_storeapps_connector_onboarding_redirect_url', esc_url_raw( $current_url ) );
+					}
+					$redirect_to = add_query_arg(
+						array(
+							'page' => 'storeapps',
+							'tab'  => 'onboard',
+						),
+						admin_url( 'admin.php' )
+					);
+					wp_safe_redirect( $redirect_to );
+					exit;
+				} else {
+					wp_die( __( 'The link you followed has expired.', $this->text_domain ), __( 'Failed', $this->text_domain ), array( 'back_link' => true ) ); // phpcs:ignore
+				}
+			}
+		}
+
+		/**
 		 * To check if store is connected
 		 */
 		public function check_store_connection() {
 			$sa_is_page_for_notifications = apply_filters( 'sa_is_page_for_notifications', false, $this );
-			if ( ! $this->is_storeapps_onboarding() && true === $sa_is_page_for_notifications && in_array( strtolower( $this->sku ), array( 'sm', 'so', 'bvm', 'saff', 'se' ), true ) ) {
+			if ( ! $this->is_storeapps_onboarding() && true === $sa_is_page_for_notifications && in_array( strtolower( $this->sku ), array( 'sm', 'so', 'bvm', 'saff', 'se', 'bn' ), true ) ) {
 				$access_token = get_option( '_storeapps_connector_access_token' );
 				$token_expiry = get_option( '_storeapps_connector_token_expiry' );
 				if ( empty( $access_token ) || ( ! empty( $token_expiry ) && time() > $token_expiry ) ) {
@@ -2753,7 +2849,7 @@ if ( ! class_exists( 'StoreApps_Upgrade_3_5' ) ) {
 					$url      = $protocol . '://www.storeapps.org/oauth/authorize?response_type=code&client_id=' . $this->client_id . '&redirect_uri=' . add_query_arg( array( 'action' => $this->prefix . '_get_authorization_code' ), admin_url( 'admin-ajax.php' ) );
 				?>
 				<div id="connect_storeapps_org_step_2" style="width: 100%; height: 100%;">
-					<iframe id="connect_storeapps_iframe" class="storeapps-iframe-loading" src="<?php echo esc_url_raw( $url ); ?>" style="width: 100%; height: 600px;" scrolling="no"></iframe>
+					<iframe id="connect_storeapps_iframe" class="storeapps-iframe-loading" src="<?php echo esc_url_raw( $url ); ?>" style="width: 100%; height: 650px;" scrolling="no"></iframe>
 				</div>
 				<p class="wc-setup-actions step" style="display: none;"><?php echo esc_html__( 'Automatically redirecting to the next step in 5 seconds...', $this->text_domain ); // phpcs:ignore ?></p>
 			</form>

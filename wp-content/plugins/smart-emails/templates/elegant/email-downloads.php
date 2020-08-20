@@ -25,7 +25,7 @@ $text_align = is_rtl() ? 'right' : 'left';
 ?>
 <h2 class="woocommerce-order-downloads__title"><?php esc_html_e( 'Downloads', 'smart-emails' ); ?></h2>
 
-<table class="td" id="se-order-downloads" cellspacing="0" cellpadding="6" style="width: 100%; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; margin-bottom: 40px;">
+<table class="td" id="se-order-downloads" cellspacing="0" cellpadding="6" style="width: 100% !important; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif !important; margin-bottom: 40px !important;">
 	<thead style="background-color:#dcdcdc">
 		<tr>
 			<?php
@@ -62,7 +62,7 @@ $text_align = is_rtl() ? 'right' : 'left';
 							case 'download-expires':
 								if ( ! empty( $download['access_expires'] ) ) {
 									?>
-									<time datetime="<?php echo esc_attr( date( 'Y-m-d', strtotime( $download['access_expires'] ) ) ); ?>" title="<?php echo esc_attr( strtotime( $download['access_expires'] ) ); ?>"><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $download['access_expires'] ) ) ); // phpcs:ignore ?></time>
+									<time datetime="<?php echo esc_attr( gmdate( 'Y-m-d', strtotime( $download['access_expires'] ) ) ); ?>" title="<?php echo esc_attr( strtotime( $download['access_expires'] ) ); ?>"><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $download['access_expires'] ) ) ); // phpcs:ignore ?></time>
 										<?php
 								} else {
 									esc_html_e( 'Never', 'smart-emails' );

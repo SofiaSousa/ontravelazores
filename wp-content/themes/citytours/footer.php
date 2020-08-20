@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 /* Footer Template */
 
-if ( ! defined( 'ABSPATH' ) ) { 
+if ( ! defined( 'ABSPATH' ) ) {
 
-    exit; 
+    exit;
 
 }
 
@@ -85,32 +85,32 @@ if ( $page_template != "template-full-width-no-footer.php" ) :
         <div class="row" id="footer-sidebar-widget-logos">
 
             <div class="col-md-4">
-                <?php 
-                    if ( is_active_sidebar( 'footer-widget-logo-01' ) ) : 
+                <?php
+                    if ( is_active_sidebar( 'footer-widget-logo-01' ) ) :
                         dynamic_sidebar( 'footer-widget-logo-01' );
                     endif;
                 ?>
             </div>
 
             <div class="col-md-3">
-                <?php 
-                    if ( is_active_sidebar( 'footer-widget-logo-02' ) ) : 
+                <?php
+                    if ( is_active_sidebar( 'footer-widget-logo-02' ) ) :
                         dynamic_sidebar( 'footer-widget-logo-02' );
                     endif;
                 ?>
             </div>
 
             <div class="col-md-3">
-                <?php 
-                    if ( is_active_sidebar( 'footer-widget-logo-03' ) ) : 
+                <?php
+                    if ( is_active_sidebar( 'footer-widget-logo-03' ) ) :
                         dynamic_sidebar( 'footer-widget-logo-03' );
                     endif;
                 ?>
             </div>
 
             <div class="col-md-2 not-apply">
-                <?php 
-                    if ( is_active_sidebar( 'footer-widget-logo-04' ) ) : 
+                <?php
+                    if ( is_active_sidebar( 'footer-widget-logo-04' ) ) :
                         dynamic_sidebar( 'footer-widget-logo-04' );
                     endif;
                 ?>
@@ -128,7 +128,7 @@ if ( $page_template != "template-full-width-no-footer.php" ) :
 
                     <ul>
 
-                        <?php 
+                        <?php
 
                         $social_links = array( 'facebook', 'twitter', 'google', 'instagram', 'pinterest', 'vimeo', 'youtube-play', 'linkedin' );
 
@@ -136,7 +136,7 @@ if ( $page_template != "template-full-width-no-footer.php" ) :
 
                         foreach( $social_links as $social_link ) :
 
-                            if ( ! empty( $ct_options[ $social_link ] ) ) : 
+                            if ( ! empty( $ct_options[ $social_link ] ) ) :
 
                                 ?>
 
@@ -146,7 +146,7 @@ if ( $page_template != "template-full-width-no-footer.php" ) :
 
 
 
-                                <?php 
+                                <?php
 
                             endif;
 
@@ -160,7 +160,7 @@ if ( $page_template != "template-full-width-no-footer.php" ) :
 
                         foreach( $social_links as $social_link ) :
 
-                            if ( ! empty( $ct_options[ $social_link ] ) ) : 
+                            if ( ! empty( $ct_options[ $social_link ] ) ) :
 
                                 ?>
 
@@ -170,7 +170,7 @@ if ( $page_template != "template-full-width-no-footer.php" ) :
 
 
 
-                                <?php 
+                                <?php
 
                             endif;
 
@@ -218,7 +218,7 @@ if ( $page_template != "template-full-width-no-footer.php" ) :
 
     jQuery(function() {
 
-        <?php 
+        <?php
 
             global $post;
 
@@ -232,7 +232,7 @@ if ( $page_template != "template-full-width-no-footer.php" ) :
 
             }
 
-            
+
 
             $popup_infos = get_post_meta( $post_id, 'popup_infos', true );
 
@@ -300,7 +300,7 @@ if ( $page_template != "template-full-width-no-footer.php" ) :
 
     });
 
-</script> 
+</script>
 
 <?php wp_footer(); ?>
 
@@ -320,9 +320,9 @@ var _egoiaq = _egoiaq || [];
 
 	var u2=(("https:" == document.location.protocol) ? "https://cdn-te.e-goi.com/" : "http://cdn-te.e-goi.com/");
 
-	_egoiaq.push(['setClientId', "419232"]);
+	// _egoiaq.push(['setClientId', "419232"]);
 
-	_egoiaq.push(['setTrackerUrl', u+'collect']);
+	// _egoiaq.push(['setTrackerUrl', u+'collect']);
 
 	_egoiaq.push(['trackPageView']);
 

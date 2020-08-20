@@ -2,7 +2,6 @@
 /**
  * Include Email Style = ELEGANT specific controls
  *
- * @category    Class
  * @package     smart-emails/includes
  * @author      StoreApps
  * @version     1.0.0

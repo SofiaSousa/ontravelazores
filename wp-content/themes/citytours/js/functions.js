@@ -21,7 +21,7 @@ $ = jQuery.noConflict();
 /* ==============================================
     Activate Pre-loader
 =============================================== */
-(function($) { 
+(function($) {
 
     $(window).load( function() { // makes sure the whole site is loaded
         $('#status').fadeOut(); // will first fade out the loading animation
@@ -35,10 +35,10 @@ $ = jQuery.noConflict();
 /* ==============================================
     Sticky nav
 =============================================== */
-(function($){ 
+(function($){
 
     $(window).scroll( function() {
-        if ( $(this).scrollTop() > 10 ) {  
+        if ( $(this).scrollTop() > 10 ) {
             $('header').addClass("sticky");
         } else {
             $('header').removeClass("sticky");
@@ -51,7 +51,7 @@ $ = jQuery.noConflict();
 /* ==============================================
     Menu
 =============================================== */
-(function($){ 
+(function($){
 
     $('a.open_close').on( "click", function() {
         $('.main-menu').toggleClass('show');
@@ -78,7 +78,7 @@ $ = jQuery.noConflict();
 /* ==============================================
     Common
 =============================================== */
-(function($){ 
+(function($){
 
     // Tooltip
     $('.tooltip-1').tooltip( {html: true} );
@@ -108,7 +108,7 @@ $ = jQuery.noConflict();
 /* ==============================================
     Overlay mask form + incrementer
 =============================================== */
-(function($){ 
+(function($){
 
     $('.expose').on( "click", function(e) {
         $('#overlay i.animate-spin').hide();
@@ -156,11 +156,11 @@ $ = jQuery.noConflict();
     // Image popups
     $('.magnific-gallery').each(function() {
         $(this).magnificPopup({
-            delegate: 'a', 
+            delegate: 'a',
             type: 'image',
             gallery: { enabled: true }
         });
-    }); 
+    });
 
     /* Top drodown prevent close*/
     $('.dropdown-menu').on( "click",function(e) {
@@ -168,7 +168,7 @@ $ = jQuery.noConflict();
     });
 
     /* Hamburger icon*/
-    var toggles = document.querySelectorAll(".cmn-toggle-switch"); 
+    var toggles = document.querySelectorAll(".cmn-toggle-switch");
 
     for (var i = toggles.length - 1; i >= 0; i--) {
         var toggle = toggles[i];
@@ -181,11 +181,11 @@ $ = jQuery.noConflict();
             (this.classList.contains("active") === true) ? this.classList.remove("active") : this.classList.add("active");
         });
     };
-      
+
     /* Scroll to top*/
     $(window).scroll( function() {
         if($(this).scrollTop() != 0) {
-            $('#toTop').fadeIn();   
+            $('#toTop').fadeIn();
         } else {
             $('#toTop').fadeOut();
         }
@@ -196,8 +196,8 @@ $ = jQuery.noConflict();
     });
 
     /* Input incrementer*/
-    $('.numbers-row').each( function() { 
-        if ( ! $(this).find('.inc.button_inc').length ) { 
+    $('.numbers-row').each( function() {
+        if ( ! $(this).find('.inc.button_inc').length ) {
             $(this).append( '<div class="inc button_inc">+</div><div class="dec button_inc">-</div>' );
         }
     } );
@@ -239,7 +239,7 @@ $ = jQuery.noConflict();
                 newVal = min_val;
             }
         }
-        if ( ! $button.parent().find("input").attr('disabled') ) { 
+        if ( ! $button.parent().find("input").attr('disabled') ) {
             $button.parent().find("input").val(newVal).change();
         }
     });
@@ -258,16 +258,16 @@ $ = jQuery.noConflict();
 /* ==============================================
     Single Hotel Rooms Gallery Carousel
 =============================================== */
-(function($){ 
+(function($){
 
-    if ( is_rtl === true ) { 
+    if ( is_rtl === true ) {
         is_rtl = true;
     } else {
         is_rtl = false;
     }
 
     if ( $("#single_hotel_desc .owl-carousel").length ) {
-        $("#single_hotel_desc .owl-carousel").owlCarousel({ 
+        $("#single_hotel_desc .owl-carousel").owlCarousel({
             rtl: is_rtl,
             autoplay: true,
             responsiveClass:true,
@@ -294,7 +294,7 @@ $ = jQuery.noConflict();
 /* ==============================================
     Reviews
 =============================================== */
-(function($){ 
+(function($){
 
     //reviews ajax loading
     $('.guest-reviews .more-review').click(function() {
@@ -315,8 +315,8 @@ $ = jQuery.noConflict();
                     $('.guest-reviews').append( response.html );
                     $('.guest-reviews').append( $this );
                 }
-                    
-                if ( response.more_reviews != 1 ) { 
+
+                if ( response.more_reviews != 1 ) {
                     $this.text( response.notice );
                     $this.attr('disabled', 'disabled');
                 }
@@ -357,7 +357,7 @@ $ = jQuery.noConflict();
 /* ==============================================
     Action for Wishlist button
 =============================================== */
-(function($){ 
+(function($){
 
     // load more button click action on search result page
     $("body").on( 'click', '.btn-add-wishlist', function(e) {
@@ -424,7 +424,7 @@ $ = jQuery.noConflict();
 /* ==============================================
     Filters on list page
 =============================================== */
-(function($){ 
+(function($){
 
     // Toggle Filters container
     $(window).bind( 'load', function() {
@@ -494,7 +494,7 @@ $ = jQuery.noConflict();
 /* ==============================================
     SignUp and Login Form
 =============================================== */
-(function($){ 
+(function($){
 
     $('.signup-btn').click( function(e) {
         e.preventDefault();
@@ -520,7 +520,7 @@ $ = jQuery.noConflict();
 /* ==============================================
     Currency & Language Switcher
 =============================================== */
-(function($){ 
+(function($){
 
     $('.cl-switcher').change( function() {
         window.location.href = $(this).find(":selected").data('url');
@@ -534,7 +534,7 @@ $ = jQuery.noConflict();
 /* ==============================================
     WooCommerce Single Product Image/Thumb slider
 =============================================== */
-function selectThumb( $images_slider, $thumbs_slider, index ) { 
+function selectThumb( $images_slider, $thumbs_slider, index ) {
     var len = $thumbs_slider.find('.owl-item').length,
         actives = [],
         i = 0,
@@ -562,8 +562,8 @@ function selectThumb( $images_slider, $thumbs_slider, index ) {
     }
 }
 
-function wooProductImageSlider( $slider_container ) { 
-    if ( $slider_container == undefined ) { 
+function wooProductImageSlider( $slider_container ) {
+    if ( $slider_container == undefined ) {
         $slider_container = jQuery('.product-images-slider');
     }
 
@@ -574,7 +574,7 @@ function wooProductImageSlider( $slider_container ) {
         currentSlide = 0,
         count = $images_slider.find('> *').length;
 
-    $thumbs_slider.owlCarousel({ 
+    $thumbs_slider.owlCarousel({
         rtl: is_rtl,
         loop : false,
         autoplay : false,
@@ -620,10 +620,10 @@ function wooProductImageSlider( $slider_container ) {
     });
 }
 
-(function($, undefined){ 
+(function($, undefined){
     'use strict';
 
-    $(window).load(function() { 
+    $(window).load(function() {
         wooProductImageSlider(); // Initialize Woo Product Image Slider
     });
 
@@ -633,21 +633,21 @@ function wooProductImageSlider( $slider_container ) {
 /* ==============================================
     WooCommerce
 =============================================== */
-(function($, undefined){ 
+(function($, undefined){
 
     // Up-sells, Cross-sells and Related products slider
-    if ( $('.related-products .owl-carousel').length > 0 ) { 
-        $('.related-products .owl-carousel').each( function() { 
+    if ( $('.related-products .owl-carousel').length > 0 ) {
+        $('.related-products .owl-carousel').each( function() {
 
             var slider_options = $(this).data('slider'),
                 slider_loop = false;
 
-            if ( slider_options ) { 
-                if ( slider_options.items === undefined ) { 
+            if ( slider_options ) {
+                if ( slider_options.items === undefined ) {
                     slider_options.items = 3;
                 }
 
-                if ( slider_options.slide_count === undefined ) { 
+                if ( slider_options.slide_count === undefined ) {
                     slider_options.slide_count = slider_options.items + 1;
                 }
 
@@ -685,12 +685,12 @@ function wooProductImageSlider( $slider_container ) {
         window.open( $(this).attr('href') );
     });
 
-    $(document).on( 'change', '.woocommerce-checkout #billing_country, .woocommerce-checkout #shipping_country, .shipping-calculator-form #calc_shipping_country', function(e) { 
-        if ( $('#billing_state_field > input, #billing_state_field > select').length > 0 ) { 
+    $(document).on( 'change', '.woocommerce-checkout #billing_country, .woocommerce-checkout #shipping_country, .shipping-calculator-form #calc_shipping_country', function(e) {
+        if ( $('#billing_state_field > input, #billing_state_field > select').length > 0 ) {
             $('#billing_state_field > input, #billing_state_field > select').addClass( 'form-control' );
         }
 
-        if ( $('#shipping_state_field > input, #shipping_state_field > select').length > 0 ) { 
+        if ( $('#shipping_state_field > input, #shipping_state_field > select').length > 0 ) {
             $('#shipping_state_field > input, #shipping_state_field > select').addClass( 'form-control' );
         }
 
@@ -700,7 +700,7 @@ function wooProductImageSlider( $slider_container ) {
     });
 
     // QuickView button action
-    $(document).on( 'click', '.quickview_disabled', function(e) { 
+    $(document).on( 'click', '.quickview_disabled', function(e) {
         e.preventDefault();
 
         var pid = $(this).data('id');
@@ -736,7 +736,7 @@ function wooProductImageSlider( $slider_container ) {
     });
 
     // Price Filter on archive page
-    if ( $('.widget.widget_price_filter .price_slider').length > 0 ) { 
+    if ( $('.widget.widget_price_filter .price_slider').length > 0 ) {
         'use strict';
 
         var $price_slider = $('.widget.widget_price_filter .price_slider'),
@@ -766,16 +766,16 @@ function wooProductImageSlider( $slider_container ) {
     }
 
     // Mini Cart Scroll
-    $(document).ready( function(){ 
+    $(document).ready( function(){
         'use strict';
 
-        if ( $('.dropdown-cart #cart_items').length > 0 ) { 
+        if ( $('.dropdown-cart #cart_items').length > 0 ) {
             var height = $('#cart_items .product_list_widget').height();
         }
     });
 
     // Ajax add-to-cart button
-    $(document).on( 'added_to_cart', 'body', function( e, fragments, cart_hash, cart_btn ) { 
+    $(document).on( 'added_to_cart', 'body', function( e, fragments, cart_hash, cart_btn ) {
         'use strict';
 
         var $view_btn   = cart_btn.parent().find( '.added_to_cart' ),
@@ -784,8 +784,8 @@ function wooProductImageSlider( $slider_container ) {
         $view_btn.html('<i class="fa fa-shopping-bag"></i><div class="tool-tip">' + label + '</div>');
         $view_btn.addClass('btn_shop');
         cart_btn.hide();
-        
-        if ( $('header #cart_items').length > 0 ) { 
+
+        if ( $('header #cart_items').length > 0 ) {
             var nonce_value = $('header #cart_items #ajax_mini_cart').val();
 
             $.ajax({
@@ -810,12 +810,12 @@ function wooProductImageSlider( $slider_container ) {
 /* ==============================================
     Smooth Page Scroll to finding section
 =============================================== */
-(function($){ 
-    $('#faq_box a[href*=#]:not([href=#])').click(function() {
+(function($){
+    $('#faq_box a[href*="#"]:not([href="#"])').click(function() {
         if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
             var target = $(this.hash);
             target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
-            
+
             if (target.length) {
                 $('html,body').animate({
                     scrollTop: target.offset().top - 110
