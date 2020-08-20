@@ -193,7 +193,7 @@ if ( have_posts() ) {
                     if ( ! empty( $ct_options['hotel_review'] ) ) :
                         $review_fields = ! empty( $ct_options['hotel_review_fields'] ) ? explode( ",", $ct_options['hotel_review_fields'] ) : array( __("Position", "citytours"), __("Comfort","citytours"), __("Price","citytours"), __("Quality","citytours"));
                         $review = get_post_meta( ct_hotel_org_id( $post_id ), '_review', true );
-                        // $review = round( ( ! empty( $review ) ) ? (float) $review : 0, 1 );
+                        $review = ( ! empty( $review ) ) ? (float) $review : 0;
                         $doubled_review = number_format( round( $review * 2, 1 ), 1 );
                         $review_content = '';
 

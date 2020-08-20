@@ -5,6 +5,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 global $post_id, $before_list, $show_map;
 
+if ( ! empty( $before_list ) ) {
+	echo ( $before_list );
+} else {
+	echo '<div class="col-md-6 col-sm-6 wow zoomIn" data-wow-delay="0.1s">';
+}
+
 $wishlist = array();
 if ( is_user_logged_in() ) {
 	$user_id = get_current_user_id();
@@ -28,16 +34,12 @@ $discount_rate = get_post_meta( $post_id, '_tour_discount_rate', true );
 
 $wishlist_link = ct_wishlist_page_url();
 ?>
-<?php if ( ! empty( $before_list ) ) {
-	echo ( $before_list );
-} else { ?>
-	<div class="col-md-6 col-sm-6 wow zoomIn" data-wow-delay="0.1s">
-<?php } ?>
+
 	<div class="tour_container">
 		<?php if ( ! empty( $featured ) ) { ?>
 			<div class="ribbon_3"><span><?php _e( 'Featured', 'citytours' ); ?></span></div>
 		<?php } elseif ( ! empty( $hot ) ) { ?>
-			<div class="ribbon_3 popular"><span><?php _e( 'TOP', 'citytours' ); ?></span></div>
+			<div class="ribbon_3 popular"><span><?php _e( 'Hot', 'citytours' ); ?></span></div>
 		<?php } ?>
 		<div class="img_container">
 			<a href="<?php echo esc_url( get_permalink( $post_id ) ); ?>">

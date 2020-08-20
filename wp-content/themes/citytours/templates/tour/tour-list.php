@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; 
 } 
 
-global $post_list, $current_view, $post_id;
+global $post_list, $current_view, $post_id, $before_list;
 
 if ( empty( $post_list ) ) :
 
@@ -14,7 +14,7 @@ else :
 	foreach( $post_list as $post_obj ) :
 
 		$post_id = $post_obj['tour_id'];
-
+		$before_list = '';
 		ct_get_template( 'loop-' . $current_view . '.php', '/templates/tour/');
 
 	endforeach;

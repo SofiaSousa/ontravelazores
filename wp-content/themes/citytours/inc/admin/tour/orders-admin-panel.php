@@ -36,6 +36,10 @@ class CT_Tour_Order_List_Table extends WP_List_Table {
 		return $item['date_from'];
 	}
 
+	function column_booking_no( $item ) {
+		return $item['booking_no'];
+	}
+
 	function column_customer_name( $item ) {
 		//Build row actions
 		$link_pattern = 'edit.php?post_type=%1s&page=%2$s&action=%3$s&order_id=%4$s';
@@ -74,6 +78,7 @@ class CT_Tour_Order_List_Table extends WP_List_Table {
 		$columns = array(
 			'cb'                => '<input type="checkbox" />', //Render a checkbox instead of text
 			'id'                => esc_html__( 'ID', 'citytours' ),
+			'booking_no'        => esc_html__( 'Booking No', 'citytours' ),
 			'customer_name'     => esc_html__( 'Customer Name', 'citytours' ),
 			'date'         => esc_html__( 'Date', 'citytours' ),
 			'tour_name'=> esc_html__( 'Tour Name', 'citytours' ),
