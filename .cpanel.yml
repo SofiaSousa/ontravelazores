@@ -2,5 +2,5 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/ontravelazores/public_html/
-    - /bin/cp build.json $DEPLOYPATH
+    - /bin/cp -fR ./* $DEPLOYPATH
 
