@@ -37,3 +37,4 @@ wp-content/themes/*
 !wp-content/themes/citytours/
 # ------------------------------------------------------------
 # END WP-CLI BUILD BLOCK
+!.cpanel.yml
