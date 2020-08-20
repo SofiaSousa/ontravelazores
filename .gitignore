@@ -25,7 +25,6 @@ wp-content/themes/*
 !wp-content/plugins/revslider/
 !wp-content/plugins/woocommerce-checkout-field-editor/
 !wp-content/plugins/woocommerce-google-merchant-center-customer-reviews/
-!wp-content/plugins/woocommerce-multilingual/
 !wp-content/plugins/woocommerce-additional-fees/
 !wp-content/plugins/woocommerce-smart-coupons/
 !wp-content/plugins/js_composer/
