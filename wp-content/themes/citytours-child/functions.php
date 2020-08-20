@@ -1,9 +1,12 @@
 <?php
 add_action( 'wp_enqueue_scripts', 'citytours_child_enqueue_styles' );
 function citytours_child_enqueue_styles() {
-    wp_enqueue_style( 'parent-style', get_template_directory_uri() . '/style.css' );
+	wp_enqueue_style( 'parent-style', get_template_directory_uri() . '/style.css' );
 	wp_enqueue_style( 'child-style', get_stylesheet_directory_uri() . '/style.css', array( 'parent-style' ), wp_get_theme()->get('Version') );
 }
+
+require_once( get_stylesheet_directory() . '/inc/crbs-cart.php' );
+require_once( get_stylesheet_directory() . '/inc/chbs-cart.php' );
 
 /**
  * Remove related products output
@@ -28,9 +31,9 @@ if (!function_exists('woocommerce_template_single_excerpt')) {
  * @compatible    WooCommerce 3.5.6
  * @donate $9     https://businessbloomer.com/bloomer-armada/
  */
- 
+
 add_filter( 'woocommerce_return_to_shop_redirect', 'bbloomer_change_return_shop_url' );
- 
+
 function bbloomer_change_return_shop_url() {
 return home_url();
 }
@@ -55,7 +58,7 @@ function remove_postcode_validation( $fields ) {
 
     unset($fields['billing']['billing_postcode']['validate']);
     unset($fields['shipping']['shipping_postcode']['validate']);
-	
+
 	return $fields;
 }
 
@@ -90,7 +93,7 @@ add_action('jigoshop\cart\save', function() {
 
 add_action('init', function() {
 	if(isset($_SESSION['cart_expiration_time']) && $_SESSION['cart_expiration_time'] < time()) {
-		unset($_SESSION['cart_expiration_time']);		
+		unset($_SESSION['cart_expiration_time']);
 		setcookie('jigoshop_cart_id', '',  time() - 10, '/');
 		setcookie('jigoshop_session_key', '',  time() - 10, '/');
 	}
@@ -103,11 +106,11 @@ add_action('init', function() {
  * @testedwith    WooCommerce 3.8
  * @donate $9     https://businessbloomer.com/bloomer-armada/
  */
-  
+
 add_filter( 'woocommerce_product_tabs', 'bbloomer_remove_product_tabs', 9999 );
-  
+
 function bbloomer_remove_product_tabs( $tabs ) {
-    unset( $tabs['additional_information'] ); 
+    unset( $tabs['additional_information'] );
     return $tabs;
 }
 
