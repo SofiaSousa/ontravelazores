@@ -12,11 +12,7 @@
 			/* enable button 'Remove from basket' in Translation management > Translate jobs */
 			var translation_jobs_basket_form = jQuery('#translation-jobs-basket-form');
 			var handle_basket_form_cb = function(cb_location){
-				if (jQuery('#translation-jobs-basket-form').find(cb_location + ':checked').length > 0) {
-					jQuery('#icl-tm-basket-delete-but').removeAttr('disabled');
-				} else {
-					jQuery('#icl-tm-basket-delete-but').attr('disabled', 'disabled');
-				}
+				jQuery('#icl-tm-basket-delete-but').prop('disabled', jQuery('#translation-jobs-basket-form').find(cb_location + ':checked').length);
 			};
 
 			var cb_locations = ['td', 'tfoot th', 'thead th'];
@@ -174,13 +170,13 @@
 							success:  function (result) {
                                 result = result.data;
 								/** @namespace result.new_value */
+								form_send_button.prop('disabled', !result.valid)
 								if (result.valid) {
 									if (result.modified) {
 										set_basket_name(result.new_value);
 									}
-									form_send_button.removeAttr('disabled').show();
+									form_send_button.show();
 								} else {
-									form_send_button.attr('disabled', 'disabled');
 									alert(result.message);
 									set_basket_name(result.new_value);
                                     check_basket_name();
@@ -190,7 +186,7 @@
 							},
 							error:    function (jqXHR, textStatus) {
 								show_errors(jqXHR, textStatus);
-								form_send_button.attr('disabled', 'disabled');
+								form_send_button.prop('disabled', true);
 								check_result = false;
 							}
 						}
@@ -594,8 +590,9 @@
 					if (commit) {
 						batch_send_basket_to_tp_commit();
 					} else {
-                        form_delete_button.removeAttr('disabled');
-                        form_send_button.removeAttr('disabled').show();
+                        form_delete_button.prop('disabled', false);
+                        form_send_button.prop('disabled', false);
+                        form_send_button.show();
                         show_rollback_message();
 					}
 				};

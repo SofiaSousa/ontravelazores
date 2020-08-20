@@ -25,7 +25,7 @@ jQuery(document).ready(function(){
     jQuery('#icl_add_remove_button').click(showLanguagePicker);
     jQuery('#icl_cancel_language_selection').click(hideLanguagePicker);
     jQuery('#icl_save_language_selection').click(saveLanguageSelection);
-    jQuery('#icl_enabled_languages').find('input').attr('disabled', 'disabled');
+    jQuery('#icl_enabled_languages').find('input').prop('disabled', true);
     jQuery('#icl_save_language_negotiation_type').submit(iclSaveLanguageNegotiationType);
     jQuery('#icl_admin_language_options').submit(iclSaveForm);
     jQuery('#icl_lang_more_options').submit(iclSaveForm);
@@ -78,11 +78,8 @@ jQuery(document).ready(function(){
     jQuery('#icl_setup_next_1').click(saveLanguageSelection);
 
     jQuery('#icl_avail_languages_picker').find('li input:checkbox').click(function () {
-        if (jQuery('#icl_avail_languages_picker').find('li input:checkbox:checked').length > 1) {
-            jQuery('#icl_setup_next_1').removeAttr('disabled');
-        } else {
-            jQuery('#icl_setup_next_1').attr('disabled', 'disabled');
-        }
+		const checkedBoxes = jQuery('#icl_avail_languages_picker').find('li input:checkbox:checked').length;
+		jQuery('#icl_setup_next_1').prop('disabled', checkedBoxes <= 1);
     });
 
     jQuery('#icl_promote_form').submit(iclSaveForm);
@@ -90,7 +87,7 @@ jQuery(document).ready(function(){
     jQuery('#icl_reset_languages').click(icl_reset_languages);
 
     jQuery(':radio[name=icl_translation_option]').change(function () {
-        jQuery('#icl_enable_content_translation').removeAttr('disabled');
+        jQuery('#icl_enable_content_translation').prop('disabled', false);
     });
     jQuery('#icl_enable_content_translation, .icl_noenable_content_translation').click(iclEnableContentTranslation);
 
@@ -122,12 +119,12 @@ function manageWizardButtonStatesSpinner(){
 
     jQuery( forms ).submit(function(){
         spinner.addClass( 'is-active' );
-        jQuery( submit_buttons ).attr( 'disabled', 'disabled' );
+        jQuery( submit_buttons ).prop( 'disabled', true );
     });
 
     jQuery( buttons ).click(function(){
         spinner.addClass( 'is-active' );
-        buttons.attr( 'disabled', 'disabled');
+        buttons.prop( 'disabled', true );
     });
 }
 
@@ -202,8 +199,8 @@ function saveDefaultLanguage() {
 										selected_language_item = selected_language.closest('li');
 										selected_language_item.addClass('selected');
 										selected_language_item.find('label').append(' (' + icl_default_mark + ')');
-										enabled_languages_items.find('input').removeAttr('checked');
-										selected_language.attr('checked', 'checked');
+										enabled_languages_items.find('input').prop('checked', false);
+										selected_language.prop('checked', true);
 										enabled_languages.find('input[value="' + response.data.previousLanguage + '"]').parent().html(enabled_languages.find('input[value="' + response.data.previousLanguage + '"]').parent().html().replace('(' + icl_default_mark + ')', ''));
 										doneEditingDefaultLanguage();
 										fadeInAjxResp('#icl_ajx_response', icl_ajx_saved);
@@ -264,7 +261,7 @@ function iclLntDomains() {
 	icl_lnt_domains_options = jQuery('#icl_lnt_domains');
     icl_lnt_xdomain_options = jQuery('#language_domain_xdomain_options');
 
-    if (icl_lnt_domains_options.attr('checked')) {
+    if (icl_lnt_domains_options.prop('checked')) {
         icl_lnt_domains_box.html(icl_ajxloaderimg);
         icl_lnt_domains_box.show();
         language_negotiation_type = jQuery('#icl_save_language_negotiation_type').find('input[type="submit"]');
@@ -305,7 +302,7 @@ function iclToggleShowOnRoot() {
 }
 
 function iclUseDirectoryToggle() {
-    if (jQuery(this).attr('checked')) {
+    if (jQuery(this).prop('checked')) {
         jQuery('#icl_use_directory_details').fadeIn();
     } else {
         jQuery('#icl_use_directory_details').fadeOut();
@@ -527,11 +524,12 @@ function iclHideLanguagesCallback() {
     });
 }
 
-function icl_reset_languages() {
+function icl_reset_languages(e) {
     /* jshint validthis: true */
     var this_b = jQuery(this);
     if (confirm(this_b.next().html())) {
-        this_b.attr('disabled', 'disabled').next().html(icl_ajxloaderimg).fadeIn();
+        this_b.prop('disabled', true);
+		this_b.next().html(icl_ajxloaderimg).fadeIn();
         jQuery.ajax({
             type: "POST",
             url: icl_ajx_url,
@@ -546,7 +544,7 @@ function icl_reset_languages() {
 function iclEnableContentTranslation() {
     var val = jQuery(':radio[name=icl_translation_option]:checked').val();
     /* jshint validthis:true */
-    jQuery(this).attr('disabled', 'disabled');
+    jQuery(this).prop('disabled', true);
     jQuery.ajax({
         type: "POST",
         url: icl_ajx_url,
@@ -568,8 +566,8 @@ function installer_registration_form_submit(){
     var thisf = jQuery(this);
     var action = jQuery('#installer_registration_form').find('input[name=button_action]').val();
 
-		thisf.find('.status_msg').html('');
-    thisf.find(':submit').attr('disabled', 'disabled');
+    thisf.find('.status_msg').html('');
+    thisf.find(':submit').prop('disabled', true);
 
     if(action === 'later'){
         thisf.find('input[name=installer_site_key]').parent().remove();
@@ -595,7 +593,7 @@ function installer_registration_form_submit(){
                     thisf.find(':submit[name=finish]').show();
 										thisf.find('.installer__reporting__switcher').removeClass('hidden');
                 }
-                thisf.find(':submit').removeAttr('disabled', 'disabled');
+                thisf.find(':submit').prop('disabled', false);
             }else{ // action = finish
                 location.href = location.href.replace(/#[\w\W]*/, '');
             }
@@ -603,7 +601,7 @@ function installer_registration_form_submit(){
         fail: function (xhr, status, error) {
             var err = eval(status + ': ' +  (xhr.responseText) );
             thisf.find('.status_msg').html(err).addClass('icl_error_text');
-            thisf.find(':submit').removeAttr('disabled', 'disabled');
+            thisf.find(':submit').prop('disabled', false);
         }
     });
 
@@ -612,10 +610,6 @@ function installer_registration_form_submit(){
 
 	function update_seo_head_langs_priority(event) {
 		var element = jQuery(this);
-		if (element.attr('checked')) {
-			jQuery('#wpml-seo-head-langs-priority').removeAttr('disabled');
-		} else {
-			jQuery('#wpml-seo-head-langs-priority').attr('disabled', 'disabled');
-		}
+		jQuery('#wpml-seo-head-langs-priority').prop('disabled', !element.prop('checked'));
 	}
 }());

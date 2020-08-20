@@ -2,10 +2,10 @@
 /**
  * Plugin Name: WPML Multilingual CMS
  * Plugin URI: https://wpml.org/
- * Description: WPML Multilingual CMS | <a href="https://wpml.org">Documentation</a> | <a href="https://wpml.org/version/wpml-4-3-16/">WPML 4.3.16 release notes</a>
+ * Description: WPML Multilingual CMS | <a href="https://wpml.org">Documentation</a> | <a href="https://wpml.org/version/wpml-4-3-19/">WPML 4.3.19 release notes</a>
  * Author: OnTheGoSystems
  * Author URI: http://www.onthegosystems.com/
- * Version: 4.3.16
+ * Version: 4.3.19
  * Plugin Slug: sitepress-multilingual-cms
  *
  * @package WPML\Core
@@ -27,7 +27,7 @@ if ( ! \WPML\Requirements\WordPress::checkMinimumRequiredVersion() ) {
 	return;
 }
 
-define( 'ICL_SITEPRESS_VERSION', '4.3.16' );
+define( 'ICL_SITEPRESS_VERSION', '4.3.19' );
 
 // Do not uncomment the following line!
 // If you need to use this constant, use it in the wp-config.php file

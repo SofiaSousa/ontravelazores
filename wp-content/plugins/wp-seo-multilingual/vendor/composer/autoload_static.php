@@ -4,14 +4,17 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1212880ae2f0e3cf25846f280159294a
+class ComposerStaticInit093e5e963460362d6200e17986441299
 {
     public static $classMap = array (
         'OTGS_Assets_Handles' => __DIR__ . '/..' . '/otgs/ui/src/php/OTGS_Assets_Handles.php',
         'OTGS_Assets_Store' => __DIR__ . '/..' . '/otgs/ui/src/php/OTGS_Assets_Store.php',
         'OTGS_UI_Assets' => __DIR__ . '/..' . '/otgs/ui/src/php/OTGS_UI_Assets.php',
         'OTGS_UI_Loader' => __DIR__ . '/..' . '/otgs/ui/src/php/OTGS_UI_Loader.php',
-        'WPML\\Compatibility\\Yoast\\Utils' => __DIR__ . '/../..' . '/classes/utils.php',
+        'WPML\\WPSEO\\Loaders' => __DIR__ . '/../..' . '/classes/Loaders.php',
+        'WPML\\WPSEO\\Presentation\\Hooks' => __DIR__ . '/../..' . '/classes/Presentation/Hooks.php',
+        'WPML\\WPSEO\\PrimaryCategory\\Hooks' => __DIR__ . '/../..' . '/classes/PrimaryCategory/Hooks.php',
+        'WPML\\WPSEO\\Utils' => __DIR__ . '/../..' . '/classes/Utils.php',
         'WPML_WPSEO_Categories' => __DIR__ . '/../..' . '/classes/class-wpml-wpseo-categories.php',
         'WPML_WPSEO_Filters' => __DIR__ . '/../..' . '/classes/class-wpml-wpseo-filters.php',
         'WPML_WPSEO_Main_Factory' => __DIR__ . '/../..' . '/classes/class-wpml-wpseo-main-factory.php',
@@ -24,7 +27,7 @@ class ComposerStaticInit1212880ae2f0e3cf25846f280159294a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->classMap = ComposerStaticInit1212880ae2f0e3cf25846f280159294a::$classMap;
+            $loader->classMap = ComposerStaticInit093e5e963460362d6200e17986441299::$classMap;
 
         }, null, ClassLoader::class);
     }

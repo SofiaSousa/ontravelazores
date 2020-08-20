@@ -2,8 +2,6 @@
 
 use OTGS\Installer\AdminNotices\Loader;
 use OTGS\Installer\AdminNotices\Notices\Account;
-use OTGS\Installer\AdminNotices\Notices\ApiConnection;
-use OTGS\Installer\AdminNotices\Notices\Hooks;
 
 class OTGS_Installer_Factory {
 
@@ -345,8 +343,7 @@ class OTGS_Installer_Factory {
 	}
 
 	public function load_admin_notice_hooks() {
-		Hooks::addHooks( Account::class, $this->installer );
-		Hooks::addHooks( ApiConnection::class, $this->installer );
+		Account::addHooks( $this->installer );
 		Loader::addHooks( defined( 'DOING_AJAX' ) );
 
 		return $this;

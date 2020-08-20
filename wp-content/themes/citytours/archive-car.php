@@ -21,7 +21,7 @@ $order_defaults = array(
 
 $s = isset($_REQUEST['s']) ? sanitize_text_field( $_REQUEST['s'] ) : '';
 
-$order_by = ( isset( $_REQUEST['order_by'] ) && array_key_exists( $_REQUEST['order_by'], $order_by_array ) ) ? sanitize_text_field( $_REQUEST['order_by'] ) : '';
+$order_by = ( isset( $_REQUEST['order_by'] ) && array_key_exists( $_REQUEST['order_by'], $order_by_array ) ) ? sanitize_text_field( $_REQUEST['order_by'] ) : 'price';
 $order = ( isset( $_REQUEST['order'] ) && in_array( $_REQUEST['order'], $order_array ) ) ? sanitize_text_field( $_REQUEST['order'] ) : 'ASC';
 $car_type = ( isset( $_REQUEST['car_types'] ) ) ? ( is_array( $_REQUEST['car_types'] ) ? $_REQUEST['car_types'] : array( $_REQUEST['car_types'] ) ):array();
 $price_filter = ( isset( $_REQUEST['price_filter'] ) && is_array( $_REQUEST['price_filter'] ) ) ? $_REQUEST['price_filter'] : array();

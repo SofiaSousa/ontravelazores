@@ -5,7 +5,7 @@
  * @see     https://docs.woocommerce.com/document/template-structure/
  * @author  WooThemes
  * @package WooCommerce/Templates
- * @version 3.8.0
+ * @version 4.4.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<div class="cart-section">
+<div class="cart-section"> 
 
     <?php
 
@@ -44,7 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
                     $is_custom_product  = false;
                     $hotel_tour_id      = get_post_meta( $product_id, '_ct_post_id', true );
-                    if ( ! empty( $hotel_tour_id ) ) {
+                    if ( ! empty( $hotel_tour_id ) ) { 
                         $is_custom_product  = true;
                     }
 
@@ -54,7 +54,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
                         <tr class="woocommerce-cart-form__cart-item <?php echo esc_attr( apply_filters( 'woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key ) ); ?>">
 
-                            <td class="product-thumbnail" data-title="<?php esc_attr_e( 'Image', 'citytours' ) ?>">
+                            <td class="product-thumbnail" data-title="<?php esc_attr_e( 'Thumbnail', 'citytours' ) ?>">
                                 <?php
                                     $thumbnail = apply_filters( 'woocommerce_cart_item_thumbnail', $_product->get_image(), $cart_item, $cart_item_key );
 
@@ -67,7 +67,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                             </td>
 
                             <td class="product-name" data-title="<?php esc_attr_e( 'Product', 'citytours' ); ?>">
-                                <?php
+                                <?php 
                                     if ( ! $product_permalink ) {
                                         echo apply_filters( 'woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key ) . '&nbsp;';
                                     } else {
@@ -142,14 +142,14 @@ if ( ! defined( 'ABSPATH' ) ) {
                 <tr>
                     <td colspan="6" class="actions">
                         <div class="cart-options clearfix">
-                            <div class="pull-left">
+                            <div class="pull-left"> 
                                 <?php if ( wc_coupons_enabled() ) { ?>
                                     <div class="coupon apply-coupon">
-                                        <div class="form-group">
+                                        <div class="form-group"> 
                                             <input type="text" name="coupon_code" class="input-text form-control" id="coupon_code" value="" placeholder="<?php esc_attr_e( 'Coupon code', 'citytours' ); ?>" />
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group"> 
                                             <input type="submit" class="button btn_cart_outine" name="apply_coupon" value="<?php esc_attr_e( 'Apply Coupon', 'citytours' ); ?>" />
                                             <?php do_action( 'woocommerce_cart_coupon' ); ?>
                                         </div>
@@ -157,7 +157,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                                 <?php } ?>
                             </div>
 
-                            <div class="pull-right fix_mobile">
+                            <div class="pull-right fix_mobile"> 
                                 <input type="submit" class="button btn_cart_outine" name="update_cart" value="<?php esc_attr_e( 'Update Cart', 'citytours' ); ?>" />
 
                                 <?php do_action( 'woocommerce_cart_actions' ); ?>
@@ -185,27 +185,3 @@ if ( ! defined( 'ABSPATH' ) ) {
     <?php do_action( 'woocommerce_after_cart' ); ?>
 
 </div>
-
-<script type="text/javascript">
-var _egoiaq = _egoiaq || [];
-(function(){
-	var u=(("https:" == document.location.protocol) ? "https://egoimmerce.e-goi.com/" : "http://egoimmerce.e-goi.com/");
-	var u2=(("https:" == document.location.protocol) ? "https://cdn-te.e-goi.com/" : "http://cdn-te.e-goi.com/");
-	_egoiaq.push(['setClientId', "419232"]);
-	_egoiaq.push(['setListId', "Sample"]); // List Identifier
-	_egoiaq.push(['setSubscriber', "Sample"]); // You can use the uid (unique identifier) or the email or the phone number
-	_egoiaq.push(['setCampaignId', "Sample"]); // Campaign Identifier
-	_egoiaq.push(['setTrackerUrl', u+'collect']);
-	_egoiaq.push(['trackEcommerceCartUpdate',
-	    {{GRAND TOTAL}} // (required) Cart grandTotal (typically the sum of all items prices)
-	]);
-	_egoiaq.push(['trackPageView']);
-	_egoiaq.push(['enableLinkTracking']);
-	var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-	g.type='text/javascript';
-	g.defer=true;
-	g.async=true;
-	g.src=u2+'egoimmerce.js';
-	s.parentNode.insertBefore(g,s);
-})();
-</script>

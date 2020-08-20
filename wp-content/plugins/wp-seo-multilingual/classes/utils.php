@@ -1,6 +1,6 @@
 <?php
 
-namespace WPML\Compatibility\Yoast;
+namespace WPML\WPSEO;
 
 class Utils {
 
