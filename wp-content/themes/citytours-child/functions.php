@@ -5,9 +5,8 @@ function citytours_child_enqueue_styles() {
 	wp_enqueue_style( 'child-style', get_stylesheet_directory_uri() . '/style.css', array( 'parent-style' ), wp_get_theme()->get('Version') );
 }
 
-// Extending plugins.
-require_once( get_stylesheet_directory() . '/inc/car-rental-booking-system/cart.php' );
-require_once( get_stylesheet_directory() . '/inc/chauffeur-booking-system/cart.php' );
+// Loading theme includes.
+require_once( get_stylesheet_directory() . '/inc/load.php' );
 
 /**
  * Remove related products output
