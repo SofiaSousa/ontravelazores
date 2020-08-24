@@ -21,12 +21,15 @@ wp-content/themes/*
 !wp-content/plugins/chauffeur-booking-system/
 !wp-content/plugins/ct-booking/
 !wp-content/plugins/smart-emails/
+!wp-content/plugins/sms-orders-alertnotifications-for-woocommerce
 !wp-content/plugins/sliderpro/
 !wp-content/plugins/revslider/
+!wp-content/plugins/woocommerce/
 !wp-content/plugins/woocommerce-checkout-field-editor/
 !wp-content/plugins/woocommerce-google-merchant-center-customer-reviews/
 !wp-content/plugins/woocommerce-additional-fees/
 !wp-content/plugins/woocommerce-smart-coupons/
+!wp-content/plugins/woocommerce-gateway-stripe/
 !wp-content/plugins/js_composer/
 !wp-content/plugins/sitepress-multilingual-cms/
 !wp-content/plugins/wpml-string-translation/

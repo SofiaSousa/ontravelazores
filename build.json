@@ -55,9 +55,6 @@
         "smart-marketing-for-wp": {
             "version": "*"
         },
-        "sms-orders-alertnotifications-for-woocommerce": {
-            "version": "1.4.2"
-        },
         "woocommerce": {
             "version": "*"
         },
@@ -66,9 +63,6 @@
         },
         "woocommerce-multilingual": {
             "version": "4.10.2"
-        },
-        "woocommerce-gateway-stripe": {
-            "version": "*"
         },
         "wp-fastest-cache": {
             "version": "*"
