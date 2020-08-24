@@ -261,7 +261,7 @@ function wc_cart_totals_coupon_label( $coupon, $echo = true ) {
 	}
 
 	/* translators: %s: coupon code */
-	$label = apply_filters( 'woocommerce_cart_totals_coupon_label', sprintf( esc_html__( 'Coupon: %s', 'woocommerce' ), $coupon->get_code() ), $coupon );
+	$label = apply_filters( 'woocommerce_cart_totals_coupon_label', sprintf( esc_html__( '%s', 'woocommerce' ), $coupon->get_code() ), $coupon );
 
 	if ( $echo ) {
 		echo $label; // WPCS: XSS ok.
