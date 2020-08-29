@@ -23,6 +23,7 @@ wp-content/themes/*
 !wp-content/plugins/smart-emails/
 !wp-content/plugins/sliderpro/
 !wp-content/plugins/revslider/
+!wp-content/plugins/woocommerce/
 !wp-content/plugins/woocommerce-checkout-field-editor/
 !wp-content/plugins/woocommerce-google-merchant-center-customer-reviews/
 !wp-content/plugins/woocommerce-additional-fees/

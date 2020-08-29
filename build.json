@@ -68,7 +68,7 @@
             "version": "4.10.2"
         },
         "woocommerce-gateway-stripe": {
-            "version": "*"
+            "version": "4.5.2"
         },
         "wp-fastest-cache": {
             "version": "*"

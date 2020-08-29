@@ -5,8 +5,8 @@ function citytours_child_enqueue_styles() {
 	wp_enqueue_style( 'child-style', get_stylesheet_directory_uri() . '/style.css', array( 'parent-style' ), wp_get_theme()->get('Version') );
 }
 
-require_once( get_stylesheet_directory() . '/inc/crbs-cart.php' );
-require_once( get_stylesheet_directory() . '/inc/chbs-cart.php' );
+// Loading theme includes.
+require_once( get_stylesheet_directory() . '/inc/load.php' );
 
 /**
  * Remove related products output
