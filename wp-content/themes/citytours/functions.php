@@ -470,7 +470,7 @@ function custom_post_type() {
 	register_post_type( 'wcontravel_coupons', $args );
 
 }
-add_action( 'init', 'custom_post_type', 0 );
+// add_action( 'init', 'custom_post_type', 0 );
 
 
 
@@ -478,127 +478,127 @@ add_action( 'init', 'custom_post_type', 0 );
 /* ---- TESTES 03-06-2020 ----- */
 function wcontravel_coupons_dynamic( $post_tour_id, $product_id ) {
 
-	$args = array('post_type'=>'wcontravel_coupons', 'posts_per_page'=>'-1');
-	$result = new WP_Query($args);
-	if ( $result->have_posts() ) :
-		while ( $result->have_posts() ) : $result->the_post();
+// 	$args = array('post_type'=>'wcontravel_coupons', 'posts_per_page'=>'-1');
+// 	$result = new WP_Query($args);
+// 	if ( $result->have_posts() ) :
+// 		while ( $result->have_posts() ) : $result->the_post();
 
-			$coupon_guid	= get_the_ID();
-			$coupon_title	= get_the_title();
+// 			$coupon_guid	= get_the_ID();
+// 			$coupon_title	= get_the_title();
 
-			// tab "General"
-			$coupon_discountType	= get_field( 'tipo_de_desconto', $coupon_guid );
-			$coupon_amount 			= get_field( 'valor_do_cupao', $coupon_guid );
-			$coupon_expiryDate		= get_field( 'data_expira_cupao', $coupon_guid );
+// 			// tab "General"
+// 			$coupon_discountType	= get_field( 'tipo_de_desconto', $coupon_guid );
+// 			$coupon_amount 			= get_field( 'valor_do_cupao', $coupon_guid );
+// 			$coupon_expiryDate		= get_field( 'data_expira_cupao', $coupon_guid );
 
-			// tab "Usage restriction"
-			$coupon_minimumSpend 		= get_field( 'gasto_minimo', $coupon_guid );
-			$coupon_maximumSpend 		= get_field( 'gasto_maximo', $coupon_guid );
-			$coupon_individualUseOnly	= get_field( 'apenas_uso_individual', $coupon_guid );
-			$coupon_includeProducts 	= get_field( 'incluir_produtos', $coupon_guid );
+// 			// tab "Usage restriction"
+// 			$coupon_minimumSpend 		= get_field( 'gasto_minimo', $coupon_guid );
+// 			$coupon_maximumSpend 		= get_field( 'gasto_maximo', $coupon_guid );
+// 			$coupon_individualUseOnly	= get_field( 'apenas_uso_individual', $coupon_guid );
+// 			$coupon_includeProducts 	= get_field( 'incluir_produtos', $coupon_guid );
 
-			$not_found = true;
-			foreach ($coupon_includeProducts as $key => $value) {
-				if ($value == $post_tour_id) {
-					$not_found = false;
-				}
-			}
+// 			$not_found = true;
+// 			foreach ($coupon_includeProducts as $key => $value) {
+// 				if ($value == $post_tour_id) {
+// 					$not_found = false;
+// 				}
+// 			}
 
-			// Se encontrou tour existente num coupon
-			if ( $not_found == false ) {
+// 			// Se encontrou tour existente num coupon
+// 			if ( $not_found == false ) {
 
-				// Verificar se esse cupão já existe no "Woocommerce Coupons Default"
-				$args_coupons_wc = array(
-					'posts_per_page'   => -1,
-					'orderby'          => 'title',
-					'order'            => 'asc',
-					'post_type'        => 'shop_coupon',
-					'post_status'      => 'publish',
-				);
+// 				// Verificar se esse cupão já existe no "Woocommerce Coupons Default"
+// 				$args_coupons_wc = array(
+// 					'posts_per_page'   => -1,
+// 					'orderby'          => 'title',
+// 					'order'            => 'asc',
+// 					'post_type'        => 'shop_coupon',
+// 					'post_status'      => 'publish',
+// 				);
 
-				$get_coupons_wc = get_posts( $args_coupons_wc );
+// 				$get_coupons_wc = get_posts( $args_coupons_wc );
 
-				$found_coupon_wc = false;
-				$found_coupon_wc_guid = 0;
-				foreach ($get_coupons_wc as $key => $value) {
-					$tmp_coupon_guid = $value->ID;
-					$tmp_coupon_code = $value->post_title;
+// 				$found_coupon_wc = false;
+// 				$found_coupon_wc_guid = 0;
+// 				foreach ($get_coupons_wc as $key => $value) {
+// 					$tmp_coupon_guid = $value->ID;
+// 					$tmp_coupon_code = $value->post_title;
 
-					if ( $tmp_coupon_code == $coupon_title ) :
-						$found_coupon_wc = true;
-						$found_coupon_wc_guid = $tmp_coupon_guid;
-						break;
-					endif;
-				}
+// 					if ( $tmp_coupon_code == $coupon_title ) :
+// 						$found_coupon_wc = true;
+// 						$found_coupon_wc_guid = $tmp_coupon_guid;
+// 						break;
+// 					endif;
+// 				}
 
-				if ( $found_coupon_wc ):
-					// ID Cupão encontrado no WC Default Coupons.   -    $found_coupon_wc_guid
-					$pegar = get_post_meta( $found_coupon_wc_guid, 'product_ids', true );
-					$teste = $pegar.','.$product_id;
-					update_post_meta( $found_coupon_wc_guid, 'product_ids', $teste );
-				else:
+// 				if ( $found_coupon_wc ):
+// 					// ID Cupão encontrado no WC Default Coupons.   -    $found_coupon_wc_guid
+// 					$pegar = get_post_meta( $found_coupon_wc_guid, 'product_ids', true );
+// 					$teste = $pegar.','.$product_id;
+// 					update_post_meta( $found_coupon_wc_guid, 'product_ids', $teste );
+// 				else:
 
-					/* Criar o cupão dinâmico para esse produto */
-					$coupon_code 	= $coupon_title;
-					$coupon = array(
-						'post_title' 	=> $coupon_code,
-						'post_content'	=> '',
-						'post_status' 	=> 'publish',
-						'post_author' 	=> 1,
-						'post_type'		=> 'shop_coupon'
-					);
-					$new_coupon_id = wp_insert_post( $coupon );
+// 					/* Criar o cupão dinâmico para esse produto */
+// 					$coupon_code 	= $coupon_title;
+// 					$coupon = array(
+// 						'post_title' 	=> $coupon_code,
+// 						'post_content'	=> '',
+// 						'post_status' 	=> 'publish',
+// 						'post_author' 	=> 1,
+// 						'post_type'		=> 'shop_coupon'
+// 					);
+// 					$new_coupon_id = wp_insert_post( $coupon );
 
-					/*
-					** +  Atualizar informações extras do coupon  +
-					*/
-					// Tipo de desconto (Percentagem - percent, Fixo no carrinho - fixed_cart, Fixo no produto - fixed_product)
-					update_post_meta( $new_coupon_id, 'discount_type', $coupon_discountType );
+// 					/*
+// 					** +  Atualizar informações extras do coupon  +
+// 					*/
+// 					// Tipo de desconto (Percentagem - percent, Fixo no carrinho - fixed_cart, Fixo no produto - fixed_product)
+// 					update_post_meta( $new_coupon_id, 'discount_type', $coupon_discountType );
 
-					// Montante do desconto (% ou valor fixo)
-					update_post_meta( $new_coupon_id, 'coupon_amount', $coupon_amount );
+// 					// Montante do desconto (% ou valor fixo)
+// 					update_post_meta( $new_coupon_id, 'coupon_amount', $coupon_amount );
 
-					// Utilização individual (Sim = yes, Não = no)
-					update_post_meta( $new_coupon_id, 'individual_use', ($coupon_individualUseOnly == true ? 'yes' : 'no') );
+// 					// Utilização individual (Sim = yes, Não = no)
+// 					update_post_meta( $new_coupon_id, 'individual_use', ($coupon_individualUseOnly == true ? 'yes' : 'no') );
 
-					// Limite de utilização do coupon (número de vezes pode ser utilizado, para ilimitado colocar '')
-					update_post_meta( $new_coupon_id, 'usage_limit', $coupon_usageLimitPerCoupon );
+// 					// Limite de utilização do coupon (número de vezes pode ser utilizado, para ilimitado colocar '')
+// 					update_post_meta( $new_coupon_id, 'usage_limit', $coupon_usageLimitPerCoupon );
 
-					// Aplicar cupão se valor da encomenda tiver esse valor MÍNIMO
-					update_post_meta( $new_coupon_id, 'minimum_amount', $coupon_minimumSpend );
+// 					// Aplicar cupão se valor da encomenda tiver esse valor MÍNIMO
+// 					update_post_meta( $new_coupon_id, 'minimum_amount', $coupon_minimumSpend );
 
-					// Aplicar cupão se valor da encomenda tiver esse valor MÁXIMO
-					update_post_meta( $new_coupon_id, 'maximum_amount', $coupon_maximumSpend );
+// 					// Aplicar cupão se valor da encomenda tiver esse valor MÁXIMO
+// 					update_post_meta( $new_coupon_id, 'maximum_amount', $coupon_maximumSpend );
 
-					// Auto-aplicar o coupon na encomenda
-					update_post_meta( $new_coupon_id, 'wc_sc_auto_apply_coupon', 'yes' );
+// 					// Auto-aplicar o coupon na encomenda
+// 					update_post_meta( $new_coupon_id, 'wc_sc_auto_apply_coupon', 'yes' );
 
-					// Data que expira o coupon (retornar no formato YYY-MM-DD)
-					if ( !empty($coupon_expiryDate) ) {
-						$expire = date('Y-m-d', strtotime($coupon_expiryDate. ' + 1 days'));
-						update_post_meta( $new_coupon_id, 'expiry_date', $expire );
-					}
+// 					// Data que expira o coupon (retornar no formato YYY-MM-DD)
+// 					if ( !empty($coupon_expiryDate) ) {
+// 						$expire = date('Y-m-d', strtotime($coupon_expiryDate. ' + 1 days'));
+// 						update_post_meta( $new_coupon_id, 'expiry_date', $expire );
+// 					}
 
-					// Produtos a aplicar desconto (passar os seus IDS, caso seja vazio colocar só '')
-					$tmp_coupon_includeProducts = '';
-					$count_coupon_includeProducts = count($coupon_includeProducts);
-					foreach ($coupon_includeProducts as $key => $value) {
-						$tour_post_id = $value;
-						if ($tour_post_id == $post_tour_id) {
-							$tmp_coupon_includeProducts .= $product_id;
-						}
-						if( ($count_coupon_includeProducts-1) < $key ) {
-							$tmp_coupon_includeProducts .= ',';
-						}
-					}
-					update_post_meta( $new_coupon_id, 'product_ids', $tmp_coupon_includeProducts );
+// 					// Produtos a aplicar desconto (passar os seus IDS, caso seja vazio colocar só '')
+// 					$tmp_coupon_includeProducts = '';
+// 					$count_coupon_includeProducts = count($coupon_includeProducts);
+// 					foreach ($coupon_includeProducts as $key => $value) {
+// 						$tour_post_id = $value;
+// 						if ($tour_post_id == $post_tour_id) {
+// 							$tmp_coupon_includeProducts .= $product_id;
+// 						}
+// 						if( ($count_coupon_includeProducts-1) < $key ) {
+// 							$tmp_coupon_includeProducts .= ',';
+// 						}
+// 					}
+// 					update_post_meta( $new_coupon_id, 'product_ids', $tmp_coupon_includeProducts );
 
-				endif;
+// 				endif;
 
-			}
+// 			}
 
-		endwhile;
-	endif;
+// 		endwhile;
+// 	endif;
 
 }
 
@@ -672,19 +672,19 @@ function custom_sidebar_footer_column04() {
 }
 
 
-add_action( 'woocommerce_before_cart', 'apply_matched_coupons' );
-function apply_matched_coupons() {
-	global $woocommerce;
+// add_action( 'woocommerce_before_cart', 'apply_matched_coupons' );
+// function apply_matched_coupons() {
+// 	global $woocommerce;
 
-	$args = array('post_type'=>'wcontravel_coupons', 'posts_per_page'=>'-1');
-	$result = new WP_Query($args);
-	if ( $result->have_posts() ) :
-		while ( $result->have_posts() ) : $result->the_post();
+// 	$args = array('post_type'=>'wcontravel_coupons', 'posts_per_page'=>'-1');
+// 	$result = new WP_Query($args);
+// 	if ( $result->have_posts() ) :
+// 		while ( $result->have_posts() ) : $result->the_post();
 
-			$coupon_guid	= get_the_ID();
-			$coupon_title	= get_the_title();
-			$woocommerce->cart->add_discount( $coupon_title );
+// 			$coupon_guid	= get_the_ID();
+// 			$coupon_title	= get_the_title();
+// 			$woocommerce->cart->add_discount( $coupon_title );
 
-		endwhile;
-	endif;
-}
+// 		endwhile;
+// 	endif;
+// }
