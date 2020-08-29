@@ -13,9 +13,9 @@ if ( ! function_exists( 'ct_tour_update_cart' ) ) {
 
         // validation
         if ( ! isset( $_POST['tour_id'] ) || ! isset( $_POST['date'] ) ) {
-            wp_send_json( array( 
-                'success' => 0, 
-                'message' => __( 'Some validation error is occurred while calculate price.', 'citytours' ) 
+            wp_send_json( array(
+                'success' => 0,
+                'message' => __( 'Some validation error is occurred while calculate price.', 'citytours' )
             ) );
         }
 
@@ -39,7 +39,7 @@ if ( ! function_exists( 'ct_tour_update_cart' ) ) {
 
         if ( ! empty( $_POST['add_service'] ) ) {
             global $wpdb;
-            
+
             foreach ( $_POST['add_service'] as $key => $value ) {
                 $services = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . CT_ADD_SERVICES_TABLE . ' WHERE id=%d AND post_id=%d', $key, $tour_id ) );
 
@@ -65,9 +65,9 @@ if ( ! function_exists( 'ct_tour_update_cart' ) ) {
 
         CT_Hotel_Cart::set( $uid, $cart_data );
 
-        wp_send_json( array( 
-            'success' => 1, 
-            'message' => 'success' 
+        wp_send_json( array(
+            'success' => 1,
+            'message' => 'success'
         ) );
     }
 }
@@ -79,12 +79,12 @@ if ( ! function_exists( 'ct_tour_submit_booking' ) ) {
     function ct_tour_submit_booking() {
         global $wpdb, $ct_options;
 
-        $result_json = array( 
-            'success'   => 0, 
-            'result'    => '', 
-            'order_id'  => 0 
+        $result_json = array(
+            'success'   => 0,
+            'result'    => '',
+            'order_id'  => 0
         );
-        
+
         if ( isset( $_POST['order_id'] ) && empty( $_POST['order_id'] ) ) {
             // validation
             if ( ! isset( $_POST['uid'] ) || ! CT_Hotel_Cart::get( $_POST['uid'] ) ) {
@@ -99,7 +99,7 @@ if ( ! function_exists( 'ct_tour_submit_booking' ) ) {
                 wp_send_json( $result_json );
             }
 
-            if ( isset( $_POST['payment_info'] ) && 'cc' == $_POST['payment_info'] ) { 
+            if ( isset( $_POST['payment_info'] ) && 'cc' == $_POST['payment_info'] ) {
                 if ( ! ct_is_valid_card_number( $_POST['billing_credircard'] ) ) {
                     $result_json['result'] = esc_html__( 'Credit card number you entered is invalid.', 'citytours' );
 
@@ -117,7 +117,7 @@ if ( ! function_exists( 'ct_tour_submit_booking' ) ) {
 
                     wp_send_json( $result_json );
                 }
-                
+
                 if ( ! ct_is_valid_cvv_number( $_POST['billing_ccvnumber'] ) ) {
                     $result_json['result'] = esc_html__( 'Card verification number (CVV) is not valid. You can find this number on your credit card.', 'citytours' );
 
@@ -130,17 +130,17 @@ if ( ! function_exists( 'ct_tour_submit_booking' ) ) {
             $latest_order_id = $wpdb->get_var( 'SELECT id FROM ' . CT_ORDER_TABLE . ' ORDER BY id DESC LIMIT 1' );
             $booking_no      = mt_rand( 1000, 9999 ) . $latest_order_id;
             $pin_code        = mt_rand( 1000, 9999 );
-            $post_fields     = array( 
-                'first_name', 
-                'last_name', 
-                'email', 
-                'phone', 
-                'country', 
-                'address1', 
-                'address2', 
-                'city', 
-                'state', 
-                'zip' 
+            $post_fields     = array(
+                'first_name',
+                'last_name',
+                'email',
+                'phone',
+                'country',
+                'address1',
+                'address2',
+                'city',
+                'state',
+                'zip'
             );
 
             $order_info = ct_order_default_order_data( 'new' );
@@ -154,7 +154,7 @@ if ( ! function_exists( 'ct_tour_submit_booking' ) ) {
             $order_info['total_price']  = $cart_data['total_price'];
             $order_info['total_adults'] = $cart_data['total_adults'];
             $order_info['total_kids']   = $cart_data['total_kids'];
-            $order_info['status']       = 'new'; 
+            $order_info['status']       = 'new';
             $order_info['deposit_paid'] = 1;
             $order_info['mail_sent']    = 0;
             $order_info['post_id']      = $cart_data['tour_id'];
@@ -225,24 +225,24 @@ if ( ! function_exists( 'ct_tour_submit_booking' ) ) {
                     }
                 }
 
-                if ( ( isset( $_POST['payment_info'] ) && $_POST['payment_info'] == 'paypal' ) || ( ! isset( $_POST['payment_info'] ) ) ) { 
+                if ( ( isset( $_POST['payment_info'] ) && $_POST['payment_info'] == 'paypal' ) || ( ! isset( $_POST['payment_info'] ) ) ) {
                     $result_json['success'] = 1;
 
                     $result_json['result'] = array();
                     $result_json['result']['order_id']   = $order_id;
                     $result_json['result']['booking_no'] = $booking_no;
                     $result_json['result']['pin_code']   = $pin_code;
-                } else if ( isset( $_POST['payment_info'] ) && 'cc' == $_POST['payment_info'] ) { 
+                } else if ( isset( $_POST['payment_info'] ) && 'cc' == $_POST['payment_info'] ) {
                     $payment_process_result = ct_credit_card_paypal_process_payment( $order_info );
 
-                    if ( 1 == $payment_process_result['success'] ) { 
+                    if ( 1 == $payment_process_result['success'] ) {
                         $result_json['success'] = 1;
 
                         $result_json['result'] = array();
                         $result_json['result']['order_id']   = $order_id;
                         $result_json['result']['booking_no'] = $booking_no;
                         $result_json['result']['pin_code']   = $pin_code;
-                    } else { 
+                    } else {
                         $result_json['success']  = 0;
                         $result_json['result']   = $payment_process_result['errormsg'];
                         $result_json['order_id'] = $order_id;
@@ -252,18 +252,18 @@ if ( ! function_exists( 'ct_tour_submit_booking' ) ) {
                 $result_json['success'] = 0;
                 $result_json['result']  = esc_html__( 'Sorry, An error occurred while add your order.', 'citytours' );
             }
-        } else if ( isset( $_POST['order_id'] ) && ! empty( $_POST['order_id'] ) && isset( $_POST['payment_info'] ) && 'cc' == $_POST['payment_info'] ) { 
+        } else if ( isset( $_POST['order_id'] ) && ! empty( $_POST['order_id'] ) && isset( $_POST['payment_info'] ) && 'cc' == $_POST['payment_info'] ) {
             $order                  = new CT_Hotel_Order( $_POST['order_id'] );
             $order_info             = $order->get_order_info();
             $payment_process_result = ct_credit_card_paypal_process_payment( $order_info );
 
-            if ( 1 == $payment_process_result['success'] ) { 
+            if ( 1 == $payment_process_result['success'] ) {
                 $result_json['success'] = 1;
                 $result_json['result'] = array();
                 $result_json['result']['order_id']   = $order->order_id;
                 $result_json['result']['booking_no'] = $booking_no;
                 $result_json['result']['pin_code']   = $pin_code;
-            } else { 
+            } else {
                 $result_json['success']  = 0;
                 $result_json['result']   = $payment_process_result['errormsg'];
                 $result_json['order_id'] = $order->order_id;
@@ -277,8 +277,8 @@ if ( ! function_exists( 'ct_tour_submit_booking' ) ) {
 /*
  * Add Tour product to WooCommerce Cart
  */
-if ( ! function_exists( 'ct_add_tour_to_woo_cart' ) ) { 
-    function ct_add_tour_to_woo_cart() { 
+if ( ! function_exists( 'ct_add_tour_to_woo_cart' ) ) {
+    function ct_add_tour_to_woo_cart() {
         if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( $_POST['_wpnonce'], 'tour_update_cart' ) ) {
             print esc_html__( 'Sorry, your nonce did not verify.', 'citytours' );
             exit;
@@ -289,12 +289,12 @@ if ( ! function_exists( 'ct_add_tour_to_woo_cart' ) ) {
         $tour_date = $_POST['date'];
         $uid = $tour_id . $tour_date;
 
-        $tour_product_id = ct_create_tour_product( $tour_id, $uid ); 
+        $tour_product_id = ct_create_tour_product( $tour_id, $uid );
 
-        if ( ! $tour_product_id || is_wp_error( $tour_product_id ) ) { 
-            wp_send_json( array( 
-                'success' => 0, 
-                'message' => __( 'Can not add Tour to Cart. Please try again later', 'citytours' ) 
+        if ( ! $tour_product_id || is_wp_error( $tour_product_id ) ) {
+            wp_send_json( array(
+                'success' => 0,
+                'message' => __( 'Can not add Tour to Cart. Please try again later', 'citytours' )
             ) );
         }
 
@@ -313,13 +313,13 @@ if ( ! function_exists( 'ct_add_tour_to_woo_cart' ) ) {
             }
         }
 
-        if ( ! $in_cart ) { 
+        if ( ! $in_cart ) {
             WC()->cart->add_to_cart( $tour_product_id );
         }
 
-        wp_send_json( array( 
-            'success' => 1, 
-            'message' => 'success' 
+        wp_send_json( array(
+            'success' => 1,
+            'message' => 'success'
         ) );
     }
 }
@@ -327,8 +327,8 @@ if ( ! function_exists( 'ct_add_tour_to_woo_cart' ) ) {
 /*
  * Create product for selected Tour
  */
-if ( ! function_exists( 'ct_create_tour_product' ) ) { 
-    function ct_create_tour_product( $tour_id, $uid ) { 
+if ( ! function_exists( 'ct_create_tour_product' ) ) {
+    function ct_create_tour_product( $tour_id, $uid ) {
         $deposit_rate = get_post_meta( $tour_id, '_tour_security_deposit', true );
         $deposit_rate = empty( $deposit_rate ) ? 0 : $deposit_rate;
 
@@ -343,7 +343,7 @@ if ( ! function_exists( 'ct_create_tour_product' ) ) {
         //Create Hotel Product
         $tour_product_id = wp_insert_post( $tour_product );
 
-        if( $tour_product_id ) { 
+        if( $tour_product_id ) {
             $attach_id = get_post_meta( $tour_id, "_thumbnail_id", true );
             update_post_meta( $tour_product_id, '_thumbnail_id', $attach_id );
 
@@ -380,7 +380,7 @@ if ( ! function_exists( 'ct_create_tour_product' ) ) {
 
             update_post_meta( $tour_product_id, '_ct_booking_info', $booking_info );
 
-            wcontravel_coupons_dynamic( $tour_id, $tour_product_id );
+            // wcontravel_coupons_dynamic( $tour_id, $tour_product_id );
 
             $add_service = array();
             foreach ( $cart_info['add_service'] as $service_id => $service_info ) {
