@@ -6,6 +6,8 @@ add_action( 'init', 'ot_ctb_init' );
  */
 function ot_ctb_init() {
 	add_action( 'woocommerce_add_cart_item_data', 'ot_add_discount_category', 10, 3 );
+	add_action( 'save_post', 'ot_set_coupon_string_translation', 10, 3 );
+	add_filter( 'woocommerce_cart_totals_coupon_label', 'ot_cart_totals_smart_coupons_label', 10, 2 );
 }
 
 /**
@@ -58,4 +60,43 @@ function ot_add_discount_category( $cart_item_data, $product_id, $variation_id )
 	}
 
 	return $cart_item_data;
+}
+
+/**
+ * Set coupon translation.
+ *
+ * @param int     $post_id Post ID.
+ * @param WP_Post $post    Post object.
+ * @param bool    $update  Whether this is an existing post being updated.
+ */
+function ot_set_coupon_string_translation( $post_id, $post, $update ) {
+	// Only set for Coupons.
+	if ( 'shop_coupon' !== $post->post_type ) {
+		return;
+	}
+
+	if ( function_exists ( 'icl_register_string' ) ) {
+		icl_register_string( 'citytours', '', $post->post_title );
+	}
+}
+
+/**
+ * Add smart_coupons translated label in cart total
+ *
+ * @param string    $default_label Default label.
+ * @param WC_Coupon $coupon The coupon object.
+ * @return string   $new_label
+ */
+function ot_cart_totals_smart_coupons_label( $default_label = '', $coupon = null ) {
+	if ( empty( $coupon ) ) {
+		return $default_label;
+	}
+
+	$discount_type = ( ! empty( $coupon->discount_type ) ) ? $coupon->discount_type : '';
+
+	if ( 'percent' === $discount_type && ! empty( $coupon->code ) ) {
+		$default_label = __( esc_html( get_the_title( $coupon->id ) ), 'citytours' );
+	}
+
+	return $default_label;
 }
