@@ -380,8 +380,6 @@ if ( ! function_exists( 'ct_create_tour_product' ) ) {
 
             update_post_meta( $tour_product_id, '_ct_booking_info', $booking_info );
 
-            // wcontravel_coupons_dynamic( $tour_id, $tour_product_id );
-
             $add_service = array();
             foreach ( $cart_info['add_service'] as $service_id => $service_info ) {
                 $temp = array();

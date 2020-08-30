@@ -9,7 +9,7 @@ function ot_ctb_init() {
 }
 
 /**
- * Add discount category for tours with discount
+ * Add discount category for the tours that have a discount set.
  *
  * @param array $cart_item_data Cart item data.
  * @param int   $product_id     Product id.
@@ -20,22 +20,39 @@ function ot_ctb_init() {
 function ot_add_discount_category( $cart_item_data, $product_id, $variation_id ) {
 	$cats = wp_get_post_terms( $product_id, 'product_cat', array( 'fields' => 'slugs' ) );
 
-	// Is it a tour?
-	if ( in_array( 'tour', $cats, true ) && ! in_array( 'with-discount-10', $cats, true ) ) {
-		$meta = get_post_meta( $product_id, '_ct_booking_info', true );
+	// Isn't it a tour product?
+	if ( ! in_array( 'tour', $cats, true ) ) {
+		return $cart_item_data;
+	}
 
-		if ( isset( $meta['tour_id'] ) ) {
-			$tour_meta     = get_post_meta( $meta['tour_id'] );
-			$tour_hot      = $tour_meta['_tour_hot'];
-			$tour_discount = $tour_meta['_tour_discount_rate'];
+	// Get tour_id in booking_info.
+	$meta = get_post_meta( $product_id, '_ct_booking_info', true );
 
-			if ( $tour_hot[0] && 10 === (int) $tour_discount[0] ) {
-				$discount_cat = get_term_by( 'slug', 'with-discount-10', 'product_cat' );
+	if ( ! isset( $meta['tour_id'] ) ) {
+		return $cart_item_data;
+	}
 
-				if ( $discount_cat ) {
-					// Add discount category.
-					wp_set_post_terms( $product_id, $discount_cat->term_id, 'product_cat', true );
-				}
+	// Get tour meta.
+	$tour_meta = get_post_meta( $meta['tour_id'] );
+
+	if ( isset( $tour_meta['_tour_hot'] ) && isset( $tour_meta['_tour_discount_rate'] ) ) {
+		$tour_hot      = $tour_meta['_tour_hot'][0];
+		$tour_discount = (int) $tour_meta['_tour_discount_rate'][0];
+
+		// Is tour discount set?
+		if ( $tour_hot && 0 < $tour_discount ) {
+			$cat_slug = 'with-discount-' . $tour_discount;
+
+			// Does the tour already have the discount category?
+			if ( in_array( $cat_slug, $cats, true ) ) {
+				return $cart_item_data;
+			}
+
+			$discount_cat = get_term_by( 'slug', $cat_slug, 'product_cat' );
+
+			if ( $discount_cat ) {
+				// Add discount category.
+				wp_set_post_terms( $product_id, $discount_cat->term_id, 'product_cat', true );
 			}
 		}
 	}
