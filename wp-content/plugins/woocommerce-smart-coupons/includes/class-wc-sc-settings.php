@@ -243,11 +243,9 @@ if ( ! class_exists( 'WC_SC_Settings' ) ) {
 						coupon_style_element.select2( options );
 					};
 
-					jQuery(document).ready(function(){
-						wc_sc_initialize_code_mirror();
-						wc_sc_reload_coupon_design();
-						wc_sc_reload_coupon_preview();
-					});
+					wc_sc_initialize_code_mirror();
+					wc_sc_reload_coupon_design();
+					wc_sc_reload_coupon_preview();
 
 					jQuery('#wc_sc_setting_coupon_background_color, #wc_sc_setting_coupon_foreground_color').on('change keyup irischange', function(){
 						wc_sc_reload_coupon_design();
@@ -525,7 +523,7 @@ if ( ! class_exists( 'WC_SC_Settings' ) ) {
 					'id'          => 'smart_coupon_store_gift_page_text',
 					'type'        => 'text',
 					'desc_tip'    => __( 'When you opt to allow people to buy store credits of any amount, this label will be used.', 'woocommerce-smart-coupons' ),
-					'placeholder' => __( 'Voucher Amount', 'woocommerce-smart-coupons' ),
+					'placeholder' => __( 'Purchase credit worth', 'woocommerce-smart-coupons' ),
 					'css'         => 'min-width:300px;',
 					'autoload'    => false,
 				),
@@ -584,7 +582,7 @@ if ( ! class_exists( 'WC_SC_Settings' ) ) {
 					'id'          => 'smart_coupon_gift_certificate_form_page_text',
 					'type'        => 'text',
 					'desc_tip'    => __( 'The title for coupon receiver details block.', 'woocommerce-smart-coupons' ),
-					'placeholder' => __( 'Send voucher to...', 'woocommerce-smart-coupons' ),
+					'placeholder' => __( 'Send Coupons to...', 'woocommerce-smart-coupons' ),
 					'css'         => 'min-width:300px;',
 					'autoload'    => false,
 				),

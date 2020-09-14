@@ -12,9 +12,6 @@
         "autoptimize": {
             "version": "*"
         },
-        "classic-editor": {
-            "version": "*"
-        },
         "cookie-notice": {
             "version": "*"
         },
@@ -23,9 +20,6 @@
         },
         "disable-dashboard-for-woocommerce": {
             "version": "*"
-        },
-        "enable-jquery-migrate-helper": {
-            "version": "1.0.1"
         },
         "font-awesome": {
             "version": "*"
