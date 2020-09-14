@@ -1,43 +1,56 @@
 <?php
 /**
- * Chauffeur Booking System
+ * Car Rental Booking System
  *
  * Overriding the 5th step of the booking wizard. Instead of doing the checkout,
- * it will add the rental car items to the cart and create a CHBS booking draft.
+ * it will add the rental car items to the cart and create a CRBS booking draft.
  *
- * @package ChauffeurBookingSystem
+ * @package CarRentalBookingSystem
  */
 
-if ( ! define( 'PLUGIN_CHBS_CONTEXT' ) ) {
-	define( 'PLUGIN_CHBS_CONTEXT', 'chbs' );
+if ( ! define( 'PLUGIN_CRBS_CONTEXT' ) ) {
+	define( 'PLUGIN_CRBS_CONTEXT', 'crbs' );
 }
 
-add_action( 'init', 'ot_chbs_init' );
+add_action( 'init', 'ot_crbs_init' );
 
 /**
- * Initial setup.
+ * Add Temp Product product's category, and add actions and filters.
  */
-function ot_chbs_init() {
-	add_action( 'wp_ajax_' . PLUGIN_CHBS_CONTEXT . '_go_to_step', 'ot_chbs_go_to_step', 1, 0 );
-	add_action( 'wp_ajax_nopriv_' . PLUGIN_CHBS_CONTEXT . '_go_to_step', 'ot_chbs_go_to_step', 1, 0 );
+function ot_crbs_init() {
+	if ( ! term_exists( 'ot-temp-product', 'product_cat' ) ) {
+		// Add new category for temp rental services (in cart).
+		wp_insert_term(
+			'Temp Product',
+			'product_cat',
+			array(
+				'description' => 'Temporary products that are created for the cart',
+				'slug'        => 'ot-temp-product',
+			)
+		);
+	}
 
-	add_filter( 'woocommerce_get_item_data', 'ot_chbs_wc_get_item_data', 10, 2 );
-	add_action( 'woocommerce_checkout_create_order_line_item', 'ot_chbs_wc_checkout_create_order_line_item', 20, 4 );
-	add_filter( 'woocommerce_cart_item_permalink', 'ot_chbs_wc_cart_item_permalink', 10, 3 );
+	add_action( 'wp_ajax_' . PLUGIN_CRBS_CONTEXT . '_go_to_step', 'ot_crbs_go_to_step', 1, 0 );
+	add_action( 'wp_ajax_nopriv_' . PLUGIN_CRBS_CONTEXT . '_go_to_step', 'ot_crbs_go_to_step', 1, 0 );
 
-	add_action( 'wp_footer', 'ot_chbs_remove_fields' );
+	add_action( 'woocommerce_cart_item_removed', 'ot_wc_cart_item_removed', 10, 2 );
+	add_filter( 'woocommerce_get_item_data', 'ot_crbs_wc_get_item_data', 10, 2 );
+	add_action( 'woocommerce_checkout_create_order_line_item', 'ot_crbs_wc_checkout_create_order_line_item', 20, 4 );
+	add_filter( 'woocommerce_cart_item_permalink', 'ot_crbs_wc_cart_item_permalink', 10, 3 );
+
+	add_action( 'wp_footer', 'ot_crbs_remove_form' );
 }
 
 /**
- * Workaround to override the step 5 of CHBS reservation wizard, in order to
+ * Workaround to override the step 5 of CRBS reservation wizard, in order to
  * add the bookings' items to the chart before doing the checkout manually.
  */
-function ot_chbs_go_to_step() {
-	if ( class_exists( 'CHBSHelper' ) && class_exists( 'CHBSBooking' ) ) {
-		$booking_form = new CHBSBookingForm();
+function ot_crbs_go_to_step() {
+	if ( class_exists( 'CRBSHelper' ) && class_exists( 'CRBSBooking' ) ) {
+		$booking_form = new CRBSBookingForm();
 		$booking_form->init();
 
-		$data = CHBSHelper::getPostOption();
+		$data = CRBSHelper::getPostOption();
 
 		if ( 5 == $data['step_request'] && 4 == $data['step'] ) {
 			$response = array();
@@ -47,13 +60,13 @@ function ot_chbs_go_to_step() {
 			if ( ! is_array( $form ) ) {
 				if ( -3 === $form ) {
 					$response['step'] = 1;
-					CHBSBooking::setErrorGlobal( $response, __( 'Cannot find at least one vehicle available in selected time period.', 'chauffeur-booking-system' ) );
-					CHBSBooking::createFormResponse( $response );
+					CRBSBooking::setErrorGlobal( $response, __( 'Cannot find at least one vehicle available in selected time period.', 'car-rental-booking-system' ) );
+					CRBSHelper::createJSONResponse( $response );
 				}
 			}
 
-			$booking      = new CHBSBooking();
-			$woo_commerce = new CHBSWooCommerce();
+			$booking      = new CRBSBooking();
+			$woo_commerce = new CRBSWooCommerce();
 
 			if ( $woo_commerce->isEnable( $form['meta'] ) ) {
 				$booking_id = $booking->sendBooking( $data, $form );
@@ -62,43 +75,25 @@ function ot_chbs_go_to_step() {
 				$term = get_term_by( 'slug', 'ot-temp-product', 'product_cat' );
 
 				if ( ! empty( $booking_id ) ) {
-					$product_name = 'Transfer - ' . get_the_title( $data['vehicle_id'] );
+					$product_name = get_the_title( $data['vehicle_id'] );
 					$image_id     = get_post_meta( $data['vehicle_id'], '_thumbnail_id', true );
 
 					$billing = $booking->createBilling( $booking_id );
 
-					$products_details = array(
-						array(
-							'name'        => $product_name,
-							'value_gross' => 0,
-							'tax_value'   => 0,
-							'value_net'   => 0,
-						),
-					);
-
 					foreach ( $billing['detail'] as $detail ) {
-						if ( 'initial_fee' === $detail['type'] || 'chauffeur_service' === $detail['type'] || 'chauffeur_service_return' === $detail['type'] ) {
-							$products_details[0]['value_gross'] += floatval( $detail['value_gross'] );
-							$products_details[0]['tax_value']   += floatval( $detail['tax_value'] );
-							$products_details[0]['value_net']   += floatval( $detail['value_net'] );
+						if ( 'rental_per_day' === $detail['type'] ) {
+							$name = $product_name;
 						} else {
-							$products_details[] = array(
-								'name'        => 'Extra: ' . $detail['name'],
-								'value_gross' => floatval( $detail['value_gross'] ),
-								'tax_value'   => floatval( $detail['tax_value'] ),
-								'value_net'   => floatval( $detail['value_net'] ),
-							);
+							$name = 'Extra: ' . $detail['name'];
 						}
-					}
 
-					foreach ( $products_details as $detail ) {
 						$product = $woo_commerce->prepareProduct(
 							array(
-								'post' => array( 'post_title' => $detail['name'] ),
+								'post' => array( 'post_title' => $name ),
 								'meta' => array(
-									'chbs_booking_id'  => $booking_id,
-									'chbs_price_gross' => $detail['value_gross'],
-									'chbs_tax_value'   => $detail['tax_value'],
+									'crbs_booking_id'  => $booking_id,
+									'crbs_price_gross' => $detail['value_gross'],
+									'crbs_tax_value'   => $detail['tax_value'],
 									'_regular_price'   => $detail['value_net'],
 									'_sale_price'      => $detail['value_net'],
 									'_price'           => $detail['value_net'],
@@ -143,121 +138,97 @@ function ot_chbs_go_to_step() {
 
 			$response['summary'] = array( null, null, null );
 
-			CHBSHelper::createJSONResponse( $response );
+			CRBSHelper::createJSONResponse( $response );
 		}
 	}
 }
 
 /**
- * Add extra data to chauffeur service item in cart
+ * Remove temporary product after its item being removed from cart.
+ *
+ * @param String  $cart_item_key The cart item key.
+ * @param Objbect $cart          The cart instance.
+ */
+function ot_wc_cart_item_removed( $cart_item_key, $cart ) {
+	$line_item  = $cart->removed_cart_contents[ $cart_item_key ];
+	$product_id = $line_item['product_id'];
+
+	if ( isset( $product_id ) && has_term( 'ot-temp-product', 'product_cat', $product_id ) ) {
+		wp_delete_post( $product_id );
+	}
+};
+
+/**
+ * Add extra data to rental booking item in cart
  * (pick up and drop off data).
  *
  * @param Array $item_data The item data.
  * @param Array $cart_item The cart item.
  */
-function ot_chbs_wc_get_item_data( $item_data, $cart_item ) {
+function ot_crbs_wc_get_item_data( $item_data, $cart_item ) {
 	$product_id = $cart_item['product_id'];
 
-	// CHBS booking.
-	$booking_id = get_post_meta( $product_id, 'chbs_booking_id', true );
+	// CRBS booking.
+	$booking_id = get_post_meta( $product_id, 'crbs_booking_id', true );
 
-	if ( ! empty( $booking_id ) && strpos( $cart_item['data']->get_name(), 'Extra' ) === false ) {
-		$pickup_date = get_post_meta( $booking_id, 'chbs_pickup_date', true );
-		$pickup_time = get_post_meta( $booking_id, 'chbs_pickup_time', true );
+	if ( ! empty( $booking_id ) ) {
+		$pickup_date = get_post_meta( $booking_id, 'crbs_pickup_datetime', true );
 		$item_data[] = array(
 			'name'  => __( 'Pick Up Date', 'citytours' ),
-			'value' => $pickup_date . ' ' . $pickup_time,
+			'value' => $pickup_date,
 		);
 
-		$coordinate = get_post_meta( $booking_id, 'chbs_coordinate', true );
+		$pickup_loc  = get_post_meta( $booking_id, 'crbs_pickup_location_name', true );
+		$item_data[] = array(
+			'name'  => __( 'Pick Up Location', 'citytours' ),
+			'value' => $pickup_loc,
+		);
 
-		foreach ( $coordinate as $key => $value ) {
-			if ( $value ) {
-				if ( 0 == $key ) {
-					$name = __( 'Pick Up Location', 'citytours' );
-				} elseif ( count( $coordinate ) - 1 == $key ) {
-					$name = __( 'Drop Off Location', 'citytours' );
-				} else {
-					$name = __( 'Waypoint', 'citytours' );
-				}
+		$return_date = get_post_meta( $booking_id, 'crbs_return_date', true );
+		$return_time = get_post_meta( $booking_id, 'crbs_return_time', true );
+		$item_data[] = array(
+			'name'  => __( 'Drop Off Date', 'citytours' ),
+			'value' => $return_date . ' ' . $return_time,
+		);
 
-				$item_data[] = array(
-					'name'  => $name,
-					'value' => $coordinate[ $key ]['formatted_address'],
-				);
-			}
-		}
-
-		$return_date = get_post_meta( $booking_id, 'chbs_return_date', true );
-		$return_time = get_post_meta( $booking_id, 'chbs_return_time', true );
-
-		if ( $return_date && '00-00-0000' !== $return_date && $return_time ) {
-			$item_data[] = array(
-				'name'  => __( 'Return Date', 'citytours' ),
-				'value' => $return_date . ' ' . $return_time,
-			);
-		}
-
-		$element_field = get_post_meta( $booking_id, 'chbs_form_element_field', true );
-		foreach ( $element_field as $field ) {
-			$item_data[] = array(
-				'name'  => $field['label'],
-				'value' => $field['value'],
-			);
-		}
+		$return_loc  = get_post_meta( $booking_id, 'crbs_return_location_name', true );
+		$item_data[] = array(
+			'name'  => __( 'Drop Off Location', 'citytours' ),
+			'value' => $return_loc,
+		);
 	}
 
 	return $item_data;
 }
 
 /**
- * Add extra data to chauffeur service item on checkout
- * (pick up data).
+ * Add extra data to rental booking item on checkout
+ * (pick up and drop off data).
  *
  * @param Object $item           The item.
  * @param String $cart_item_key  The cart item key.
  * @param Array  $values         The values.
  * @param Array  $order          The order.
  */
-function ot_chbs_wc_checkout_create_order_line_item( $item, $cart_item_key, $values, $order ) {
-	$product    = $values['data'];
+function ot_crbs_wc_checkout_create_order_line_item( $item, $cart_item_key, $values, $order ) {
 	$product_id = $item->get_variation_id() ? $item->get_variation_id() : $item->get_product_id();
 
-	// CHBS booking.
-	$booking_id = get_post_meta( $product_id, 'chbs_booking_id', true );
+	// CRBS booking.
+	$booking_id = get_post_meta( $product_id, 'crbs_booking_id', true );
 
-	if ( ! empty( $booking_id ) && strpos( $product->get_name(), 'Extra' ) === false ) {
-		$pickup_date = get_post_meta( $booking_id, 'chbs_pickup_date', true );
-		$pickup_time = get_post_meta( $booking_id, 'chbs_pickup_time', true );
-		$item->update_meta_data( __( 'Pick Up Date', 'citytours' ), $pickup_date . ' ' . $pickup_time );
+	if ( ! empty( $booking_id ) ) {
+		$pickup_date = get_post_meta( $booking_id, 'crbs_pickup_datetime', true );
+		$item->update_meta_data( __( 'Pick Up Date', 'citytours' ), $pickup_date );
 
-		$coordinate = get_post_meta( $booking_id, 'chbs_coordinate', true );
+		$pickup_loc = get_post_meta( $booking_id, 'crbs_pickup_location_name', true );
+		$item->update_meta_data( __( 'Pick Up Location', 'citytours' ), $pickup_loc );
 
-		foreach ( $coordinate as $key => $value ) {
-			if ( $value ) {
-				if ( 0 == $key ) {
-					$name = __( 'Pick Up Location', 'citytours' );
-				} elseif ( count( $coordinate ) - 1 == $key ) {
-					$name = __( 'Drop Off Location', 'citytours' );
-				} else {
-					$name = __( 'Waypoint', 'citytours' );
-				}
+		$return_date = get_post_meta( $booking_id, 'crbs_return_date', true );
+		$return_time = get_post_meta( $booking_id, 'crbs_return_time', true );
+		$item->update_meta_data( __( 'Drop Off Date', 'citytours' ), $return_date . ' ' . $return_time );
 
-				$item->update_meta_data( $name, $coordinate[ $key ]['formatted_address'] );
-			}
-		}
-
-		$return_date = get_post_meta( $booking_id, 'chbs_return_date', true );
-		$return_time = get_post_meta( $booking_id, 'chbs_return_time', true );
-
-		if ( $return_date && '00-00-0000' !== $return_date && $return_time ) {
-			$item->update_meta_data( __( 'Drop Off Date', 'citytours' ), $return_date . ' ' . $return_time );
-		}
-
-		$element_field = get_post_meta( $booking_id, 'chbs_form_element_field', true );
-		foreach ( $element_field as $field ) {
-			$item->update_meta_data( $field['label'], $field['value'] );
-		}
+		$return_loc = get_post_meta( $booking_id, 'crbs_return_location_name', true );
+		$item->update_meta_data( __( 'Drop Off Location', 'citytours' ), $return_loc );
 	}
 }
 
@@ -268,11 +239,11 @@ function ot_chbs_wc_checkout_create_order_line_item( $item, $cart_item_key, $val
  * @param Array  $cart_item     The cart item.
  * @param String $cart_item_key The cart item key.
  */
-function ot_chbs_wc_cart_item_permalink( $product_get_permalink_cart_item, $cart_item, $cart_item_key ) {
+function ot_crbs_wc_cart_item_permalink( $product_get_permalink_cart_item, $cart_item, $cart_item_key ) {
 	$product_id = $cart_item['product_id'];
 
-	// CHBS booking.
-	$booking_id = get_post_meta( $product_id, 'chbs_booking_id', true );
+	// CRBS booking.
+	$booking_id = get_post_meta( $product_id, 'crbs_booking_id', true );
 
 	if ( ! empty( $booking_id ) ) {
 		return false;
@@ -284,15 +255,15 @@ function ot_chbs_wc_cart_item_permalink( $product_get_permalink_cart_item, $cart
 /**
  * Remove billing form from dom (step 3 in wizard).
  */
-function ot_chbs_remove_fields() {
+function ot_crbs_remove_form() {
 	?>
 	<script type="text/javascript">
 		jQuery( document ).ajaxComplete(function() {
-			var step = jQuery('.chbs-main-content-step-3');
+			var step = jQuery('.crbs-main-content-step-3');
 
 			if (step) {
-				var billing = step.find('[name="chbs_client_billing_detail_enable"]');
-				var comment = step.find('[name="chbs_comment"]');
+				var billing = step.find('[name="crbs_client_billing_detail_enable"]');
+				var comment = step.find('[name="crbs_comment"]');
 
 				if (billing) {
 					billing.val(0);
