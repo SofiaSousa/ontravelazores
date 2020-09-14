@@ -4,7 +4,7 @@
  *
  * @author      StoreApps
  * @since       3.3.0
- * @version     1.1.3
+ * @version     1.1.5
  *
  * @package     woocommerce-smart-coupons/includes/
  */
@@ -111,11 +111,6 @@ if ( ! class_exists( 'WC_SC_Coupon_Fields' ) ) {
 
 			$coupon_share_url = home_url( '/?coupon-code=' . $post->post_title );
 			?>
-			<style type="text/css">
-				#sc-share-link {
-					background-color: #f0fff0;
-				}
-			</style>
 			<h2 style="padding: unset;">
 				<?php
 					echo esc_html__( 'Copy the following link and share it to apply this coupon via URL.', 'woocommerce-smart-coupons' );
@@ -125,7 +120,7 @@ if ( ! class_exists( 'WC_SC_Coupon_Fields' ) ) {
 				<textarea id="coupon-link" readonly="readonly" rows="1" cols="25"><?php echo esc_html( $coupon_share_url ); ?></textarea>
 				<br><br>
 				<div class="copy-button" style="float: right;">
-					<button class="button button-primary sc-click-to-copy-btn" id="sc-click-to-copy-btn" onclick="sc_copy_coupon_link_to_clipboard()" data-clipboard-action="copy" data-clipboard-target="#coupon-link"><?php echo esc_html__( 'Click to copy', 'woocommerce-smart-coupons' ); ?></button>
+					<a class="button button-primary sc-click-to-copy-btn" id="sc-click-to-copy-btn" onclick="sc_copy_coupon_link_to_clipboard()" data-clipboard-action="copy" data-clipboard-target="#coupon-link"><?php echo esc_html__( 'Click to copy', 'woocommerce-smart-coupons' ); ?></a>
 				</div>
 				<br><br>
 				<div class="sc-multiple-coupons">
@@ -156,18 +151,6 @@ if ( ! class_exists( 'WC_SC_Coupon_Fields' ) ) {
 			}
 
 			?>
-			<style type="text/css">
-				.smart-coupons-field {
-					background-color: #f0fff0;
-				}
-				.coupon_title_prefix_suffix_field input {
-					height: 2em;
-				}
-				li.wc_sc_actions_tab a::before {
-					font-family: WooCommerce !important;
-					content: '\e01c' !important;
-				}
-			</style>
 			<script type="text/javascript">
 				jQuery(function(){
 					var customerEmails;
@@ -242,35 +225,33 @@ if ( ! class_exists( 'WC_SC_Coupon_Fields' ) ) {
 					});
 
 					<?php if ( $this->is_wc_gte_32() ) { ?>
-						jQuery(document).ready(function(){
-								let wc_sc_expiry_time = parseInt( jQuery('#wc_sc_expiry_time').val() );
-								let expiry_time_string = '';
-								if( Number.isInteger( wc_sc_expiry_time ) ) {
-									let expiry_minutes = wc_sc_expiry_time / 60; // Expiry time is stored in seconds.
-									let expiry_hours = Math.floor( expiry_minutes / 60 ); // Get total hours from total seconds.
-									expiry_minutes = expiry_minutes % 60; // Get remaining minutes after removing hours from total seconds.
-									expiry_hours = expiry_hours < 10 ? '0' + expiry_hours : expiry_hours; // Add leading zero to hours to avoid timepicker time not preselected issue when hours < 10.
-									expiry_minutes = expiry_minutes < 10 ? '0' + expiry_minutes : expiry_minutes; // Add leading zero to minutes to avoid timepicker time not preselected issue when minutes < 10.
-									expiry_time_string = expiry_hours + ':' + expiry_minutes;
-								}
+					let wc_sc_expiry_time = parseInt( jQuery('#wc_sc_expiry_time').val() );
+					let expiry_time_string = '';
+					if( Number.isInteger( wc_sc_expiry_time ) ) {
+						let expiry_minutes = wc_sc_expiry_time / 60; // Expiry time is stored in seconds.
+						let expiry_hours = Math.floor( expiry_minutes / 60 ); // Get total hours from total seconds.
+						expiry_minutes = expiry_minutes % 60; // Get remaining minutes after removing hours from total seconds.
+						expiry_hours = expiry_hours < 10 ? '0' + expiry_hours : expiry_hours; // Add leading zero to hours to avoid timepicker time not preselected issue when hours < 10.
+						expiry_minutes = expiry_minutes < 10 ? '0' + expiry_minutes : expiry_minutes; // Add leading zero to minutes to avoid timepicker time not preselected issue when minutes < 10.
+						expiry_time_string = expiry_hours + ':' + expiry_minutes;
+					}
 
-								jQuery('#wc_sc_expiry_time_picker').timepicker({
-									timeInput: true,
-								}).val(expiry_time_string);
+					jQuery('#wc_sc_expiry_time_picker').timepicker({
+						timeInput: true,
+					}).val(expiry_time_string);
 
-								jQuery('#wc_sc_expiry_time_picker').on('change', function(){
-									let expiry_time = jQuery(this).val();
-									if( expiry_time !== '' && expiry_time.indexOf(':') > 0 ) {
-										expiry_time = expiry_time.split(':');
-										let expiry_hours = parseInt( expiry_time[0] );
-										let expiry_minutes = parseInt( expiry_time[1] );
-										if( Number.isInteger( expiry_hours ) && Number.isInteger( expiry_minutes ) ) {
-											expiry_time = expiry_hours * 60 * 60 + expiry_minutes * 60;
-										}
-									}
-									jQuery('#wc_sc_expiry_time').val( expiry_time );
-								});
-						});
+					jQuery('#wc_sc_expiry_time_picker').on('change', function(){
+						let expiry_time = jQuery(this).val();
+						if( expiry_time !== '' && expiry_time.indexOf(':') > 0 ) {
+							expiry_time = expiry_time.split(':');
+							let expiry_hours = parseInt( expiry_time[0] );
+							let expiry_minutes = parseInt( expiry_time[1] );
+							if( Number.isInteger( expiry_hours ) && Number.isInteger( expiry_minutes ) ) {
+								expiry_time = expiry_hours * 60 * 60 + expiry_minutes * 60;
+							}
+						}
+						jQuery('#wc_sc_expiry_time').val( expiry_time );
+					});
 					<?php } ?>
 				});
 			</script>
@@ -305,7 +286,7 @@ if ( ! class_exists( 'WC_SC_Coupon_Fields' ) ) {
 						'id'                => 'wc_sc_max_discount',
 						'label'             => __( 'Max discount', 'woocommerce-smart-coupons' ),
 						'placeholder'       => esc_attr__( 'Unlimited discount', 'woocommerce-smart-coupons' ),
-						'description'       => __( 'The maximum discount this coupon can give.', 'woocommerce-smart-coupons' ),
+						'description'       => __( 'The maximum discount this coupon can give on a cart.', 'woocommerce-smart-coupons' ),
 						'type'              => 'number',
 						'desc_tip'          => true,
 						'custom_attributes' => array(

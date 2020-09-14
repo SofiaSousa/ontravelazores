@@ -75,7 +75,7 @@ function ot_set_coupon_string_translation( $post_id, $post, $update ) {
 		return;
 	}
 
-	if ( function_exists ( 'icl_register_string' ) ) {
+	if ( function_exists( 'icl_register_string' ) ) {
 		icl_register_string( 'citytours', '', $post->post_title );
 	}
 }
@@ -85,7 +85,8 @@ function ot_set_coupon_string_translation( $post_id, $post, $update ) {
  *
  * @param string    $default_label Default label.
  * @param WC_Coupon $coupon The coupon object.
- * @return string   $new_label
+ *
+ * @return string
  */
 function ot_cart_totals_smart_coupons_label( $default_label = '', $coupon = null ) {
 	if ( empty( $coupon ) ) {

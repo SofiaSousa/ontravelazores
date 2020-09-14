@@ -4,7 +4,7 @@
  *
  * @author      StoreApps
  * @since       3.3.0
- * @version     1.1.6
+ * @version     1.1.7
  *
  * @package     woocommerce-smart-coupons/includes/
  */
@@ -171,14 +171,12 @@ if ( ! class_exists( 'WC_SC_Purchase_Credit' ) ) {
 							});
 
 							// To handle, if the call for credit form is included twice.
-							jQuery(document).ready(function(){
-								jQuery.each( jQuery('body').find('div#call_for_credit'), function(){
-									let current_element = jQuery(this);
-									let is_visible = current_element.is(':visible');
-									if ( false === is_visible ) {
-										current_element.remove();
-									}
-								});
+							jQuery.each( jQuery('body').find('div#call_for_credit'), function(){
+								let current_element = jQuery(this);
+								let is_visible = current_element.is(':visible');
+								if ( false === is_visible ) {
+									current_element.remove();
+								}
 							});
 
 						";
@@ -192,7 +190,7 @@ if ( ! class_exists( 'WC_SC_Purchase_Credit' ) ) {
 				$smart_coupon_store_gift_page_text = get_option( 'smart_coupon_store_gift_page_text' );
 
 				/* translators: %s: singular name for store credit */
-				$smart_coupon_store_gift_page_text = ( ! empty( $smart_coupon_store_gift_page_text ) ) ? $smart_coupon_store_gift_page_text . ' ' : ( ! empty( $store_credit_label['singular'] ) ? sprintf( __( 'Purchase %s worth', 'woocommerce-smart-coupons' ), ucwords( $store_credit_label['singular'] ) ) : __( 'Voucher Amount', 'woocommerce-smart-coupons' ) ) . ' ';
+				$smart_coupon_store_gift_page_text = ( ! empty( $smart_coupon_store_gift_page_text ) ) ? $smart_coupon_store_gift_page_text . ' ' : ( ! empty( $store_credit_label['singular'] ) ? sprintf( __( 'Purchase %s worth', 'woocommerce-smart-coupons' ), ucwords( $store_credit_label['singular'] ) ) : __( 'Purchase credit worth', 'woocommerce-smart-coupons' ) ) . ' ';
 
 				$custom_classes = array(
 					'container' => '',
@@ -629,7 +627,7 @@ if ( ! class_exists( 'WC_SC_Purchase_Credit' ) ) {
 
 						$pick_price_of_prod                              = get_post_meta( $coupon_id, 'is_pick_price_of_product', true );
 						$smart_coupon_gift_certificate_form_page_text    = get_option( 'smart_coupon_gift_certificate_form_page_text' );
-						$smart_coupon_gift_certificate_form_page_text    = ( ! empty( $smart_coupon_gift_certificate_form_page_text ) ) ? $smart_coupon_gift_certificate_form_page_text : __( 'Send gift voucher to...', 'woocommerce-smart-coupons' );
+						$smart_coupon_gift_certificate_form_page_text    = ( ! empty( $smart_coupon_gift_certificate_form_page_text ) ) ? $smart_coupon_gift_certificate_form_page_text : __( 'Send Coupons to...', 'woocommerce-smart-coupons' );
 						$smart_coupon_gift_certificate_form_details_text = get_option( 'smart_coupon_gift_certificate_form_details_text' );
 						$smart_coupon_gift_certificate_form_details_text = ( ! empty( $smart_coupon_gift_certificate_form_details_text ) ) ? $smart_coupon_gift_certificate_form_details_text : '';     // Enter email address and optional message for Gift Card receiver.
 
@@ -641,7 +639,7 @@ if ( ! class_exists( 'WC_SC_Purchase_Credit' ) ) {
 								if ( 'no' === $is_show_coupon_receiver_form ) {
 									?>
 									<div class="gift-certificate sc_info_box">
-										<p><?php echo esc_html__( 'Your order contains vouchers. You will receive them after completion of this order.', 'woocommerce-smart-coupons' ); ?></p>
+										<p><?php echo esc_html__( 'Your order contains coupons. You will receive them after completion of this order.', 'woocommerce-smart-coupons' ); ?></p>
 									</div>
 									<?php
 								}
@@ -652,7 +650,7 @@ if ( ! class_exists( 'WC_SC_Purchase_Credit' ) ) {
 										<p><?php echo esc_html( stripslashes( $smart_coupon_gift_certificate_form_details_text ) ); ?></p>
 										<?php } ?>
 										<div class="gift-certificate-show-form">
-											<p><?php echo esc_html__( 'Your order contains vouchers. What would you like to do?', 'woocommerce-smart-coupons' ); ?></p>
+											<p><?php echo esc_html__( 'Your order contains coupons. What would you like to do?', 'woocommerce-smart-coupons' ); ?></p>
 											<ul class="show_hide_list" style="list-style-type: none;">
 												<li><input type="radio" id="hide_form" name="is_gift" value="no" checked="checked" /> <label for="hide_form"><?php echo esc_html__( 'Send to me', 'woocommerce-smart-coupons' ); ?></label></li>
 												<li>
@@ -663,7 +661,7 @@ if ( ! class_exists( 'WC_SC_Purchase_Credit' ) ) {
 												</ul>
 												<?php if ( 'yes' === $schedule_store_credit ) { ?>
 													<li class="wc_sc_schedule_gift_sending_wrapper">
-														<?php echo esc_html__( 'Deliver gift voucher', 'woocommerce-smart-coupons' ); ?>
+														<?php echo esc_html__( 'Deliver coupon', 'woocommerce-smart-coupons' ); ?>
 														<label class="wc-sc-toggle-check">
 															<input type="checkbox" class="wc-sc-toggle-check-input" id="wc_sc_schedule_gift_sending" name="wc_sc_schedule_gift_sending" value="yes" />
 															<span class="wc-sc-toggle-check-text"></span>
@@ -839,15 +837,11 @@ if ( ! class_exists( 'WC_SC_Purchase_Credit' ) ) {
 
 			foreach ( $order_items as $item_id => $order_item ) {
 
-				if ( $this->is_wc_gte_30() ) {
-					$item_sc_called_credit = ( is_object( $order_item ) && is_callable( array( $order_item, 'get_meta' ) ) ) ? $order_item->get_meta( 'sc_called_credit' ) : array();
-				} else {
-					$item_sc_called_credit = ( ! empty( $order_item['sc_called_credit'] ) ) ? $order_item['sc_called_credit'] : 0;
-				}
+				$item_sc_called_credit = ( is_object( $order_item ) && is_callable( array( $order_item, 'get_meta' ) ) ) ? $order_item->get_meta( 'sc_called_credit' ) : ( ( ! empty( $order_item['sc_called_credit'] ) ) ? $order_item['sc_called_credit'] : 0 );
 
 				if ( ! empty( $item_sc_called_credit ) ) {
 
-					$product = $order->get_product_from_item( $order_item );
+					$product = ( is_object( $order_item ) && is_callable( array( $order_item, 'get_product' ) ) ) ? $order_item->get_product() : $order->get_product_from_item( $order_item );
 
 					if ( ! is_object( $product ) ) {
 						continue;
@@ -861,7 +855,7 @@ if ( ! class_exists( 'WC_SC_Purchase_Credit' ) ) {
 					} else {
 						$product_id = ( ! empty( $product->id ) ) ? $product->id : 0;
 						$item_qty   = ( ! empty( $order_item['qty'] ) ) ? $order_item['qty'] : 1;
-						$item_tax   = ( ! empty( $order_item['line_tax'] ) ) ? $order_item['line_tax'] : 0;
+						$item_tax   = ( ! empty( $order_item['line_subtotal_tax'] ) ) ? $order_item['line_subtotal_tax'] : 0;
 					}
 
 					if ( true === $prices_include_tax && ! $this->is_generated_store_credit_includes_tax() ) {

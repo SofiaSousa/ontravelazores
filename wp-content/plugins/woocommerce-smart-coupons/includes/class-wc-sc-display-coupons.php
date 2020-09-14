@@ -1104,18 +1104,14 @@ if ( ! class_exists( 'WC_SC_Display_Coupons' ) ) {
 						jQuery('#sc_coupons_list').hide();
 					}
 
-					jQuery( document ).ready(function() {
-						if( jQuery('div#all_coupon_container').children().length == 0 ) {
-							jQuery('#coupons_list').hide();
-						}
-					});
+					if( jQuery('div#all_coupon_container').children().length == 0 ) {
+						jQuery('#coupons_list').hide();
+					}
 
-					jQuery( document ).ready(function() {
-						if( jQuery('div.woocommerce-MyAccount-content').children().length == 0 ) {
-							jQuery('.woocommerce-MyAccount-content').append(jQuery('.woocommerce-Message.woocommerce-Message--info.woocommerce-info'));
-							jQuery('.woocommerce-Message.woocommerce-Message--info.woocommerce-info').show();
-						}
-					});
+					if( jQuery('div.woocommerce-MyAccount-content').children().length == 0 ) {
+						jQuery('.woocommerce-MyAccount-content').append(jQuery('.woocommerce-Message.woocommerce-Message--info.woocommerce-info'));
+						jQuery('.woocommerce-Message.woocommerce-Message--info.woocommerce-info').show();
+					}
 
 					/* to show scroll bar for core coupons */
 					var coupons_list = jQuery('#coupons_list');
@@ -1588,8 +1584,8 @@ if ( ! class_exists( 'WC_SC_Display_Coupons' ) ) {
 					echo '<div id="generated_coupon_data_container" style="padding: 2em 0 2em;">';
 
 					if ( $header ) {
-						echo '<h2>' . esc_html__( 'Voucher Received', 'woocommerce-smart-coupons' ) . '</h2>';
-						echo '<p>' . esc_html__( '', 'woocommerce-smart-coupons' ) . '</p>';
+						echo '<h2>' . esc_html__( 'Coupon Received', 'woocommerce-smart-coupons' ) . '</h2>';
+						echo '<p>' . esc_html__( 'List of coupons & their details which you have received from the store. Click on the coupon to see the details.', 'woocommerce-smart-coupons' ) . '</p>';
 					}
 
 					echo $coupon_details_html_content; // phpcs:ignore
