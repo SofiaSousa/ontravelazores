@@ -32,10 +32,10 @@ do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 <?php
 if ( $partial_refund ) {
 	/* translators: %s: Site title */
-	printf( esc_html__( 'Your order on %s has been partially refunded. There are more details below for your reference:', 'smart-emails' ), esc_html( wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ) ) );
+	printf( esc_html__( 'Your booking on %s has been partially refunded. There are more details below for your reference:', 'smart-emails' ), esc_html( wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ) ) );
 } else {
 	/* translators: %s: Site title */
-	printf( esc_html__( 'Your order on %s has been refunded. There are more details below for your reference:', 'smart-emails' ), esc_html( wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ) ) );
+	printf( esc_html__( 'Your booking on %s has been refunded. There are more details below for your reference:', 'smart-emails' ), esc_html( wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ) ) );
 }
 ?>
 </p>

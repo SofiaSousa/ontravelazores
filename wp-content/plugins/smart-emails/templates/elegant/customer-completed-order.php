@@ -28,7 +28,7 @@ do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 <?php /* translators: %s: Customer first name */ ?>
 <p><?php printf( esc_html__( 'Hi %s,', 'smart-emails' ), esc_html( $order->get_billing_first_name() ) ); ?></p>
 <?php /* translators: %s: Site title */ ?>
-<p><?php esc_html_e( 'We have finished processing your order.', 'smart-emails' ); ?></p>
+<p><?php esc_html_e( 'Your booking is confirmed. For your reference the booking details are below and you can use as a voucher:', 'smart-emails' ); ?></p>
 <?php
 
 /*

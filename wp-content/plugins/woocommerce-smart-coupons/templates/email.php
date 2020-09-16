@@ -79,7 +79,7 @@ if ( has_action( 'woocommerce_email_header' ) ) {
 <p>
 <?php
 	/* translators: %s: Coupon code */
-	echo sprintf( esc_html__( 'To redeem your discount use coupon code %s during checkout or click on the following coupon:', 'woocommerce-smart-coupons' ), '<strong><code>' . esc_html( $coupon_code ) . '</code></strong>' );
+	echo sprintf( esc_html__( 'Congratulations! You received a Gift Voucher. To use, enter the code below when completing a purchase.', 'woocommerce-smart-coupons' ), '<strong><code>' . esc_html( $coupon_code ) . '</code></strong>' );
 ?>
 </p>
 
