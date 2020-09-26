@@ -3,13 +3,13 @@
  * Plugin Name: WooCommerce Payment Gateway Based Fees
  * Plugin URI: https://www.woothemes.com/products/payment-gateway-based-fees/
  * Description: Add fees to an order automatically depending on the payment gateway. The fees are calculated on product level and/or on total cart value on checkout page, pay-for-order page and admin order page. The admin can change the amount added in the backend and can also disable calculation of fees for a specific order for the pay-for-order page.
- * Version: 3.1.11
+ * Version: 3.1.12
  * Author: InoPlugs
  * Author URI: https://woothemes.com/
  * 
  * Text Domain: woocommerce_additional_fees
  * WC requires at least: 2.1.6
- * WC tested up to: 4.2.2
+ * WC tested up to: 4.4.1
  *
  * Woo: 272217:c634a2d133341d02fd2cbe7ee00e7fbe
  * 

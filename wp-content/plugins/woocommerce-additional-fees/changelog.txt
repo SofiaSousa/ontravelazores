@@ -1,5 +1,9 @@
 *** WooCommerce Payment Gateway Based Fees (prior Additional Fees) Changelog ***
 
+2020.08.22 - version 3.1.12
+	* Fixed: ZIP Payment Gateway not calculating fees
+	* Fixed: Subscription plugin pay for failed renewal order creates a new order
+
 2020.07.08 - version 3.1.11
 	* Fixed: Admin payment methods N/A and Other are supported with "Disabled" - no fees added
 

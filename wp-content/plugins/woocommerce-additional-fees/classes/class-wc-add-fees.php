@@ -274,10 +274,13 @@ class WC_Add_Fees
 		$this->dp                = (int) get_option( 'woocommerce_price_num_decimals' );
 		$this->round_at_subtotal = get_option( 'woocommerce_tax_round_at_subtotal' ) == 'yes';
 
-			//	add all plugins that produce an error on payment_gateways->get_available_payment_gateways()
+			//	add all plugins that produce an error on payment_gateways->get_available_payment_gateways() or are removed due to restrictions (but this is nothing we have to take care of)
 		$this->gateway_bugfix_array = array(
-					'woocommerce-account-funds/woocommerce-account-funds.php'
+					'woocommerce-account-funds/woocommerce-account-funds.php',
+					'wc-partpay/partpay.php',
+					'zipmoney-payments-woocommerce/zipmoney-payment-gateway.php'
 				);
+		
 		$this->gateway_bugfix = false;
 		$this->prod_fee_cnt = 0;
 		$this->wpml = new WC_Add_Fees_WPML();
@@ -763,14 +766,22 @@ class WC_Add_Fees
 		}
 		
 		
-		$curr_order_id      = absint( WC()->session->get( 'order_awaiting_payment' ) );
+		$curr_order_id = absint( WC()->session->get( 'order_awaiting_payment' ) );
 		if( $curr_order_id <= 0 )
 		{
 			return $order_id;
 		}
 		
-		$cart_hash          = md5( json_encode( wc_clean( WC()->cart->get_cart_for_session() ) ) . WC()->cart->total );
-		
+		if( ! method_exists( WC()->cart, 'get_cart_hash' ) )
+		{
+			//	@since 3.6.0 outdated - produces error on "failed renewals"
+			$cart_hash = md5( json_encode( wc_clean( WC()->cart->get_cart_for_session() ) ) . WC()->cart->total );
+		}
+		else
+		{
+			$cart_hash = WC()->cart->get_cart_hash();
+		}
+
 		$order = wc_get_order( $curr_order_id );
 		if( false === $order )
 		{
@@ -783,7 +794,7 @@ class WC_Add_Fees
 		return $order_id;
 	}
 
-		/**
+	/**
 	 * Bugfix with Subscription plugin: we have to remove all our fees of existing order
 	 * see https://github.com/woocommerce/woocommerce-subscriptions/pull/450#issuecomment-304106454
 	 * 
@@ -2350,7 +2361,20 @@ class WC_Add_Fees
 		{
 			foreach ( $items as $item_key => $item ) 
 			{
-				$_product = $order->get_product_from_item( $item );
+				//	@since 4.4.0 
+				if ( is_callable( array( $item, 'get_product' ) ) )
+				{
+					$_product = $item->get_product();
+				}
+				else if( is_callable( array( $order, 'get_product_from_item' ) ) )
+				{
+					$_product = $order->get_product_from_item( $item );
+				}
+				else
+				{
+					$_product = false;
+				}
+				
 				if( ! $_product )	
 				{	
 					continue;
