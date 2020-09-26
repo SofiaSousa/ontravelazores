@@ -2,5 +2,5 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/ontravelazores/public_html/
-    - /bin/cp -fR ./wp-content/themes/* /home/ontravelazores/public_html/wp-content/themes/
+    - /bin/cp -fR ./wp-content/themes/citytours-child/* /home/ontravelazores/public_html/wp-content/themes/citytours-child
 
