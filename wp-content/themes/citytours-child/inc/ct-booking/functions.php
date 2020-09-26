@@ -86,17 +86,15 @@ function ot_set_coupon_string_translation( $post_id, $post, $update ) {
  * @param string    $default_label Default label.
  * @param WC_Coupon $coupon The coupon object.
  *
- * @return string
+ * @return string New label
  */
 function ot_cart_totals_smart_coupons_label( $default_label = '', $coupon = null ) {
 	if ( empty( $coupon ) ) {
 		return $default_label;
 	}
 
-	$discount_type = ( ! empty( $coupon->discount_type ) ) ? $coupon->discount_type : '';
-
-	if ( 'percent' === $discount_type && ! empty( $coupon->code ) ) {
-		$default_label = __( esc_html( get_the_title( $coupon->id ) ), 'citytours' );
+	if ( 'percent' === $coupon->get_discount_type() && ! empty( $coupon->get_code() ) ) {
+		$default_label = __( esc_html( get_the_title( $coupon->get_id() ) ), 'citytours' );
 	}
 
 	return $default_label;
