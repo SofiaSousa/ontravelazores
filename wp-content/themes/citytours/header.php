@@ -13,17 +13,6 @@ global $ct_options;
 <!--[if IE   ]>    <html class="ie" <?php language_attributes(); ?>> <![endif]-->
 <!--[if lt IE 9]><script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 <html <?php language_attributes(); ?>>
-
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-163950422-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-163950422-1');
-</script>
-
 <head>
     <!-- Meta Tags -->
     <meta charset="<?php bloginfo( 'charset' ); ?>">
@@ -212,24 +201,6 @@ global $ct_options;
                                 <ul>
                                     <li class="menu-item"><a href="<?php echo esc_url( home_url('/') ); ?>"><?php esc_html_e( 'Home', 'citytours'); ?></a></li>
                                     <li class="menu-item"><a href="<?php echo esc_url( admin_url('nav-menus.php') ); ?>"><?php esc_html_e( 'Configure', 'citytours'); ?></a></li>
-                                </ul>
-                            </div>
-                            <?php
-                        }
-                        ?>
-
-                        <?php
-                        if ( class_exists('WooCommerce') && $ct_options['cart_show_mini_cart'] ) {
-                            ?>
-                            <div class="visible-xs-block">
-                                <ul>
-                                    <li>
-                                        <a href="<?php echo wc_get_cart_url(); ?>">
-                                            <i class=" icon-basket-1"></i>
-                                            <?php _e( 'Cart', 'citytours' ); ?>
-                                            (<span class="cart-item-qty"><?php echo WC()->cart->cart_contents_count; ?></span>)
-                                        </a>
-                                    </li>
                                 </ul>
                             </div>
                             <?php

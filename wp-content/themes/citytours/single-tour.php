@@ -1,7 +1,7 @@
 <?php
 /* Page Template for Single Tour */
-if ( ! defined( 'ABSPATH' ) ) { 
-    exit; 
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
 }
 
 get_header();
@@ -66,7 +66,7 @@ if ( have_posts() ) {
         $t_types = wp_get_post_terms( $post_id, 'tour_type' );
         if ( ! $t_types || is_wp_error( $t_types ) ) {
             $tour_type_img_url =  $tour_marker_img_url;
-        } else {                        
+        } else {
             $img = get_tax_meta( $t_types[0]->term_id, 'ct_tax_marker_img', true );
             if ( isset( $img ) && is_array( $img ) ) {
                 $tour_type_img_url = $img['src'];
@@ -180,7 +180,7 @@ if ( have_posts() ) {
                         $review = get_post_meta( ct_tour_org_id( $post_id ), '_review', true );
                         $review = round( ( ! empty( $review ) ) ? (float) $review : 0, 1 );
                         $review_detail = get_post_meta( ct_tour_org_id( $post_id ), '_review_detail', true );
-                        
+
                         if ( ! empty( $review_detail ) ) {
                             $review_detail = is_array( $review_detail ) ? $review_detail : unserialize( $review_detail );
                         } else {
@@ -191,7 +191,7 @@ if ( have_posts() ) {
                         <div class="row">
                             <div class="col-md-3">
                                 <h3><?php echo esc_html__( 'Reviews', 'citytours') ?></h3>
-                                
+
                                 <a href="#" class="btn_1 add_bottom_15" data-toggle="modal" data-target="#myReview"><?php echo esc_html__( 'Leave a review', 'citytours') ?></a>
                             </div>
 
@@ -229,21 +229,21 @@ if ( have_posts() ) {
                                     $review_html = ct_get_review_html($post_id, 0, $per_page);
 
                                     echo ( $review_html['html'] );
-                                
-                                    if ( $review_html['count'] >= $per_page ) { 
+
+                                    if ( $review_html['count'] >= $per_page ) {
                                         ?>
-                                        
+
                                         <a href="#" class="btn more-review" data-post_id="<?php echo esc_attr( $post_id ) ?>"><?php echo esc_html__( 'Load More Reviews', 'citytours' ) ?></a>
 
-                                        <?php 
-                                    } 
+                                        <?php
+                                    }
                                     ?>
                                 </div>
                             </div>
                         </div>
 
-                        <?php 
-                    endif; 
+                        <?php
+                    endif;
                     ?>
 
                 </div><!--End  single_tour_desc-->
@@ -259,7 +259,7 @@ if ( have_posts() ) {
                     <?php endif; ?>
 
                     <?php if ( 'empty' != $tour_setting ) : ?>
-                        
+
                         <div class="box_style_1 expose">
                             <h3 class="inner">- <?php echo esc_html__( 'Booking', 'citytours' ) ?> -</h3>
 
@@ -273,13 +273,13 @@ if ( have_posts() ) {
 
                                     <input type="hidden" name="tour_id" value="<?php echo esc_attr( $post_id ) ?>">
 
-                                    <?php 
+                                    <?php
                                     $lang_code = ct_get_lang_code_for_page( $ct_options['tour_cart_page'] );
-                                    if ( ! empty( $ct_options['tour_cart_page'] ) && ! empty( $lang_code ) ) { 
+                                    if ( ! empty( $ct_options['tour_cart_page'] ) && ! empty( $lang_code ) ) {
                                         ?>
                                         <input type="hidden" name="lang" value="<?php echo esc_attr( $lang_code ); ?>">
-                                        <?php 
-                                    } 
+                                        <?php
+                                    }
                                     ?>
 
                                     <?php if ( ! empty( $is_repeated ) ) : ?>
@@ -310,7 +310,7 @@ if ( have_posts() ) {
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6">
                                             <div class="form-group">
-                                                <label><?php echo esc_html__( 'Adults (+11 Years)', 'citytours' ) ?></label>
+                                                <label><?php echo esc_html__( 'Adults', 'citytours' ) ?></label>
                                                 <div class="numbers-row" data-min="1">
                                                     <input type="text" value="1" id="adults" class="qty2 form-control" name="adults">
 
@@ -322,24 +322,9 @@ if ( have_posts() ) {
 
                                         <div class="col-md-6 col-sm-6">
                                             <div class="form-group">
-                                                <label><?php echo esc_html__( 'Children (3 - 10 Years)', 'citytours' ) ?></label>
+                                                <label><?php echo esc_html__( 'Children', 'citytours' ) ?></label>
                                                 <div class="numbers-row" data-min="0">
 													<input type="text" value="0" id="children" class="qty2 form-control" name="kids" <?php if ( ! empty( $price_type ) && $price_type != 'per_group' && empty( $charge_child ) ) echo 'disabled' ?> >
-                                                    
-                                                    <div class="inc button_inc">+</div>
-                                                    <div class="dec button_inc">-</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                                    
-                                    
-                                    <div class="row">
-                                        <div class="col-md-12 col-sm-12">
-                                            <div class="form-group">
-                                                <label><?php echo esc_html__( 'Infants (0 - 2 Years)', 'citytours' ) ?></label>
-                                                <div class="numbers-row" data-min="0">
-                                                    <input type="text" value="0" id="infants" class="qty2 form-control" name="infants">
 
                                                     <div class="inc button_inc">+</div>
                                                     <div class="dec button_inc">-</div>
@@ -347,7 +332,6 @@ if ( have_posts() ) {
                                             </div>
                                         </div>
                                     </div>
-                                    
 
                                     <br>
 
@@ -355,7 +339,7 @@ if ( have_posts() ) {
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                        <?php echo esc_html__( 'Adults (+11 Years)', 'citytours' ) ?>
+                                                        <?php echo esc_html__( 'Adults', 'citytours' ) ?>
                                                 </td>
                                                 <td class="text-right adults-number">
                                                     1
@@ -363,22 +347,13 @@ if ( have_posts() ) {
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <?php echo esc_html__( 'Children (3 - 10 Years)', 'citytours' ) ?>
+                                                    <?php echo esc_html__( 'Children', 'citytours' ) ?>
                                                 </td>
                                                 <td class="text-right children-number">
                                                     0
                                                 </td>
-                                            </tr>        
-                                          
-                                            <tr>
-                                                <td>
-                                                    <?php echo esc_html__( 'Infants (0 - 2 Years)', 'citytours' ) ?>
-                                                </td>
-                                                <td class="text-right infants-number">
-                                                    0
-                                                </td>
                                             </tr>
-											
+
 											<?php if ( empty( $price_type ) || $price_type == 'per_person' ) : ?>
                                             <tr>
                                                 <td>
@@ -392,7 +367,7 @@ if ( have_posts() ) {
                                                 </td>
                                             </tr>
 											<?php endif; ?>
-											
+
                                             <tr class="total">
                                                 <td>
                                                     <?php echo esc_html__( 'Total cost', 'citytours' ) ?>
@@ -419,20 +394,20 @@ if ( have_posts() ) {
 
                             <hr>
 
-                            <?php 
+                            <?php
                             if ( ! empty( $ct_options['wishlist'] ) ) :
                                 if ( is_user_logged_in() ) {
                                     $user_id = get_current_user_id();
                                     $wishlist = get_user_meta( $user_id, 'wishlist', true );
-                                    if ( empty( $wishlist ) ) 
-                                        $wishlist = array(); 
+                                    if ( empty( $wishlist ) )
+                                        $wishlist = array();
                                     ?>
 
                                     <a class="btn_full_outline btn-add-wishlist" href="#" data-label-add="<?php esc_html_e( 'Add to wishlist', 'citytours' ); ?>" data-label-remove="<?php esc_html_e( 'Remove from wishlist', 'citytours' ); ?>" data-post-id="<?php echo esc_attr( $post_id ) ?>"<?php echo ( in_array( ct_tour_org_id( $post_id ), $wishlist) ) ? ' style="display:none;"' : '' ?>><i class=" icon-heart"></i> <?php echo esc_html__( 'Add to wishlist', 'citytours' ) ?></a>
                                     <a class="btn_full_outline btn-remove-wishlist" href="#" data-label-add="<?php esc_html_e( 'Add to wishlist', 'citytours' ); ?>" data-label-remove="<?php esc_html_e( 'Remove from wishlist', 'citytours' ); ?>" data-post-id="<?php echo esc_attr( $post_id ) ?>"<?php echo ( ! in_array( ct_tour_org_id( $post_id ), $wishlist) ) ? ' style="display:none;"' : '' ?>><i class=" icon-heart"></i> <?php esc_html_e( 'Remove from wishlist', 'citytours' ); ?></a>
 
-                                <?php 
-                                } else { 
+                                <?php
+                                } else {
                                 ?>
 
                                     <div><?php esc_html_e( 'To save your wishlist please login.', 'citytours' ); ?></div>
@@ -443,9 +418,9 @@ if ( have_posts() ) {
                                         <a href="<?php echo esc_url( ct_get_permalink_clang( $ct_options['login_page'] ) ); ?>" class="btn_full_outline"><?php esc_html_e( 'login', 'citytours' ); ?></a>
                                     <?php } ?>
 
-                                <?php 
-                                } 
-                            endif; 
+                                <?php
+                                }
+                            endif;
                             ?>
 
                         </div><!--/box_style_1 -->
@@ -466,8 +441,8 @@ if ( have_posts() ) {
 
         </div><!--End container -->
 
-        <?php 
-        if ( ! empty( $ct_options['tour_review'] ) ) : 
+        <?php
+        if ( ! empty( $ct_options['tour_review'] ) ) :
             ?>
 
             <div class="modal fade" id="myReview" tabindex="-1" role="dialog" aria-labelledby="myReviewLabel" aria-hidden="true">
@@ -533,8 +508,8 @@ if ( have_posts() ) {
                 </div>
             </div>
 
-            <?php 
-        endif; 
+            <?php
+        endif;
         ?>
 
         <?php
@@ -547,9 +522,6 @@ if ( have_posts() ) {
             if ( ! empty( $tour_end_date ) ) {
                 $tour_end_date_milli_sec = strtotime( $tour_end_date) * 1000;
             }
-
-            $next_days_block_optional = get_field('tours_number_days_to_block');
-            $next_days_block_optional = ($next_days_block_optional == '' ? '0' : $next_days_block_optional);
         ?>
 
         <script type="text/javascript">
@@ -572,13 +544,14 @@ if ( have_posts() ) {
             <?php if ( ! empty( $_SESSION['exchange_rate'] ) ) : ?>
                 exchange_rate = <?php echo esc_js( $_SESSION['exchange_rate'] ); ?>;
             <?php endif; ?>
-			var date_format = $('input.date-pick').data('date-format'); 
+			var date_format = $('input.date-pick').data('date-format');
 
             $(document).ready(function(){
                 var available_days = <?php echo json_encode($tour_available_days );?>;
 				var tour_prices = <?php echo json_encode( $tour_prices ); ?>;
 				var tour_prices_html = <?php echo json_encode( $tour_prices_html ); ?>;
                 var today = new Date();
+				//today.setDate(today.getDate()+1);
                 var tour_start_date = new Date( <?php echo esc_js( $tour_start_date_milli_sec ); ?> );
                 var tour_end_date = new Date( <?php echo esc_js( $tour_end_date_milli_sec ); ?> );
                 var available_first_date = tour_end_date;
@@ -590,168 +563,26 @@ if ( have_posts() ) {
                 tour_start_date.setHours(0, 0, 0, 0);
                 tour_end_date.setHours(0, 0, 0, 0);
 
-                <?php 
-                    $arr_dates_blocked = array();
-                    $tmp_datepicker_string = '';
-
-                    $post_id = get_the_ID();
-                    if( have_rows('tours_blocked_dates_repeater', $post_id) ) {
-
-                        while ( have_rows('tours_blocked_dates_repeater', $post_id) ) { 
-                            the_row();
-
-                            if( have_rows('tours_blocked_dates_group') ) {
-                                while ( have_rows('tours_blocked_dates_group') ) { 
-                                    the_row();
-                                    $start_date = get_sub_field('tours_blocked_dates_startDate', $post_id);
-                                    $end_date = get_sub_field('tours_blocked_dates_endDate', $post_id);
-
-                                    // return: Y-m-d
-                                    $temp_start_date    = date("Y-m-d", strtotime($start_date));
-                                    $temp_end_date      = date("Y-m-d", strtotime($end_date));
-
-                                    if ( $temp_start_date < $temp_end_date ) {
-
-                                        $begin = new DateTime($start_date);
-                                        $end = new DateTime($end_date);
-
-                                        $interval = DateInterval::createFromDateString('1 day');
-                                        $period = new DatePeriod($begin, $interval, $end);
-
-                                        foreach ($period as $dt) {
-                                            $date = $dt->format('Y-m-d');
-                                            array_push($arr_dates_blocked, $date);
-                                        }
-
-                                        array_push($arr_dates_blocked, $end_date);
-                                    } else if ( $temp_start_date == $temp_end_date ) {
-                                        $begin = new DateTime($start_date);
-                                        array_push($arr_dates_blocked, $end_date);
-                                    }
-
-                                }
-                            }
-
-                        }
-
-                        for ($i=0; $i < count($arr_dates_blocked) ; $i++) { 
-                            
-                            $temp_date = $arr_dates_blocked[$i];
-                            $new_date = str_replace('-', '/', $temp_date );
-                            $new_date = date('d/m/Y', strtotime($new_date));
-
-                            $tmp_datepicker_string .= '"'.$new_date.'"';
-                            if ($i < (count($arr_dates_blocked)-1)) {
-                                $tmp_datepicker_string .= ',';
-                            }
-                        }
-
-                    }
-
-
-                    if( have_rows('options_tours_blocked_dates_repeater', 'option') ) {
-                        while ( have_rows('options_tours_blocked_dates_repeater', 'option') ) { 
-                            the_row();
-
-                            if( have_rows('options_tours_blocked_dates_group', 'option') ) {
-                                while ( have_rows('options_tours_blocked_dates_group', 'option') ) { 
-                                    the_row();
-                                    $start_date = get_sub_field('options_tours_blocked_dates_startDate', 'option');
-                                    $end_date = get_sub_field('options_tours_blocked_dates_endDate', 'option');
-
-                                    // return: Y-m-d
-                                    $temp_start_date    = date("Y-m-d", strtotime($start_date));
-                                    $temp_end_date      = date("Y-m-d", strtotime($end_date));
-
-                                    if ( $temp_start_date < $temp_end_date ) {
-
-                                        $begin = new DateTime($start_date);
-                                        $end = new DateTime($end_date);
-
-                                        $interval = DateInterval::createFromDateString('1 day');
-                                        $period = new DatePeriod($begin, $interval, $end);
-
-                                        foreach ($period as $dt) {
-                                            $date = $dt->format('Y-m-d');
-                                            array_push($arr_dates_blocked, $date);
-                                        }
-
-                                        array_push($arr_dates_blocked, $end_date);
-                                    } else if ( $temp_start_date == $temp_end_date ) {
-                                        
-                                        array_push($arr_dates_blocked, $temp_start_date);
-
-                                    }
-
-                                }
-                            }
-
-                        }
-
-                        for ($i=0; $i < count($arr_dates_blocked) ; $i++) { 
-                            
-                            $temp_date = $arr_dates_blocked[$i];
-                            $new_date = str_replace('-', '/', $temp_date );
-                            $new_date = date('d/m/Y', strtotime($new_date));
-
-                            if ( $tmp_datepicker_string == '' ) {
-                                $tmp_datepicker_string .= '"'.$new_date.'"';
-                            } else {
-                                $tmp_datepicker_string .= ',"'.$new_date.'"';
-                            }
-
-                            if ($i < (count($arr_dates_blocked)-1)) {
-                                $tmp_datepicker_string .= ',';
-                            }
-                        }
-
-                    }
-
-
-                ?>
-
-                var disableDates = [<?php  echo $tmp_datepicker_string; ?>];  
-
                 if ( today > tour_start_date ) {
 					tour_start_date.setTime( today.getTime() );
                 }
 
-                <?php
-                    $next_days_block_optional = get_field( 'tours_number_days_to_block', get_the_ID() );
-                    $next_days_block_optional = ($next_days_block_optional == '' ? '0' : $next_days_block_optional);
-                ?>
-                var ttt = tour_start_date.getDate();
-                tour_start_date.setDate( ttt + <?php echo $next_days_block_optional; ?> );
-
-
-                var ddd = tour_start_date.getDate();
+				var ddd = tour_start_date.getDate();
 				for(var i=0;i<7;i++) {
 					tour_start_date.setDate( ddd + i );
 					if ( $.inArray( tour_start_date.getDay(), available_days ) >= 0 ) {
-                        available_first_date = tour_start_date;
 						break;
 					}
 				}
 
 				function update_tour_price() {
 					var adults = $('input#adults').val();
-                    var infants = $('input#infants').val();
 					var children = price = total_price = 0;
 					var day;
 
 					if ( $('input#children').length ) {
 						children = $('input#children').val();
 					}
-
-                    if ( $('input#infants').length ) {
-						infants = $('input#infants').val();
-					}
-
-                    /*
-                    if ( $('input#babys').length ) {
-						babys = $('input#babys').val();
-					}
-                    */
 
 					if ($('input.date-pick').length > 0) {
 						date_format = $('input.date-pick').data('date-format');
@@ -761,10 +592,10 @@ if ( have_posts() ) {
 						} else {
 							day = new Date( $('input.date-pick').val() );
 						}
-						
+
 					var d = day.getDay();
 					$('span.day-price').html(tour_prices_html[d]);
-					
+
 					price_per_person = tour_prices[d];
 					}
 					if ( price_type ) {
@@ -778,34 +609,31 @@ if ( have_posts() ) {
 					$('.child-amount').toggleClass( 'hide', children < 1 );
 					total_price = $('.total-cost').text().replace(/[\d\.\,]+/g, price);
 					$('.total-cost').text( total_price );
-                }
-                
+				}
 
                 function DisableDays(date) {
+
                     var day = date.getDay();
-                    let formatted_date = ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth()+1)).slice(-2) + '/' + date.getFullYear(); 
 
-                    if ( disableDates.length >= 1 ) {
-                        if ( $.inArray( formatted_date, disableDates ) >= 0 ) {
-                            return false;                          
+                    if ( available_days.length == 0 ) {
+                        if ( available_first_date >= date && date >= tour_start_date) {
+                            available_first_date = date;
                         }
+                        return true;
                     }
 
-                    if ( available_days.length >= 1 ) {
-                        if ( $.inArray( day, available_days ) == -1 ) {
-                            return false;
+					if ( $.inArray( day, available_days ) >= 0 ) {
+                        if ( available_first_date >= date && date >= tour_start_date) {
+                            available_first_date = date;
                         }
+                        return true;
+                    } else {
+                        return false;
                     }
-
-                    if ( available_first_date >= date && date >= tour_start_date ) {
-                        available_first_date = date;
-                    }
-
-                    return true;
                 }
 
                 if ( $('input.date-pick').length ) {
-                    if ( lang.substring( 0, 2 ) != 'fa' ) { 
+                    if ( lang.substring( 0, 2 ) != 'fa' ) {
                         $('input.date-pick').datepicker({
                             startDate: tour_start_date,
                         <?php if ( $tour_end_date_milli_sec > 0 ) : ?>
@@ -814,14 +642,9 @@ if ( have_posts() ) {
                             beforeShowDay: DisableDays,
                             language: lang
                         });
+                        $('input[name="date"]').datepicker( 'setDate', available_first_date );
+                    } else {
 
-                        let formatted_date_available_first_date = ('0' + available_first_date.getDate()).slice(-2) + '/' + ('0' + (available_first_date.getMonth()+1)).slice(-2) + '/' + available_first_date.getFullYear(); 
-                        if ( $.inArray( formatted_date_available_first_date, disableDates ) == -1 ) {
-                            $('input[name="date"]').datepicker( 'setDate', available_first_date );
-                        }
-                        
-                    } else { 
-						
                         $('input.date-pick').persianDatepicker({
                             observer: true,
                             format: date_format.toUpperCase(),
@@ -837,21 +660,14 @@ if ( have_posts() ) {
                     $('.children-number').html( $(this).val() );
                     update_tour_price();
                 });
-                
-                $('input#infants').on('change', function(){
-                    $('.infants-number').html( $(this).val() );
-                    update_tour_price();
-                });
-                
 
-            
 				$('input.date-pick').on('change', function(e){
 					e.preventDefault();
 					update_tour_price();
 				});
 
 				$('input.date').trigger('change');
-			
+
                 var validation_rules = {};
                 if ( $('input.date-pick').length ) {
                     validation_rules.date = { required: true};
@@ -868,16 +684,16 @@ if ( have_posts() ) {
                 $('#collapseMap').on('shown.bs.collapse', function(e){
                     var markersData = {
                         <?php
-                        foreach ( $related_ht as $each_ht ) { 
+                        foreach ( $related_ht as $each_ht ) {
                             if ( get_post_type( $each_ht ) == 'hotel' ) {
                                 $each_pos = get_post_meta( $each_ht, '_hotel_loc', true );
                                 $img_url = $hotel_marker_img_url;
-                            } else { 
+                            } else {
                                 $each_pos = get_post_meta( $each_ht, '_tour_loc', true );
                                 $t_types = wp_get_post_terms( $each_ht, 'tour_type' );
                                 if ( ! $t_types || is_wp_error( $t_types ) ) {
                                     $img_url =  $tour_marker_img_url;
-                                } else {                        
+                                } else {
                                     $img = get_tax_meta( $t_types[0]->term_id, 'ct_tax_marker_img', true );
                                     if ( isset( $img ) && is_array( $img ) ) {
                                         $post_type = $img['src'];
@@ -887,7 +703,7 @@ if ( have_posts() ) {
                                 }
                             }
 
-                            if ( ! empty( $each_pos ) ) { 
+                            if ( ! empty( $each_pos ) ) {
                                 $each_pos = explode( ',', $each_pos );
                                 $description = str_replace( "'", "\'", wp_trim_words( strip_shortcodes(get_post_field("post_content", $each_ht)), 20, '...' ) );
                              ?>
@@ -903,8 +719,8 @@ if ( have_posts() ) {
                                 }],
                             <?php
                             }
-                        } 
-                        if ( ! empty( $tour_pos ) ) { 
+                        }
+                        if ( ! empty( $tour_pos ) ) {
                             $description = str_replace( "'", "\'", wp_trim_words( strip_shortcodes(get_post_field("post_content", $post_id)), 20, '...' ) );
                         ?>
                             'Center': [
@@ -919,25 +735,25 @@ if ( have_posts() ) {
                                 url_point: '<?php echo get_permalink( $post_id ) ?>'
                             },
                             ]
-                        <?php 
+                        <?php
                         } ?>
                     };
-                    <?php 
-                    if ( empty($tour_pos) ) { 
+                    <?php
+                    if ( empty($tour_pos) ) {
                         foreach ( $related_ht as $each_ht ) {
                             if ( get_post_type( $each_ht ) == 'hotel' ) {
                                 $each_pos = get_post_meta( $each_ht, '_hotel_loc', true );
-                            } else { 
+                            } else {
                                 $each_pos = get_post_meta( $each_ht, '_tour_loc', true );
                             }
 
-                            if ( ! empty( $each_pos ) ) { 
+                            if ( ! empty( $each_pos ) ) {
                                 $tour_pos = explode( ',', $each_pos );
                                 break;
                             }
                         }
                     }
-                    
+
                     if ( !empty( $tour_pos ) ) {
                     ?>
                     var lati = <?php echo esc_js( $tour_pos[0] ); ?>;
