@@ -8,6 +8,7 @@ function citytours_child_enqueue_styles() {
 
 // Loading theme includes.
 require_once( get_stylesheet_directory() . '/inc/load.php' );
+require_once( get_stylesheet_directory() . '/plugins/loader.php' );
 
 /**
  * Remove related products output
