@@ -1,13 +1,13 @@
-<?php 
+<?php
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /*
  * Functions for WooCommerce Integration
  */
 
-if ( is_admin() ) { 
+if ( is_admin() ) {
     add_action( 'admin_init', 'ct_compatible_with_woocommerce' );
-} else { 
+} else {
     add_action( 'init', 'ct_compatible_with_woocommerce' );
 }
 
@@ -21,7 +21,7 @@ if ( ! function_exists( 'ct_is_woocommerce_integration_enabled' ) ) {
 
         if ( ! empty( $ct_options['enable_woocommerce_integration'] ) && class_exists( 'WooCommerce' ) ) {
             return true;
-        } else { 
+        } else {
             return false;
         }
     }
@@ -71,9 +71,9 @@ if ( class_exists( 'WooCommerce' ) ) {
 
 // Add actions/filters to make Citytours compatible with WooCommerce
 if ( ! function_exists( 'ct_compatible_with_woocommerce' ) ) {
-    function ct_compatible_with_woocommerce() { 
+    function ct_compatible_with_woocommerce() {
 
-        if ( ct_is_woocommerce_integration_enabled() ) { 
+        if ( ct_is_woocommerce_integration_enabled() ) {
 
             add_action( 'plugins_loaded', 'ct_register_simple_hotel_tour_product_type' );
             add_action( 'admin_enqueue_scripts', 'ct_enqueue_custom_admin_scripts', 100 );
@@ -138,11 +138,11 @@ if ( ! function_exists( 'ct_woo_create_product_category' ) ) {
 /*
  * Return WooCommerce Cart Page URL
  */
-if ( ! function_exists( 'ct_get_woocommerce_cart_url' ) ) { 
-    function ct_get_woocommerce_cart_url( $ct_default_cart_url ) { 
-        if ( ct_is_woocommerce_integration_enabled() ) { 
+if ( ! function_exists( 'ct_get_woocommerce_cart_url' ) ) {
+    function ct_get_woocommerce_cart_url( $ct_default_cart_url ) {
+        if ( ct_is_woocommerce_integration_enabled() ) {
             return wc_get_cart_url();
-        } else { 
+        } else {
             return $ct_default_cart_url;
         }
     }
@@ -192,7 +192,7 @@ if ( ! function_exists( 'ct_woo_return_to_shop_redirect' ) ) {
 /**
  * Register the Hotel product type after init
  */
-if ( ! function_exists( 'ct_register_simple_hotel_tour_product_type' ) ) { 
+if ( ! function_exists( 'ct_register_simple_hotel_tour_product_type' ) ) {
     function ct_register_simple_hotel_tour_product_type() {
 
         class WC_Product_Hotel extends WC_Product {
@@ -228,7 +228,7 @@ if ( ! function_exists( 'ct_register_simple_hotel_tour_product_type' ) ) {
 /**
  * Add to product type drop down.
  */
-if ( ! function_exists( 'ct_add_custom_product_type' ) ) { 
+if ( ! function_exists( 'ct_add_custom_product_type' ) ) {
     function ct_add_custom_product_type( $types ){
         $types[ 'simple_hotel' ] = __( 'Hotel', 'citytours' );
         $types[ 'simple_tour' ] = __( 'Tour', 'citytours' );
@@ -240,7 +240,7 @@ if ( ! function_exists( 'ct_add_custom_product_type' ) ) {
 /**
  * Show tabs and fields for simple_hotel product type.
  */
-if ( ! function_exists( 'ct_enqueue_custom_admin_scripts' ) ) { 
+if ( ! function_exists( 'ct_enqueue_custom_admin_scripts' ) ) {
     function ct_enqueue_custom_admin_scripts() {
 
         if ( 'product' != get_post_type() ) :
@@ -259,7 +259,7 @@ if ( ! function_exists( 'ct_enqueue_custom_admin_scripts' ) ) {
 /**
  * Add custom CSS classes to each data panel.
  */
-if ( ! function_exists( 'ct_add_custom_css_to_panels' ) ) { 
+if ( ! function_exists( 'ct_add_custom_css_to_panels' ) ) {
     function ct_add_custom_css_to_panels( $tabs ) {
 
         $tabs['inventory']['class'][] = 'show_if_simple_hotel show_if_simple_tour show_if_simple_car';
@@ -273,7 +273,7 @@ if ( ! function_exists( 'ct_add_custom_css_to_panels' ) ) {
 /**
  * Add a Hotel product tab.
  */
-if ( ! function_exists( 'ct_add_custom_product_tabs' ) ) { 
+if ( ! function_exists( 'ct_add_custom_product_tabs' ) ) {
     function ct_add_custom_product_tabs( $tabs ) {
 
         $tabs['hotel'] = array(
@@ -301,7 +301,7 @@ if ( ! function_exists( 'ct_add_custom_product_tabs' ) ) {
 /**
  * Contents of the Hotel options product tab.
  */
-if ( ! function_exists( 'ct_hotel_options_product_tab_content' ) ) { 
+if ( ! function_exists( 'ct_hotel_options_product_tab_content' ) ) {
     function ct_hotel_options_product_tab_content() {
 
         global $post;
@@ -368,16 +368,16 @@ if ( ! function_exists( 'ct_hotel_options_product_tab_content' ) ) {
                         <th colspan="4"><?php _e('Added Services', 'citytours') ?></th>
                     </tr></thead>
                     <tbody>
-                        <?php 
+                        <?php
                         foreach ( $add_service[0] as $service_info ) {
                             $org_service_info = ct_get_add_services_by_postid( 0, $service_info['service_id'] );
                         ?>
-                        <tr> 
+                        <tr>
                             <td>
                                 <i class="<?php echo esc_attr( $org_service_info[0]->icon_class ); ?>"></i>
                             </td>
                             <td>
-                                <?php echo esc_attr( $service_info['title'] ); ?> 
+                                <?php echo esc_attr( $service_info['title'] ); ?>
                                 <strong>+<?php echo ct_price( $service_info['price'] ); ?></strong>
                             </td>
                             <td>
@@ -444,16 +444,16 @@ if ( ! function_exists( 'ct_hotel_options_product_tab_content' ) ) {
                         <th colspan="4"><?php _e( 'Added Services', 'citytours' ); ?></th>
                     </tr></thead>
                     <tbody>
-                        <?php 
+                        <?php
                         foreach ( $add_service[0] as $service_info ) {
                             $org_service_info = ct_get_add_services_by_postid( 0, $service_info['service_id'] );
                         ?>
-                        <tr> 
+                        <tr>
                             <td>
                                 <i class="<?php echo esc_attr( $org_service_info[0]->icon_class ); ?>"></i>
                             </td>
                             <td>
-                                <?php echo esc_html( $service_info['title'] ); ?> 
+                                <?php echo esc_html( $service_info['title'] ); ?>
                                 <strong>+<?php echo ct_price( $service_info['price'] ); ?></strong>
                             </td>
                             <td>
@@ -520,16 +520,16 @@ if ( ! function_exists( 'ct_hotel_options_product_tab_content' ) ) {
                         <th colspan="4"><?php _e( 'Added Services', 'citytours' ); ?></th>
                     </tr></thead>
                     <tbody>
-                        <?php 
+                        <?php
                         foreach ( $add_service[0] as $service_info ) {
                             $org_service_info = ct_get_add_services_by_postid( 0, $service_info['service_id'] );
                         ?>
-                        <tr> 
+                        <tr>
                             <td>
                                 <i class="<?php echo esc_attr( $org_service_info[0]->icon_class ); ?>"></i>
                             </td>
                             <td>
-                                <?php echo esc_html( $service_info['title'] ); ?> 
+                                <?php echo esc_html( $service_info['title'] ); ?>
                                 <strong>+<?php echo ct_price( $service_info['price'] ); ?></strong>
                             </td>
                             <td>
@@ -555,8 +555,8 @@ if ( ! function_exists( 'ct_hotel_options_product_tab_content' ) ) {
 /*
  * Enable original product type options for Hotel product type
  */
-if ( ! function_exists( 'ct_enable_product_type_options' ) ) { 
-    function ct_enable_product_type_options( $options ) { 
+if ( ! function_exists( 'ct_enable_product_type_options' ) ) {
+    function ct_enable_product_type_options( $options ) {
         $options['virtual']['wrapper_class'] = 'show_if_simple show_if_simple_hotel show_if_simple_tour show_if_simple_car';
         return $options;
     }
@@ -565,9 +565,9 @@ if ( ! function_exists( 'ct_enable_product_type_options' ) ) {
 /*
  * Add custom class 'container' into Cart and Checkout page container.
  */
-if ( ! function_exists( 'ct_add_custom_content_class' ) ) { 
-    function ct_add_custom_content_class( $content_class ) { 
-        if ( is_cart() || is_checkout() ) { 
+if ( ! function_exists( 'ct_add_custom_content_class' ) ) {
+    function ct_add_custom_content_class( $content_class ) {
+        if ( is_cart() || is_checkout() ) {
             $content_class .= ' container';
         }
 
@@ -579,11 +579,11 @@ if ( ! function_exists( 'ct_add_custom_content_class' ) ) {
 /**
  * Add custom CSS class into WooCommerce form fields
  */
-if ( ! function_exists( 'ct_add_class_woocommerce_form_field' ) ) { 
-    function ct_add_class_woocommerce_form_field( $args, $key, $value ) { 
-        if ( $args['type'] == 'radio' ) { 
+if ( ! function_exists( 'ct_add_class_woocommerce_form_field' ) ) {
+    function ct_add_class_woocommerce_form_field( $args, $key, $value ) {
+        if ( $args['type'] == 'radio' ) {
             $args['input_class'][] = 'form-radio-control';
-        } else { 
+        } else {
             $args['input_class'][] = 'form-control';
         }
         return $args;
@@ -593,8 +593,8 @@ if ( ! function_exists( 'ct_add_class_woocommerce_form_field' ) ) {
 /**
  * Change Hotel/Tour order status to "Confirmed" after WooCommerce Order status is changed as "Completed"
  */
-if ( ! function_exists( 'ct_change_order_status_as_completed' ) ) { 
-    function ct_change_order_status_as_completed( $order_id ) { 
+if ( ! function_exists( 'ct_change_order_status_as_completed' ) ) {
+    function ct_change_order_status_as_completed( $order_id ) {
         global $wpdb, $ct_options;
 
         $order = new WC_Order( $order_id );
@@ -604,24 +604,34 @@ if ( ! function_exists( 'ct_change_order_status_as_completed' ) ) {
             $product_id = $item['product_id'];
             $hotel_tour_id = get_post_meta( $product_id, '_ct_post_id', true );
 
-            if ( $hotel_tour_id ) { 
+            if ( $hotel_tour_id ) {
                 // $result = $wpdb->get_var( 'SELECT id FROM ' . CT_ORDER_TABLE . ' WHERE other = ' . $order_id, ARRAY_A );
                 $wpdb->update( CT_ORDER_TABLE, array( 'status' => 'confirmed' ), array( 'other' => $order_id ), array( '%s' ), array( '%d' ) );
             }
         }
     }
 }
+/*
+ * Set order as deposit paid when payment completed
+ */
+if ( ! function_exists( 'ct_woocommerce_payment_complete' ) ) {
+	function ct_woocommerce_payment_complete( $order_id, $prev_status, $current_status, $original_order ) {
+			if ( 'completed' == $current_status || 'processing' == $current_status || 'pending' == $current_status ) {
+					ct_add_new_booking_order( $order_id );
+			}
+	}
+}
 
 /*
  * Add Hotel/Tour Booking Order when complete payment
  */
-if ( ! function_exists( 'ct_add_new_booking_order' ) ) { 
-    function ct_add_new_booking_order( $order_id ) { 
+if ( ! function_exists( 'ct_add_new_booking_order' ) ) {
+    function ct_add_new_booking_order( $order_id ) {
         global $wpdb, $ct_options;
 
         $order = new WC_Order( $order_id );
         $items = $order->get_items();
-        $customer_id = $order->get_user_id(); 
+        $customer_id = $order->get_user_id();
 
         $order_info = array();
         $order_info['deposit_paid'] = 1;
@@ -631,9 +641,9 @@ if ( ! function_exists( 'ct_add_new_booking_order' ) ) {
         $order_info['phone'] = $order->get_billing_phone();
         $order_info['country'] = $order->get_billing_country();
         $order_info['address1'] = $order->get_billing_address_1();
-        if ( $order->get_billing_address_2() ) { 
+        if ( $order->get_billing_address_2() ) {
             $order_info['address2'] = $order->get_billing_address_2();
-        } else { 
+        } else {
             $order_info['address2'] = '';
         }
         $order_info['city'] = $order->get_billing_city();
@@ -648,42 +658,42 @@ if ( ! function_exists( 'ct_add_new_booking_order' ) ) {
             $total_price = 0;
             $total_adults = 0;
             $total_kids = 0;
-            
+
             $product_id = $item['product_id'];
             $hotel_tour_id = get_post_meta( $product_id, '_ct_post_id', true );
-            
+
             $total = get_post_meta( $product_id, '_ct_total_price', true );
-            if ( $total && !empty($total) ) { 
+            if ( $total && !empty($total) ) {
                 $total_price += $total;
             }
 
             $booking_info = get_post_meta( $product_id, '_ct_booking_info' );
 
-            if ( $hotel_tour_id ) { 
-                if ( get_post_type( $hotel_tour_id ) == 'tour' ) { 
+            if ( $hotel_tour_id ) {
+                if ( get_post_type( $hotel_tour_id ) == 'tour' ) {
                     $flag_custom = true;
 
                     $deposit_rate = get_post_meta( $hotel_tour_id, '_tour_security_deposit', true );
                     $booking_date = get_post_meta( $product_id, '_ct_booking_date', true );
                     $order_info['date_from'] = date( 'Y-m-d', ct_strtotime( $booking_date ) );
-                    $booking_time = get_post_meta( $product_id, '_ct_booking_time', true );                    
+                    $booking_time = get_post_meta( $product_id, '_ct_booking_time', true );
 
                     $total_adults += $booking_info[0]['adults'];
                     $total_kids += $booking_info[0]['kids'];
-                } else if ( get_post_type( $hotel_tour_id ) == 'car' ) { 
+                } else if ( get_post_type( $hotel_tour_id ) == 'car' ) {
                     $flag_custom = true;
 
                     $deposit_rate = get_post_meta( $hotel_tour_id, '_car_security_deposit', true );
                     $booking_date = get_post_meta( $product_id, '_ct_booking_date', true );
                     $booking_pickup_location = get_post_meta( $product_id, '_ct_booking_pickup_location', true );
                     $booking_dropoff_location = get_post_meta( $product_id, '_ct_booking_dropoff_location', true );
-                    
+
                     $order_info['date_from'] = date( 'Y-m-d', ct_strtotime( $booking_date ) );
-                    $booking_time = get_post_meta( $product_id, '_ct_booking_time', true );                    
+                    $booking_time = get_post_meta( $product_id, '_ct_booking_time', true );
 
                     $total_adults += $booking_info[0]['adults'];
                     $total_kids += $booking_info[0]['kids'];
-                } else if ( get_post_type( $hotel_tour_id ) == 'hotel' ) { 
+                } else if ( get_post_type( $hotel_tour_id ) == 'hotel' ) {
                     $flag_custom = true;
 
                     $deposit_rate = get_post_meta( $hotel_tour_id, '_hotel_security_deposit', true );
@@ -702,7 +712,7 @@ if ( ! function_exists( 'ct_add_new_booking_order' ) ) {
 
             $result = $wpdb->get_var( 'SELECT id FROM ' . CT_ORDER_TABLE . ' WHERE other = ' . $order_id );
 
-            if ( $flag_custom && empty( $result ) ) { 
+            if ( $flag_custom && empty( $result ) ) {
 
                 $order_info['total_price'] = $total_price;
                 $order_info['total_adults'] = $total_adults;
@@ -734,7 +744,7 @@ if ( ! function_exists( 'ct_add_new_booking_order' ) ) {
                     $ct_order_id = $wpdb->insert_id;
 
                     if ( ! empty( $booking_info[0] ) ) {
-                        if ( get_post_type( $hotel_tour_id ) == 'tour' ) { 
+                        if ( get_post_type( $hotel_tour_id ) == 'tour' ) {
                             $tour_booking_info = array();
                             $tour_booking_info['order_id'] = $ct_order_id;
                             $tour_booking_info['tour_id'] = $hotel_tour_id;
@@ -745,7 +755,7 @@ if ( ! function_exists( 'ct_add_new_booking_order' ) ) {
                             $tour_booking_info['total_price'] = $booking_info[0]['total'];
 
                             $wpdb->insert( CT_TOUR_BOOKINGS_TABLE, $tour_booking_info );
-                        } else if ( get_post_type( $hotel_tour_id ) == 'car' ) { 
+                        } else if ( get_post_type( $hotel_tour_id ) == 'car' ) {
                             $tour_booking_info = array();
                             $tour_booking_info['order_id'] = $ct_order_id;
                             $tour_booking_info['car_id'] = $hotel_tour_id;
@@ -758,7 +768,7 @@ if ( ! function_exists( 'ct_add_new_booking_order' ) ) {
                             $tour_booking_info['total_price'] = $booking_info[0]['total'];
 
                             $wpdb->insert( CT_CAR_BOOKINGS_TABLE, $tour_booking_info );
-                        } else { 
+                        } else {
                             foreach ( $booking_info[0] as $room_info ) {
                                 $room_booking_info = array();
                                 $room_booking_info['order_id'] = $ct_order_id;
@@ -788,9 +798,9 @@ if ( ! function_exists( 'ct_add_new_booking_order' ) ) {
                     }
 
                     $order = new CT_Hotel_Order( $ct_order_id );
-                    if ( get_post_type( $hotel_tour_id ) == 'tour' ) { 
+                    if ( get_post_type( $hotel_tour_id ) == 'tour' ) {
                         ct_tour_generate_conf_mail( $order );
-                    } else if ( get_post_type( $hotel_tour_id ) == 'car' ) { 
+                    } else if ( get_post_type( $hotel_tour_id ) == 'car' ) {
                         ct_car_generate_conf_mail( $order );
                     } else {
                         ct_hotel_generate_conf_mail( $order );
@@ -806,8 +816,8 @@ if ( ! function_exists( 'ct_add_new_booking_order' ) ) {
 /*
  *
  */
-if ( ! function_exists( 'ct_clear_cart_info' ) ) { 
-    function ct_clear_cart_info( $order_id ) { 
+if ( ! function_exists( 'ct_clear_cart_info' ) ) {
+    function ct_clear_cart_info( $order_id ) {
         $order = new WC_Order( $order_id );
         $items = $order->get_items();
 
@@ -815,11 +825,11 @@ if ( ! function_exists( 'ct_clear_cart_info' ) ) {
             $post_id = get_post_meta( $item['product_id'], '_ct_post_id', true );
             $uid = '';
 
-            if ( $post_id && !empty( $post_id ) ) { 
-                if ( get_post_type($post_id) == 'tour' ) { 
+            if ( $post_id && !empty( $post_id ) ) {
+                if ( get_post_type($post_id) == 'tour' ) {
                     $booking_date = get_post_meta( $item['product_id'], '_ct_booking_date', true );
                     $uid = $post_id . $booking_date;
-                } else { 
+                } else {
                     $booking_date_from = get_post_meta( $item['product_id'], '_ct_booking_date_from', true );
                     $booking_date_to = get_post_meta( $item['product_id'], '_ct_booking_date_to', true );
                     $uid = $post_id . $booking_date_from . $booking_date_to;
@@ -834,17 +844,17 @@ if ( ! function_exists( 'ct_clear_cart_info' ) ) {
 }
 
 /*
- * Return WooCommerce Currency 
+ * Return WooCommerce Currency
  */
-if ( ! function_exists( 'ct_return_woocommerce_currency' ) ) { 
-    function ct_return_woocommerce_currency( $currency ) { 
+if ( ! function_exists( 'ct_return_woocommerce_currency' ) ) {
+    function ct_return_woocommerce_currency( $currency ) {
         return get_woocommerce_currency();
     }
 }
 
 /* Adding meta field for product */
-if ( ! function_exists( 'ct_product_register_meta_boxes' ) ) { 
-    function ct_product_register_meta_boxes() { 
+if ( ! function_exists( 'ct_product_register_meta_boxes' ) ) {
+    function ct_product_register_meta_boxes() {
         $meta_boxes = array();
 
         $meta_boxes[] = array(
@@ -858,7 +868,7 @@ if ( ! function_exists( 'ct_product_register_meta_boxes' ) ) {
                     'name'      => __( 'Show Header Image', 'citytours' ),
                     'id'        => '_show_header_image',
                     'type'      => 'select',
-                    'options'   => array( 
+                    'options'   => array(
                         'show'  => 'Show',
                         'hide'  => 'Hide',
                     ),
@@ -951,23 +961,23 @@ if ( ! function_exists( 'ct_product_register_meta_boxes' ) ) {
 }
 
 /* Add Custom Meta Fields for Product */
-if ( ! function_exists( 'ct_theme_register_product_meta_boxes' ) ) { 
-    function ct_theme_register_product_meta_boxes( $meta_boxes ) { 
+if ( ! function_exists( 'ct_theme_register_product_meta_boxes' ) ) {
+    function ct_theme_register_product_meta_boxes( $meta_boxes ) {
         $meta_boxes = array_merge( $meta_boxes, ct_product_register_meta_boxes() );
         return $meta_boxes;
     }
 }
 
 /* Remove default WooCommerce Styles */
-if ( ! function_exists( 'ct_remove_woocommerce_styles' ) ) { 
-    function ct_remove_woocommerce_styles( $styles ) { 
+if ( ! function_exists( 'ct_remove_woocommerce_styles' ) ) {
+    function ct_remove_woocommerce_styles( $styles ) {
         return array();
     }
 }
 
 /* Change Comment Form Fields order */
-if ( ! function_exists( 'ct_reset_fields_order' ) ) { 
-    function ct_reset_fields_order( $comment_fields ) { 
+if ( ! function_exists( 'ct_reset_fields_order' ) ) {
+    function ct_reset_fields_order( $comment_fields ) {
         $comment_field = $comment_fields['comment'];
         unset( $comment_fields['comment'] );
         $comment_fields += array( 'comment' => $comment_field );
@@ -977,10 +987,10 @@ if ( ! function_exists( 'ct_reset_fields_order' ) ) {
 }
 
 /* Return product thumbnails for loop product */
-if ( ! function_exists( 'ct_woocommerce_template_loop_product_thumbnail' ) ) { 
-    function ct_woocommerce_template_loop_product_thumbnail() { 
+if ( ! function_exists( 'ct_woocommerce_template_loop_product_thumbnail' ) ) {
+    function ct_woocommerce_template_loop_product_thumbnail() {
         global $post;
-        
+
         $id = get_the_ID();
         $size = 'shop_catalog';
         $image_size = apply_filters( 'single_product_archive_thumbnail_size', $size );
@@ -999,23 +1009,23 @@ if ( ! function_exists( 'ct_woocommerce_template_loop_product_thumbnail' ) ) {
     }
 }
 
-/* Open containers for Add-to-cart, Wishlist, QuickView buttons */ 
-if ( ! function_exists( 'ct_woocommerce_template_loop_links_open' ) ) { 
-    function ct_woocommerce_template_loop_links_open() { 
+/* Open containers for Add-to-cart, Wishlist, QuickView buttons */
+if ( ! function_exists( 'ct_woocommerce_template_loop_links_open' ) ) {
+    function ct_woocommerce_template_loop_links_open() {
         echo '<div class="item-options clearfix">';
     }
 }
 
 /* Close containers for Add-to-cart, Wishlist, QuickView buttons */
-if ( ! function_exists( 'ct_woocommerce_template_loop_links_close' ) ) { 
-    function ct_woocommerce_template_loop_links_close() { 
+if ( ! function_exists( 'ct_woocommerce_template_loop_links_close' ) ) {
+    function ct_woocommerce_template_loop_links_close() {
         echo '</div>';
     }
 }
 
 /* Show Quick View button on Loop product */
-if ( ! function_exists( 'ct_woocommerce_template_loop_quick_view' ) ) { 
-    function ct_woocommerce_template_loop_quick_view() { 
+if ( ! function_exists( 'ct_woocommerce_template_loop_quick_view' ) ) {
+    function ct_woocommerce_template_loop_quick_view() {
         global $product;
         ?>
 
@@ -1023,13 +1033,13 @@ if ( ! function_exists( 'ct_woocommerce_template_loop_quick_view' ) ) {
             <span class="icon-eye"></span>
             <div class="tool-tip"><?php echo __( 'View', 'citytours' ) ?></div>
         </a>
-        
+
         <?php
     }
 }
 
 /* Convert Array to Json */
-if ( ! function_exists( 'ct_convert_array_to_json' ) ) { 
+if ( ! function_exists( 'ct_convert_array_to_json' ) ) {
     function ct_convert_array_to_json($arr) {
         if(function_exists('json_encode')) return json_encode($arr); //Lastest versions of PHP already has this functionality.
         $parts = array();
@@ -1073,8 +1083,8 @@ if ( ! function_exists( 'ct_convert_array_to_json' ) ) {
 }
 
 /* Return product layout for QuickView */
-if ( ! function_exists( 'ct_product_quickview' ) ) { 
-    function ct_product_quickview() { 
+if ( ! function_exists( 'ct_product_quickview' ) ) {
+    function ct_product_quickview() {
 
         global $post, $product;
         $post = get_post( $_POST['pid'] );
@@ -1131,22 +1141,22 @@ if ( ! function_exists( 'ct_product_quickview' ) ) {
 }
 
 /* Return custom title for loop product */
-if ( ! function_exists( 'ct_woocommerce_template_loop_product_title' ) ) { 
-    function ct_woocommerce_template_loop_product_title() { 
+if ( ! function_exists( 'ct_woocommerce_template_loop_product_title' ) ) {
+    function ct_woocommerce_template_loop_product_title() {
         echo '<h3><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h3>';
     }
 }
 
-/* Disable shop page title */ 
-if ( ! function_exists( 'ct_woocommerce_show_page_title' ) ) { 
-    function ct_woocommerce_show_page_title( $args ) { 
+/* Disable shop page title */
+if ( ! function_exists( 'ct_woocommerce_show_page_title' ) ) {
+    function ct_woocommerce_show_page_title( $args ) {
         return false;
     }
 }
 
 /* Return custom products count for Shop/Archive page */
-if ( ! function_exists( 'ct_loop_shop_per_page' ) ) { 
-    function ct_loop_shop_per_page( $cols ) { 
+if ( ! function_exists( 'ct_loop_shop_per_page' ) ) {
+    function ct_loop_shop_per_page( $cols ) {
         global $ct_options;
 
         return $ct_options['shop_product_count'];
@@ -1154,8 +1164,8 @@ if ( ! function_exists( 'ct_loop_shop_per_page' ) ) {
 }
 
 /* Add custom classes into billing form fields */
-if ( ! function_exists( 'ct_woocommerce_form_field_args' ) ) { 
-    function ct_woocommerce_form_field_args( $args, $key, $value ) { 
+if ( ! function_exists( 'ct_woocommerce_form_field_args' ) ) {
+    function ct_woocommerce_form_field_args( $args, $key, $value ) {
         $args['class'][] = 'form-group';
 
         switch ( $key ) {
@@ -1169,14 +1179,6 @@ if ( ! function_exists( 'ct_woocommerce_form_field_args' ) ) {
             case 'shipping_last_name':
             case 'shipping_city':
             case 'shipping_state':
-            case 'billing_postcode': 
-            case 'billing_country':  
-            case 'billing_company':
-            case 'vat':
-            case 'hotel':
-            case 'language':
-            case 'billing_address_1':
-                
                 $args['class'][] = 'col-sm-6';
                 break;
 
@@ -1195,15 +1197,15 @@ if ( ! function_exists( 'ct_woocommerce_form_field_args' ) ) {
 }
 
 /* Remove Select2 js and css from WooCommerce */
-if ( ! function_exists( 'ct_custom_woocommerce_scripts' ) ) { 
-    function ct_custom_woocommerce_scripts() { 
+if ( ! function_exists( 'ct_custom_woocommerce_scripts' ) ) {
+    function ct_custom_woocommerce_scripts() {
         wp_dequeue_script( 'select2' );
         wp_dequeue_style( 'select2' );
     }
 }
 
 /* Filter shop page query not to show beta products */
-if ( ! function_exists( 'ct_shop_filter_certain_cat' ) ) { 
+if ( ! function_exists( 'ct_shop_filter_certain_cat' ) ) {
     function ct_shop_filter_certain_cat( $query ) {
         if ( !is_admin() && is_post_type_archive( 'product' ) && $query->is_main_query() ) {
            $query->set('tax_query', array(
@@ -1214,17 +1216,17 @@ if ( ! function_exists( 'ct_shop_filter_certain_cat' ) ) {
                     'operator'  => 'NOT IN'
                     )
                 )
-           );   
+           );
         }
     }
 }
 
 
 /* Return mini-cart contents */
-if ( ! function_exists( 'ct_ajax_mini_cart' ) ) { 
-    function ct_ajax_mini_cart() { 
+if ( ! function_exists( 'ct_ajax_mini_cart' ) ) {
+    function ct_ajax_mini_cart() {
 
-        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'ajax_mini_cart' )  ) { 
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'ajax_mini_cart' )  ) {
             wp_send_json( array( 'success' => false ) );
             die();
         }
@@ -1238,7 +1240,7 @@ if ( ! function_exists( 'ct_ajax_mini_cart' ) ) {
 
         // Fragments and mini cart are returned
         $data = array(
-            'success'       => true, 
+            'success'       => true,
             'mini_cart'     => apply_filters( 'woocommerce_add_to_cart_fragments', array( $mini_cart ) ),
             'cart_qty'      => WC()->cart->cart_contents_count
         );
@@ -1247,8 +1249,8 @@ if ( ! function_exists( 'ct_ajax_mini_cart' ) ) {
     }
 }
 
-if ( ! function_exists( 'ct_woocommerce_output_related_products_args' ) ) { 
-    function ct_woocommerce_output_related_products_args( $args ) { 
+if ( ! function_exists( 'ct_woocommerce_output_related_products_args' ) ) {
+    function ct_woocommerce_output_related_products_args( $args ) {
         global $ct_options;
 
         $args['posts_per_page'] = $ct_options['product_related_count'];
@@ -1258,20 +1260,20 @@ if ( ! function_exists( 'ct_woocommerce_output_related_products_args' ) ) {
     }
 }
 
-if ( ! function_exists( 'ct_woocommerce_extra_booking_info' ) ) { 
-    function ct_woocommerce_extra_booking_info( $item_data, $cart_item ) { 
+if ( ! function_exists( 'ct_woocommerce_extra_booking_info' ) ) {
+    function ct_woocommerce_extra_booking_info( $item_data, $cart_item ) {
         $product_id         = $cart_item['product_id'];
         $is_custom_product  = false;
         $post_type          = false;
 
         $hotel_tour_id      = get_post_meta( $product_id, '_ct_post_id', true );
-        if ( ! empty( $hotel_tour_id ) ) { 
+        if ( ! empty( $hotel_tour_id ) ) {
             $is_custom_product  = true;
             $post_type          = get_post_type( $hotel_tour_id );
         }
 
-        if ( $is_custom_product && $post_type ) { 
-            if ( 'hotel' == $post_type ) { 
+        if ( $is_custom_product && $post_type ) {
+            if ( 'hotel' == $post_type ) {
                 $booking_details = get_post_meta( $product_id, '_ct_booking_info', true );
                 foreach ( $booking_details as $room_detail ) {
                     $room_title = get_the_title( $room_detail['room_id'] );
@@ -1281,30 +1283,30 @@ if ( ! function_exists( 'ct_woocommerce_extra_booking_info' ) ) {
                         'value' => $room_title
                     );
 
-                    $item_data[] = array( 
+                    $item_data[] = array(
                         'name'  => __('# of Rooms', 'citytours'),
                         'value' => $room_detail['room_qty']
                     );
 
-                    $item_data[] = array( 
+                    $item_data[] = array(
                         'name'  => __('Adults', 'citytours'),
                         'value' => $room_detail['adults']
                     );
 
-                    $item_data[] = array( 
+                    $item_data[] = array(
                         'name'  => __('Kids', 'citytours'),
                         'value' => $room_detail['kids']
                     );
                 }
 
                 $date_from = get_post_meta( $product_id, '_ct_booking_date_from', true );
-                $item_data[] = array( 
+                $item_data[] = array(
                     'name'  => __('Check In', 'citytours'),
                     'value' => $date_from
                 );
 
                 $date_to = get_post_meta( $product_id, '_ct_booking_date_to', true );
-                $item_data[] = array( 
+                $item_data[] = array(
                     'name'  => __('Check Out', 'citytours'),
                     'value' => $date_to
                 );
@@ -1312,99 +1314,70 @@ if ( ! function_exists( 'ct_woocommerce_extra_booking_info' ) ) {
                 $additional_services = get_post_meta( $product_id, '_ct_add_service', true );
             }
 
-            if ( 'tour' == $post_type ) { 
+            if ( 'tour' == $post_type ) {
                 $booking_date = get_post_meta( $product_id, '_ct_booking_date', true );
                 $booking_time = get_post_meta( $product_id, '_ct_booking_time', true );
 
-                $item_data[] = array( 
+                $item_data[] = array(
                     'name'  => __('Date', 'citytours'),
                     'value' => $booking_date
                 );
 
-                $item_data[] = array( 
+                $item_data[] = array(
                     'name'  => __('Time', 'citytours'),
                     'value' => $booking_time
                 );
 
                 $booking_details = get_post_meta( $product_id, '_ct_booking_info', true );
 
-                $item_data[] = array( 
-                    'name'  => __('Adults (+ 11 Years)', 'citytours'),
+                $item_data[] = array(
+                    'name'  => __('Adults', 'citytours'),
                     'value' => $booking_details['adults']
                 );
 
-                $item_data[] = array( 
-                    'name'  => __('Childrens (3 - 10 Years)', 'citytours'),
+                $item_data[] = array(
+                    'name'  => __('Kids', 'citytours'),
                     'value' => $booking_details['kids']
                 );
-
-                $item_data[] = array( 
-                    'name'  => __('Infants (0 - 2 Years)', 'citytours'),
-                    'value' => ($booking_details['infants'] == '' ? 'n/a' : $booking_details['infants'])
-                );
-
-
-                /* Serviços extras */
-                $add_services = get_post_meta( $product_id, '_ct_add_service' );
-                $add_services = $add_services[0];
-
-                if ( ! empty( $add_services ) ) :
-
-                    foreach ( $add_services as $service ) :
-                        $service_id = esc_attr( $service['service_id'] );
-                        $title = esc_attr( $service['title'] );
-                        $quantity = esc_attr( $service['qty'] );
-                        $price = esc_attr( $service['price'] );
-
-                        $item_data[] = array( 
-                            'name'  => __($title . '&nbsp;(+'.$price.'&nbsp;€)', 'citytours'),
-                            'value' => ($quantity),
-                        );
-
-                    endforeach;
-                
-                endif;
-
-                
             }
 
-            if ( 'car' == $post_type ) { 
+            if ( 'car' == $post_type ) {
                 $booking_date = get_post_meta( $product_id, '_ct_booking_date', true );
 
-                $item_data[] = array( 
+                $item_data[] = array(
                     'name'  => __('Date', 'citytours'),
                     'value' => $booking_date
                 );
 
                 $booking_time = get_post_meta( $product_id, '_ct_booking_time', true );
 
-                $item_data[] = array( 
+                $item_data[] = array(
                     'name'  => __('Time', 'citytours'),
                     'value' => $booking_time
                 );
 
                 $booking_pickup_location = get_post_meta( $product_id, '_ct_booking_pickup_location', true );
 
-                $item_data[] = array( 
+                $item_data[] = array(
                     'name'  => __('Pick Up', 'citytours'),
                     'value' => $booking_pickup_location
                 );
 
                 $booking_dropoff_location = get_post_meta( $product_id, '_ct_booking_dropoff_location', true );
 
-                $item_data[] = array( 
+                $item_data[] = array(
                     'name'  => __('Drop Off', 'citytours'),
                     'value' => $booking_dropoff_location
                 );
 
                 $booking_details = get_post_meta( $product_id, '_ct_booking_info', true );
 
-                $item_data[] = array( 
+                $item_data[] = array(
                     'name'  => __('Adults', 'citytours'),
                     'value' => $booking_details['adults']
                 );
 
-                $item_data[] = array( 
+                $item_data[] = array(
                     'name'  => __('Kids', 'citytours'),
                     'value' => $booking_details['kids']
                 );

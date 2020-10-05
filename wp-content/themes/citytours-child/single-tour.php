@@ -331,10 +331,7 @@ if ( have_posts() ) {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 
-
-                                    <div class="row">
                                         <div class="col-md-12 col-sm-12">
                                             <div class="form-group">
                                                 <label><?php echo esc_html__( 'Infants (0 - 2 Years)', 'citytours' ) ?></label>
@@ -735,23 +732,12 @@ if ( have_posts() ) {
 
 				function update_tour_price() {
 					var adults = $('input#adults').val();
-                    var infants = $('input#infants').val();
 					var children = price = total_price = 0;
 					var day;
 
 					if ( $('input#children').length ) {
 						children = $('input#children').val();
 					}
-
-                    if ( $('input#infants').length ) {
-						infants = $('input#infants').val();
-					}
-
-                    /*
-                    if ( $('input#babys').length ) {
-						babys = $('input#babys').val();
-					}
-                    */
 
 					if ($('input.date-pick').length > 0) {
 						date_format = $('input.date-pick').data('date-format');
@@ -840,7 +826,6 @@ if ( have_posts() ) {
 
                 $('input#infants').on('change', function(){
                     $('.infants-number').html( $(this).val() );
-                    update_tour_price();
                 });
 
 

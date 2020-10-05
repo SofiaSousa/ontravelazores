@@ -7,7 +7,7 @@ function citytours_child_enqueue_styles() {
 }
 
 // Loading theme includes.
-require_once( get_stylesheet_directory() . '/inc/load.php' );
+require_once( get_stylesheet_directory() . '/plugins/loader.php' );
 
 /**
  * Remove related products output
@@ -358,21 +358,12 @@ $wpml_language_code = ICL_LANGUAGE_CODE;
 
 if( function_exists('acf_add_options_page') ) {
 	acf_add_options_page(array(
-		'page_title' 	=> 'Settings (Tours)',
-		'menu_title'	=> 'Settings (Tours)',
-		'menu_slug' 	=> 'theme-general-settings',
-		'capability' 	=> 'edit_posts',
-		'icon_url' 		=> 'dashicons-schedule',
-		'redirect'		=> false
-	));
-
-	acf_add_options_page(array(
-		'page_title' 	=> 'Woocommerce (Emails)',
-		'menu_title'	=> 'Woocommerce (Emails)',
-		'menu_slug' 	=> 'theme-general-settings-wc',
-		'capability' 	=> 'edit_posts',
-		'icon_url' 		=> 'dashicons-schedule',
-		'redirect'		=> false
+		'page_title' => 'Settings (Tours)',
+		'menu_title' => 'Settings (Tours)',
+		'menu_slug'  => 'theme-general-settings',
+		'capability' => 'edit_posts',
+		'icon_url'   => 'dashicons-schedule',
+		'redirect'   => false
 	));
 }
 
@@ -381,134 +372,69 @@ function translate_woocommerce_emails($text, $code_language) {
 
 }
 
-
-
-// (Woocommerce) E-mails enviados da encomenda
-add_action('woocommerce_checkout_create_order_line_item', 'save_custom_fields_as_order_item_meta', 20, 4);
-function save_custom_fields_as_order_item_meta($item, $cart_item_key, $values, $order) {
-	$wpml_language_code = ICL_LANGUAGE_CODE;
-	$product_id = $item->get_variation_id() ? $item->get_variation_id() : $item->get_product_id();
-	$add_services = get_post_meta( $product_id, '_ct_add_service' );
-	$add_services = $add_services[0];
-
-	$booking_details = get_post_meta( $product_id, '_ct_booking_info', true );
-	$booking_date = get_post_meta( $product_id, '_ct_booking_date', true );
-	$booking_time = get_post_meta( $product_id, '_ct_booking_time', true );
-
-	/*
-	if ($wpml_language_code == 'pt-pt') {
-		$item->update_meta_data( __('Data', $text_domain), $booking_date );
-		$item->update_meta_data( __('Hora', $text_domain), $booking_time );
-		$item->update_meta_data( __('Adultos (+ 11 anos)', $text_domain), $booking_details['adults'] );
-		$item->update_meta_data( __('Crianças (3 - 10 anos)', $text_domain), $booking_details['kids'] );
-		$item->update_meta_data( __('Bebés (0 - 2 anos)', $text_domain), $booking_details['infants'] );
-	} else if ($wpml_language_code == 'en') {
-		$item->update_meta_data( __('Date', $text_domain), $booking_date );
-		$item->update_meta_data( __('Time', $text_domain), $booking_time );
-		$item->update_meta_data( __('Adults (+ 11 Years)', $text_domain), $booking_details['adults'] );
-		$item->update_meta_data( __('Childrens (3 - 10 Years)', $text_domain), $booking_details['kids'] );
-		$item->update_meta_data( __('Infants (0 - 2 Years)', $text_domain), $booking_details['infants'] );
-	}
-	*/
-
-	$wc_email_data 				= get_field('data', 'option');
-	$wc_email_hora				= get_field('hora', 'option');
-	$wc_email_adultos11anos 	= get_field('adultos_11_anos', 'option');
-	$wc_email_criancas310anos	= get_field('criancas_3_10_anos', 'option');
-	$wc_email_bebes02anos		= get_field('bebes_0_2_anos', 'option');
-
-	$wc_email_data 				= (!empty($wc_email_data) ? $wc_email_data : 'Data' );
-	$wc_email_hora				= (!empty($wc_email_hora) ? $wc_email_hora : 'Hora' );
-	$wc_email_adultos11anos 	= (!empty($wc_email_adultos11anos) ? $wc_email_adultos11anos : 'Adultos (+ 11 anos)' );
-	$wc_email_criancas310anos	= (!empty($wc_email_criancas310anos) ? $wc_email_criancas310anos : 'Crianças (3 - 10 anos)' );
-	$wc_email_bebes02anos		= (!empty($wc_email_bebes02anos) ? $wc_email_bebes02anos : 'Bebés (0 - 2 anos)' );
-
-	$item->update_meta_data( $wc_email_data, $booking_date );
-	$item->update_meta_data( $wc_email_hora, $booking_time );
-	$item->update_meta_data( $wc_email_adultos11anos, $booking_details['adults'] );
-	$item->update_meta_data( $wc_email_criancas310anos, $booking_details['kids'] );
-	$item->update_meta_data( $wc_email_bebes02anos, $booking_details['infants'] );
-
-
-	if ( ! empty( $add_services ) ) :
-
-		foreach ( $add_services as $service ) :
-			$service_id = esc_attr( $service['service_id'] );
-			$title = esc_attr( $service['title'] );
-			$quantity = esc_attr( $service['qty'] );
-			$price = esc_attr( $service['price'] );
-
-			$item->update_meta_data( __($title . '&nbsp;(+'.$price.'&nbsp;€)', $text_domain), $quantity );
-
-		endforeach;
-
-	endif;
-}
-
 // Adicionar folha de estilo personalizada (hotfix)
 add_action( 'wp_enqueue_scripts', 'child_enqueue_styles');
 function child_enqueue_styles() {
 	wp_enqueue_style( 'style-exclude-autoptimize', get_stylesheet_directory_uri() . '/style-exclude-autoptimize.css', array(), '11.25');
 }
 
-
 // Criar um novo widget personalizado para as imagens do footer (logos)
 add_action( 'widgets_init', 'custom_sidebar_footer_column01' );
 function custom_sidebar_footer_column01() {
-    register_sidebar(
-        array (
-            'name' => __( 'Footer Widget 01 (Logo)', 'ontravelazores' ),
-            'id' => 'footer-widget-logo-01',
-            'description' => __( 'Insira a logo para Widget 1', 'ontravelazores' ),
-            'before_widget' => '<div class="widget-content">',
-            'after_widget' => "</div>",
-            'before_title' => '<h3 class="widget-title">',
-            'after_title' => '</h3>',
-        )
-    );
+	register_sidebar(
+		array (
+			'name'          => __( 'Footer Widget 01 (Logo)', 'ontravelazores' ),
+			'id'            => 'footer-widget-logo-01',
+			'description'   => __( 'Insira a logo para Widget 1', 'ontravelazores' ),
+			'before_widget' => '<div class="widget-content">',
+			'after_widget'  => "</div>",
+			'before_title'  => '<h3 class="widget-title">',
+			'after_title'   => '</h3>',
+		)
+	);
 }
 
 add_action( 'widgets_init', 'custom_sidebar_footer_column02' );
 function custom_sidebar_footer_column02() {
-    register_sidebar(
-        array (
-            'name' => __( 'Footer Widget 02 (Logo)', 'ontravelazores' ),
-            'id' => 'footer-widget-logo-02',
-            'description' => __( 'Insira a logo para Widget 2', 'ontravelazores' ),
-            'before_widget' => '<div class="widget-content">',
-            'after_widget' => "</div>",
-            'before_title' => '<h3 class="widget-title">',
-            'after_title' => '</h3>',
-        )
-    );
+	register_sidebar(
+		array (
+			'name'          => __( 'Footer Widget 02 (Logo)', 'ontravelazores' ),
+			'id'            => 'footer-widget-logo-02',
+			'description'   => __( 'Insira a logo para Widget 2', 'ontravelazores' ),
+			'before_widget' => '<div class="widget-content">',
+			'after_widget'  => "</div>",
+			'before_title'  => '<h3 class="widget-title">',
+			'after_title'   => '</h3>',
+		)
+	);
 }
 
 add_action( 'widgets_init', 'custom_sidebar_footer_column03' );
 function custom_sidebar_footer_column03() {
-    register_sidebar(
-        array (
-            'name' => __( 'Footer Widget 03 (Logo)', 'ontravelazores' ),
-            'id' => 'footer-widget-logo-03',
-            'description' => __( 'Insira a logo para Widget 3', 'ontravelazores' ),
-            'before_widget' => '<div class="widget-content">',
-            'after_widget' => "</div>",
-            'before_title' => '<h3 class="widget-title">',
-            'after_title' => '</h3>',
-        )
-    );
+	register_sidebar(
+		array (
+			'name'          => __( 'Footer Widget 03 (Logo)', 'ontravelazores' ),
+			'id'            => 'footer-widget-logo-03',
+			'description'   => __( 'Insira a logo para Widget 3', 'ontravelazores' ),
+			'before_widget' => '<div class="widget-content">',
+			'after_widget'  => "</div>",
+			'before_title'  => '<h3 class="widget-title">',
+			'after_title'   => '</h3>',
+		)
+	);
 }
 
 add_action( 'widgets_init', 'custom_sidebar_footer_column04' );
 function custom_sidebar_footer_column04() {
-    register_sidebar(
-        array (
-            'name' => __( 'Footer Widget 04 (Logo)', 'ontravelazores' ),
-            'id' => 'footer-widget-logo-04',
-            'description' => __( 'Insira a logo para Widget 4', 'ontravelazores' ),
-            'before_widget' => '<div class="widget-content">',
-            'after_widget' => "</div>",
-            'before_title' => '<h3 class="widget-title">',
-            'after_title' => '</h3>',
-        )
-    );
+	register_sidebar(
+		array (
+			'name'          => __( 'Footer Widget 04 (Logo)', 'ontravelazores' ),
+			'id'            => 'footer-widget-logo-04',
+			'description'   => __( 'Insira a logo para Widget 4', 'ontravelazores' ),
+			'before_widget' => '<div class="widget-content">',
+			'after_widget'  => "</div>",
+			'before_title'  => '<h3 class="widget-title">',
+			'after_title'   => '</h3>',
+		)
+	);
 }
