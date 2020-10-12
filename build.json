@@ -24,9 +24,6 @@
         "font-awesome": {
             "version": "*"
         },
-        "freesoul-deactivate-plugins": {
-            "version": "*"
-        },
         "better-wp-security": {
             "version": "*",
             "activate-network": "yes"

@@ -8,6 +8,7 @@ function ot_ctb_init() {
 	add_action( 'woocommerce_add_cart_item_data', 'ot_add_discount_category', 10, 3 );
 	add_action( 'save_post', 'ot_set_coupon_string_translation', 10, 3 );
 	add_filter( 'woocommerce_cart_totals_coupon_label', 'ot_cart_totals_smart_coupons_label', 10, 2 );
+	add_action( 'wp_enqueue_scripts', 'ot_remove_conflicted_assets', 99 );
 }
 
 /**
@@ -98,4 +99,14 @@ function ot_cart_totals_smart_coupons_label( $default_label = '', $coupon = null
 	}
 
 	return $default_label;
+}
+
+/**
+ * Remove conflicted script.
+ */
+function ot_remove_conflicted_assets() {
+	if ( is_singular( 'tour' ) || is_singular( 'product' ) ) {
+		// Remove styles.
+		wp_dequeue_script( 'jquery-ui-datepicker' );
+	}
 }
