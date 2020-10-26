@@ -7,7 +7,7 @@ function citytours_child_enqueue_styles() {
 }
 
 // Loading theme includes.
-require_once( get_stylesheet_directory() . '/plugins/loader.php' );
+require_once get_stylesheet_directory() . '/plugins/loader.php';
 
 /**
  * Remove related products output
@@ -437,4 +437,12 @@ function custom_sidebar_footer_column04() {
 			'after_title'   => '</h3>',
 		)
 	);
+}
+
+// Avoid to send confirmation email from theme.
+if ( ! function_exists( 'ct_tour_generate_conf_mail' ) ) {
+	function ct_tour_generate_conf_mail( $order, $type='new' ) {
+		error_log( 'return false ct_tour_generate' );
+		return false;
+	}
 }
