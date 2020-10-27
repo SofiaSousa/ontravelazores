@@ -439,10 +439,25 @@ function custom_sidebar_footer_column04() {
 	);
 }
 
-// Avoid to send confirmation email from theme.
 if ( ! function_exists( 'ct_tour_generate_conf_mail' ) ) {
-	function ct_tour_generate_conf_mail( $order, $type='new' ) {
-		error_log( 'return false ct_tour_generate' );
+	/**
+	 * To avoid sending confirmation email from theme.
+	 */
+	function ct_tour_generate_conf_mail() {
 		return false;
 	}
 }
+
+add_action(
+	'woocommerce_after_cart_table',
+	function() {
+		if ( is_plugin_active( 'customer-upload-files-for-woocommerce/customer-upload-files-for-woocommerce.php' ) ) {
+			?>
+			<br>
+			<br>
+			<h3><?php echo esc_html__( 'Adicione o seu voucher Açores Seguro', 'ontravelazores' ); ?></h3>
+			<br>
+			<?php
+		}
+	}
+);
