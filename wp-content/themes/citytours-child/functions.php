@@ -3,11 +3,13 @@
 add_action( 'wp_enqueue_scripts', 'citytours_child_enqueue_styles' );
 function citytours_child_enqueue_styles() {
 	wp_enqueue_style( 'parent-style', get_template_directory_uri() . '/style.css' );
-	wp_enqueue_style( 'child-style', get_stylesheet_directory_uri() . '/style.css', array( 'parent-style' ), wp_get_theme()->get('Version') );
+	wp_enqueue_style( 'child-style', get_stylesheet_directory_uri() . '/style.css', array( 'parent-style' ), '20201027' );
+	// wp_get_theme()->get('Version')
 }
 
 // Loading theme includes.
 require_once get_stylesheet_directory() . '/plugins/loader.php';
+require_once get_stylesheet_directory() . '/inc/position-field.php';
 
 /**
  * Remove related products output
@@ -448,6 +450,7 @@ if ( ! function_exists( 'ct_tour_generate_conf_mail' ) ) {
 	}
 }
 
+// Add heading for upload files section in cart page.
 add_action(
 	'woocommerce_after_cart_table',
 	function() {
@@ -455,9 +458,29 @@ add_action(
 			?>
 			<br>
 			<br>
-			<h3><?php echo esc_html__( 'Adicione o seu voucher Açores Seguro', 'ontravelazores' ); ?></h3>
+			<h3><?php echo esc_html__( 'Add your Azores Safe Vouchers', 'ontravelazores' ); ?></h3>
 			<br>
 			<?php
+		}
+	}
+);
+
+// Remove '(discount:-35%)' from Açores Voucher name.
+add_action(
+	'woocommerce_cart_calculate_fees',
+	function( $cart ) {
+		$fees = $cart->fees_api()->get_fees();
+
+		if ( isset( $fees ) && ! empty( $fees ) ) {
+			$update_fees = false;
+			$fee_str     = '(discount:-35%)';
+
+			foreach ( $fees as &$f ) {
+				if ( false !== strpos( $f->name, $fee_str ) ) {
+					$update_fees = true;
+					$f->name     = str_replace( $fee_str, '', $f->name );
+				}
+			}
 		}
 	}
 );

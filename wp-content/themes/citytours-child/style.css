@@ -4,3 +4,68 @@
  Template:     citytours
 */
 
+#fme_upload_files_preview_cart_file {
+  padding: 0;
+  margin: 0;
+}
+
+#fme_upload_files_preview_cart_file:last-child {
+  margin-bottom: 50px;
+}
+
+#fme_upload_files_preview_cart_file li {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ddd;
+  padding: 20px 0;
+}
+
+#fme_upload_files_preview_cart_file li span {
+  flex-grow: 1;
+}
+
+#fme_upload_files_preview_cart_file li .fme_upload_file {
+  display: inline-block;
+}
+
+#fme_upload_files_preview_cart_file li .fme_view_cart_file {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  color: #1cbbb4;
+  margin-right: 10px;
+}
+
+#fme_upload_files_preview_cart_file li .fme_view_cart_file:focus,
+#fme_upload_files_preview_cart_file li .fme_view_cart_file:hover {
+  color: #111;
+}
+
+#fme_upload_files_preview_cart_file li .fme_view_cart_file span {
+ display: none;
+}
+
+#fme_upload_files_preview_cart_file li .fme_view_cart_file span.glyphicon {
+  display: inline-block;
+}
+
+#fme_upload_files_preview_cart_file li .fme_upload_files_iconpreviewcartpage {
+  position: relative;
+  top: 2px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+}
+
+#fme_upload_files_preview_cart_file li .fme_upload_files_iconpreviewcartpage:before {
+  content: "\e105";
+}
+
+#fme_upload_files_preview_cart_file li .fme_upload_files_iconpreviewcartpage img {
+  display: none;
+}
