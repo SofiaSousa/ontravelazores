@@ -5,14 +5,14 @@
  *
  * Copyright 2012 Ohad Raz (admin@bainternet.info)
  * @since 1.0
- * 
+ *
  * @package Tax Meta Class
- * 
+ *
  */
 
 var $ =jQuery.noConflict();
 function update_repeater_fields(){
-    
+
     /**
      * WysiWyg editor
      *
@@ -23,44 +23,44 @@ function update_repeater_fields(){
       tinyMCE.execCommand("mceAddControl", false, $(this).attr('id'));
       }
     });
-    
+
     /**
      * Datepicker Field.
      *
      * @since 1.0
      */
     $('.at-date').each( function() {
-      
+
       var $this  = $(this),
           format = $this.attr('rel');
-  
+
       $this.datepicker( { showButtonPanel: true, dateFormat: format } );
-      
+
     });
-  
+
     /**
      * Timepicker Field.
      *
      * @since 1.0
      */
     $('.at-time').each( function() {
-      
+
       var $this   = $(this),
           format   = $this.attr('rel');
-  
+
       $this.timepicker( { showSecond: true, timeFormat: format } );
-      
+
     });
-  
+
     /**
      * Colorpicker Field.
      *
      * @since 1.0
      */
     /*
-    
-    
-    
+
+
+
     /**
      * Select Color Field.
      *
@@ -72,49 +72,49 @@ function update_repeater_fields(){
       $(this).siblings('.at-color-picker').farbtastic("#" + id).toggle();
       return false;
     });
-  
+
     /**
      * Delete File.
      *
      * @since 1.0
      */
     $('.at-upload').delegate( '.at-delete-file', 'click' , function() {
-      
+
       var $this   = $(this),
         $parent = $this.parent(),
         data = $this.attr('rel');
-          
+
       $.post( ajaxurl, { action: 'at_delete_file', data: data }, function(response) {
         response == '0' ? ( alert( 'File has been successfully deleted.' ), $parent.remove() ) : alert( 'You do NOT have permission to delete this file.' );
       });
-      
+
       return false;
-    
+
     });
-  
+
     /**
      * Reorder Images.
      *
      * @since 1.0
      */
     $('.at-images').each( function() {
-      
+
       var $this = $(this), order, data;
-      
+
       $this.sortable( {
         placeholder: 'ui-state-highlight',
         update: function (){
           order = $this.sortable('serialize');
           data   = order + '|' + $this.siblings('.at-images-data').val();
-  
+
           $.post(ajaxurl, {action: 'at_reorder_images', data: data}, function(response){
             response == '0' ? alert( 'Order saved!' ) : alert( "You don't have permission to reorder images." );
           });
         }
       });
-      
+
     });
-    
+
   }
 jQuery(document).ready(function($) {
 
@@ -129,26 +129,26 @@ jQuery(document).ready(function($) {
   jQuery(".at-repater-block").click(function(){
     jQuery(this).find('table').toggle();
   });
-  
+
   */
   //edit
-  $(".at-re-toggle").live('click', function() {
+  $(document).on('click', '.at-re-toggle', function() {
+  // $(".at-re-toggle").live('click', function() {
     $(this).prev().toggle('slow');
   });
-  
-  
+
   /**
    * Datepicker Field.
    *
    * @since 1.0
    */
   $('.at-date').each( function() {
-    
+
     var $this  = $(this),
         format = $this.attr('rel');
 
     $this.datepicker( { showButtonPanel: true, dateFormat: format } );
-    
+
   });
 
   /**
@@ -157,12 +157,12 @@ jQuery(document).ready(function($) {
    * @since 1.0
    */
   $('.at-time').each( function() {
-    
+
     var $this   = $(this),
         format   = $this.attr('rel');
 
     $this.timepicker( { showSecond: true, timeFormat: format } );
-    
+
   });
 
   /**
@@ -172,16 +172,18 @@ jQuery(document).ready(function($) {
    * better handler for color picker with repeater fields support
    * which now works both when button is clicked and when field gains focus.
    */
-  $('.at-color').live('focus', function() {
+  $(document).on('focus', '.at-color', function() {
+  // $('.at-color').live('focus', function() {
     var $this = $(this);
     $(this).siblings('.at-color-picker').farbtastic($this).toggle();
   });
 
-  $('.at-color').live('focusout', function() {
+  $(document).on('focusout', '.at-color', function() {
+  // $('.at-color').live('focusout', function() {
     var $this = $(this);
     $(this).siblings('.at-color-picker').farbtastic($this).toggle();
   });
-  
+
   /**
    * Add Files.
    *
@@ -199,21 +201,21 @@ jQuery(document).ready(function($) {
    * @since 1.0
    */
   $('.at-upload').delegate( '.at-delete-file', 'click' , function() {
-    
+
     var $this   = $(this),
         $parent = $this.parent(),
         data = $this.attr('rel');
-    
+
     var ind = $(this).index()
     $.post( ajaxurl, { action: 'at_delete_file', data: data, tag_id: get_query_var('tag_ID') }, function(response) {
       response == '0' ? ( alert( 'File has been successfully deleted.' ), $parent.remove() ) : alert( 'You do NOT have permission to delete this file.' );
     });
-    
+
     return false;
-  
+
   });
 
-    
+
   /**
    * Helper Function
    *
@@ -225,9 +227,9 @@ jQuery(document).ready(function($) {
 
     var match = RegExp('[?&]' + name + '=([^&#]*)').exec(location.href);
     return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
-      
+
   }
-  
+
   //new image upload field
   function load_images_muploader(){
     jQuery(".mupload_img_holder").each(function(i,v){
@@ -240,10 +242,11 @@ jQuery(document).ready(function($) {
       }
     });
   }
-  
+
   load_images_muploader();
   //delete img button
-  jQuery('.at-delete_image_button').live('click', function(e){
+  jQuery(document).on('click', '.at-delete_image_button', function(e){
+  // jQuery('.at-delete_image_button').live('click', function(e){
     var field_id = jQuery(this).attr("rel");
     var at_id = jQuery(this).prev().prev();
     var at_src = jQuery(this).prev();
@@ -255,7 +258,7 @@ jQuery(document).ready(function($) {
         field_id: field_id,
         attachment_id: jQuery(at_id).val()
     };
-  
+
     $.getJSON(ajaxurl, data, function(response) {
       if ('success' == response.status){
         jQuery(t_button).val("Upload Image");
@@ -269,23 +272,24 @@ jQuery(document).ready(function($) {
         alert(response.message);
       }
     });
-  
+
     return false;
   });
-  
+
 
   //upload button
   var formfield1;
   var formfield2;
-  jQuery('.at-upload_image_button').live('click',function(e){
+  jQuery(document).on('click', '.at-upload_image_button', function(e){
+  // jQuery('.at-upload_image_button').live('click',function(e){
     formfield1 = jQuery(this).prev();
-    formfield2 = jQuery(this).prev().prev();      
+    formfield2 = jQuery(this).prev().prev();
     tb_show('', 'media-upload.php?post_id=0&type=image&amp;TB_iframe=true&tax_meta_c=instopo');
 
     //cleanup the meadi uploader
     tbframe_interval = setInterval(function() {
 
-       //remove url, alignment and size fields- auto set to null, none and full respectively                        
+       //remove url, alignment and size fields- auto set to null, none and full respectively
        $('#TB_iframeContent').contents().find('.url').hide();
        $('#TB_iframeContent').contents().find('.align').hide();
        $('#TB_iframeContent').contents().find('.image_alt').hide();
