@@ -458,7 +458,7 @@ add_action(
 			?>
 			<br>
 			<br>
-			<h3><?php echo esc_html__( 'Add your Azores Safe Vouchers', 'ontravelazores' ); ?></h3>
+			<h3><b><?php echo esc_html__( 'Add your Azores Safe Vouchers', 'ontravelazores' ); ?></b></h3>
 			<br>
 			<?php
 		}
