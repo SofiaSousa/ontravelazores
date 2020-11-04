@@ -455,7 +455,7 @@ add_action(
 			?>
 			<br>
 			<br>
-			<h3><?php echo esc_html__( 'Adicione o seu voucher Açores Seguro', 'ontravelazores' ); ?></h3>
+			<h3><b><?php echo esc_html__( 'Adicione o seu voucher Açores Seguro', 'ontravelazores' ); ?></b></h3>
 			<br>
 			<?php
 		}
