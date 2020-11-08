@@ -8,7 +8,7 @@
  * @package CarRentalBookingSystem
  */
 
-if ( ! define( 'PLUGIN_CRBS_CONTEXT' ) ) {
+if ( ! defined( 'PLUGIN_CRBS_CONTEXT' ) ) {
 	define( 'PLUGIN_CRBS_CONTEXT', 'crbs' );
 }
 

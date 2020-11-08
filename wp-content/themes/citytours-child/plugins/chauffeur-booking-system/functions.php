@@ -8,7 +8,7 @@
  * @package ChauffeurBookingSystem
  */
 
-if ( ! define( 'PLUGIN_CHBS_CONTEXT' ) ) {
+if ( ! defined( 'PLUGIN_CHBS_CONTEXT' ) ) {
 	define( 'PLUGIN_CHBS_CONTEXT', 'chbs' );
 }
 
