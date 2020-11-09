@@ -173,7 +173,7 @@ function ot_wc_checkout_create_order_line_item( $item, $cart_item_key, $values, 
 			$booking_details = get_post_meta( $product_id, '_ct_booking_info', true );
 			$item->update_meta_data( __( 'Adults (+11 Years)', 'citytours' ), $booking_details['adults'] );
 			$item->update_meta_data( __( 'Children (3 - 10 Years)', 'citytours' ), $booking_details['kids'] );
-			$item->update_meta_data( '--' . __( 'Infants (0 - 2 Years)', 'citytours' ), $booking_details['infants'] );
+			$item->update_meta_data( __( 'Infants (0 - 2 Years)', 'citytours' ), $booking_details['infants'] );
 
 			// Aditional services.
 			$add_services = get_post_meta( $product_id, '_ct_add_service' );
@@ -200,65 +200,58 @@ function ot_wc_checkout_create_order_line_item( $item, $cart_item_key, $values, 
 function ot_wc_custom_checkout_fields( $checkout ) {
 	$extra_fields = ot_get_tours_extra_fields();
 
-	$extra_fields_keys = array_keys( $extra_fields );
-
 	foreach ( WC()->cart->get_cart() as $cart_item ) {
 		$product_id = $cart_item['product_id'];
 		$post_id    = get_post_meta( $product_id, '_ct_post_id', true );
 		$post_type  = get_post_type( $post_id );
 
 		if ( 'tour' === $post_type && 'product' === $cart_item['data']->post_type ) {
-			$product_slug      = $cart_item['data']->get_slug();
-			$extra_fields_slug = false;
+			$extra_fields_groups = wp_get_post_terms( $post_id, 'tour_extra_fields', array( 'fields' => 'slugs' ) );
 
-			// Check if there are extra fields for current product.
-			foreach ( $extra_fields_keys as $k ) {
-				if ( false !== strpos( $product_slug, $k ) ) {
-					$extra_fields_slug = $k;
-					break;
-				}
-			}
+			if ( ! empty( $extra_fields_groups ) ) {
+				// Heading.
+				echo '<div class="col-sm-12"><div class="default-title"><h2>' . esc_attr( $cart_item['data']->get_name() ) . '</h2></div></div>';
 
-			if ( ! $extra_fields_slug ) {
-				break;
-			}
-
-			echo '<div class="col-sm-12"><div class="default-title"><h2>' . esc_attr( $cart_item['data']->get_name() ) . '</h2></div></div>';
-
-			$fields = $extra_fields[ $extra_fields_slug ];
-
-			foreach ( $fields as $k_field => $fields ) {
+				// Hidden field - tour name.
 				woocommerce_form_field(
-					'extra[' . $cart_item['data']->id . '][fields][' . $k_field . ']',
+					'extra[' . $cart_item['data']->id . '][name]',
 					array(
-						'type'        => 'text',
-						'class'       => array( 'form-row-wide' ),
-						'label'       => $fields['label'],
-						'placeholder' => '',
-						'required'    => true,
-					),
-					$checkout->get_value( $k_field )
+						'type'     => 'hidden',
+						'default'  => $cart_item['data']->get_name(),
+						'required' => true,
+					)
+				);
+
+				foreach ( $extra_fields_groups as $group ) {
+					$fields = $extra_fields[ $group ];
+					if ( $group && ! empty( $fields ) ) {
+
+						foreach ( $fields as $k_field => $field ) {
+							woocommerce_form_field(
+								'extra[' . $cart_item['data']->id . '][fields][' . $k_field . ']',
+								array(
+									'type'        => 'text',
+									'class'       => array( 'form-row-wide' ),
+									'label'       => $field['label'],
+									'placeholder' => '',
+									'required'    => true,
+								),
+								$checkout->get_value( $k_field )
+							);
+						}
+					}
+				}
+
+				// Hidden field - extra fields groups.
+				woocommerce_form_field(
+					'extra[' . $cart_item['data']->id . '][groups]',
+					array(
+						'type'     => 'hidden',
+						'default'  => implode( ',', $extra_fields_groups ),
+						'required' => true,
+					)
 				);
 			}
-
-			woocommerce_form_field(
-				'extra[' . $cart_item['data']->id . '][name]',
-				array(
-					'type'     => 'hidden',
-					'default'  => $cart_item['data']->get_name(),
-					'required' => true,
-				),
-				$checkout->get_value( $k_field )
-			);
-			woocommerce_form_field(
-				'extra[' . $cart_item['data']->id . '][type]',
-				array(
-					'type'     => 'hidden',
-					'default'  => $cart_item['data']->get_name(),
-					'required' => true,
-				),
-				$extra_fields_slug
-			);
 		}
 	}
 }
@@ -267,22 +260,26 @@ function ot_wc_custom_checkout_fields( $checkout ) {
  * Validate extra fields presence.
  */
 function ot_wc_checkout_process() {
-	$extra_fields = ot_get_tours_extra_fields();
+	if ( isset( $_POST['extra'] ) ) {
+		$extra_fields = ot_get_tours_extra_fields();
 
-	// error_log( print_r( $_POST, 1 ) );
+		foreach ( $_POST['extra'] as $id => $tour_data ) {
+			$extra_fields_groups = explode( ',', $tour_data['groups'] );
 
-	if ( isset( $_POST[ 'extra' ] ) ) {
-		foreach ( $_POST[ 'extra' ] as $id => $tour_data ) {
-			$type = $tour_data['type'];
+			if ( ! empty( $extra_fields_groups ) ) {
+				foreach ( $extra_fields_groups as $group ) {
+					$fields = $extra_fields[ $group ];
 
-			if ( isset( $type ) && isset( $extra_fields[ $type ] ) ) {
-				foreach ( $extra_fields[ $type ] as $slug => $field ) {
-					$field_name     = $field['label'];
-					$field_required = $field['required'];
+					if ( $group && ! empty( $fields ) ) {
+						foreach ( $fields as $k_field => $field ) {
+							$field_name     = $field['label'];
+							$field_required = $field['required'];
 
-					if ( ( ! isset( $field_required ) || ! ! $field_required ) && empty( $tour_data['fields'][ $slug ] ) ) {
-						/* translators: %s: Field name. */
-						wc_add_notice( $tour_data['name'] . ' - ' . sprintf( __( '%s is a required field.', 'woocommerce' ), '<strong>' . esc_html( $field_name ) . '</strong>' ), 'error' );
+							if ( ( ! isset( $field_required ) || ! ! $field_required ) && empty( $tour_data['fields'][ $k_field ] ) ) {
+								/* translators: %s: Field name. */
+								wc_add_notice( $tour_data['name'] . ' - ' . sprintf( __( '%s is a required field.', 'woocommerce' ), '<strong>' . esc_html( $field_name ) . '</strong>' ), 'error' );
+							}
+						}
 					}
 				}
 			}
@@ -292,6 +289,8 @@ function ot_wc_checkout_process() {
 
 /**
  * Save order extra fields.
+ *
+ * @param int $order_id The order id.
  */
 function ot_wc_checkout_update_order_meta( $order_id ) {
 	$extra_fields = ot_get_tours_extra_fields();
@@ -303,21 +302,30 @@ function ot_wc_checkout_update_order_meta( $order_id ) {
 
 /**
  * Display field value on the order edit page.
+ *
+ * @param Array $order The order.
  */
 function ot_wc_admin_order_meta_data( $order ) {
 	$extra_fields = ot_get_tours_extra_fields();
-	$extra_data   = get_post_meta( $order->id, 'extra_fields', true );
+	$extra_data   = get_post_meta( $order->get_id(), 'extra_fields', true );
 
 	if ( isset( $extra_data ) ) {
 		foreach ( $extra_data as $id => $tour_data ) {
-			$type = $tour_data['type'];
+			$extra_fields_groups = explode( ',', $tour_data['groups'] );
 
 			echo '<div>';
 			echo '<h3>' . esc_attr( $tour_data['name'] ) . '</h3>';
 
-			foreach ( $tour_data['fields'] as $key => $value ) {
-				echo '<p><strong>' . esc_html( $extra_fields[ $type ][ $key ]['label'] ) . ':</strong> ' . esc_attr( $value ) . '</p>';
+			foreach ( $extra_fields_groups as $group ) {
+				$fields = $extra_fields[ $group ];
+
+				if ( $group && ! empty( $fields ) ) {
+					foreach ( $fields as $k_field => $field ) {
+						echo '<p><strong>' . esc_html( $extra_fields[ $group ][ $k_field ]['label'] ) . ':</strong> ' . esc_attr( $tour_data['fields'][ $k_field ] ) . '</p>';
+					}
+				}
 			}
+
 			echo '</div>';
 		}
 	}
@@ -325,14 +333,16 @@ function ot_wc_admin_order_meta_data( $order ) {
 
 /**
  * Display field value on the order edit page.
+ *
+ * @param Array $order The order.
  */
 function ot_wc_order_details_after_order_table( $order ) {
 	$extra_fields = ot_get_tours_extra_fields();
-	$extra_data   = get_post_meta( $order->id, 'extra_fields', true );
+	$extra_data   = get_post_meta( $order->get_id(), 'extra_fields', true );
 
 	if ( isset( $extra_data ) ) {
 		foreach ( $extra_data as $id => $tour_data ) {
-			$type = $tour_data['type'];
+			$extra_fields_groups = explode( ',', $tour_data['groups'] );
 
 			echo '<div>';
 			echo '<h2>' . esc_attr( $tour_data['name'] ) . '</h2>';
@@ -341,8 +351,14 @@ function ot_wc_order_details_after_order_table( $order ) {
 			echo '<table class="shop_table">';
 			echo '<tbody>';
 
-			foreach ( $tour_data['fields'] as $key => $value ) {
-				echo '<tr><th style="width: 1px; white-space: nowrap;">' . esc_html( $extra_fields[ $type ][ $key ]['label'] ) . ':</th><td>' . esc_attr( $value ) . '</td></tr>';
+			foreach ( $extra_fields_groups as $group ) {
+				$fields = $extra_fields[ $group ];
+
+				if ( $group && ! empty( $fields ) ) {
+					foreach ( $fields as $k_field => $field ) {
+						echo '<tr><th style="width: 1px; white-space: nowrap;">' . esc_html( $extra_fields[ $group ][ $k_field ]['label'] ) . ':</th><td>' . esc_attr( $tour_data['fields'][ $k_field ] ) . '</td></tr>';
+					}
+				}
 			}
 
 			echo '</tbody>';
@@ -356,16 +372,18 @@ function ot_wc_order_details_after_order_table( $order ) {
  */
 function ot_get_tours_extra_fields() {
 	return array(
-		'canyoning' => array(
-			'participants_names'    => array(
+		'fields-group-1' => array(
+			'participants_names' => array(
 				'label' => __( 'Name & Surname - All Participants', 'citytours' ),
 			),
-			'participants_ids'      => array(
+			'participants_ids'   => array(
 				'label' => __( 'ID No. - All Participants', 'citytours' ),
 			),
-			'participants_birth'    => array(
+			'participants_birth' => array(
 				'label' => __( 'Date of Birth - All Participants', 'citytours' ),
 			),
+		),
+		'fields-group-2' => array(
 			'participants_height'   => array(
 				'label' => __( 'Height - All Participants', 'citytours' ),
 			),
