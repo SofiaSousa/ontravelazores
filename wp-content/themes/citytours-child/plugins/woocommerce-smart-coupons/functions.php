@@ -4,6 +4,7 @@
  */
 
 add_action( 'init', 'ot_smart_coupons_init' );
+add_action( 'admin_init', 'ot_smart_coupons_admin_init' );
 
 /**
  * Initial setup.
@@ -11,17 +12,23 @@ add_action( 'init', 'ot_smart_coupons_init' );
 function ot_smart_coupons_init() {
 	add_filter( 'wc_get_template', 'ot_smart_coupons_templates', 10, 5 );
 
+	remove_action( 'woocommerce_checkout_after_customer_details', array( WC_SC_Purchase_Credit::get_instance(), 'gift_certificate_receiver_detail_form' ) );
+	add_action( 'woocommerce_checkout_after_customer_details', 'ot_smart_coupons_gift_certificate_receiver_detail_form' );
+}
+
+/**
+ * Admin init.
+ */
+function ot_smart_coupons_admin_init() {
 	if ( is_plugin_active( 'woocommerce-gateway-paypal-express/woocommerce-gateway-paypal-express.php' ) ) {
 		remove_action( 'woocommerce_ppe_checkout_order_review', array( WC_SC_Purchase_Credit::get_instance(), 'gift_certificate_receiver_detail_form' ), 9 );
 		add_action( 'woocommerce_ppe_checkout_order_review', 'ot_smart_coupons_gift_certificate_receiver_detail_form' );
 	}
-
-	remove_action( 'woocommerce_checkout_after_customer_details', array( WC_SC_Purchase_Credit::get_instance(), 'gift_certificate_receiver_detail_form' ) );
-
-
-	add_action( 'woocommerce_checkout_after_customer_details',  'ot_smart_coupons_gift_certificate_receiver_detail_form' );
 }
 
+/**
+ *
+ */
 function ot_smart_coupons_templates( $template, $template_name, $args, $template_path, $default_path ) {
 	$custom_templates = array( 'call-for-credit-form.php' );
 
@@ -31,7 +38,6 @@ function ot_smart_coupons_templates( $template, $template_name, $args, $template
 
 	return $template;
 }
-
 
 /**
  * Function to display form for entering details of the gift certificate's receiver
@@ -180,6 +186,4 @@ function ot_smart_coupons_gift_certificate_receiver_detail_form() {
 		<?php
 		do_action( 'wc_sc_gift_certificate_form_shown' );
 	}
-
 }
-

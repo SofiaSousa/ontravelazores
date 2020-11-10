@@ -20,6 +20,7 @@ wp-content/themes/*
 !wp-content/plugins/car-rental-booking-system/
 !wp-content/plugins/chauffeur-booking-system/
 !wp-content/plugins/ct-booking/
+!wp-content/plugins/customer-upload-files-for-woocommerce/
 !wp-content/plugins/smart-emails/
 !wp-content/plugins/sliderpro/
 !wp-content/plugins/revslider/

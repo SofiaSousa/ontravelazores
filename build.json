@@ -15,16 +15,10 @@
         "cookie-notice": {
             "version": "*"
         },
-        "disable-right-click-for-wp": {
-            "version": "1.1.6"
-        },
         "disable-dashboard-for-woocommerce": {
             "version": "*"
         },
         "font-awesome": {
-            "version": "*"
-        },
-        "freesoul-deactivate-plugins": {
             "version": "*"
         },
         "better-wp-security": {
@@ -50,7 +44,7 @@
             "version": "*"
         },
         "sms-orders-alertnotifications-for-woocommerce": {
-            "version": "1.4.2"
+            "version": "1.*"
         },
         "woocommerce": {
             "version": "*"
@@ -59,18 +53,15 @@
             "version": "*"
         },
         "woocommerce-multilingual": {
-            "version": "4.10.2"
+            "version": "4.*"
         },
         "woocommerce-gateway-stripe": {
-            "version": "4.5.2"
+            "version": "4.*"
         },
         "wp-fastest-cache": {
             "version": "*"
         },
         "wp-mail-smtp": {
-            "version": "*"
-        },
-        "simple-taxonomy-ordering": {
             "version": "*"
         },
         "wordpress-seo": {

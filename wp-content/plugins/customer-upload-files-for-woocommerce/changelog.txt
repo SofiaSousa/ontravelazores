@@ -1,0 +1,7 @@
+** FME Addons: Customer Upload Files for WooCommerce **
+
+2020-10-08 - version 1.0.1
+* Solve Add to cart variable product Price issue.
+
+2020-09-08 - version 1.0.0
+* Initial Release

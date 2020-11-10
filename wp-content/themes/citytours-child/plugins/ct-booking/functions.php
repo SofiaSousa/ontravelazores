@@ -8,6 +8,9 @@ function ot_ctb_init() {
 	add_action( 'woocommerce_add_cart_item_data', 'ot_add_discount_category', 10, 3 );
 	add_action( 'save_post', 'ot_set_coupon_string_translation', 10, 3 );
 	add_filter( 'woocommerce_cart_totals_coupon_label', 'ot_cart_totals_smart_coupons_label', 10, 2 );
+	add_action( 'wp_enqueue_scripts', 'ot_remove_conflicted_assets', 99 );
+
+	register_tour_extra_fields_taxonomy();
 }
 
 /**
@@ -98,4 +101,46 @@ function ot_cart_totals_smart_coupons_label( $default_label = '', $coupon = null
 	}
 
 	return $default_label;
+}
+
+/**
+ * Remove conflicted script.
+ */
+function ot_remove_conflicted_assets() {
+	if ( is_singular( 'tour' ) || is_singular( 'product' ) ) {
+		// Remove styles.
+		wp_dequeue_script( 'jquery-ui-datepicker' );
+	}
+}
+
+/**
+ * Register Tour Extra Fields taxonomy
+ */
+function register_tour_extra_fields_taxonomy() {
+	$labels = array(
+		'name'                       => _x( 'Tour Extra Fields', 'taxonomy general name', 'citytours' ),
+		'singular_name'              => _x( 'Tour Extra Fields', 'taxonomy singular name', 'citytours' ),
+		'menu_name'                  => __( 'Tour Extra Fields', 'citytours' ),
+		'all_items'                  => __( 'All Tour Extra Fields', 'citytours' ),
+		'parent_item'                => null,
+		'parent_item_colon'          => null,
+		'new_item_name'              => __( 'New Tour Extra Fields Group', 'citytours' ),
+		'add_new_item'               => __( 'Add New Tour Extra Fields Group', 'citytours' ),
+		'edit_item'                  => __( 'Edit Tour Extra Fields Group', 'citytours' ),
+		'update_item'                => __( 'Update Tour Extra Fields Group', 'citytours' ),
+		'separate_items_with_commas' => __( 'Separate tour extra fields with commas', 'citytours' ),
+		'search_items'               => __( 'Search Tour Extra Fields', 'citytours' ),
+		'add_or_remove_items'        => __( 'Add or remove tour extra fields', 'citytours' ),
+		'choose_from_most_used'      => __( 'Choose from the most used tour extra fields', 'citytours' ),
+		'not_found'                  => __( 'No tour extra fields found.', 'citytours' ),
+	);
+
+	$args = array(
+		'labels'            => $labels,
+		'hierarchical'      => false,
+		'show_ui'           => true,
+		'show_admin_column' => true,
+	);
+
+	register_taxonomy( 'tour_extra_fields', array( 'tour' ), $args );
 }
