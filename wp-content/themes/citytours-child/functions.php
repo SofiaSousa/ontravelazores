@@ -113,265 +113,24 @@ add_action('init', function() {
 add_filter( 'woocommerce_product_tabs', 'bbloomer_remove_product_tabs', 9999 );
 
 function bbloomer_remove_product_tabs( $tabs ) {
-    unset( $tabs['additional_information'] );
-    return $tabs;
+	unset( $tabs['additional_information'] );
+	return $tabs;
 }
 
 // From parent theme - old implementation
 /** ************************************************ **/
 
-// Ir pegar nos IDS dos posts que existirem campos personalizados (tours)
-function check_product_category(){
-	$arr_ids = array();
-    foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
-		$product_id = apply_filters( 'woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key );
-		$product_title = get_the_title($product_id);
-		$product_permalink = get_permalink($product_id);
-
-		$args = array('post_type'=>'tour', 'posts_per_page'=>'-1');
-		$result = new WP_Query($args);
-		if ($result->have_posts()) :
-			while ($result->have_posts()) : $result->the_post();
-				$tour_permalink = get_permalink();
-				$tour_id = get_the_ID();
-				if ($tour_permalink == $product_permalink) {
-					$check_exists_fields = have_rows('tours_extraFields_repeater',  $tour_id);
-					if ($check_exists_fields) {
-						array_push($arr_ids, $tour_id);
-					}
-					break;
-				}
-			endwhile;
-		endif;
-    }
-    return $arr_ids;
-}
-
-
-// Adicionar campos personalizados no checkout
-add_action( 'woocommerce_before_order_notes', 'sdc_custom_checkout_field' );
-function sdc_custom_checkout_field( $checkout ) {
-	$wpml_language_code = ICL_LANGUAGE_CODE;
-	$products_with_extrafields_ids = check_product_category();
-
-	if ( count($products_with_extrafields_ids) ) {
-
-		foreach ($products_with_extrafields_ids as $key => $value) {
-			/*
-			if ($wpml_language_code == 'pt-pt') {
-				echo '<div class="col-sm-12"><div class="default-title"><h2>' . __( 'Mais informações - "'. get_the_title($value) . '"</h2></div></div><div>');
-			} else if ($wpml_language_code == 'en') {
-				echo '<div class="col-sm-12"><div class="default-title"><h2>' . __( 'More information - "'. get_the_title($value) . '"</h2></div></div><div>');
-			}
-			*/
-
-			$checkout_mais_informacoes = get_field('checkout_mais_informacoes', 'option');
-
-			if ( !empty($checkout_mais_informacoes) ):
-				echo '<div class="col-sm-12"><div class="default-title"><h2>' . $checkout_mais_informacoes . ' - "' .  get_the_title($value) . '"</h2></div></div><div>';
-			else:
-				echo '<div class="col-sm-12"><div class="default-title"><h2>' . get_the_title($value) . '</h2></div></div><div>';
-			endif;
-
-				if( have_rows('tours_extraFields_repeater', $value) ):
-					while ( have_rows('tours_extraFields_repeater', $value) ) : the_row();
-						$title = get_sub_field('tours_extraFields_title', $value);
-						$type = get_sub_field('tours_extraFields_type', $value);
-						$required = get_sub_field('tours_extraFields_required', $value);
-
-						$type = ($type == 'number' ? 'number' : 'text');
-						$required = ($required == 'yes' ? true : false);
-
-						$field_name = substr( md5( serialize( $value.$title ) ), 0, 8 );
-
-						woocommerce_form_field( $field_name, array(
-							'type'  => $type,
-							'required'  => $required,
-							'class' => array( $field_name . ' form-row-wide' ),
-							'label' => __( $title ),
-						), $checkout->get_value( $field_name ) );
-
-					endwhile;
-				endif;
-			echo '</div>';
-		}
-    }
-}
-
-// Validação dos campos personalizados
-add_action( 'woocommerce_checkout_process', 'bbloomer_validate_new_checkout_field' );
-function bbloomer_validate_new_checkout_field() {
-	$wpml_language_code = ICL_LANGUAGE_CODE;
-	$products_with_extrafields_ids = check_product_category();
-	if ( count($products_with_extrafields_ids) ) {
-		foreach ($products_with_extrafields_ids as $key => $value) {
-			if( have_rows('tours_extraFields_repeater', $value) ):
-				while ( have_rows('tours_extraFields_repeater', $value) ) : the_row();
-					$title = get_sub_field('tours_extraFields_title', $value);
-					$type = get_sub_field('tours_extraFields_type', $value);
-					$required = get_sub_field('tours_extraFields_required', $value);
-
-					$required = ($required == 'yes' ? true : false);
-					$field_name = substr( md5( serialize( $value.$title ) ), 0, 8 );
-
-					if ( $required && !$_POST[$field_name] ) {
-						if ($wpml_language_code == 'pt-pt') {
-							wc_add_notice( 'Por favor preencha o campo "'.$title.'"', 'error' );
-						} else if ($wpml_language_code == 'en') {
-							wc_add_notice( 'Please fill in the "'.$title.'" field', 'error' );
-						}
-					}
-				endwhile;
-			endif;
-		}
-	}
-}
-
-/*Save to DB as post meta*/
-add_action( 'woocommerce_checkout_update_order_meta', 'my_custom_checkout_field_update_order_meta' );
-function my_custom_checkout_field_update_order_meta( $order_id ) {
-	$products_with_extrafields_ids = check_product_category();
-
-	if ( count($products_with_extrafields_ids) ) {
-		foreach ($products_with_extrafields_ids as $key => $value) {
-			if( have_rows('tours_extraFields_repeater', $value) ):
-				while ( have_rows('tours_extraFields_repeater', $value) ) : the_row();
-					$title = get_sub_field('tours_extraFields_title', $value);
-					$type = get_sub_field('tours_extraFields_type', $value);
-					$required = get_sub_field('tours_extraFields_required', $value);
-
-					$field_name = substr( md5( serialize( $value.$title ) ), 0, 8 );
-
-					if ( ! empty( $_POST[$field_name] ) ) {
-						update_post_meta( $order_id, $field_name, sanitize_text_field( $_POST[$field_name] ) );
-					}
-				endwhile;
-			endif;
-		}
-    }
-}
-
-// Mostrar os valores dos campos personalizados - na Administração (Woocommerce)
-add_action( 'woocommerce_admin_order_data_after_billing_address', 'bbloomer_show_new_checkout_field_order', 10, 1 );
-function bbloomer_show_new_checkout_field_order( $order ) {
-
-	$order_id = $order->get_id();
-
-	foreach ($order->get_items() as $item_key => $item ):
-		$item_id 	= $item->get_id();
-		$product    = $item->get_product();
-		$product_id	= $item->get_product_id();
-
-		$tour_id = 0;
-
-		$product_title = get_the_title($product_id);
-		$product_permalink = get_permalink($product_id);
-
-		$args = array('post_type'=>'tour', 'posts_per_page'=>'-1');
-		$result = new WP_Query($args);
-		if ($result->have_posts()) :
-			while ($result->have_posts()) : $result->the_post();
-				$tour_permalink	= get_permalink();
-				$temp_tour_id 		= get_the_ID();
-				if ($tour_permalink == $product_permalink) {
-					$check_exists_fields = have_rows('tours_extraFields_repeater',  $temp_tour_id);
-					if ($check_exists_fields) {
-						$tour_id = $temp_tour_id;
-					}
-					break;
-				}
-			endwhile;
-		endif;
-
-		if( have_rows('tours_extraFields_repeater', $tour_id) ):
-			while ( have_rows('tours_extraFields_repeater', $tour_id) ) : the_row();
-
-				$title = get_sub_field('tours_extraFields_title', $tour_id);
-				$type = get_sub_field('tours_extraFields_type', $tour_id);
-				$required = get_sub_field('tours_extraFields_required', $tour_id);
-				$field_name = substr( md5( serialize( $tour_id.$title ) ), 0, 8 );
-
-				if ( get_post_meta( $order_id, $field_name, true ) ) echo '<p><strong>'.$title.':</strong> ' . get_post_meta( $order_id, $field_name, true ) . '</p>';
-
-			endwhile;
-		endif;
-
-	endforeach;
-}
-
-
-add_action( 'woocommerce_email_after_order_table', 'bbloomer_show_new_checkout_field_emails', 20, 4 );
-function bbloomer_show_new_checkout_field_emails( $order, $sent_to_admin, $plain_text, $email ) {
-
-	$order_id = $order->get_id();
-
-	$array_fields = array();
-
-	foreach ($order->get_items() as $item_key => $item ):
-		$item_id 	= $item->get_id();
-		$product    = $item->get_product();
-		$product_id	= $item->get_product_id();
-
-		$tour_id = 0;
-
-		$product_title = get_the_title($product_id);
-		$product_permalink = get_permalink($product_id);
-
-		$args = array('post_type'=>'tour', 'posts_per_page'=>'-1', 'suppress_filters'=>true);
-		$result = new WP_Query($args);
-		if ($result->have_posts()) :
-			while ($result->have_posts()) : $result->the_post();
-				$tour_permalink	= get_permalink();
-				$temp_tour_id 		= get_the_ID();
-				if ($tour_permalink == $product_permalink) {
-					$check_exists_fields = have_rows('tours_extraFields_repeater',  $temp_tour_id);
-					if ($check_exists_fields) {
-						$tour_id = $temp_tour_id;
-					}
-					break;
-				}
-			endwhile;
-		endif;
-
-		if( have_rows('tours_extraFields_repeater', $tour_id) ):
-			while ( have_rows('tours_extraFields_repeater', $tour_id) ) : the_row();
-
-				$title = get_sub_field('tours_extraFields_title', $tour_id);
-				$type = get_sub_field('tours_extraFields_type', $tour_id);
-				$required = get_sub_field('tours_extraFields_required', $tour_id);
-				$field_name = substr( md5( serialize( $tour_id.$title ) ), 0, 8 );
-				$field_value = get_post_meta( $order_id, $field_name, true );
-
-				if ( get_post_meta( $order_id, $field_name, true ) ) {
-					echo '<p><strong>'.$title.':</strong> ' . $field_value . '</p>';
-					array_push( $array_fields, array($title, $field_value) );
-				}
-
-			endwhile;
-		endif;
-
-	endforeach;
-
-}
-
-
-
-$wpml_language_code = ICL_LANGUAGE_CODE;
-
-if( function_exists('acf_add_options_page') ) {
-	acf_add_options_page(array(
-		'page_title' => 'Settings (Tours)',
-		'menu_title' => 'Settings (Tours)',
-		'menu_slug'  => 'theme-general-settings',
-		'capability' => 'edit_posts',
-		'icon_url'   => 'dashicons-schedule',
-		'redirect'   => false
-	));
-}
-
-
-function translate_woocommerce_emails($text, $code_language) {
-
+if ( function_exists( 'acf_add_options_page' ) ) {
+	acf_add_options_page(
+		array(
+			'page_title' => 'Settings (Tours)',
+			'menu_title' => 'Settings (Tours)',
+			'menu_slug'  => 'theme-general-settings',
+			'capability' => 'edit_posts',
+			'icon_url'   => 'dashicons-schedule',
+			'redirect'   => false,
+		)
+	);
 }
 
 // Adicionar folha de estilo personalizada (hotfix)
@@ -380,66 +139,77 @@ function child_enqueue_styles() {
 	wp_enqueue_style( 'style-exclude-autoptimize', get_stylesheet_directory_uri() . '/style-exclude-autoptimize.css', array(), '11.25');
 }
 
-// Criar um novo widget personalizado para as imagens do footer (logos)
-add_action( 'widgets_init', 'custom_sidebar_footer_column01' );
-function custom_sidebar_footer_column01() {
-	register_sidebar(
-		array (
-			'name'          => __( 'Footer Widget 01 (Logo)', 'ontravelazores' ),
-			'id'            => 'footer-widget-logo-01',
-			'description'   => __( 'Insira a logo para Widget 1', 'ontravelazores' ),
-			'before_widget' => '<div class="widget-content">',
-			'after_widget'  => "</div>",
-			'before_title'  => '<h3 class="widget-title">',
-			'after_title'   => '</h3>',
-		)
-	);
-}
+// Widget for Footer logo 1.
+add_action(
+	'widgets_init',
+	function() {
+		register_sidebar(
+			array(
+				'name'          => __( 'Footer Widget 01 (Logo)', 'citytours' ),
+				'id'            => 'footer-widget-logo-01',
+				'description'   => __( 'Insira a logo para Widget 1', 'citytours' ),
+				'before_widget' => '<div class="widget-content">',
+				'after_widget'  => '</div>',
+				'before_title'  => '<h3 class="widget-title">',
+				'after_title'   => '</h3>',
+			)
+		);
+	}
+);
 
-add_action( 'widgets_init', 'custom_sidebar_footer_column02' );
-function custom_sidebar_footer_column02() {
-	register_sidebar(
-		array (
-			'name'          => __( 'Footer Widget 02 (Logo)', 'ontravelazores' ),
-			'id'            => 'footer-widget-logo-02',
-			'description'   => __( 'Insira a logo para Widget 2', 'ontravelazores' ),
-			'before_widget' => '<div class="widget-content">',
-			'after_widget'  => "</div>",
-			'before_title'  => '<h3 class="widget-title">',
-			'after_title'   => '</h3>',
-		)
-	);
-}
+// Widget for Footer logo 2.
+add_action(
+	'widgets_init',
+	function() {
+		register_sidebar(
+			array(
+				'name'          => __( 'Footer Widget 02 (Logo)', 'citytours' ),
+				'id'            => 'footer-widget-logo-02',
+				'description'   => __( 'Insira a logo para Widget 2', 'citytours' ),
+				'before_widget' => '<div class="widget-content">',
+				'after_widget'  => '</div>',
+				'before_title'  => '<h3 class="widget-title">',
+				'after_title'   => '</h3>',
+			)
+		);
+	}
+);
 
-add_action( 'widgets_init', 'custom_sidebar_footer_column03' );
-function custom_sidebar_footer_column03() {
-	register_sidebar(
-		array (
-			'name'          => __( 'Footer Widget 03 (Logo)', 'ontravelazores' ),
-			'id'            => 'footer-widget-logo-03',
-			'description'   => __( 'Insira a logo para Widget 3', 'ontravelazores' ),
-			'before_widget' => '<div class="widget-content">',
-			'after_widget'  => "</div>",
-			'before_title'  => '<h3 class="widget-title">',
-			'after_title'   => '</h3>',
-		)
-	);
-}
+// Widget for Footer logo 3.
+add_action(
+	'widgets_init',
+	function() {
+		register_sidebar(
+			array(
+				'name'          => __( 'Footer Widget 03 (Logo)', 'citytours' ),
+				'id'            => 'footer-widget-logo-03',
+				'description'   => __( 'Insira a logo para Widget 3', 'citytours' ),
+				'before_widget' => '<div class="widget-content">',
+				'after_widget'  => '</div>',
+				'before_title'  => '<h3 class="widget-title">',
+				'after_title'   => '</h3>',
+			)
+		);
+	}
+);
 
-add_action( 'widgets_init', 'custom_sidebar_footer_column04' );
-function custom_sidebar_footer_column04() {
-	register_sidebar(
-		array (
-			'name'          => __( 'Footer Widget 04 (Logo)', 'ontravelazores' ),
-			'id'            => 'footer-widget-logo-04',
-			'description'   => __( 'Insira a logo para Widget 4', 'ontravelazores' ),
-			'before_widget' => '<div class="widget-content">',
-			'after_widget'  => "</div>",
-			'before_title'  => '<h3 class="widget-title">',
-			'after_title'   => '</h3>',
-		)
-	);
-}
+// Widget for Footer logo 4.
+add_action(
+	'widgets_init',
+	function() {
+		register_sidebar(
+			array(
+				'name'          => __( 'Footer Widget 04 (Logo)', 'citytours' ),
+				'id'            => 'footer-widget-logo-04',
+				'description'   => __( 'Insira a logo para Widget 4', 'citytours' ),
+				'before_widget' => '<div class="widget-content">',
+				'after_widget'  => '</div>',
+				'before_title'  => '<h3 class="widget-title">',
+				'after_title'   => '</h3>',
+			)
+		);
+	}
+);
 
 if ( ! function_exists( 'ct_tour_generate_conf_mail' ) ) {
 	/**
