@@ -24,6 +24,9 @@ function ot_wc_init() {
 	add_action( 'woocommerce_email_after_order_table', 'ot_wc_admin_order_meta_data', 10, 1 );
 	add_action( 'woocommerce_order_details_after_order_table', 'ot_wc_order_details_after_order_table', 10, 1 );
 
+	add_action( 'woocommerce_cart_calculate_fees', 'ot_wc_add_checkout_fee_for_paypal' );
+	add_action( 'woocommerce_review_order_before_payment', 'ot_wc_refresh_checkout_on_payment_methods_change'  );
+
 	// Remove actions.
 	remove_action( 'woocommerce_order_status_changed', 'ct_woocommerce_payment_complete', 50, 4 );
 }
@@ -192,7 +195,6 @@ function ot_wc_checkout_create_order_line_item( $item, $cart_item_key, $values, 
 		}
 	}
 }
-
 
 /**
  * Add tours extra fields to checkout page.
@@ -395,4 +397,36 @@ function ot_get_tours_extra_fields() {
 			),
 		),
 	);
+}
+
+/**
+ * Add new fee for PayPal payments.
+ */
+function ot_wc_add_checkout_fee_for_paypal() {
+	global $woocommerce;
+
+	$chosen_gateway = $woocommerce->session->get( 'chosen_payment_method' );
+
+	if ( 'paypal' === $chosen_gateway ) {
+		$cart_total = $woocommerce->cart->cart_contents_total;
+		$paypal_fee = 0.032;
+		$amount     = $cart_total * $paypal_fee;
+
+		$woocommerce->cart->add_fee( 'PayPal Fee - 3,1%', $amount );
+	}
+}
+
+/**
+ * Refresh Checkout when selected payment gateway is changed.
+ */
+function ot_wc_refresh_checkout_on_payment_methods_change() {
+	?>
+	<script type="text/javascript">
+		(function($){
+			$( 'form.checkout' ).on( 'change', 'input[name^="payment_method"]', function() {
+				$('body').trigger('update_checkout');
+			});
+		})(jQuery);
+	</script>
+	<?php
 }
