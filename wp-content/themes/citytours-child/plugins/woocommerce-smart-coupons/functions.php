@@ -33,7 +33,7 @@ function ot_smart_coupons_templates( $template, $template_name, $args, $template
 	$custom_templates = array( 'call-for-credit-form.php' );
 
 	if ( in_array( $template_name, $custom_templates, true ) ) {
-		$template = get_stylesheet_directory() . '/inc/woocommerce-smart-coupons/templates/' . $template_name;
+		$template = get_stylesheet_directory() . '/plugins/woocommerce-smart-coupons/templates/' . $template_name;
 	}
 
 	return $template;
