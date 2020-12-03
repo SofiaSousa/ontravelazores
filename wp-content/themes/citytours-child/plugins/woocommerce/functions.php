@@ -25,7 +25,7 @@ function ot_wc_init() {
 	add_action( 'woocommerce_order_details_after_order_table', 'ot_wc_order_details_after_order_table', 10, 1 );
 
 	add_action( 'woocommerce_cart_calculate_fees', 'ot_wc_add_checkout_fee_for_paypal' );
-	add_action( 'woocommerce_review_order_before_payment', 'ot_wc_refresh_checkout_on_payment_methods_change'  );
+	add_action( 'woocommerce_review_order_before_payment', 'ot_wc_refresh_checkout_on_payment_methods_change' );
 
 	// Remove actions.
 	remove_action( 'woocommerce_order_status_changed', 'ct_woocommerce_payment_complete', 50, 4 );
