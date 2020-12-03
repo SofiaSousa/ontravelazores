@@ -412,7 +412,7 @@ function ot_wc_add_checkout_fee_for_paypal() {
 		$paypal_fee = 0.032;
 		$amount     = $cart_total * $paypal_fee;
 
-		$woocommerce->cart->add_fee( 'PayPal Fee - 3,1%', $amount );
+		$woocommerce->cart->add_fee( __( 'PayPal Fee', 'citytours' ) . ' - 3,1%', $amount );
 	}
 }
 
