@@ -29,12 +29,12 @@ if ( $order ) : ?>
 
         <?php else : ?>
 
-            <p class="woocommerce-notice woocommerce-notice--success woocommerce-thankyou-order-received"><?php echo apply_filters( 'woocommerce_thankyou_order_received_text', __( 'Thank you. Your order has been received.', 'citytours' ), $order ); ?></p>
+            <p class="woocommerce-notice woocommerce-notice--success woocommerce-thankyou-order-received"><?php echo apply_filters( 'woocommerce_thankyou_order_received_text', __( 'Thank you. Your booking has been received.', 'citytours' ), $order ); ?></p>
 
             <ul class="woocommerce-order-overview woocommerce-thankyou-order-details order_details">
 
                 <li class="woocommerce-order-overview__order order">
-                    <?php _e( 'Order number:', 'citytours' ); ?>
+                    <?php _e( 'Booking number:', 'citytours' ); ?>
                     <strong><?php echo $order->get_order_number(); ?></strong>
                 </li>
 
@@ -82,3 +82,13 @@ if ( $order ) : ?>
     <p class="woocommerce-notice woocommerce-notice--success woocommerce-thankyou-order-received"><?php echo apply_filters( 'woocommerce_thankyou_order_received_text', __( 'Thank you. Your order has been received.', 'citytours' ), null ); ?></p>
 
 <?php endif; ?>
+
+<!-- Event snippet for Todas as Reservas - ONTRAVEL conversion page -->
+<script>
+  gtag('event', 'conversion', {
+      'send_to': 'AW-954412331/sIpoCOmQq80BEKvajMcD',
+      'value': 1.0,
+      'currency': 'EUR',
+      'transaction_id': ''
+  });
+</script>
