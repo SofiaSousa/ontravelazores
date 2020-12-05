@@ -22,6 +22,26 @@ global $ct_options;
     <link rel="shortcut icon" href="<?php echo esc_url( ct_favicon_url() ); ?>" type="image/x-icon" />
 
     <?php wp_head();?>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-163950422-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-163950422-1');
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Ads: 954412331 -->
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=AW-954412331"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'AW-954412331');
+    </script>
 </head>
 
 <?php $body_class = ct_get_extra_body_class(); ?>
