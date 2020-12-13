@@ -69,3 +69,11 @@
 #fme_upload_files_preview_cart_file li .fme_upload_files_iconpreviewcartpage img {
   display: none;
 }
+
+.ribbon_3.popular span {
+  background: linear-gradient(#1cbbb4 0,#1cbbb4 100%);
+}
+
+.ribbon_3 span {
+  background: #1cbbb4;
+}
