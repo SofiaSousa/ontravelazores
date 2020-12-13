@@ -253,3 +253,60 @@ add_action(
 		}
 	}
 );
+
+
+// Script for FB chat.
+add_action(
+	'wp_footer',
+	function() {
+		echo '<!-- Load Facebook SDK for JavaScript -->
+		<div id="fb-root"></div>
+		<script>
+		window.fbAsyncInit = function() {
+			FB.init({
+				xfbml            : true,
+				version          : "v9.0"
+			});
+		};
+
+		(function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) return;
+			js = d.createElement(s); js.id = id;
+			js.src = "https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, "script", "facebook-jssdk"));</script>
+
+		<!-- Your Chat Plugin code -->
+		<div class="fb-customerchat"
+			attribution=install_email
+			page_id="1757371964491287"
+			theme_color="#1cbbb4">
+		</div>';
+	}
+);
+
+// EGO API script.
+// _egoiaq.push(["setClientId", "419232"]);
+// _egoiaq.push(["setTrackerUrl", u+"collect"]);
+add_action(
+	'wp_footer',
+	function() {
+		echo '<script type="text/javascript">
+		var _egoiaq = _egoiaq || [];
+		(function(){
+			var u=(("https:" == document.location.protocol) ? "https://egoimmerce.e-goi.com/" : "http://egoimmerce.e-goi.com/");
+			var u2=(("https:" == document.location.protocol) ? "https://cdn-te.e-goi.com/" : "http://cdn-te.e-goi.com/");
+
+			_egoiaq.push(["trackPageView"]);
+			_egoiaq.push(["enableLinkTracking"]);
+			var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0];
+			g.type="text/javascript";
+			g.defer=true;
+			g.async=true;
+			g.src=u2+"egoimmerce.js";
+			s.parentNode.insertBefore(g,s);
+		})();
+		</script>';
+	}
+);
