@@ -1,6 +1,6 @@
-<?php 
-if ( ! defined( 'ABSPATH' ) ) { 
-    exit; 
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
 }
 
 global $post_id;
@@ -37,7 +37,7 @@ $wishlist_link = ct_wishlist_page_url();
 			<?php if ( ! empty( $featured ) ) { ?>
 				<div class="ribbon_3"><span><?php _e( 'Featured', 'citytours' ); ?></span></div>
 			<?php } elseif ( ! empty( $hot ) ) { ?>
-				<div class="ribbon_3 popular"><span><?php _e( 'TOP', 'citytours' ); ?></span></div>
+				<div class="ribbon_3 popular"><span><?php _e( 'Hot', 'citytours' ); ?></span></div>
 			<?php } ?>
 			<?php if ( ! empty( $wishlist_link ) ) : ?>
 			<div class="wishlist">
@@ -52,7 +52,7 @@ $wishlist_link = ct_wishlist_page_url();
 					<?php if ( ! empty( $discount_rate ) ) { ?>
 						<div class="badge_save"><?php _e( 'Save', 'citytours' ); ?><strong><?php echo esc_html( $discount_rate . '%' ); ?></strong></div>
 					<?php } ?>
-					<?php 
+					<?php
 					if ( ! empty( $tour_type ) ) {
 						$icon_class = get_tax_meta($tour_type[0]->term_id, 'ct_tax_icon_class', true);
 						echo '<div class="short_info">' . ( empty( $icon_class ) ? '' : '<i class="' . $icon_class . '"></i>' ) . $tour_type[0]->name . ' </div>';
@@ -78,11 +78,11 @@ $wishlist_link = ct_wishlist_page_url();
 			<div class="price_list">
 				<div>
 					<?php echo ct_price( $price, 'special' ) ?><small ><?php echo ( ! empty( $price_type ) && $price_type == 'per_group' ) ? esc_html__( '*Per group', 'citytours' ) : esc_html__( '*Per person', 'citytours' ); ?></small>
-					<p><a href="<?php echo esc_url( get_permalink( $post_id ) ); ?>" class="btn_1"><?php echo esc_html__( 'Book now', 'citytours' ) ?></a></p>
+					<p><a href="<?php echo esc_url( get_permalink( $post_id ) ); ?>" class="btn_1"><?php echo esc_html__( 'Details', 'citytours' ) ?></a></p>
 				</div>
 			</div>
 		</div>
-		
+
 	</div>
 
 </div><!--End strip -->

@@ -1,6 +1,6 @@
-<?php 
-if ( ! defined( 'ABSPATH' ) ) { 
-    exit; 
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
 }
 
 global $post_id, $before_list, $show_map;
