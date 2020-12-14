@@ -92,6 +92,7 @@
   border-top: 3px solid #009895;
 }
 
+.fb_dialog.fb_dialog_mobile iframe,
 .fb_dialog.fb_dialog_advanced iframe {
   left: auto;
 }
