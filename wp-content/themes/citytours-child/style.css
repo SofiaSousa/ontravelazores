@@ -91,3 +91,7 @@
   border-bottom: 3px solid transparent;
   border-top: 3px solid #009895;
 }
+
+.fb_dialog.fb_dialog_advanced iframe {
+  left: auto;
+}
