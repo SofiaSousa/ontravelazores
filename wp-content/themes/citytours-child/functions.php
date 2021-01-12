@@ -220,39 +220,39 @@ if ( ! function_exists( 'ct_tour_generate_conf_mail' ) ) {
 }
 
 // Add heading for upload files section in cart page.
-add_action(
-	'woocommerce_after_cart_table',
-	function() {
-		if ( is_plugin_active( 'customer-upload-files-for-woocommerce/customer-upload-files-for-woocommerce.php' ) ) {
-			?>
+// add_action(
+// 	'woocommerce_after_cart_table',
+// 	function() {
+// 		if ( is_plugin_active( 'customer-upload-files-for-woocommerce/customer-upload-files-for-woocommerce.php' ) ) {
+			/* ?>
 			<br>
 			<br>
 			<h3><b><?php echo esc_html__( 'Add your Azores Safe Vouchers', 'ontravelazores' ); ?></b></h3>
 			<br>
-			<?php
-		}
-	}
-);
+			<?php */
+// 		}
+// 	}
+// );
 
 // Remove '(discount:-35%)' from Açores Voucher name.
-add_action(
-	'woocommerce_cart_calculate_fees',
-	function( $cart ) {
-		$fees = $cart->fees_api()->get_fees();
+// add_action(
+// 	'woocommerce_cart_calculate_fees',
+// 	function( $cart ) {
+// 		$fees = $cart->fees_api()->get_fees();
 
-		if ( isset( $fees ) && ! empty( $fees ) ) {
-			$update_fees = false;
-			$fee_str     = '(discount:-35%)';
+// 		if ( isset( $fees ) && ! empty( $fees ) ) {
+// 			$update_fees = false;
+// 			$fee_str     = '(discount:-35%)';
 
-			foreach ( $fees as &$f ) {
-				if ( false !== strpos( $f->name, $fee_str ) ) {
-					$update_fees = true;
-					$f->name     = str_replace( $fee_str, '', $f->name );
-				}
-			}
-		}
-	}
-);
+// 			foreach ( $fees as &$f ) {
+// 				if ( false !== strpos( $f->name, $fee_str ) ) {
+// 					$update_fees = true;
+// 					$f->name     = str_replace( $fee_str, '', $f->name );
+// 				}
+// 			}
+// 		}
+// 	}
+// );
 
 
 // Script for FB chat.
