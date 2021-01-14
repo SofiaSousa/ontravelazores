@@ -70,6 +70,30 @@
   display: none;
 }
 
+footer {
+  background-image: none;
+}
+
+.email_address,
+.phone_number {
+  color: #FFF;
+}
+
+a.btn_map,
+a.btn_full {
+  background: #1cbbb4;
+}
+
+#search_results,
+.woocommerce-message a {
+  background-color: #1cbbb4;
+}
+
+.phone_number.show_icons:before,
+a#phone:before {
+  content: "\57";
+}
+
 .ribbon_3.popular span {
   background: linear-gradient(#1cbbb4 0,#1cbbb4 100%);
 }
