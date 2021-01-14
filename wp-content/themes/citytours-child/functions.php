@@ -1,10 +1,28 @@
 <?php
-
-add_action( 'wp_enqueue_scripts', 'citytours_child_enqueue_styles' );
+add_action( 'wp_enqueue_scripts', 'citytours_child_enqueue_styles', 11 );
 function citytours_child_enqueue_styles() {
+	$version = '20210101';
+
 	wp_enqueue_style( 'parent-style', get_template_directory_uri() . '/style.css' );
-	wp_enqueue_style( 'child-style', get_stylesheet_directory_uri() . '/style.css', array( 'parent-style' ), '20201027' );
+	wp_enqueue_style( 'child-style', get_stylesheet_directory_uri() . '/style.css', array( 'parent-style' ), $version );
 }
+
+add_action(
+	'wp_footer',
+	function() {
+		?>
+		<script>
+		(function($){
+			setTimeout(function(){
+				$('select.mobileMenu option:contains("Filter by category")').text('<?php echo esc_attr( __( 'Filter by category', 'woocommerce' ) ); ?>');
+			}, 0);
+		})(jQuery);
+		</script>
+		<?php
+	},
+	99
+);
+
 
 // Loading theme includes.
 require_once get_stylesheet_directory() . '/plugins/loader.php';

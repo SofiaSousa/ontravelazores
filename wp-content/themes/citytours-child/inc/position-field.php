@@ -37,6 +37,9 @@ add_action(
 add_action( 'created_tour_type', 'ot_tour_type_save_term_fields' );
 add_action( 'edited_tour_type', 'ot_tour_type_save_term_fields' );
 
+/**
+ * Update tour_type position.
+ */
 function ot_tour_type_save_term_fields( $term_id ) {
 	update_term_meta(
 		$term_id,
@@ -45,7 +48,7 @@ function ot_tour_type_save_term_fields( $term_id ) {
 	);
 }
 
-// Orde tour_types by tax_position.
+// Order tour_types by tax_position.
 add_filter(
 	'terms_clauses',
 	function( $pieces, $taxonomies, $args ) {

@@ -76,7 +76,7 @@ if ( ! function_exists( 'ct_logo_sticky_url' ) ) {
 if ( ! function_exists( 'ct_favicon_url' ) ) {
     function ct_favicon_url() {
         global $ct_options;
-        
+
         if ( ! empty( $ct_options['favicon'] ) && ! empty( $ct_options['favicon']['url'] ) ) {
             $url = $ct_options['favicon']['url'];
         } else {
@@ -173,7 +173,7 @@ if ( ! function_exists( 'ct_wishlist_page_url' ) ) {
         if ( ! empty( $ct_options['wishlist'] ) ) {
             $wishlist_page = ct_get_permalink_clang( $ct_options['wishlist'] );
         }
-        
+
         return $wishlist_page;
     }
 }
@@ -202,7 +202,7 @@ if ( ! function_exists( 'ct_get_header_image_src' ) ) {
             if ( ! empty( $ct_options['tour_header_img'] ) ) return $ct_options['tour_header_img']['url'];
         } elseif ( 'car' == get_post_type( $post_id ) ) {
             if ( ! empty( $ct_options['car_header_img'] ) ) return $ct_options['car_header_img']['url'];
-        } elseif ( 'product' == get_post_type( $post_id ) ) { 
+        } elseif ( 'product' == get_post_type( $post_id ) ) {
             if ( ! empty( $ct_options['product_header_img'] ) )  return $ct_options['product_header_img']['url'];
         } elseif ( 'post' == get_post_type( $post_id ) ) {
             if ( ! empty( $ct_options['post_header_img'] ) ) return $ct_options['post_header_img']['url'];
@@ -233,54 +233,54 @@ if ( ! function_exists( 'ct_get_header_image_src' ) ) {
 /*
  * return extra body classes after check if there's header image
  */
-if ( ! function_exists( 'ct_get_extra_body_class' ) ) { 
-    function ct_get_extra_body_class() { 
+if ( ! function_exists( 'ct_get_extra_body_class' ) ) {
+    function ct_get_extra_body_class() {
         global $post, $ct_options;
 
         $body_class = '';
 
-        if ( is_single() ) { 
-            if ( is_singular( 'product' ) ) { 
+        if ( is_single() ) {
+            if ( is_singular( 'product' ) ) {
                 $enable_header_img = get_post_meta( $post->ID, '_show_header_image', true );
 
-                if ( $enable_header_img == 'show' || empty($enable_header_img) ) { 
+                if ( $enable_header_img == 'show' || empty($enable_header_img) ) {
                     $header_img_scr = ct_get_header_image_src( $post->ID );
 
-                    if ( empty( $header_img_scr ) ) { 
+                    if ( empty( $header_img_scr ) ) {
                         $body_class = 'no-header-image';
-                    } 
-                } else { 
+                    }
+                } else {
                     $body_class = 'no-header-image';
                 }
-            } else { 
+            } else {
                 $header_img_scr = ct_get_header_image_src( $post->ID );
 
-                if ( empty( $header_img_scr ) ) { 
+                if ( empty( $header_img_scr ) ) {
                     $body_class = 'no-header-image';
-                } 
+                }
             }
-        } else if ( is_archive() || is_tax() ) { 
+        } else if ( is_archive() || is_tax() ) {
             $post_type = '';
 
-            if ( is_post_type_archive( 'post' ) || is_category() ) { 
+            if ( is_post_type_archive( 'post' ) || is_category() ) {
                 $post_type = 'blog';
-            } else if ( is_post_type_archive( 'hotel' ) || is_tax( array('district', 'hotel_facility') ) ) { 
+            } else if ( is_post_type_archive( 'hotel' ) || is_tax( array('district', 'hotel_facility') ) ) {
                 $post_type = 'hotel';
-            } else if ( is_post_type_archive( 'tour' ) || is_tax( array('tour_type', 'tour_facility') ) ) { 
+            } else if ( is_post_type_archive( 'tour' ) || is_tax( array('tour_type', 'tour_facility') ) ) {
                 $post_type = 'tour';
-            } else if ( is_post_type_archive( 'car' ) || is_tax( array('car_type', 'car_facility') ) ) { 
+            } else if ( is_post_type_archive( 'car' ) || is_tax( array('car_type', 'car_facility') ) ) {
                 $post_type = 'car';
-            } else if ( is_post_type_archive( 'product' ) || is_tax( 'product_cat' ) ) { 
+            } else if ( is_post_type_archive( 'product' ) || is_tax( 'product_cat' ) ) {
                 $post_type = 'shop';
             }
             $header_img_scr = ct_get_header_image_src( $post_type );
 
-            if ( empty( $header_img_scr ) ) { 
+            if ( empty( $header_img_scr ) ) {
                 $body_class = 'no-header-image';
-            } 
+            }
         }
 
-        if ( isset( $ct_options['header_sticky'] ) && empty( $ct_options['header_sticky'] ) ) { 
+        if ( isset( $ct_options['header_sticky'] ) && empty( $ct_options['header_sticky'] ) ) {
             $body_class .= ' no-sticky-header';
         }
 
@@ -309,7 +309,7 @@ if ( ! function_exists( 'ct_get_header_image_height' ) ) {
             if ( ! empty( $ct_options['hotel_header_img_height'] ) ) return intval( $ct_options['hotel_header_img_height']['height'] );
         } elseif ( 'tour' == get_post_type( $post_id ) ) {
             if ( ! empty( $ct_options['tour_header_img_height'] ) ) return intval( $ct_options['tour_header_img_height']['height'] );
-        } elseif ( 'product' == get_post_type( $post_id ) ) { 
+        } elseif ( 'product' == get_post_type( $post_id ) ) {
             if ( ! empty( $ct_options['product_header_img_height'] ) )  return intval( $ct_options['product_header_img_height']['height'] );
         } elseif ( 'post' == get_post_type( $post_id ) ) {
             if ( ! empty( $ct_options['post_header_img_height'] ) ) return intval( $ct_options['post_header_img_height']['height'] );
@@ -330,7 +330,7 @@ if ( ! function_exists( 'ct_get_header_image_height' ) ) {
         if ( ! empty( $ct_options['header_img_height'] ) ) {
             return intval( $ct_options['header_img_height']['height'] );
         }
-        
+
         return 470;
     }
 }
@@ -358,7 +358,7 @@ if ( ! function_exists( 'ct_get_header_content' ) ) {
             if ( ! empty( $ct_options['tour_header_content'] ) ) return $ct_options['tour_header_content'];
         } elseif ( 'car' == get_post_type( $post_id ) ) {
             if ( ! empty( $ct_options['car_header_content'] ) ) return $ct_options['car_header_content'];
-        } elseif ( 'product' == get_post_type( $post_id ) ) { 
+        } elseif ( 'product' == get_post_type( $post_id ) ) {
             if ( ! empty( $ct_options['product_header_content'] ) )  return $ct_options['product_header_content'];
         } elseif ( 'post' == get_post_type( $post_id ) ) {
             if ( ! empty( $ct_options['post_header_content'] ) ) return $ct_options['post_header_content'];
@@ -381,7 +381,7 @@ if ( ! function_exists( 'ct_get_header_content' ) ) {
         if ( ! empty( $ct_options['header_content'] ) ) {
             return $ct_options['header_content'];
         }
-        
+
         return '';
     }
 }
@@ -432,7 +432,7 @@ if ( ! function_exists( 'ct_get_sidebar_position' ) ) {
                 return ( ! empty( $ct_options['def_post_layout'] ) ) ? $ct_options['def_post_layout'] : 'left';
             } else if ( 'page' == get_post_type( $post_id ) ) {
                 return ( ! empty( $ct_options['def_page_layout'] ) ) ? $ct_options['def_page_layout'] : 'left';
-            } else if ( 'product' == get_post_type( $post_id ) ) { 
+            } else if ( 'product' == get_post_type( $post_id ) ) {
                 return ( ! empty( $ct_options['product_page_layout'] ) ) ? $ct_options['product_page_layout'] : 'right';
             }
         }
@@ -565,7 +565,7 @@ if ( ! function_exists( 'ct_enqueue_scripts' ) ) {
         wp_register_style( 'ct_style_shop', CT_TEMPLATE_DIRECTORY_URI . '/css/shop' . $suffix . '.css' );
         wp_register_style( 'ct_style_timedropper', CT_TEMPLATE_DIRECTORY_URI . '/css/timedropper.min.css' );
 
-        if ( current_user_can( 'edit_theme_options' ) ) { 
+        if ( current_user_can( 'edit_theme_options' ) ) {
             wp_register_style( 'ct_admin_bar', CT_TEMPLATE_DIRECTORY_URI . '/css/admin/admin_bar.css' );
         }
 
@@ -592,7 +592,7 @@ if ( ! function_exists( 'ct_enqueue_scripts' ) ) {
 
         wp_enqueue_style( 'ct_gootle_fonts');
 
-        if ( current_user_can( 'edit_theme_options' ) ) { 
+        if ( current_user_can( 'edit_theme_options' ) ) {
             wp_enqueue_style( 'ct_admin_bar' );
         }
 
@@ -606,7 +606,7 @@ if ( ! function_exists( 'ct_enqueue_scripts' ) ) {
             wp_enqueue_style( 'ct_rtl_bootstrap',  CT_TEMPLATE_DIRECTORY_URI . '/css/rtl/bootstrap-rtl' . $suffix . '.css' );
             wp_enqueue_style( 'ct_rtl',  CT_TEMPLATE_DIRECTORY_URI . '/css/rtl/rtl' . $suffix . '.css' );
 
-            if ( substr($current_locale, 0, 2) == 'fa' ) { 
+            if ( substr($current_locale, 0, 2) == 'fa' ) {
                 wp_enqueue_style( 'ct_style_jquery_persian' );
             }
         }
@@ -633,10 +633,10 @@ if ( ! function_exists( 'ct_enqueue_scripts' ) ) {
         $cookie_notification = $ct_options['cookie_notification'];
         if ( ! empty( $cookie_notification ) ) {
             $cookie_notification_text = $ct_options['cookie_notification_text'];
-            if ( ! empty( $ct_options['privacy_page'] ) ) {
-                $terms_page_url = esc_url( ct_get_permalink_clang( $ct_options['privacy_page'] ) );
+            if ( ! empty( $ct_options['terms_page'] ) ) {
+                $terms_page_url = esc_url( ct_get_permalink_clang( $ct_options['terms_page'] ) );
             } else {
-                $terms_page_url = 'https://www.ontravelazores.com/privacy-policy/';
+                $terms_page_url = '#';
             }
             $cookie_notification = array(
                                         'description'   => $cookie_notification_text,
@@ -644,7 +644,7 @@ if ( ! function_exists( 'ct_enqueue_scripts' ) ) {
                                         'policy_text'   => __( 'Privacy Policy', 'citytours' ),
                                         'url'           => $terms_page_url
                                     );
-            wp_localize_script( 'ct_theme_script', 'cookie_notification', $cookie_notification );   
+            wp_localize_script( 'ct_theme_script', 'cookie_notification', $cookie_notification );
         }
 
         // date and time picker
@@ -653,15 +653,15 @@ if ( ! function_exists( 'ct_enqueue_scripts' ) ) {
 
         wp_localize_script( 'ct_script_datepicker', 'is_rtl', $is_rtl );
 
-        if ( $current_locale != 'en' ) { 
+        if ( $current_locale != 'en' ) {
             $file_name = '/js/locales/bootstrap-datepicker.' . $current_locale . '.min.js';
             $file_name2 = '/js/locales/bootstrap-datepicker.' . substr($current_locale, 0, 2) . '.min.js';
-            if ( $file_exists = file_exists( get_template_directory() . $file_name ) ) { 
+            if ( $file_exists = file_exists( get_template_directory() . $file_name ) ) {
                 wp_register_script( 'ct_script_localization', CT_TEMPLATE_DIRECTORY_URI . $file_name, array('jquery'), '', true );
-            } else if ( $file_exists = file_exists( get_template_directory() . $file_name2 ) ) { 
+            } else if ( $file_exists = file_exists( get_template_directory() . $file_name2 ) ) {
                 wp_register_script( 'ct_script_localization', CT_TEMPLATE_DIRECTORY_URI . $file_name2, array('jquery'), '', true );
-            } else { 
-                if ( substr($current_locale, 0, 2) == 'fa' ) { 
+            } else {
+                if ( substr($current_locale, 0, 2) == 'fa' ) {
                     wp_register_script( 'ct_script_localization1', CT_TEMPLATE_DIRECTORY_URI . '/js/persian-date' . $suffix . '.js', array('jquery'), '', true );
                     wp_register_script( 'ct_script_localization2', CT_TEMPLATE_DIRECTORY_URI . '/js/persian-datepicker-0.4.5.min.js', array('jquery'), '', true );
                 }
@@ -676,9 +676,9 @@ if ( ! function_exists( 'ct_enqueue_scripts' ) ) {
         wp_register_script( 'ct_script_fixed_sidebar', CT_TEMPLATE_DIRECTORY_URI . '/js/theia-sticky-sidebar' . $suffix . '.js', array(), '', true );
 
         // map
-        if ( ! empty( $ct_options['map_api_key'] ) ) { 
+        if ( ! empty( $ct_options['map_api_key'] ) ) {
             wp_register_script( 'ct_script_google_map', '//maps.googleapis.com/maps/api/js?key=' . $ct_options['map_api_key'], array(), '', true );
-        } else { 
+        } else {
             wp_register_script( 'ct_script_google_map', '//maps.googleapis.com/maps/api/js', array(), '', true );
         }
         wp_register_script( 'ct_script_infobox', CT_TEMPLATE_DIRECTORY_URI . '/js/infobox' . $suffix . '.js', array(), '', true );
@@ -686,32 +686,25 @@ if ( ! function_exists( 'ct_enqueue_scripts' ) ) {
         wp_localize_script( 'ct_script_map', 'theme_url', CT_TEMPLATE_DIRECTORY_URI );
         wp_localize_script( 'ct_script_map', 'button_text', __( 'Details', 'citytours' ) );
 
-        if ( ! empty( $ct_options['tour_map_icon'] ) ) { 
+        if ( ! empty( $ct_options['tour_map_icon'] ) ) {
             wp_localize_script( 'ct_script_map', 'tour_icon', $ct_options['tour_map_icon'] );
         }
-        if ( ! empty( $ct_options['hotel_map_icon'] ) ) { 
+        if ( ! empty( $ct_options['hotel_map_icon'] ) ) {
             wp_localize_script( 'ct_script_map', 'hotel_icon', $ct_options['hotel_map_icon'] );
         }
 
         wp_register_script( 'ct_script_modernizr', CT_TEMPLATE_DIRECTORY_URI . '/js/modernizr' . $suffix . '.js', array(), '', true );
         wp_register_script( 'ct_script_owl', CT_TEMPLATE_DIRECTORY_URI . '/js/owl.carousel.min.js', array(), '', true );
-        //wp_register_script( 'ct_cat_nav_mobile', CT_TEMPLATE_DIRECTORY_URI . '/js/cat_nav_mobile' . $suffix . '.js', array(), '', true );
-
-        $wpml_language_code = ICL_LANGUAGE_CODE;
-        if ($wpml_language_code == 'pt-pt') {
-            wp_register_script( 'ct_cat_nav_mobile', CT_TEMPLATE_DIRECTORY_URI . '/js/cat_nav_mobile_pt' . $suffix . '.js', array(), '', true );
-        } else {
-            wp_register_script( 'ct_cat_nav_mobile', CT_TEMPLATE_DIRECTORY_URI . '/js/cat_nav_mobile_en' . $suffix . '.js', array(), '', true );
-        }
+        wp_register_script( 'ct_cat_nav_mobile', CT_TEMPLATE_DIRECTORY_URI . '/js/cat_nav_mobile' . $suffix . '.js', array(), '', true );
 
         wp_enqueue_script( 'ct_script_cookie' );
         wp_enqueue_script( 'ct_script_common' );
         wp_enqueue_script( 'ct_script_jquery_validate' );
         wp_enqueue_script( 'ct_script_datepicker' );
 
-        if ( $current_locale != 'en' && $file_exists) { 
+        if ( $current_locale != 'en' && $file_exists) {
             wp_enqueue_script( 'ct_script_localization' );
-        } else if ( substr($current_locale, 0, 2) == 'fa' ) { 
+        } else if ( substr($current_locale, 0, 2) == 'fa' ) {
             wp_enqueue_script( 'ct_script_localization1' );
             wp_enqueue_script( 'ct_script_localization2' );
         }
@@ -720,7 +713,7 @@ if ( ! function_exists( 'ct_enqueue_scripts' ) ) {
         wp_enqueue_script( 'ct_script_map' );
         wp_enqueue_script( 'ct_script_infobox' );
         wp_enqueue_script( 'ct_script_owl' );
-        
+
         if ( is_singular( array( 'tour', 'hotel' ) ) ) {
 
         }
@@ -734,7 +727,7 @@ if ( ! function_exists( 'ct_enqueue_scripts' ) ) {
         wp_enqueue_script( 'ct_theme_script' );
 
 		if ( "templates/template-dashboard.php" == get_page_template_slug() ) {
-			wp_enqueue_script( 'ct_script_tab', CT_TEMPLATE_DIRECTORY_URI . '/js/tabs.js', array(), '', true );		
+			wp_enqueue_script( 'ct_script_tab', CT_TEMPLATE_DIRECTORY_URI . '/js/tabs.js', array(), '', true );
 		}
     }
 }
@@ -742,8 +735,8 @@ if ( ! function_exists( 'ct_enqueue_scripts' ) ) {
 /*
  * admin enqueue script function
  */
-if ( ! function_exists( 'ct_admin_scripts' ) ) { 
-    function ct_admin_scripts() { 
+if ( ! function_exists( 'ct_admin_scripts' ) ) {
+    function ct_admin_scripts() {
 
         wp_register_style( 'ct_admin_bar', CT_TEMPLATE_DIRECTORY_URI . '/css/admin/admin_bar.css' );
         wp_register_style( 'ct_admin_css', CT_TEMPLATE_DIRECTORY_URI . '/css/admin/admin.css' );
@@ -773,7 +766,7 @@ if ( ! function_exists( 'ct_register_required_plugins' ) ) {
                 'slug'               => 'ct-booking',
                 'source'             => 'https://c-themes.com/plugins/ct-booking.zip',
                 'required'           => true,
-				'version'            => '1.4.5',
+				'version'            => '1.4.6',
                 'force_activation'   => false,
                 'force_deactivation' => false,
                 'external_url'       => '',
@@ -799,7 +792,7 @@ if ( ! function_exists( 'ct_register_required_plugins' ) ) {
                 'slug'               => 'js_composer',
                 'source'             => 'https://c-themes.com/plugins/js_composer.zip',
                 'required'           => true,
-				'version'            => '6.0.5',
+				'version'            => '6.4.1',
                 'force_activation'   => false,
                 'force_deactivation' => false,
                 'external_url'       => '',
@@ -823,7 +816,7 @@ if ( ! function_exists( 'ct_register_required_plugins' ) ) {
                 'slug'               => 'revslider',
                 'source'             => 'https://c-themes.com/plugins/revslider.zip',
                 'required'           => true,
-				'version'            => '6.1.1',
+				'version'            => '6.2.22',
                 'force_activation'   => false,
                 'force_deactivation' => false,
                 'external_url'       => '',
@@ -988,7 +981,7 @@ if ( ! function_exists( 'ct_register_sidebar' ) ) {
             'after_title'   => '</h4>' );
         register_sidebar( $args );
 
-        if ( class_exists( 'WooCommerce' ) ) { 
+        if ( class_exists( 'WooCommerce' ) ) {
             $args = array(
                 'name'          => esc_html__( 'WooCommerce Category Sidebar', 'citytours' ),
                 'id'            => 'sidebar-woo-category',
@@ -1055,7 +1048,7 @@ if ( ! function_exists( 'ct_register_sidebar' ) ) {
             'before_title'  => '<h3 class="widgettitle">',
             'after_title'   => '</h3>' );
         register_sidebar( $args );
-        
+
         $args = array(
             'name'          => esc_html__( 'FAQ', 'citytours' ),
             'id'            => 'ct-custom-sidebar-faq',
@@ -1115,7 +1108,7 @@ if ( ! function_exists( 'ct_breadcrumbs' ) ) {
                     $shop_page_id = 0;
                     if ( version_compare( $woocommerce->version, '3.0', ">=" ) ) {
                         $shop_page_id = wc_get_page_id( 'shop' );
-                    } else { 
+                    } else {
                         $shop_page_id = woocommerce_get_page_id( 'shop' );
                     }
 
@@ -1124,11 +1117,11 @@ if ( ! function_exists( 'ct_breadcrumbs' ) ) {
                     $categories = get_the_terms( $post->ID, 'product_cat' );
                     $category   = '';
 
-                    if ( $categories ) { 
+                    if ( $categories ) {
                         $max_count = 0;
 
                         foreach ( $categories as $cat ) {
-                            if ( $max_count < $cat->count ) { 
+                            if ( $max_count < $cat->count ) {
                                 $max_count  = $cat->count;
                                 $category   = $cat;
                             }
@@ -1139,7 +1132,7 @@ if ( ! function_exists( 'ct_breadcrumbs' ) ) {
 
                         $parent_cats = get_ancestors( $category->term_id, 'product_cat', 'taxonomy' );
 
-                        if ( $parent_cats ) { 
+                        if ( $parent_cats ) {
                             foreach ( $parent_cats as $key => $parent_cat ) {
                                 $term = get_term( $parent_cat, 'product_cat' );
 
@@ -1195,13 +1188,13 @@ if ( ! function_exists( 'ct_breadcrumbs' ) ) {
             }
 
             if ( is_tax() ) {
-                if ( is_tax( 'product_cat' ) ) { 
+                if ( is_tax( 'product_cat' ) ) {
                     global $woocommerce;
 
                     $shop_page_id = 0;
                     if ( version_compare( $woocommerce->version, '3.0', ">=" ) ) {
                         $shop_page_id = wc_get_page_id( 'shop' );
-                    } else { 
+                    } else {
                         $shop_page_id = woocommerce_get_page_id( 'shop' );
                     }
 
@@ -1257,8 +1250,8 @@ if ( ! function_exists( 'ct_breadcrumbs' ) ) {
  */
 if ( ! function_exists('ct_enqueue_comment_reply') ) {
     function ct_enqueue_comment_reply() {
-        if ( get_option( 'thread_comments' ) ) { 
-            wp_enqueue_script( 'comment-reply' ); 
+        if ( get_option( 'thread_comments' ) ) {
+            wp_enqueue_script( 'comment-reply' );
         }
     }
 }
@@ -1401,30 +1394,30 @@ if ( ! function_exists( 'ct_open_comments_for_myposttype' ) ) {
 }
 
 if ( ! function_exists( 'ct_theme_slug_fonts_url' ) ) {
-	function ct_theme_slug_fonts_url() {
-		$fonts_url = '';
-		$montserrat = _x( 'on', 'Montserrat font: on or off', 'citytours' );
-		$gochihand = _x( 'on', 'Gochi+Hand font: on or off', 'citytours' );
-		$lato = _x( 'on', 'Lato font: on or off', 'citytours' );
+    function ct_theme_slug_fonts_url() {
+        $fonts_url = '';
+        $montserrat = _x( 'on', 'Montserrat font: on or off', 'citytours' );
+        $gochihand = _x( 'on', 'Gochi+Hand font: on or off', 'citytours' );
+        $lato = _x( 'on', 'Lato font: on or off', 'citytours' );
 
-		if ( 'off' !== $montserrat || 'off' !== $gochihand || 'lato' !== $gochihand ) {
-			$font_families = array();
-			if ( 'off' !== $montserrat ) {
-				$font_families[] = 'Montserrat:400,700';
-			}
-			if ( 'off' !== $gochihand ) {
+        if ( 'off' !== $montserrat || 'off' !== $gochihand || 'lato' !== $gochihand ) {
+            $font_families = array();
+            if ( 'off' !== $montserrat ) {
+                $font_families[] = 'Montserrat:400,700';
+            }
+            if ( 'off' !== $gochihand ) {
 				$font_families[] = 'Gochi Hand';
-			}
-			if ( 'off' !== $lato ) {
-				$font_families[] = 'Lato:300,400';
-			}
-			$query_args = array(
-				'family' => urlencode( implode( '|', $font_families ) ),
-				'subset' => urlencode( 'latin,latin-ext' ),
-			);
-			$fonts_url = add_query_arg( $query_args, 'https://fonts.googleapis.com/css' );
-		}
+            }
+            if ( 'off' !== $lato ) {
+                $font_families[] = 'Lato:300,400';
+            }
+            $query_args = array(
+                'family' => urlencode( implode( '|', $font_families ) ),
+                'subset' => urlencode( 'latin,latin-ext' ),
+            );
+            $fonts_url = add_query_arg( $query_args, 'https://fonts.googleapis.com/css' );
+        }
 
-		return esc_url_raw( $fonts_url );
-	}
+        return esc_url_raw( $fonts_url );
+    }
 }
