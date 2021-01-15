@@ -87,7 +87,7 @@ button.btn_full {
 
 a.btn_full_outline {
   color: #1cbbb4;
-  border-color: 2px solid #1cbbb4;
+  border: 2px solid #1cbbb4;
 }
 
 button#place_order {
