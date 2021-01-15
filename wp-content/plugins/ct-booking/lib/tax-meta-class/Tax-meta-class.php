@@ -636,12 +636,12 @@ class Tax_Meta_Class {
     echo '<script>
         jQuery(document).ready(function() {
           var '.$counter.' = '.$c.';
-          jQuery("#add-'.$field['id'].'").live(\'click\', function() {
+          jQuery("#add-'.$field['id'].'").on(\'click\', function() {
             '.$counter.' = '.$counter.' + 1;
             jQuery(this).before(\''.$js_code.'\');            
             update_repeater_fields();
           });
-              jQuery("#remove-'.$field['id'].'").live(\'click\', function() {
+              jQuery("#remove-'.$field['id'].'").on(\'click\', function() {
                   jQuery(this).parent().remove();
               });
           });

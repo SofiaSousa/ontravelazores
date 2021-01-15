@@ -281,7 +281,7 @@ if ( ! class_exists( 'CTShortcodes') ) :
 			$sizes = array( 'medium', 'full' );
 			if ( ! in_array( $style, $styles ) ) $style = '';
 			if ( ! in_array( $size, $sizes ) ) $size = '';
-			if ( $size == 'full' ) $size = 'btn-full';
+			if ( $size == 'full' ) $size = 'btn_full';
 			$classes = array( 'btn_1' );
 			if ( ! empty( $style ) ) $classes[] = $style;
 			if ( ! empty( $size ) ) $classes[] = $size;
@@ -851,8 +851,14 @@ if ( ! class_exists( 'CTShortcodes') ) :
 
 					foreach ( $hotels as $post_obj ) {
 						if ( $post_obj ) { 
+							if ( isset( $post_id ) ) {
+								$temp_post_id = $post_id;	
+							}
 							$post_id = $post_obj->ID;
 							ct_get_template( 'loop-grid.php', '/templates/hotel/');
+							if ( isset( $temp_post_id ) ) {
+								$post_id = $temp_post_id;
+							}
 						}
 					}
 
@@ -923,8 +929,14 @@ if ( ! class_exists( 'CTShortcodes') ) :
 
 					foreach ( $hotels as $post_obj ) {
 						if ( $post_obj ) { 
+							if ( isset( $post_id ) ) {
+								$temp_post_id = $post_id;	
+							}
 							$post_id = $post_obj->ID;
 							ct_get_template( 'loop-grid.php', '/templates/hotel/');
+							if ( isset( $temp_post_id ) ) {
+								$post_id = $temp_post_id;
+							}
 						}
 					}
 
@@ -1042,8 +1054,14 @@ if ( ! class_exists( 'CTShortcodes') ) :
 
 				foreach ( $tours as $post_obj ) {
 					if ( $post_obj ) { 
+						if ( isset( $post_id ) ) {
+							$temp_post_id = $post_id;	
+						}
 						$post_id = $post_obj->ID;
 						ct_get_template( 'loop-list.php', '/templates/tour/');
+						if ( isset( $temp_post_id ) ) {
+							$post_id = $temp_post_id;
+						}
 					}
 				}
 
@@ -1070,8 +1088,14 @@ if ( ! class_exists( 'CTShortcodes') ) :
 					
 					foreach ( $tours as $post_obj ) {
 						if ( $post_obj ) { 
+							if ( isset( $post_id ) ) {
+								$temp_post_id = $post_id;	
+							}
 							$post_id = $post_obj->ID;
 							ct_get_template( 'loop-grid.php', '/templates/tour/');
+							if ( isset( $temp_post_id ) ) {
+								$post_id = $temp_post_id;
+							}
 						}
 					}
 
@@ -1153,8 +1177,14 @@ if ( ! class_exists( 'CTShortcodes') ) :
 
 					foreach ( $tours as $post_obj ) {
 						if ( $post_obj ) { 
+							if ( isset( $post_id ) ) {
+								$temp_post_id = $post_id;	
+							}
 							$post_id = $post_obj->ID;
 							ct_get_template( 'loop-grid.php', '/templates/tour/');
+							if ( isset( $temp_post_id ) ) {
+								$post_id = $temp_post_id;
+							}
 						}
 					}
 
@@ -1267,8 +1297,14 @@ if ( ! class_exists( 'CTShortcodes') ) :
 
 				foreach ( $cars as $post_obj ) {
 					if ( $post_obj ) { 
+						if ( isset( $post_id ) ) {
+							$temp_post_id = $post_id;	
+						}
 						$post_id = $post_obj->ID;
 						ct_get_template( 'loop-list.php', '/templates/car/');
+						if ( isset( $temp_post_id ) ) {
+							$post_id = $temp_post_id;
+						}
 					}
 				}
 
@@ -1285,8 +1321,14 @@ if ( ! class_exists( 'CTShortcodes') ) :
 
 				foreach ( $cars as $post_obj ) {
 					if ( $post_obj ) { 
+						if ( isset( $post_id ) ) {
+							$temp_post_id = $post_id;	
+						}
 						$post_id = $post_obj->ID;
 						ct_get_template( 'loop-grid.php', '/templates/car/');
+						if ( isset( $temp_post_id ) ) {
+							$post_id = $temp_post_id;
+						}
 					}
 				}
 

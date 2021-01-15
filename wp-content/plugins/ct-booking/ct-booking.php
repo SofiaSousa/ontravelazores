@@ -3,7 +3,7 @@
 Plugin Name: CTBooking
 Plugin URI: http://www.soaptheme.net/ctbooking/
 Description: A booking system
-Version: 1.4.5
+Version: 1.4.6
 Author: Soaptheme
 Author URI: http://www.soaptheme.net
 Text Domain: ct-booking
