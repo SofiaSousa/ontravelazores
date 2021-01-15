@@ -15,7 +15,7 @@ add_action(
 		(function($){
 			setTimeout(function(){
 				$('select.mobileMenu option:contains("Filter by category")').text('<?php echo esc_attr( __( 'Filter by category', 'woocommerce' ) ); ?>');
-			}, 0);
+			}, 100);
 		})(jQuery);
 		</script>
 		<?php
