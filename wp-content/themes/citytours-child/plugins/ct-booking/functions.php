@@ -10,7 +10,7 @@ function ot_ctb_init() {
 	add_filter( 'woocommerce_cart_totals_coupon_label', 'ot_cart_totals_smart_coupons_label', 10, 2 );
 	add_action( 'wp_enqueue_scripts', 'ot_remove_conflicted_assets', 99 );
 
-	register_tour_extra_fields_taxonomy();
+	ot_register_tour_extra_fields_taxonomy();
 }
 
 /**
@@ -116,7 +116,7 @@ function ot_remove_conflicted_assets() {
 /**
  * Register Tour Extra Fields taxonomy
  */
-function register_tour_extra_fields_taxonomy() {
+function ot_register_tour_extra_fields_taxonomy() {
 	$labels = array(
 		'name'                       => _x( 'Tour Extra Fields', 'taxonomy general name', 'citytours' ),
 		'singular_name'              => _x( 'Tour Extra Fields', 'taxonomy singular name', 'citytours' ),
