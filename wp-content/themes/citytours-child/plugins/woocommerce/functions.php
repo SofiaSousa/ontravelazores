@@ -27,6 +27,8 @@ function ot_wc_init() {
 	add_action( 'woocommerce_cart_calculate_fees', 'ot_wc_add_checkout_fee_for_paypal' );
 	add_action( 'woocommerce_review_order_before_payment', 'ot_wc_refresh_checkout_on_payment_methods_change' );
 
+	add_action( 'woocommerce_thankyou', 'ot_conversion_tracking_thank_you_page', 95, 1 );
+
 	// Remove actions.
 	remove_action( 'woocommerce_order_status_changed', 'ct_woocommerce_payment_complete', 50, 4 );
 }
@@ -428,6 +430,28 @@ function ot_wc_refresh_checkout_on_payment_methods_change() {
 				$('body').trigger('update_checkout');
 			});
 		})(jQuery);
+	</script>
+	<?php
+}
+
+/**
+ * Add Google Tag Conversion script to thank you page.
+ */
+function ot_conversion_tracking_thank_you_page( $order_id ) {
+	if ( ! $order_id ) {
+		return;
+	}
+
+	$order = wc_get_order( $order_id );
+	?>
+	<!-- Event snippet for Todas as Reservas - ONTRAVEL conversion page -->
+	<script>
+	gtag('event', 'conversion', {
+		'send_to': 'AW-954412331/sIpoCOmQq80BEKvajMcD',
+		'value': '<?php echo esc_attr( $order->get_total() ); ?>',
+		'currency': '<?php echo esc_attr( $order->get_currency() ); ?>',
+		'transaction_id': '<?php echo esc_attr( $order->get_transaction_id() ? $order->get_transaction_id() : $order_id ); ?>'
+	});
 	</script>
 	<?php
 }

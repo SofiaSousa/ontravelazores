@@ -32,6 +32,16 @@ global $ct_options;
 
         gtag('config', 'UA-163950422-1');
     </script>
+
+    <!-- Global site tag (gtag.js) - Google Ads -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-954412331"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'AW-954412331');
+    </script>
 </head>
 
 <?php $body_class = ct_get_extra_body_class(); ?>
