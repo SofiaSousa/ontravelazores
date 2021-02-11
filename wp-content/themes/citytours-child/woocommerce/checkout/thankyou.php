@@ -82,13 +82,3 @@ if ( $order ) : ?>
     <p class="woocommerce-notice woocommerce-notice--success woocommerce-thankyou-order-received"><?php echo apply_filters( 'woocommerce_thankyou_order_received_text', __( 'Thank you. Your order has been received.', 'citytours' ), null ); ?></p>
 
 <?php endif; ?>
-
-<!-- Event snippet for Todas as Reservas - ONTRAVEL conversion page -->
-<script>
-  gtag('event', 'conversion', {
-      'send_to': 'AW-954412331/sIpoCOmQq80BEKvajMcD',
-      'value': 1.0,
-      'currency': 'EUR',
-      'transaction_id': ''
-  });
-</script>
