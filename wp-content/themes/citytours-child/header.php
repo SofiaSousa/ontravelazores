@@ -24,13 +24,13 @@ global $ct_options;
     <?php wp_head();?>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-163950422-1"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BYSDXF5Y4W"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
-        gtag('config', 'UA-163950422-1');
+        gtag('config', 'G-BYSDXF5Y4W');
     </script>
 
     <!-- Global site tag (gtag.js) - Google Ads -->
