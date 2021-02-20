@@ -79,6 +79,21 @@ if ( $page_template != "template-full-width-no-footer.php" ) :
         </div>
         <!-- End row - Logos -->
 
+        <?php
+        if ( is_active_sidebar( 'footer-sponsors-widget' ) ) {
+            ?>
+            <!-- Start row - Sponsors Logos -->
+            <div class="row">
+                <div class="col-md-12">
+                    <?php dynamic_sidebar( 'footer-sponsors-widget' ); ?>
+                </div>
+            </div>
+            <!-- End row - Sponsors Logos -->
+            <?php
+        }
+        ?>
+
+        <!-- Start row -->
         <div class="row">
             <div class="col-md-12">
                 <div id="social_footer">

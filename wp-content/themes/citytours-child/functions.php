@@ -228,6 +228,24 @@ add_action(
 	}
 );
 
+// Widget for Footer Sponsors.
+add_action(
+	'widgets_init',
+	function() {
+		register_sidebar(
+			array(
+				'name'          => __( 'Footer Sponsors', 'citytours' ),
+				'id'            => 'footer-sponsors-widget',
+				'description'   => __( 'Insira o conteudo para o widget Footer Sponsors', 'citytours' ),
+				'before_widget' => '<div class="widget-content text-center">',
+				'after_widget'  => '</div>',
+				'before_title'  => '<h3 class="widget-title">',
+				'after_title'   => '</h3>',
+			)
+		);
+	}
+);
+
 if ( ! function_exists( 'ct_tour_generate_conf_mail' ) ) {
 	/**
 	 * To avoid sending confirmation email from theme.
