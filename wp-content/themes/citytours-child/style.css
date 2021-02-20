@@ -142,3 +142,12 @@ a#phone:before {
   border-bottom: 3px solid transparent;
   border-top: 3px solid #009895;
 }
+
+#footer-sponsors-widget {
+  margin-top: 1rem;
+}
+
+#footer-sponsors-widget img {
+  max-width: 100%;
+  height: auto;
+}
