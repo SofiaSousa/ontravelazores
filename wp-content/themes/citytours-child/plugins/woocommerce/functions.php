@@ -398,6 +398,14 @@ function ot_get_tours_extra_fields() {
 				'label' => __( 'Foot Size - All Participants', 'citytours' ),
 			),
 		),
+		'fields-group-3' => array(
+			'participants_height' => array(
+				'label' => __( 'Height - All Participants', 'citytours' ),
+			),
+			'participants_weight' => array(
+				'label' => __( 'Weight - All Participants', 'citytours' ),
+			),
+		),
 	);
 }
 
