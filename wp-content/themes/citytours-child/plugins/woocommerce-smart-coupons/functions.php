@@ -16,7 +16,7 @@ function ot_smart_coupons_init() {
 	add_action( 'woocommerce_checkout_after_customer_details', 'ot_smart_coupons_gift_certificate_receiver_detail_form' );
 
 	// Add a bonus to gift vouchers.
-	add_action( 'added_post_meta', 'ot_smart_coupons_gift_bonus', 10, 4 );
+	// add_action( 'added_post_meta', 'ot_smart_coupons_gift_bonus', 10, 4 );
 }
 
 /**
@@ -200,23 +200,23 @@ function ot_smart_coupons_gift_certificate_receiver_detail_form() {
  * @param string $meta_key    Metadata key.
  * @param mixed  $_meta_value Metadata value. Serialized if non-scalar.
  */
-function ot_smart_coupons_gift_bonus( $mid, $object_id, $meta_key, $_meta_value ) {
-	if ( 'sc_called_credit_details' !== $meta_key ) {
-		return;
-	}
+// function ot_smart_coupons_gift_bonus( $mid, $object_id, $meta_key, $_meta_value ) {
+// 	if ( 'sc_called_credit_details' !== $meta_key ) {
+// 		return;
+// 	}
 
-	$order       = wc_get_order( $object_id );
-	$order_items = $order->get_items();
+// 	$order       = wc_get_order( $object_id );
+// 	$order_items = $order->get_items();
 
-	$sc_called_credit = get_post_meta( $object_id, 'sc_called_credit_details', true );
+// 	$sc_called_credit = get_post_meta( $object_id, 'sc_called_credit_details', true );
 
-	foreach ( $order_items as $item_id => $order_item ) {
-		if ( isset( $_meta_value[ $item_id ] ) ) {
-			$amount = $_meta_value[ $item_id ];
+// 	foreach ( $order_items as $item_id => $order_item ) {
+// 		if ( isset( $_meta_value[ $item_id ] ) ) {
+// 			$amount = $_meta_value[ $item_id ];
 
-			$sc_called_credit[ $item_id ] = wc_round_discount( $amount + ( $amount * 0.20 ), 2 );
+// 			$sc_called_credit[ $item_id ] = wc_round_discount( $amount + ( $amount * 0.20 ), 2 );
 
-			update_post_meta( $object_id, 'sc_called_credit_details', $sc_called_credit );
-		}
-	}
-}
+// 			update_post_meta( $object_id, 'sc_called_credit_details', $sc_called_credit );
+// 		}
+// 	}
+// }
