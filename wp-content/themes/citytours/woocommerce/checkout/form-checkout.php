@@ -44,8 +44,8 @@ if ( ! $checkout->enable_signup && ! $checkout->enable_guest_checkout && ! is_us
 
     <div class="col-md-5">
 
-        <div class="default-title"> 
-            <h2 id="order_review_heading"><?php _e( 'Your booking', 'citytours' ); ?></h2>
+        <div class="default-title">
+            <h2 id="order_review_heading"><?php _e( 'Your order', 'citytours' ); ?></h2>
         </div>
 
         <?php do_action( 'woocommerce_checkout_before_order_review' ); ?>

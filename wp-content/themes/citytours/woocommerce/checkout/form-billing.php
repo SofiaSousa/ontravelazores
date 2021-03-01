@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
             <?php else : ?>
 
-                <h2><?php _e( 'Customer Details', 'citytours' ); ?></h2>
+                <h2><?php _e( 'Billing Details', 'citytours' ); ?></h2>
 
             <?php endif; ?>
         </div>
