@@ -5,7 +5,7 @@
  * @see 	https://docs.woocommerce.com/document/template-structure/
  * @author  WooThemes
  * @package WooCommerce/Templates
- * @version 3.7.0
+ * @version 4.6.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -27,14 +27,14 @@ if ( $show_downloads ) {
 }
 ?>
 
-<h2 class="woocommerce-order-details__title order-details-header"><?php _e( 'Booking Details', 'citytours' ); ?></h2>
+<h2 class="woocommerce-order-details__title order-details-header"><?php _e( 'Order details', 'citytours' ); ?></h2>
 
 <table class="woocommerce-table woocommerce-table--order-details shop_table order_details">
 
 	<thead>
 		<tr>
 			<th class="woocommerce-table__product-name product-name"><?php _e( 'Product', 'citytours' ); ?></th>
-			<th class="woocommerce-table__product-table product-total"><?php _e( 'Total', '' ); ?></th>
+			<th class="woocommerce-table__product-table product-total"><?php _e( 'Total', 'citytours' ); ?></th>
 		</tr>
 	</thead>
 
@@ -77,9 +77,9 @@ if ( $show_downloads ) {
 
 </table>
 
-<?php 
+<?php
 do_action( 'woocommerce_order_details_after_order_table', $order );
 
-if ( $show_customer_details ) : 
+if ( $show_customer_details ) :
 	wc_get_template( 'order/order-details-customer.php', array( 'order' =>  $order ) );
 endif;
