@@ -263,7 +263,7 @@ ul.products {
   font-weight: bold;
   text-transform: uppercase;
   color: #fff;
-  background-color: #1cbbb4;
+  background-color: #85c99d;
   -webkit-transition: all 0.3s;
   -moz-transition: all 0.3s;
   transition: all 0.3s;
@@ -741,8 +741,8 @@ ul.products .image-box .onsale { top:10px; }
 }
 .btn_cart_outine:hover{
     color:#fff;
-    background:#1cbbb4;
-    border:2px solid #1cbbb4;
+    background:#e04f67;
+    border:2px solid #e04f67;
 }
 
 .table.cart-list.shopping-cart th,
@@ -770,11 +770,6 @@ ul.products .image-box .onsale { top:10px; }
     font-size: 22px;
 }
 
-.shop_table .cart_item td.product-name:not(dl) {
-    font-weight: bold;
-    color: #1cbbb4;
-}
-
 .shop_table .cart_item td.product-name a {
     font-weight: bold;
 }
@@ -786,11 +781,6 @@ ul.products .image-box .onsale { top:10px; }
 .shop_table .cart_item td.product-name dt,
 .shop_table .cart_item td.product-name dd {
     display: inline-block;
-    color: #565a5c;;
-}
-
-.shop_table .cart_item td.product-name dd {
-    font-weight: lighter;
 }
 
 .cart-section .cart-collaterals {
