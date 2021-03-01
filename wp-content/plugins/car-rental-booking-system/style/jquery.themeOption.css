@@ -1,11 +1,11 @@
 /******************************************************************************/
-/* Base */
+/* Base																		  */
 /******************************************************************************/
 
 .to *
 {
-	line-height:150%;
-	box-sizing:border-box;
+    line-height:150%;
+    box-sizing:border-box;
 }
 
 .to,
@@ -15,7 +15,7 @@
 .to select,
 .to textarea,
 .to .dk_container a,
-.to .ui-buttonset .ui-button,
+.to .ui-button,
 .to .dk_container a.dk_toggle:hover,
 .to .dk_container a.dk_toggle:focus,
 .to .dk_container a.dk_toggle:active,
@@ -23,9 +23,9 @@
 .ui-datepicker *
 {
 	font-size:14px;
-	min-height:auto;
-	line-height:150%;
-	font-family:Arial;
+    min-height:auto;
+    line-height:150%;
+    font-family:Arial;
 }
 
 .to .to-clear-fix:after
@@ -127,7 +127,7 @@
 }
 
 /******************************************************************************/
-/* jQuery UI skin */
+/* jQuery UI skin															  */
 /******************************************************************************/
 
 .to .ui-widget-header,
@@ -171,7 +171,7 @@
 }
 
 /******************************************************************************/
-/* Image sprite  */
+/* Image sprite																  */
 /******************************************************************************/
 
 .to .to-social-list li a,
@@ -188,7 +188,7 @@
 }
 
 /******************************************************************************/
-/* Header */
+/* Header																	  */
 /******************************************************************************/
 
 .to h1,.to h1 a,
@@ -210,11 +210,11 @@
 .to h6,.to h6 a { font-size:13px; }
 
 /******************************************************************************/
-/* Color */
+/* Color																	  */
 /******************************************************************************/
 
 	/**************************************************************************/
-	/* Color / Text */
+	/* Color / Text             											  */
 	/**************************************************************************/
 
 	.to
@@ -225,33 +225,34 @@
 	.ui-datepicker a,
 	.ui-datepicker td span,
 	.to input,
-	.to select,
 	.to textarea,
-	.to table.to-table td>div,
+	.to select option,
+	.to select option:hover,
+    .to table.to-table td>div,
 	.to label.to-infield,
 	.to label.to-label-1,
 	.to .dk_container a,
-	.to .dk_container a.dk_toggle,
+    .to .dk_container a.dk_toggle,
 	.to .dk_container a.dk_toggle:hover,
 	.to .dk_container a.dk_toggle:focus,
 	.to .dk_container a.dk_toggle:active,
 	.to .dk_container .dk_options_inner li a,
 	.to .ui-timepicker-list li,
 	.to .ui-tabs .ui-tabs-nav li a,
-	.to .ui-buttonset .ui-button .ui-button-text,
+	.to .ui-button,
 	.to .to-content #to_panel .to-panel-description,
-	.to .to-slider-range,
-	.to .to-field-disabled,
-	.to *[readonly="readonly"]
+    .to .to-slider-range,
+    .to .to-field-disabled,
+    .to *[readonly="readonly"]
 	{
 		color:#444444;
 	}
-	
+    
 	.to .to-form-field-list li span.to-legend,
 	.to .to-form-field-list li span.to-legend-field
-	{
-		color:#777777;
-	}
+    {
+        color:#777777;
+    }
 
 	.to input[type="submit"].to-button,
 	.to input[type="button"].to-button,
@@ -269,17 +270,17 @@
 	.to ul.to-menu li a.to-menu-select:hover,
 	.to ul.to-menu li a.to-menu-error,
 	.to ul.to-menu li a.to-menu-error:hover,
-	.to li.ui-timepicker-selected,	 
+    .to li.ui-timepicker-selected,     
 	.to .to-qtip,
 	.to .to-header .to-header-left h3,
-	.to .ui-tooltip-error .ui-tooltip-content,
-	.to .ui-autocomplete li.ui-menu-item.ui-state-focus,
+    .to .ui-tooltip-error .ui-tooltip-content,
+	.to .ui-autocomplete li.ui-menu-item:hover,
 	.to .ui-timepicker-list li:hover, 
 	.to .ui-timepicker-list .ui-timepicker-selected:hover,
-	.to .ui-buttonset .ui-button.ui-state-active span,
-	.to .ui-buttonset .ui-button.ui-state-active.ui-state-hover span,
-	.to .ui-tabs .ui-tabs-nav .ui-state-active a,
-	.to .ui-tabs .ui-tabs-nav .ui-state-active.ui-state-hover a,
+    .to .ui-button.ui-state-active,
+    .to .ui-button.ui-state-active:hover,
+    .to .ui-tabs .ui-tabs-nav .ui-state-active a,
+    .to .ui-tabs .ui-tabs-nav .ui-state-active.ui-state-hover a,
 	.to .dk_options_inner li a:hover,
 	.to .dk_options_inner li.dk_option_current a
 	{
@@ -310,23 +311,23 @@
 	{
 		color:#357909;
 	}
-	
-	.to .to-form-field-list>li>h5
-	{
-		color:#111111;
-	}
-	
-	.to .ui-tabs .ui-tabs-nav .ui-state-hover a,
-	.to .ui-buttonset .ui-button.ui-state-hover span
-	{
-		color:#0073AA;
-	}
+    
+    .to .to-form-field-list>li>h5
+    {
+        color:#111111;
+    }
+    
+	.to .ui-button:hover,
+    .to .ui-tabs .ui-tabs-nav .ui-state-hover a
+    {
+        color:#0073AA;
+    }
 	
 	/**************************************************************************/
-	/* Color / Border color */
+	/* Color / Border color													  */
 	/**************************************************************************/
 
-	.ui-datepicker,
+    .ui-datepicker,
 	.to select,
 	.to textarea,
 	.to input[type="text"],
@@ -335,10 +336,9 @@
 	.to table.to-table td,
 	.to table.to-table th,
 	.to .ui-autocomplete,
-	.to .ui-autocomplete .ui-state-hover,
-	.to .ui-buttonset .ui-state-hover,
-	.to .ui-buttonset .ui-state-active,
-	.to .ui-buttonset .ui-state-default,
+	.to .ui-button,
+	.to .ui-button:hover,
+	.to .ui-button.ui-state-active,
 	.to .dk_toggle,
 	.to .dk_toggle:hover,
 	.to .dk_toggle:focus,
@@ -348,9 +348,9 @@
 	.to .to-content #to_panel .to-panel-description,
 	.to .ui-timepicker-wrapper,
 	.to .ui-tabs .ui-tabs-panel,
-	.to .ui-tabs .ui-tabs-nav li,
-	.to .to-buffer-output,
-	.to .ui-slider .ui-slider-handle
+    .to .ui-tabs .ui-tabs-nav li,
+    .to .to-buffer-output,
+    .to .ui-slider .ui-slider-handle
 	{
 		border-color:#E4E4E4;
 	}
@@ -365,9 +365,7 @@
 	}
 
 	.to .ui-widget-content,
-	.to .ui-slider-handle.ui-state-hover,
-	.to .ui-slider-handle.ui-state-active,
-	.to .ui-slider-handle.ui-state-focus
+	.to .ui-slider-handle:hover
 	{
 		border-color:#DDDDDD;
 	}
@@ -391,36 +389,36 @@
 	{
 		border-color:#FFFFFF;	
 	}
-	
-	.to .ui-tabs .ui-tabs-nav .ui-state-active,
-	.to .ui-buttonset .ui-button.ui-state-active
-	{
-		border-color:#0073AA;
-	}
-	
-	.dk_toggle::after
-	{
-		border-top-color:#111111;
-	}
-	
-	.to .to-slider-range,
-	.to .to-field-disabled,
-	.to *[readonly="readonly"]
-	{
-		border-color:#F0F0F0;
-	}
-	
+    
+    .to .ui-tabs .ui-tabs-nav .ui-state-active,
+    .to .ui-button.ui-state-active
+    {
+        border-color:#0073AA;
+    }
+    
+    .dk_toggle::after
+    {
+        border-top-color:#111111;
+    }
+    
+    .to .to-slider-range,
+    .to .to-field-disabled,
+    .to *[readonly="readonly"]
+    {
+        border-color:#F0F0F0;
+    }
+    
 	/**************************************************************************/
-	/* Color / Background color */
+	/* Color / Background color												  */
 	/**************************************************************************/
 
-	.postbox.to-postbox-1,
-	.to .ui-tabs .ui-tabs-nav,
-	.to .ui-tabs .ui-tabs-nav li a
-	{
-		background-color:transparent;
-	}
-	
+    .postbox.to-postbox-1,
+    .to .ui-tabs .ui-tabs-nav,
+    .to .ui-tabs .ui-tabs-nav li a
+    {
+        background-color:transparent;
+    }
+    
 	.to .to-header .to-header-left,
 	.to .to-footer .to-footer-left,
 	.to .to-content .to-content-left
@@ -433,37 +431,35 @@
 		background-color:#333333;
 	}
 
-	.to .ui-slider,
+    .to .ui-slider,
 	.to .to-header .to-header-right,
 	.to .to-footer .to-footer-right
 	{
 		background-color:#F0F0F0;
 	}
 
-	.ui-datepicker,
+    .ui-datepicker,
 	.to ul.to-menu li a.to-menu-select,
 	.to ul.to-menu li a.to-menu-select:hover,  
 	.to table.to-table td,
 	.to table.to-table th,
 	.to #to_form,
-	.to .dk_toggle,
+    .to .dk_toggle,
 	.to .ui-autocomplete,
 	.to .ui-slider-handle.ui-state-default,
-	.to .ui-slider-handle.ui-state-focus,
-	.to .ui-slider-handle.ui-state-hover,
-	.to .ui-slider-handle.ui-state-active,
-	.to .ui-buttonset .ui-state-default,
+	.to .ui-slider-handle:hover,
+	.to .ui-button,
 	.to .to-header .to-header-right,
 	.to .to-content .to-content-right,
 	.to .to-footer .to-footer-right,
-	.to .ui-tabs .ui-tabs-panel,
-	.to .ui-tabs .ui-tabs-nav li,
-	.to .ui-tabs .ui-tabs-nav li a,
-	.to .dk_open .dk_toggle
+    .to .ui-tabs .ui-tabs-panel,
+    .to .ui-tabs .ui-tabs-nav li,
+    .to .ui-tabs .ui-tabs-nav li a,
+    .to .dk_open .dk_toggle
 	{
 		background-color:#FFFFFF;
 	}
-
+	
 	.to input[type="submit"].to-button,
 	.to input[type="button"].to-button
 	{
@@ -482,16 +478,16 @@
 	.to input[type="button"].to-button:hover,
 	.to ul.to-menu li a.to-menu-select,
 	.to ul.to-menu li a.to-menu-select:hover,
-	.to li.ui-timepicker-selected, 
+    .to li.ui-timepicker-selected, 
 	.to .dk_options a:hover,
 	.to .dk_options .dk_option_current a,
-	.to .ui-autocomplete li.ui-menu-item.ui-state-focus,
+	.to .ui-autocomplete li.ui-menu-item:hover,
 	.to .ui-timepicker-list li:hover, 
 	.to .ui-timepicker-list .ui-timepicker-selected:hover,
-	.to .ui-buttonset .ui-state-active,
-	.to .ui-tabs .ui-tabs-nav .ui-state-active a,
-	.to .ui-widget-header
-	{
+    .to .ui-button.ui-state-active,
+    .to .ui-tabs .ui-tabs-nav .ui-state-active a,
+    .to .ui-widget-header
+    {
 		background-color:#0073AA;
 	}
 
@@ -505,7 +501,7 @@
 		background-color:#E6F4DD;
 	}
 
-	.to .to-qtip.to-qtip-error,
+    .to .to-qtip.to-qtip-error,
 	.to .ui-tooltip-error .ui-tooltip-content
 	{
 		background-color:#E9431C;
@@ -527,22 +523,20 @@
 	.to .ui-state-default,
 	.to .ui-widget-header,
 	.to .ui-slider-handle,
-	.to .ui-slider-handle.ui-state-hover,
-	.to .ui-slider-handle.ui-state-active,
-	.to .ui-slider-handle.ui-state-focus
+	.to .ui-slider-handle:hover
 	{
 		background-image:none !important;
 	}
-	
-	.to .to-slider-range,
-	.to .to-field-disabled,
-	.to *[readonly="readonly"]
-	{
-		background-color:#F0F0F0;
-	}
+    
+    .to .to-slider-range,
+    .to .to-field-disabled,
+    .to *[readonly="readonly"]
+    {
+        background-color:#F0F0F0;
+    }
 
 /******************************************************************************/
-/* Panel dimension */
+/* Panel dimension															  */
 /******************************************************************************/
 
 .to .to-header .to-header-left,
@@ -567,48 +561,48 @@
 }
 
 /******************************************************************************/
-/* Postbox */
+/* Postbox																	  */
 /******************************************************************************/
 
 .postbox.to-postbox-1
 {
-	border:none !important;
+    border:none !important;
 }
 
 .block-editor .postbox.to-postbox-1
 {
-	margin-top:20px;
+    margin-top:20px;
 }
 
-	.postbox.to-postbox-1>h2,
-	.postbox.to-postbox-1>button
-	{
-	   display:none !important;
-	}
+    .postbox.to-postbox-1>h2,
+    .postbox.to-postbox-1>button
+    {
+       display:none !important;
+    }
 
-	.postbox.to-postbox-1>.inside
-	{
-		margin:0px !important;
-		padding:0px !important;
-	}
-	
-	.postbox.to-postbox-1>.inside>.to
-	{
-		margin:0px;
-	}
+    .postbox.to-postbox-1>.inside
+    {
+        margin:0px !important;
+        padding:0px !important;
+    }
+    
+    .postbox.to-postbox-1>.inside>.to
+    {
+        margin:0px;
+    }
 
 /******************************************************************************/
-/* Panel */
+/* Panel																	  */
 /******************************************************************************/
 
 .to
 {
-	display:block;
+    display:block;
 	margin-top:20px;
 }
 
 	/**************************************************************************/
-	/* Panel / Header */
+	/* Panel / Header														  */
 	/**************************************************************************/
 
 	.to .to-header
@@ -623,7 +617,7 @@
 		}
 		
 		/**********************************************************************/
-		/* Panel / Header / Left */
+		/* Panel / Header / Left											  */
 		/**********************************************************************/
 		
 		.to .to-header .to-header-left
@@ -633,11 +627,11 @@
 		
 			.to .to-header .to-header-left>div
 			{
-				padding:36px 20px 37px 20px;
+                padding:36px 20px 37px 20px;
 			}
 
 		/**********************************************************************/
-		/* Panel / Header / Right */
+		/* Panel / Header / Right											  */
 		/**********************************************************************/
 		
 		.to .to-header .to-header-right
@@ -676,7 +670,7 @@
 			}
 			
 	/**************************************************************************/
-	/* Panel / Content */
+	/* Panel / Content														  */
 	/**************************************************************************/
 
 	.to .to-content
@@ -700,7 +694,7 @@
 	}
 	
 		/**********************************************************************/
-		/* Panel / Content / Left */
+		/* Panel / Content / Left										      */
 		/**********************************************************************/
 		
 		.to .to-content .to-content-left
@@ -756,7 +750,7 @@
 						width:16px;
 						height:16px;
 						display:block;
-						margin-top:3px;
+                        margin-top:3px;
 						margin-right:10px;
 					}
 
@@ -772,7 +766,7 @@
 					}
 					
 		/**********************************************************************/
-		/* Panel / Content / Right */
+		/* Panel / Content / Right									  		  */
 		/**********************************************************************/
 		
 		.to .to-content .to-content-right
@@ -800,7 +794,7 @@
 		}
 		
 	/**************************************************************************/
-	/* Panel / Footer */
+	/* Panel / Footer													      */
 	/**************************************************************************/
 
 	.to .to-footer,
@@ -811,7 +805,7 @@
 	}
 	
 		/**********************************************************************/
-		/* Panel / Footer / Left */
+		/* Panel / Footer / Left									   		  */
 		/**********************************************************************/
 		
 		.to .to-footer .to-footer-left
@@ -820,7 +814,7 @@
 		}
 		
 			/******************************************************************/
-			/* Panel / Footer / Social List */
+			/* Panel / Footer / Social List									  */
 			/******************************************************************/
 
 			.to .to-social-list
@@ -859,7 +853,7 @@
 					.to .to-social-list li a.to-social-list-deviantart:hover	{ background-position:-180px -230px;	}
 
 		/**********************************************************************/
-		/* Panel / Footer / Right */
+		/* Panel / Footer / Right											  */
 		/**********************************************************************/
 		
 		.to .to-footer .to-footer-right
@@ -869,7 +863,7 @@
 		}
 		
 	/**************************************************************************/
-	/* Panel / Form Field List */
+	/* Panel / Form Field List												  */
 	/**************************************************************************/
 				
 	.to .to-form-field-list
@@ -927,11 +921,11 @@
 				margin-bottom:15px;
 			}
 
-			.to .to-form-field-list>li span.to-legend
-			{
-				padding-top:3px;
-			}
-			
+            .to .to-form-field-list>li span.to-legend
+            {
+                padding-top:3px;
+            }
+            
 			.to .to-form-field-list>li span.to-legend,
 			.to .to-form-field-list>li span.to-legend-field
 			{
@@ -954,21 +948,21 @@
 			}
 			
 	/**************************************************************************/
-	/* Panel / Form Element */
+	/* Panel / Form Element													  */
 	/**************************************************************************/			
 	
-	.to select[multiple="multiple"]
-	{
-		outline:0;
-		padding:0px;
-	}
-	
-		.to select[multiple="multiple"] option
-		{
-			outline:0;
-			padding:5px 5px 5px 5px;
-		}
-	
+    .to select[multiple="multiple"]
+    {
+        outline:0;
+        padding:0px;
+    }
+    
+        .to select[multiple="multiple"] option
+        {
+            outline:0;
+            padding:5px 5px 5px 5px;
+        }
+    
 	.to select,
 	.to input[type="submit"].to-button,
 	.to input[type="button"].to-button
@@ -980,7 +974,7 @@
 	.to select,
 	.to textarea
 	{
-		margin:0px;
+        margin:0px;
 		border-radius:0px;
 		-moz-border-radius:0px;
 		-webkit-border-radius:0px;		
@@ -1020,7 +1014,7 @@
 		border:none;
 		padding:10px;
 		min-width:80px;
-		text-shadow:none;
+        text-shadow:none;
 		margin:30px 30px 0px 0px;
 	}
 
@@ -1032,68 +1026,68 @@
 		margin:0px 0px 0px 2px;
 		padding:11px 10px 11px 10px;
 	}
-	
-	.to input[type="button"].to-button-browse
-	{
-		margin-left:-2px;
-	}
-	
-	div+div>input:only-child
-	{
-		margin-top:1px;
-	}
+    
+    .to input[type="button"].to-button-browse
+    {
+        margin-left:-2px;
+    }
+    
+    div+div>input:only-child
+    {
+        margin-top:1px;
+    }
 	
 		/**********************************************************************/
-		/* Panel / Form Element / Tabs */
+		/* Panel / Form Element / Tabs  									  */
 		/**********************************************************************/
-		
-		.to .ui-tabs
-		{
-			padding:0px;
-		}
-		
-			.to .ui-tabs .ui-tabs-nav
-			{
-				margin:0px;
-				padding:0px;
-			}
-		
-			.to .ui-tabs .ui-tabs-nav li
-			{
-				top:1px;
-				z-index:1;
-				margin:0px;
-				border-width:1px;
-				margin-right:5px;
-				position:relative;
-				border-style:solid;
-			}
-			
-			.to .ui-tabs .ui-tabs-nav .ui-state-active
-			{
-				z-index:3;
-				padding-bottom:0px;
-			}
-			
-				.to .ui-tabs .ui-tabs-nav li>a
-				{
-					display:block;
-					font-size:14px;
-					cursor:pointer;
-					padding:15px 25px 15px 25px;
-				}
-				
-			.to .ui-tabs .ui-tabs-panel
-			{
-				z-index:2;
-				margin:0px;
-				border-width:1px;
-				border-style:solid;
-				padding:30px 25px 30px 25px;
-			}
+        
+        .to .ui-tabs
+        {
+            padding:0px;
+        }
+        
+            .to .ui-tabs .ui-tabs-nav
+            {
+                margin:0px;
+                padding:0px;
+            }
+        
+            .to .ui-tabs .ui-tabs-nav li
+            {
+                top:1px;
+                z-index:1;
+                margin:0px;
+                border-width:1px;
+                margin-right:5px;
+                position:relative;
+                border-style:solid;
+            }
+            
+            .to .ui-tabs .ui-tabs-nav .ui-state-active
+            {
+                z-index:3;
+                padding-bottom:0px;
+            }
+            
+                .to .ui-tabs .ui-tabs-nav li>a
+                {
+                    display:block;
+                    font-size:14px;
+                    cursor:pointer;
+                    padding:15px 25px 15px 25px;
+                }
+                
+            .to .ui-tabs .ui-tabs-panel
+            {
+                z-index:2;
+                margin:0px;
+                border-width:1px;
+                border-style:solid;
+                padding:30px 25px 30px 25px;
+            }
 			
 		/**********************************************************************/
-		/* Panel / Form Element / Buttonset */
+		/* Panel / Form Element / Buttonset									  */
 		/**********************************************************************/
 
 		.to input[type="radio"].ui-helper-hidden-accessible,
@@ -1108,36 +1102,31 @@
 			position:relative;
 		}
 
-		.to .ui-buttonset
+		.to .ui-button
 		{
+			float:left;
 			margin:0px;
+			height:auto;
+			cursor:pointer;
+			box-shadow:none;
+			border-width:1px;
+			border-radius:0px;
+			margin-right:-1px;	
+			border-style:solid;
+			font-weight:normal;
+			padding:10px 15px 10px 15px;
 		}
 
-			.to .ui-buttonset .ui-button
-			{
-				float:left;
-				margin:0px;
-				height:auto;
-				cursor:pointer;
-				box-shadow:none;
-				border-width:1px;
-				border-radius:0px;
-				margin-right:-1px;	
-				border-style:solid;
-				font-weight:normal;
-			}
-			
-			.to .ui-buttonset .ui-button:active
-			{
-				transform:none;
-			}
-
-				.to .ui-buttonset .ui-button .ui-button-text
-				{
-					display:block;
-					padding:12px 15px 12px 15px;
-				}
-
+		.to .ui-button:active
+		{
+			transform:none;
+		}
+		
+		.to .ui-button .ui-button-text
+		{
+			padding:0px;
+		}
+		
 		/**********************************************************************/
 		/* Panel / Form Element / Dropkick									  */
 		/**********************************************************************/
@@ -1145,15 +1134,15 @@
 		.to .dk_container
 		{
 			margin-bottom:0px;
-			opacity:1 !important;
+            opacity:1 !important;
 		}
-		
-		.to .dk_options a:hover,
-		.to .dk_options .dk_option_current a
-		{
-			text-shadow:none;
-		}
-		
+        
+        .to .dk_options a:hover,
+        .to .dk_options .dk_option_current a
+        {
+            text-shadow:none;
+        }
+        
 		.to .dk_container,
 		.to .dk_container .dk_toggle,
 		.to .dk_container .dk_options,
@@ -1196,12 +1185,12 @@
 
 			.to .dk_container .dk_options
 			{
-				margin-top:0px;
+                margin-top:0px;
 			}
 
 				.to .dk_container .dk_options .dk_options_inner
 				{
-					max-height:224px;
+                    max-height:224px;
 					border-bottom-width:1px;
 				}
 
@@ -1217,7 +1206,7 @@
 						}		
 						
 		/**********************************************************************/
-		/* Panel / Form Element / Slider */
+		/* Panel / Form Element / Slider								  	  */
 		/**********************************************************************/	
 
 		.to .ui-slider
@@ -1226,13 +1215,13 @@
 			width:308px;
 			margin:13px 10px 10px 10px;
 		}
-		
+        
 		.to .ui-slider .ui-slider-handle
 		{
-			top:-3px;
-			width:18px;
-			height:18px;
-			cursor:pointer;
+            top:-3px;
+            width:18px;
+            height:18px;
+            cursor:pointer;
 			border-width:1px;
 			border-style:solid;		
 			outline:none !important;
@@ -1242,9 +1231,7 @@
 		}
 
 		.to .ui-slider .ui-slider-handle,
-		.to .ui-slider .ui-slider-handle.ui-state-focus,
-		.to .ui-slider .ui-slider-handle.ui-state-hover,
-		.to .ui-slider .ui-slider-handle.ui-state-active
+		.to .ui-slider .ui-slider-handle:hover
 		{
 			background-image:none !important;
 		}
@@ -1259,7 +1246,7 @@
 		}
 		
 		/**********************************************************************/
-		/* Panel / Form Element / Color Sample */
+		/* Panel / Form Element / Color Sample								  */
 		/**********************************************************************/
 
 		.to .to-color-picker-sample
@@ -1271,23 +1258,22 @@
 			margin-right:2px;
 			border-width:1px;
 			border-style:solid;	
-			position:relative;
+            position:relative;
 			outline:solid 1px #E4E4E4;
 		}
 
 		.to input.to-color-picker
 		{
-			float:left;
-			border-left:0px;
+            float:left;
+            border-left:0px;
 			padding-left:51px;
 		}
-		
+        
 		/**********************************************************************/
-		/* Panel / Form Element / Autocomplete */
+		/* Panel / Form Element / Autocomplete								  */
 		/**********************************************************************/
 
-		.to .ui-autocomplete,
-		.to .ui-autocomplete .ui-state-hover
+		.to .ui-autocomplete
 		{
 			border-width:1px;
 			border-style:solid;
@@ -1296,26 +1282,22 @@
 		.to .ui-autocomplete.ui-menu
 		{
 			padding:0px;
-			box-shadow:none;
-			border-top-width:0px;
+            box-shadow:none;
+            border-top-width:0px;
 		}
 		
 			.to .ui-autocomplete li.ui-menu-item,
-			.to .ui-autocomplete li.ui-menu-item.ui-state-focus,
+            .to .ui-autocomplete li.ui-menu-item:hover,
 			.to .ui-autocomplete li.ui-menu-item.ui-state-active
 			{
-				margin:0px;
+                margin:0px;
+				text-shadow:none;
 				padding:8px 10px 8px 10px;
 			}
-			
+            
 			.to .ui-autocomplete li.ui-menu-item
 			{
 				box-sizing:border-box;
-			}
-
-			.to .ui-autocomplete li.ui-menu-item.ui-state-focus
-			{
-				text-shadow:none;
 			}
 
 			.to input[type="text"].ui-autocomplete-loading
@@ -1325,7 +1307,7 @@
 			}
 			
 		/**********************************************************************/
-		/* Panel / Form Element / Infield label */
+		/* Panel / Form Element / Infield label								  */
 		/**********************************************************************/	
 
 		.to label.to-infield,
@@ -1350,16 +1332,16 @@
 		}
 		
 		/**********************************************************************/
-		/* Panel / Form Element / Datepicker */
+		/* Panel / Form Element / Datepicker								  */
 		/**********************************************************************/	
 
 		.ui-datepicker
 		{
-			width:auto;
+            width:auto;
 			padding:10px;
 			border-width:1px;
 			border-style:solid;
-			z-index:9 !important;
+            z-index:9 !important;
 		}
 		
 		.ui-datepicker .ui-datepicker-header
@@ -1428,40 +1410,40 @@
 		}
 		
 		/**********************************************************************/
-		/* Panel / Form Element / Timepicker */
+		/* Panel / Form Element / Timepicker								  */
 		/**********************************************************************/			
 		
 		.to .ui-timepicker-wrapper
 		{
-			height:166px;
-			max-height:166px;
+            height:166px;
+            max-height:166px;
 			box-shadow:none;
-			margin-top:-1px;
+            margin-top:-1px;
 		}
-		
-			.ui-timepicker-list li
-			{
-				padding:10px 10px 10px 10px;
-			}
-		
+        
+            .ui-timepicker-list li
+            {
+                padding:10px 10px 10px 10px;
+            }
+        
 		/**********************************************************************/
-		/* Panel / Form Element / Disabled field */
+		/* Panel / Form Element / Disabled field    						  */
 		/**********************************************************************/
-		
-		.to .to-field-disabled
-		{
-			height:auto;
-			width:100%;
-			padding:8px;
-			max-width:400px;
-			box-shadow:none;
-			border-width:1px;
-			min-height:36.2px;
-			border-style:solid;
-		}
+        
+        .to .to-field-disabled
+        {
+            height:auto;
+            width:100%;
+            padding:8px;
+            max-width:400px;
+            box-shadow:none;
+            border-width:1px;
+            min-height:36.2px;
+            border-style:solid;
+        }
 		
 	/**************************************************************************/
-	/* Panel / Qtip */
+	/* Panel / Qtip															  */
 	/**************************************************************************/
 
 	.to .to-qtip
@@ -1484,7 +1466,7 @@
 	}
 		
 	/**************************************************************************/
-	/* Panel / Notice */
+	/* Panel / Notice												   		  */
 	/**************************************************************************/
 	
 	#to_notice
@@ -1534,7 +1516,7 @@
 			}
 			
 	/**************************************************************************/
-	/* Panel / Width */
+	/* Panel / Width														  */
 	/**************************************************************************/
 	
 	.to .width-100			{ width:100px !important; }
@@ -1545,18 +1527,18 @@
 	.to input.width-p-50	{ width:100px !important; }
 	
 	/**************************************************************************/
-	/* Panel / Height */
+	/* Panel / Height												   		  */
 	/**************************************************************************/
 	
-	.to .height-50		  { height:50px !important; }
+	.to .height-50          { height:50px !important; }
 	
 /******************************************************************************/
-/* Chrome scrollbar */
+/* Chrome scrollbar				                                              */
 /******************************************************************************/
 
 ::-webkit-scrollbar 
 {
-	width:15px;
+    width:15px;
 }
 
 ::-webkit-scrollbar-track
@@ -1567,11 +1549,11 @@
  
 ::-webkit-scrollbar-thumb
 {
-	background-color:#DDDDDD;
+    background-color:#DDDDDD;
 }
 
 /******************************************************************************/
-/*	Output buffer */
+/*	Output buffer															  */
 /******************************************************************************/
 
 .to .to-buffer-output
@@ -1580,13 +1562,13 @@
 	padding:20px;
 	color:#999999;
 	overflow:auto;
-	border-width:1px;
+    border-width:1px;
 	border-style:solid;
-	font-family:'Courier New';
+    font-family:'Courier New';
 }
 
 /******************************************************************************/
-/* Table */
+/* Table						                                              */
 /******************************************************************************/
 
 .to table.to-table
@@ -1630,27 +1612,22 @@
 			padding:5px;
 		}
 
-	.to table.to-table .dk_container
-	{
-		position:relative;
-	}
-		
 	.to table.to-table input,
 	.to table.to-table .dk_container,
 	.to table.to-table .dk_container .dk_toggle
 	{
 		width:100% !important;
-		max-width:100%;
+        max-width:100%;
 		-webkit-box-sizing:border-box;
 		-moz-box-sizing:border-box;
 		box-sizing:border-box;
 	}
-	
+    
 	.to table.to-table input[type="radio"],
-	.to table.to-table input[type="checkbox"]
-	{
-		width:auto !important;
-	}
+    .to table.to-table input[type="checkbox"]
+    {
+        width:auto !important;
+    }
 	
 .to-table-button-add
 {
@@ -1660,7 +1637,7 @@
 }
 
 /******************************************************************************/
-/* Strike */
+/* Strike						                                              */
 /******************************************************************************/
 
 .to-strike,
@@ -1677,7 +1654,7 @@
 }
 
 /******************************************************************************/
-/* Overflow */
+/* Overflow						                                              */
 /******************************************************************************/
 
 .to-overflow-y
@@ -1688,7 +1665,7 @@
 }
 
 /******************************************************************************/
-/* Gutenberg */
+/* Gutenberg																  */
 /******************************************************************************/
 
 .block-editor .postbox.to-postbox-1

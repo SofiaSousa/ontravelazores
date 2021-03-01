@@ -29,7 +29,7 @@ class CHBSPostMeta
 		{
 			case PLUGIN_CHBS_CONTEXT.'_route':
                 
-                self::unserialize($data,array('coordinate','vehicle'));
+                self::unserialize($data,array('coordinate','vehicle','pickup_hour'));
      
 				$Route=new CHBSRoute();
 				$Route->setPostMetaDefault($data);
@@ -72,7 +72,7 @@ class CHBSPostMeta
         
 			case PLUGIN_CHBS_CONTEXT.'_booking_form':
                 
-                self::unserialize($data,array('service_type_id','transfer_type_enable_1','transfer_type_enable_3','vehicle_category_id','vehicle_filter_enable','booking_extra_category_id','currency','route_id','business_hour','break_hour','location_fixed_pickup_service_type_1','location_fixed_dropoff_service_type_1','location_fixed_pickup_service_type_2','location_fixed_dropoff_service_type_2','driving_zone_restriction_pickup_location_country','driving_zone_restriction_dropoff_location_country','date_exclude','payment_id','google_map_route_avoid','style_color','form_element_panel','form_element_field','form_element_agreement'));
+                self::unserialize($data,array('service_type_id','transfer_type_enable_1','transfer_type_enable_3','vehicle_category_id','vehicle_filter_enable','booking_extra_category_id','currency','route_id','business_hour','break_hour','location_fixed_pickup_service_type_1','location_fixed_dropoff_service_type_1','location_fixed_pickup_service_type_2','location_fixed_dropoff_service_type_2','driving_zone_restriction_pickup_location_country','driving_zone_restriction_dropoff_location_country','date_exclude','payment_id','payment_stripe_method','google_map_route_avoid','style_color','form_element_panel','form_element_field','form_element_agreement','gratuity_customer_type','field_mandatory'));
                 
 				$BookingForm=new CHBSBookingForm();
 				$BookingForm->setPostMetaDefault($data);
@@ -81,7 +81,7 @@ class CHBSPostMeta
         
 			case PLUGIN_CHBS_CONTEXT.'_booking':
                 
-                self::unserialize($data,array('booking_extra','coordinate','payment_data','form_element_panel','form_element_field','form_element_agreement'));
+                self::unserialize($data,array('booking_extra','coordinate','payment_stripe_data','payment_paypal_data','form_element_panel','form_element_field','form_element_agreement','booking_driver_log'));
   
 				$Booking=new CHBSBooking();
 				$Booking->setPostMetaDefault($data);
@@ -144,6 +144,7 @@ class CHBSPostMeta
 				$Geofence->setPostMetaDefault($data);
 				
 			break;
+		
 		}
 		
 		return($data);

@@ -30,6 +30,7 @@
                         </ul>     
                         <div id="meta-box-booking-form-1-1">
                             <ul class="to-form-field-list">
+								<?php echo CHBSHelper::createPostIdField(__('Booking form ID','chauffeur-booking-system')); ?>
                                 <li>
                                     <h5><?php esc_html_e('Shortcode','chauffeur-booking-system'); ?></h5>
                                     <span class="to-legend"><?php esc_html_e('Copy and paste the shortcode on a page.','chauffeur-booking-system'); ?></span>
@@ -73,7 +74,7 @@
                                 </li>                         
                                 <li>
                                     <h5><?php esc_html_e('Transfer type','chauffeur-booking-system'); ?></h5>
-                                    <span class="to-legend"><?php esc_html_e('Enable or disable transfer type (one way, return, return - new ride) for choosen services.','chauffeur-booking-system'); ?></span>
+                                    <span class="to-legend"><?php esc_html_e('Enable or disable transfer type (one way, return, return - new ride) for chosen services.','chauffeur-booking-system'); ?></span>
                                     <div>
                                         <table class="to-table">
                                             <tr>
@@ -172,7 +173,7 @@
                                 </li>
                                 <li>
                                     <h5><?php esc_html_e('Booking extras','chauffeur-booking-system'); ?></h5>
-                                    <span class="to-legend"><?php esc_html_e('Select categories, from which addons are available to book.','chauffeur-booking-system'); ?></span>
+                                    <span class="to-legend"><?php esc_html_e('Select categories, from which add-ons are available to book.','chauffeur-booking-system'); ?></span>
                                     <div class="to-checkbox-button">
                                         <input type="checkbox" value="-1" id="<?php CHBSHelper::getFormName('booking_extra_category_id_0'); ?>" name="<?php CHBSHelper::getFormName('booking_extra_category_id[]'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['booking_extra_category_id'],-1); ?>/>
                                         <label for="<?php CHBSHelper::getFormName('booking_extra_category_id_0'); ?>"><?php esc_html_e('- All extras -','chauffeur-booking-system') ?></label>
@@ -320,6 +321,8 @@
                                         <label for="<?php CHBSHelper::getFormName('billing_detail_state_2'); ?>"><?php esc_html_e('Checked','chauffeur-booking-system'); ?></label>
                                         <input type="radio" value="3" id="<?php CHBSHelper::getFormName('billing_detail_state_3'); ?>" name="<?php CHBSHelper::getFormName('billing_detail_state'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['billing_detail_state'],3); ?>/>
                                         <label for="<?php CHBSHelper::getFormName('billing_detail_state_3'); ?>"><?php esc_html_e('Mandatory','chauffeur-booking-system'); ?></label>
+                                        <input type="radio" value="4" id="<?php CHBSHelper::getFormName('billing_detail_state_4'); ?>" name="<?php CHBSHelper::getFormName('billing_detail_state'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['billing_detail_state'],4); ?>/>
+                                        <label for="<?php CHBSHelper::getFormName('billing_detail_state_4'); ?>"><?php esc_html_e('Hidden','chauffeur-booking-system'); ?></label>
                                     </div>
                                 </li>
                                 <li>
@@ -360,7 +363,23 @@
 		}
 ?>                                
                                     </div>
-                                </li>                                                
+                                </li>  
+                                <li>
+                                    <h5><?php esc_html_e('Default country','chauffeur-booking-system'); ?></h5>
+                                    <span class="to-legend">
+                                        <?php esc_html_e('Select default country.','chauffeur-booking-system'); ?><br/>
+										<?php esc_html_e('This country will be default selected in step #3 of booking form in section "Billing details".','chauffeur-booking-system'); ?>
+                                    </span>
+									<div class="to-clear-fix">
+										<select name="<?php CHBSHelper::getFormName('country_default'); ?>" id="<?php CHBSHelper::getFormName('country_default'); ?>">
+<?php
+		echo '<option value="-1" '.(CHBSHelper::selectedIf($this->data['meta']['country_default'],-1,false)).'>'.esc_html__('- Based on customer geolocation -','chauffeur-booking-system').'</option>';
+		foreach($this->data['dictionary']['country'] as $index=>$value)
+            echo '<option value="'.esc_attr($index).'" '.(CHBSHelper::selectedIf($this->data['meta']['country_default'],$index,false)).'>'.esc_html($value[0]).'</option>';
+?>
+										</select>                                                  
+									</div>
+                                </li> 				
                                 <li>
                                     <h5><?php esc_html_e('Server side geolocation','chauffeur-booking-system'); ?></h5>
                                     <span class="to-legend">
@@ -449,7 +468,23 @@
 ?>
                                         </select>
                                     </div>
-                                </li>     
+                                </li>  
+                                <li>
+                                    <h5><?php esc_html_e('Vehicle selecting','chauffeur-booking-system'); ?></h5>
+                                    <span class="to-legend">
+                                        <?php esc_html_e('Enable/disable vehicle selecting in the second step.','chauffeur-booking-system'); ?><br/>
+										<?php esc_html_e('Please note, that if this option is disabled, default vehicle has to be set up.','chauffeur-booking-system'); ?><br/>
+										<?php esc_html_e('Please also note, that settings related with vehicles availability are ignored in this case.','chauffeur-booking-system'); ?><br/>
+                                    </span>
+                                    <div class="to-clear-fix">
+                                        <div class="to-radio-button">
+                                            <input type="radio" value="1" id="<?php CHBSHelper::getFormName('vehicle_select_enable_1'); ?>" name="<?php CHBSHelper::getFormName('vehicle_select_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['vehicle_select_enable'],1); ?>/>
+                                            <label for="<?php CHBSHelper::getFormName('vehicle_select_enable_1'); ?>"><?php esc_html_e('Enable','chauffeur-booking-system'); ?></label>
+                                            <input type="radio" value="0" id="<?php CHBSHelper::getFormName('vehicle_select_enable_2'); ?>" name="<?php CHBSHelper::getFormName('vehicle_select_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['vehicle_select_enable'],0); ?>/>
+                                            <label for="<?php CHBSHelper::getFormName('vehicle_select_enable_2'); ?>"><?php esc_html_e('Disable','chauffeur-booking-system'); ?></label>
+                                         </div>
+                                    </div>
+                                </li>  								
                                 <li>
                                     <h5><?php esc_html_e('Vehicle categories','chauffeur-booking-system'); ?></h5>
                                     <span class="to-legend"><?php esc_html_e('Select categories, from which vehicles are available to book.','chauffeur-booking-system'); ?></span>
@@ -516,7 +551,7 @@
                                     <div>
                                         <input type="text" maxlength="2" name="<?php CHBSHelper::getFormName('vehicle_limit'); ?>" value="<?php echo esc_attr($this->data['meta']['vehicle_limit']); ?>"/>
                                     </div> 
-                                </li>                                 
+                                </li>  
                             </ul>
                         </div>
                         <div id="meta-box-booking-form-1-3">
@@ -899,7 +934,7 @@
                                 </li>  
                                 <li>
                                     <h5><?php esc_html_e('Hide fees','chauffeur-booking-system'); ?></h5>
-                                    <span class="to-legend"><?php esc_html_e('Hide all addtional fees (inital, delivery) in booking summary and include them to the price of selected vehicle.','chauffeur-booking-system'); ?>
+                                    <span class="to-legend"><?php esc_html_e('Hide all additional fees (initial, delivery) in booking summary and include them to the price of selected vehicle.','chauffeur-booking-system'); ?>
                                     </span>
                                     <div class="to-radio-button">
                                         <input type="radio" value="1" id="<?php CHBSHelper::getFormName('booking_summary_hide_fee_1'); ?>" name="<?php CHBSHelper::getFormName('booking_summary_hide_fee'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['booking_summary_hide_fee'],1); ?>/>
@@ -944,7 +979,99 @@
                                         <input type="radio" value="0" id="<?php CHBSHelper::getFormName('show_net_price_hide_tax_0'); ?>" name="<?php CHBSHelper::getFormName('show_net_price_hide_tax'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['show_net_price_hide_tax'],0); ?>/>
                                         <label for="<?php CHBSHelper::getFormName('show_net_price_hide_tax_0'); ?>"><?php esc_html_e('Disable','chauffeur-booking-system'); ?></label>
                                     </div>
-                                </li>                                 
+                                </li>  
+                                <li>
+                                    <h5><?php esc_html_e('Gratuity','chauffeur-booking-system'); ?></h5>
+                                    <span class="to-legend">
+                                        <?php esc_html_e('Enter setting of gratuity.','chauffeur-booking-system'); ?>
+                                    </span> 
+                                    <div>
+                                        <span class="to-legend-field"><?php esc_html_e('Status:','chauffeur-booking-system'); ?></span>
+                                        <div class="to-radio-button">
+                                            <input type="radio" value="1" id="<?php CHBSHelper::getFormName('gratuity_enable_1'); ?>" name="<?php CHBSHelper::getFormName('gratuity_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['gratuity_enable'],1); ?>/>
+                                            <label for="<?php CHBSHelper::getFormName('gratuity_enable_1'); ?>"><?php esc_html_e('Enable','chauffeur-booking-system'); ?></label>
+                                            <input type="radio" value="0" id="<?php CHBSHelper::getFormName('gratuity_enable_0'); ?>" name="<?php CHBSHelper::getFormName('gratuity_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['gratuity_enable'],0); ?>/>
+                                            <label for="<?php CHBSHelper::getFormName('gratuity_enable_0'); ?>"><?php esc_html_e('Disable','chauffeur-booking-system'); ?></label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="to-legend-field"><?php esc_html_e('Gratuity type:','chauffeur-booking-system'); ?></span>
+                                        <div class="to-radio-button">
+<?php
+		foreach($this->data['dictionary']['gratuity_type'] as $index=>$value)
+		{
+?>
+                                            <input type="radio" value="<?php echo esc_attr($index); ?>" id="<?php CHBSHelper::getFormName('gratuity_admin_type_'.$index); ?>" name="<?php CHBSHelper::getFormName('gratuity_admin_type'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['gratuity_admin_type'],$index); ?>/>
+                                            <label for="<?php CHBSHelper::getFormName('gratuity_admin_type_'.$index); ?>"><?php echo esc_html($value[0]); ?></label>
+<?php		
+		}
+?>                                
+                                        </div>
+                                    </div> 
+                                    <div>
+                                        <span class="to-legend-field"><?php esc_html_e('Value of gratuity (fixed or percentage):','chauffeur-booking-system'); ?></span>
+                                        <input type="text" maxlength="12" name="<?php CHBSHelper::getFormName('gratuity_admin_value'); ?>" id="<?php CHBSHelper::getFormName('gratuity_admin_value'); ?>" value="<?php echo esc_attr($this->data['meta']['gratuity_admin_value']); ?>"/>
+                                    </div>                                    
+                                    <div>
+                                        <span class="to-legend-field"><?php esc_html_e('Enable possibility of changing gratuity by customer:','chauffeur-booking-system'); ?></span>
+                                        <div class="to-radio-button">
+                                            <input type="radio" value="1" id="<?php CHBSHelper::getFormName('gratuity_customer_enable_1'); ?>" name="<?php CHBSHelper::getFormName('gratuity_customer_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['gratuity_customer_enable'],1); ?>/>
+                                            <label for="<?php CHBSHelper::getFormName('gratuity_customer_enable_1'); ?>"><?php esc_html_e('Enable','chauffeur-booking-system'); ?></label>
+                                            <input type="radio" value="2" id="<?php CHBSHelper::getFormName('gratuity_customer_enable_0'); ?>" name="<?php CHBSHelper::getFormName('gratuity_customer_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['gratuity_customer_enable'],0); ?>/>
+                                            <label for="<?php CHBSHelper::getFormName('gratuity_customer_enable_0'); ?>"><?php esc_html_e('Disable','chauffeur-booking-system'); ?></label>
+                                        </div>
+                                    </div>   
+                                    <div>
+                                        <span class="to-legend-field"><?php esc_html_e('Customer gratuity type: (fixed or percentage)','chauffeur-booking-system'); ?></span>
+                                        <div class="to-checkbox-button">
+<?php
+		foreach($this->data['dictionary']['gratuity_type'] as $index=>$value)
+		{
+?>
+                                            <input type="checkbox" value="<?php echo esc_attr($index); ?>" id="<?php CHBSHelper::getFormName('gratuity_customer_type_'.$index); ?>" name="<?php CHBSHelper::getFormName('gratuity_customer_type[]'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['gratuity_customer_type'],$index); ?>/>
+                                            <label for="<?php CHBSHelper::getFormName('gratuity_customer_type_'.$index); ?>"><?php echo esc_html($value[0]); ?></label>
+<?php		
+		}
+?>                                
+                                        </div>                                            
+                                    </div>  
+                                </li>
+                                <li>
+                                    <h5><?php esc_html_e('Vehicle price rounding','chauffeur-booking-system'); ?></h5>
+                                    <span class="to-legend">
+                                        <?php esc_html_e('Vehicle price rounding.','chauffeur-booking-system'); ?><br/>
+                                        <?php esc_html_e('A value from range 0.01-999999.99. If empty, price will not be rounded.','chauffeur-booking-system'); ?>
+                                    </span>
+                                    <div>
+                                        <input type="text" maxlength="9" name="<?php CHBSHelper::getFormName('vehicle_price_round'); ?>" value="<?php echo esc_attr($this->data['meta']['vehicle_price_round']); ?>"/>
+                                    </div>
+                                </li>   
+                                <li>
+                                    <h5><?php esc_html_e('Bid vehicle price','chauffeur-booking-system'); ?></h5>
+                                    <span class="to-legend">
+                                        <?php esc_html_e('This option allows customer to enter own price for a vehicle.','chauffeur-booking-system'); ?><br/>
+										<?php esc_html_e('Price for a vehicle cannot be lower than set percentage value of source price.','chauffeur-booking-system'); ?><br/>
+										<?php esc_html_e('In case of fixed locations, maximum percentage discount could be replaced by value entered during editing/adding fixed location.','chauffeur-booking-system'); ?><br/>
+										<?php esc_html_e('This option works only if "Hide fees" option is enabled.','chauffeur-booking-system'); ?>
+                                    </span>
+                                    <div>
+                                        <span class="to-legend-field"><?php esc_html_e('Status:','chauffeur-booking-system'); ?></span>
+                                        <div>
+											<div class="to-radio-button">
+												<input type="radio" value="1" id="<?php CHBSHelper::getFormName('vehicle_bid_enable_1'); ?>" name="<?php CHBSHelper::getFormName('vehicle_bid_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['vehicle_bid_enable'],1); ?>/>
+												<label for="<?php CHBSHelper::getFormName('vehicle_bid_enable_1'); ?>"><?php esc_html_e('Enable','chauffeur-booking-system'); ?></label>
+												<input type="radio" value="0" id="<?php CHBSHelper::getFormName('vehicle_bid_enable_0'); ?>" name="<?php CHBSHelper::getFormName('vehicle_bid_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['vehicle_bid_enable'],0); ?>/>
+												<label for="<?php CHBSHelper::getFormName('vehicle_bid_enable_0'); ?>"><?php esc_html_e('Disable','chauffeur-booking-system'); ?></label>
+											</div>
+                                        </div>                     
+                                    </div>
+                                    <div>
+                                        <span class="to-legend-field"><?php esc_html_e('Maximum percentage discount:','chauffeur-booking-system'); ?></span>
+                                        <div>
+											<input type="text" maxlength="5" name="<?php CHBSHelper::getFormName('vehicle_bid_max_percentage_discount'); ?>" value="<?php echo esc_attr($this->data['meta']['vehicle_bid_max_percentage_discount']); ?>"/>
+                                        </div>                     
+                                    </div>									
+                                </li>
                             </ul>
                         </div>
                         <div id="meta-box-booking-form-1-6">
@@ -1029,7 +1156,7 @@
                                 <li>
                                     <h5><?php esc_html_e('Top navigation','chauffeur-booking-system'); ?></h5>
                                     <span class="to-legend">
-                                        <?php echo __('Enable or disable top navigation.','chauffeur-booking-system'); ?>
+                                        <?php  esc_html_e('Enable or disable top navigation.','chauffeur-booking-system'); ?>
                                     </span>
                                     <div class="to-clear-fix">
                                         <div class="to-radio-button">
@@ -1040,6 +1167,20 @@
                                         </div>                                
                                     </div>
                                 </li>
+                                <li>
+                                    <h5><?php esc_html_e('Services tab','chauffeur-booking-system'); ?></h5>
+                                    <span class="to-legend">
+                                        <?php esc_html_e('Enable or disable services tab on step #1 of booking form if only one service is active.','chauffeur-booking-system'); ?>
+                                    </span>
+                                    <div class="to-clear-fix">
+                                        <div class="to-radio-button">
+                                            <input type="radio" value="1" id="<?php CHBSHelper::getFormName('service_tab_enable_1'); ?>" name="<?php CHBSHelper::getFormName('service_tab_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['service_tab_enable'],1); ?>/>
+                                            <label for="<?php CHBSHelper::getFormName('service_tab_enable_1'); ?>"><?php esc_html_e('Enable','chauffeur-booking-system'); ?></label>
+                                            <input type="radio" value="0" id="<?php CHBSHelper::getFormName('service_tab_enable_0'); ?>" name="<?php CHBSHelper::getFormName('service_tab_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['service_tab_enable'],0); ?>/>
+                                            <label for="<?php CHBSHelper::getFormName('service_tab_enable_0'); ?>"><?php esc_html_e('Disable','chauffeur-booking-system'); ?></label>
+                                        </div>                                
+                                    </div>
+                                </li>								
                                 <li>
                                     <h5><?php esc_html_e('Icons in fields','chauffeur-booking-system'); ?></h5>
                                     <span class="to-legend">
@@ -1079,7 +1220,6 @@
                                         <label for="<?php CHBSHelper::getFormName('vehicle_more_info_default_show_0'); ?>"><?php esc_html_e('Hide','chauffeur-booking-system'); ?></label>
                                     </div>
                                 </li>  
-                                
                                 <li>
                                     <h5><?php esc_html_e('Extra time','chauffeur-booking-system'); ?></h5>
                                     <span class="to-legend">
@@ -1147,7 +1287,7 @@
                                         <?php esc_html_e('Timepicker settings: dropdown list status and interval.','chauffeur-booking-system'); ?><br/>
                                     </span>
                                     <div class="to-clear-fix">
-                                        <span class="to-legend-field"><?php esc_html_e('Dropdown list stautus:','chauffeur-booking-system'); ?></span>
+                                        <span class="to-legend-field"><?php esc_html_e('Dropdown list status:','chauffeur-booking-system'); ?></span>
                                         <div class="to-radio-button">
                                             <input type="radio" value="1" id="<?php CHBSHelper::getFormName('timepicker_dropdown_list_enable_1'); ?>" name="<?php CHBSHelper::getFormName('timepicker_dropdown_list_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['timepicker_dropdown_list_enable'],1); ?>/>
                                             <label for="<?php CHBSHelper::getFormName('timepicker_dropdown_list_enable_1'); ?>"><?php esc_html_e('Enable','chauffeur-booking-system'); ?></label>
@@ -1185,6 +1325,64 @@
                                         <label for="<?php CHBSHelper::getFormName('scroll_to_booking_extra_after_select_vehicle_enable_0'); ?>"><?php esc_html_e('Disable','chauffeur-booking-system'); ?></label>
                                     </div>
                                 </li>  
+                                <li>
+                                    <h5><?php esc_html_e('Drop off location in "Hourly" service','chauffeur-booking-system'); ?></h5>
+                                    <span class="to-legend"><?php esc_html_e('Enable or disable "Drop-off location" field in "Hourly" service type offered.','chauffeur-booking-system'); ?></span>
+                                    <div class="to-radio-button">
+                                        <input type="radio" value="1" id="<?php CHBSHelper::getFormName('dropoff_location_field_enable_1'); ?>" name="<?php CHBSHelper::getFormName('dropoff_location_field_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['dropoff_location_field_enable'],1); ?>/>
+                                        <label for="<?php CHBSHelper::getFormName('dropoff_location_field_enable_1'); ?>"><?php esc_html_e('Enable','chauffeur-booking-system'); ?></label>
+                                        <input type="radio" value="0" id="<?php CHBSHelper::getFormName('dropoff_location_field_enable_0'); ?>" name="<?php CHBSHelper::getFormName('dropoff_location_field_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['dropoff_location_field_enable'],0); ?>/>
+                                        <label for="<?php CHBSHelper::getFormName('dropoff_location_field_enable_0'); ?>"><?php esc_html_e('Disable','chauffeur-booking-system'); ?></label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <h5><?php esc_html_e('Number of passengers on vehicle list','chauffeur-booking-system'); ?></h5>
+                                    <span class="to-legend"><?php esc_html_e('Enable or disable visibility of passenger number of vehicle on list in step #3.','chauffeur-booking-system'); ?></span>
+                                    <div class="to-radio-button">
+                                        <input type="radio" value="1" id="<?php CHBSHelper::getFormName('passenger_number_vehicle_list_enable_1'); ?>" name="<?php CHBSHelper::getFormName('passenger_number_vehicle_list_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['passenger_number_vehicle_list_enable'],1); ?>/>
+                                        <label for="<?php CHBSHelper::getFormName('passenger_number_vehicle_list_enable_1'); ?>"><?php esc_html_e('Enable','chauffeur-booking-system'); ?></label>
+                                        <input type="radio" value="0" id="<?php CHBSHelper::getFormName('passenger_number_vehicle_list_enable_0'); ?>" name="<?php CHBSHelper::getFormName('passenger_number_vehicle_list_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['passenger_number_vehicle_list_enable'],0); ?>/>
+                                        <label for="<?php CHBSHelper::getFormName('passenger_number_vehicle_list_enable_0'); ?>"><?php esc_html_e('Disable','chauffeur-booking-system'); ?></label>
+                                    </div>
+                                </li>  
+                                <li>
+                                    <h5><?php esc_html_e('Number of suitcases on vehicle list','chauffeur-booking-system'); ?></h5>
+                                    <span class="to-legend"><?php esc_html_e('Enable or disable visibility of suitcases number of vehicle on list in step #3.','chauffeur-booking-system'); ?></span>
+                                    <div class="to-radio-button">
+                                        <input type="radio" value="1" id="<?php CHBSHelper::getFormName('suitcase_number_vehicle_list_enable_1'); ?>" name="<?php CHBSHelper::getFormName('suitcase_number_vehicle_list_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['suitcase_number_vehicle_list_enable'],1); ?>/>
+                                        <label for="<?php CHBSHelper::getFormName('suitcase_number_vehicle_list_enable_1'); ?>"><?php esc_html_e('Enable','chauffeur-booking-system'); ?></label>
+                                        <input type="radio" value="0" id="<?php CHBSHelper::getFormName('suitcase_number_vehicle_list_enable_0'); ?>" name="<?php CHBSHelper::getFormName('suitcase_number_vehicle_list_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['suitcase_number_vehicle_list_enable'],0); ?>/>
+                                        <label for="<?php CHBSHelper::getFormName('suitcase_number_vehicle_list_enable_0'); ?>"><?php esc_html_e('Disable','chauffeur-booking-system'); ?></label>
+                                    </div>
+                                </li>  
+                                <li>
+                                    <h5><?php esc_html_e('"Use my location" link for pickup location fields','chauffeur-booking-system'); ?></h5>
+                                    <span class="to-legend">
+										<?php esc_html_e('Enable or disable visibility of "Use my location" link for pickup location fields in "Distance" and "Hourly" service.','chauffeur-booking-system'); ?><br/>
+										<?php esc_html_e('This option works if browser geolocation is enabled by customer only. Otherwise link will not be displayed.','chauffeur-booking-system'); ?>
+									</span>
+                                    <div class="to-radio-button">
+                                        <input type="radio" value="1" id="<?php CHBSHelper::getFormName('use_my_location_link_enable_1'); ?>" name="<?php CHBSHelper::getFormName('use_my_location_link_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['use_my_location_link_enable'],1); ?>/>
+                                        <label for="<?php CHBSHelper::getFormName('use_my_location_link_enable_1'); ?>"><?php esc_html_e('Enable','chauffeur-booking-system'); ?></label>
+                                        <input type="radio" value="0" id="<?php CHBSHelper::getFormName('use_my_location_link_enable_0'); ?>" name="<?php CHBSHelper::getFormName('use_my_location_link_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['use_my_location_link_enable'],0); ?>/>
+                                        <label for="<?php CHBSHelper::getFormName('use_my_location_link_enable_0'); ?>"><?php esc_html_e('Disable','chauffeur-booking-system'); ?></label>
+                                    </div>
+                                </li>  
+								<li>
+									<h5><?php esc_html_e('Fields mandatory','chauffeur-booking-system'); ?></h5>
+									<span class="to-legend"><?php esc_html_e('Select which fields should be marked as mandatory.','chauffeur-booking-system'); ?></span>
+									<div class="to-checkbox-button">
+<?php
+		foreach($this->data['dictionary']['field_mandatory'] as $index=>$value)
+		{
+?>
+										<input type="checkbox" value="<?php echo esc_attr($index); ?>" id="<?php CHBSHelper::getFormName('field_mandatory_'.$index); ?>" name="<?php CHBSHelper::getFormName('field_mandatory['.$index.']'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['field_mandatory'],$index); ?>/>
+										<label for="<?php CHBSHelper::getFormName('field_mandatory_'.$index); ?>"><?php echo esc_html($value['label']); ?></label>
+<?php		
+		}
+?>                                
+									</div>
+								</li> 
                             </ul>
                         </div>
                     </div>
@@ -1410,7 +1608,35 @@
 ?>
                             </div>	
                         </li>
-                        <li id="to-payment-id-2">
+                        <li>
+                            <h5><?php esc_html_e('Default payment','chauffeur-booking-system'); ?></h5>
+                            <span class="to-legend">
+                                <?php esc_html_e('Select default payment method.','chauffeur-booking-system'); ?>
+                            </span>
+                            <div>
+								<select name="<?php CHBSHelper::getFormName('payment_default_id'); ?>">
+									<option value="-1" <?php CHBSHelper::selectedIf($this->data['meta']['payment_default_id'],-1); ?>><?php esc_html_e('- None -','chauffeur-booking-system'); ?></option>
+<?php
+        foreach($this->data['dictionary']['payment'] as $index=>$value)
+            echo '<option value="'.esc_attr($index).'" '.(CHBSHelper::selectedIf($this->data['meta']['payment_default_id'],$index,false)).'>'.esc_html($value[0]).'</option>';
+?>
+								</select>  
+                            </div>	
+                        </li>
+                        <li>
+                            <h5><?php esc_html_e('Cash','chauffeur-booking-system'); ?></h5>
+                            <span class="to-legend"><?php esc_html_e('Enter settings for Cash.','chauffeur-booking-system'); ?></span>
+                            <div class="to-clear-fix">
+                                <span class="to-legend-field"><?php esc_html_e('Logo:','chauffeur-booking-system'); ?></span>
+                                <input type="text" name="<?php CHBSHelper::getFormName('payment_cash_logo_src'); ?>" id="<?php CHBSHelper::getFormName('payment_cash_logo_src'); ?>" class="to-float-left" value="<?php echo esc_attr($this->data['meta']['payment_cash_logo_src']); ?>"/>
+                                <input type="button" name="<?php CHBSHelper::getFormName('payment_cash_logo_src_browse'); ?>" id="<?php CHBSHelper::getFormName('payment_cash_logo_src_browse'); ?>" class="to-button-browse to-button" value="<?php esc_attr_e('Browse','chauffeur-booking-system'); ?>"/>
+                            </div>
+                            <div class="to-clear-fix">
+                                <span class="to-legend-field"><?php esc_html_e('Additional information for customer:','chauffeur-booking-system'); ?></span>
+                                <textarea rows="1" cols="1" name="<?php CHBSHelper::getFormName('payment_cash_info'); ?>"><?php echo esc_html($this->data['meta']['payment_cash_info']); ?></textarea>
+                            </div>
+                        </li>
+                        <li>
                             <h5><?php esc_html_e('Stripe','chauffeur-booking-system'); ?></h5>
                             <span class="to-legend"><?php esc_html_e('Enter settings for Stripe gateway.','chauffeur-booking-system'); ?></span>
                             <div class="to-clear-fix">
@@ -1421,17 +1647,47 @@
                                 <span class="to-legend-field"><?php esc_html_e('Publishable API key:','chauffeur-booking-system'); ?></span>
                                 <input type="text" name="<?php CHBSHelper::getFormName('payment_stripe_api_key_publishable'); ?>" value="<?php echo esc_attr($this->data['meta']['payment_stripe_api_key_publishable']); ?>"/>
                             </div>
+							<div class="to-clear-fix">
+								<span class="to-legend-field"><?php esc_html_e('Payment methods (you need to set up each of them in your "Stripe" dashboard under "Settings / Payment methods"):','chauffeur-booking-system'); ?></span>
+								<div class="to-checkbox-button">
+<?php
+		foreach($this->data['dictionary']['payment_stripe_method'] as $index=>$value)
+		{
+?>
+									<input type="checkbox" value="<?php echo esc_attr($index); ?>" id="<?php CHBSHelper::getFormName('payment_stripe_method_'.$index); ?>" name="<?php CHBSHelper::getFormName('payment_stripe_method[]'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['payment_stripe_method'],$index); ?>/>
+									<label for="<?php CHBSHelper::getFormName('payment_stripe_method_'.$index); ?>"><?php echo esc_html($value[0]); ?></label>							
+<?php		
+		}
+?>
+								</div>	
+							</div>
                             <div class="to-clear-fix">
-                                <span class="to-legend-field"><?php esc_html_e('URL address of redirect after payment:','chauffeur-booking-system'); ?></span>
-                                <input type="text" name="<?php CHBSHelper::getFormName('payment_stripe_redirect_url_address'); ?>" value="<?php echo esc_attr($this->data['meta']['payment_stripe_redirect_url_address']); ?>"/>
+                                <span class="to-legend-field"><?php esc_html_e('Product ID:','chauffeur-booking-system'); ?></span>
+                                <input type="text" name="<?php CHBSHelper::getFormName('payment_stripe_product_id'); ?>" value="<?php echo esc_attr($this->data['meta']['payment_stripe_product_id']); ?>"/>
                             </div>
+                            <div class="to-clear-fix">
+                                <span class="to-legend-field"><?php esc_html_e('Duration of redirection delay (in seconds) to the Stripe gateway:','chauffeur-booking-system'); ?></span>
+                                <input type="text" maxlength="2" name="<?php CHBSHelper::getFormName('payment_stripe_redirect_duration'); ?>" value="<?php echo esc_attr($this->data['meta']['payment_stripe_redirect_duration']); ?>"/>
+                            </div>							
+                            <div class="to-clear-fix">
+                                <span class="to-legend-field"><?php esc_html_e('Stripe "success" URL address:','chauffeur-booking-system'); ?></span>
+                                <input type="text" name="<?php CHBSHelper::getFormName('payment_stripe_success_url_address'); ?>" value="<?php echo esc_attr($this->data['meta']['payment_stripe_success_url_address']); ?>"/>
+                            </div>
+                            <div class="to-clear-fix">
+                                <span class="to-legend-field"><?php esc_html_e('Stripe "cancel" URL address:','chauffeur-booking-system'); ?></span>
+                                <input type="text" name="<?php CHBSHelper::getFormName('payment_stripe_cancel_url_address'); ?>" value="<?php echo esc_attr($this->data['meta']['payment_stripe_cancel_url_address']); ?>"/>
+                            </div>							
                             <div class="to-clear-fix">
                                 <span class="to-legend-field"><?php esc_html_e('Logo:','chauffeur-booking-system'); ?></span>
                                 <input type="text" name="<?php CHBSHelper::getFormName('payment_stripe_logo_src'); ?>" id="<?php CHBSHelper::getFormName('payment_stripe_logo_src'); ?>" class="to-float-left" value="<?php echo esc_attr($this->data['meta']['payment_stripe_logo_src']); ?>"/>
                                 <input type="button" name="<?php CHBSHelper::getFormName('payment_stripe_logo_src_browse'); ?>" id="<?php CHBSHelper::getFormName('payment_stripe_logo_src_browse'); ?>" class="to-button-browse to-button" value="<?php esc_attr_e('Browse','chauffeur-booking-system'); ?>"/>
                             </div>
+                            <div class="to-clear-fix">
+                                <span class="to-legend-field"><?php esc_html_e('Additional information for customer:','chauffeur-booking-system'); ?></span>
+                                <textarea rows="1" cols="1" name="<?php CHBSHelper::getFormName('payment_stripe_info'); ?>"><?php echo esc_html($this->data['meta']['payment_stripe_info']); ?></textarea>
+                            </div>
                         </li>
-                        <li id="to-payment-id-3">
+                        <li>
                             <h5><?php esc_html_e('PayPal','chauffeur-booking-system'); ?></h5>
                             <span class="to-legend"><?php esc_html_e('Enter settings for PayPal gateway.','chauffeur-booking-system'); ?></span>
                             <div class="to-clear-fix">
@@ -1439,42 +1695,62 @@
                                 <input type="text" name="<?php CHBSHelper::getFormName('payment_paypal_email_address'); ?>" value="<?php echo esc_attr($this->data['meta']['payment_paypal_email_address']); ?>"/>
                             </div>
                             <div class="to-clear-fix">
-                                <span class="to-legend-field"><?php esc_html_e('Enable sandbox mode:','chauffeur-booking-system'); ?></span>
+                                <span class="to-legend-field"><?php esc_html_e('Sandbox mode:','chauffeur-booking-system'); ?></span>
                                 <div class="to-radio-button">
                                     <input type="radio" value="1" id="<?php CHBSHelper::getFormName('payment_paypal_sandbox_mode_enable_1'); ?>" name="<?php CHBSHelper::getFormName('payment_paypal_sandbox_mode_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['payment_paypal_sandbox_mode_enable'],1); ?>/>
                                     <label for="<?php CHBSHelper::getFormName('payment_paypal_sandbox_mode_enable_1'); ?>"><?php esc_html_e('Enable','chauffeur-booking-system'); ?></label>
                                     <input type="radio" value="0" id="<?php CHBSHelper::getFormName('payment_paypal_sandbox_mode_enable_0'); ?>" name="<?php CHBSHelper::getFormName('payment_paypal_sandbox_mode_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['payment_paypal_sandbox_mode_enable'],0); ?>/>
                                     <label for="<?php CHBSHelper::getFormName('payment_paypal_sandbox_mode_enable_0'); ?>"><?php esc_html_e('Disable','chauffeur-booking-system'); ?></label>
-                                </div>                                  
+                                </div>
                             </div>
+                            <div class="to-clear-fix">
+                                <span class="to-legend-field"><?php esc_html_e('Duration of redirection delay (in seconds) to the PayPal gateway:','chauffeur-booking-system'); ?></span>
+                                <input type="text" maxlength="2" name="<?php CHBSHelper::getFormName('payment_paypal_redirect_duration'); ?>" value="<?php echo esc_attr($this->data['meta']['payment_paypal_redirect_duration']); ?>"/>
+                            </div>	
+                           <div class="to-clear-fix">
+                                <span class="to-legend-field"><?php esc_html_e('PayPal "success" URL address:','chauffeur-booking-system'); ?></span>
+                                <input type="text" name="<?php CHBSHelper::getFormName('payment_paypal_success_url_address'); ?>" value="<?php echo esc_attr($this->data['meta']['payment_paypal_success_url_address']); ?>"/>
+                            </div>
+                            <div class="to-clear-fix">
+                                <span class="to-legend-field"><?php esc_html_e('PayPal "cancel" URL address:','chauffeur-booking-system'); ?></span>
+                                <input type="text" name="<?php CHBSHelper::getFormName('payment_paypal_cancel_url_address'); ?>" value="<?php echo esc_attr($this->data['meta']['payment_paypal_cancel_url_address']); ?>"/>
+                            </div>							
                             <div class="to-clear-fix">
                                 <span class="to-legend-field"><?php esc_html_e('Logo:','chauffeur-booking-system'); ?></span>
                                 <input type="text" name="<?php CHBSHelper::getFormName('payment_paypal_logo_src'); ?>" id="<?php CHBSHelper::getFormName('payment_paypal_logo_src'); ?>" class="to-float-left" value="<?php echo esc_attr($this->data['meta']['payment_paypal_logo_src']); ?>"/>
                                 <input type="button" name="<?php CHBSHelper::getFormName('payment_paypal_logo_src_browse'); ?>" id="<?php CHBSHelper::getFormName('payment_paypal_logo_src_browse'); ?>" class="to-button-browse to-button" value="<?php esc_attr_e('Browse','chauffeur-booking-system'); ?>"/>
                             </div>
-                        </li> 
-                        <li id="to-payment-id-4">
-                            <h5><?php esc_html_e('Wire transfer','chauffeur-booking-system'); ?></h5>
-                            <span class="to-legend"><?php esc_html_e('Enter settings for wire transfer.','chauffeur-booking-system'); ?></span>
                             <div class="to-clear-fix">
                                 <span class="to-legend-field"><?php esc_html_e('Additional information for customer:','chauffeur-booking-system'); ?></span>
-                                <textarea rows="1" cols="1" name="<?php CHBSHelper::getFormName('payment_wire_transfer_info'); ?>"><?php echo esc_html($this->data['meta']['payment_wire_transfer_info']); ?></textarea>
+                                <textarea rows="1" cols="1" name="<?php CHBSHelper::getFormName('payment_paypal_info'); ?>"><?php echo esc_html($this->data['meta']['payment_paypal_info']); ?></textarea>
                             </div>
+                        </li> 
+                        <li>
+                            <h5><?php esc_html_e('Wire transfer','chauffeur-booking-system'); ?></h5>
+                            <span class="to-legend"><?php esc_html_e('Enter settings for wire transfer.','chauffeur-booking-system'); ?></span>
                             <div class="to-clear-fix">
                                 <span class="to-legend-field"><?php esc_html_e('Logo:','chauffeur-booking-system'); ?></span>
                                 <input type="text" name="<?php CHBSHelper::getFormName('payment_wire_transfer_logo_src'); ?>" id="<?php CHBSHelper::getFormName('payment_wire_transfer_logo_src'); ?>" class="to-float-left" value="<?php echo esc_attr($this->data['meta']['payment_wire_transfer_logo_src']); ?>"/>
                                 <input type="button" name="<?php CHBSHelper::getFormName('payment_wire_transfer_logo_src_browse'); ?>" id="<?php CHBSHelper::getFormName('payment_wire_transfer_logo_src_browse'); ?>" class="to-button-browse to-button" value="<?php esc_attr_e('Browse','chauffeur-booking-system'); ?>"/>
                             </div>
-                        </li> 
+                            <div class="to-clear-fix">
+                                <span class="to-legend-field"><?php esc_html_e('Additional information for customer:','chauffeur-booking-system'); ?></span>
+                                <textarea rows="1" cols="1" name="<?php CHBSHelper::getFormName('payment_wire_transfer_info'); ?>"><?php echo esc_html($this->data['meta']['payment_wire_transfer_info']); ?></textarea>
+                            </div>
+                        </li>
                         <li>
-                            <h5><?php esc_html_e('Cash','chauffeur-booking-system'); ?></h5>
-                            <span class="to-legend"><?php esc_html_e('Enter settings for cash.','chauffeur-booking-system'); ?></span>
+                            <h5><?php esc_html_e('Credit card on pickup','chauffeur-booking-system'); ?></h5>
+                            <span class="to-legend"><?php esc_html_e('Enter settings for paying by credit card on pickup.','chauffeur-booking-system'); ?></span>
                             <div class="to-clear-fix">
                                 <span class="to-legend-field"><?php esc_html_e('Logo:','chauffeur-booking-system'); ?></span>
-                                <input type="text" name="<?php CHBSHelper::getFormName('payment_cash_logo_src'); ?>" id="<?php CHBSHelper::getFormName('payment_cash_logo_src'); ?>" class="to-float-left" value="<?php echo esc_attr($this->data['meta']['payment_cash_logo_src']); ?>"/>
-                                <input type="button" name="<?php CHBSHelper::getFormName('payment_cash_logo_src_browse'); ?>" id="<?php CHBSHelper::getFormName('payment_cash_logo_src_browse'); ?>" class="to-button-browse to-button" value="<?php esc_attr_e('Browse','chauffeur-booking-system'); ?>"/>
+                                <input type="text" name="<?php CHBSHelper::getFormName('payment_credit_card_pickup_logo_src'); ?>" id="<?php CHBSHelper::getFormName('payment_credit_card_pickup_logo_src'); ?>" class="to-float-left" value="<?php echo esc_attr($this->data['meta']['payment_credit_card_pickup_logo_src']); ?>"/>
+                                <input type="button" name="<?php CHBSHelper::getFormName('payment_credit_card_pickup_logo_src_browse'); ?>" id="<?php CHBSHelper::getFormName('payment_credit_card_pickup_logo_src_browse'); ?>" class="to-button-browse to-button" value="<?php esc_attr_e('Browse','chauffeur-booking-system'); ?>"/>
                             </div>
-                        </li>                           
+                            <div class="to-clear-fix">
+                                <span class="to-legend-field"><?php esc_html_e('Additional information for customer:','chauffeur-booking-system'); ?></span>
+                                <textarea rows="1" cols="1" name="<?php CHBSHelper::getFormName('payment_credit_card_pickup_info'); ?>"><?php echo esc_html($this->data['meta']['payment_credit_card_pickup_info']); ?></textarea>
+                            </div>
+                        </li>	  
                     </ul>
                 </div>
                 <div id="meta-box-booking-form-4">
@@ -1955,9 +2231,27 @@
                                 </select>
                             </div>
                             <div class="to-clear-fix">
-                                <span class="to-legend-field"><?php esc_html_e('List of recipients e-mail addresses separated by semicolon:','chauffeur-booking-system'); ?></span>
+                                <span class="to-legend-field"><?php esc_html_e('List of recipients e-mail addresses (shop separated by semicolon:','chauffeur-booking-system'); ?></span>
                                 <input type="text" name="<?php CHBSHelper::getFormName('booking_new_recipient_email_address'); ?>" value="<?php echo esc_attr($this->data['meta']['booking_new_recipient_email_address']); ?>"/>
                             </div>
+                            <div class="to-clear-fix">
+                                <span class="to-legend-field"><?php esc_html_e('Sending an e-mail message about new booking to the customers:','chauffeur-booking-system'); ?></span>
+                                <div class="to-radio-button">
+                                    <input type="radio" value="1" id="<?php CHBSHelper::getFormName('email_notification_booking_new_client_enable_1'); ?>" name="<?php CHBSHelper::getFormName('email_notification_booking_new_client_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['email_notification_booking_new_client_enable'],1); ?>/>
+                                    <label for="<?php CHBSHelper::getFormName('email_notification_booking_new_client_enable_1'); ?>"><?php esc_html_e('Enable','chauffeur-booking-system'); ?></label>
+                                    <input type="radio" value="0" id="<?php CHBSHelper::getFormName('email_notification_booking_new_client_enable_0'); ?>" name="<?php CHBSHelper::getFormName('email_notification_booking_new_client_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['email_notification_booking_new_client_enable'],0); ?>/>
+                                    <label for="<?php CHBSHelper::getFormName('email_notification_booking_new_client_enable_0'); ?>"><?php esc_html_e('Disable','chauffeur-booking-system'); ?></label>
+                                </div>                                
+                            </div>							
+                            <div class="to-clear-fix">
+                                <span class="to-legend-field"><?php esc_html_e('Sending an e-mail message about new booking on the addresses defined on recipient list:','chauffeur-booking-system'); ?></span>
+                                <div class="to-radio-button">
+                                    <input type="radio" value="1" id="<?php CHBSHelper::getFormName('email_notification_booking_new_admin_enable_1'); ?>" name="<?php CHBSHelper::getFormName('email_notification_booking_new_admin_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['email_notification_booking_new_admin_enable'],1); ?>/>
+                                    <label for="<?php CHBSHelper::getFormName('email_notification_booking_new_admin_enable_1'); ?>"><?php esc_html_e('Enable','chauffeur-booking-system'); ?></label>
+                                    <input type="radio" value="0" id="<?php CHBSHelper::getFormName('email_notification_booking_new_admin_enable_0'); ?>" name="<?php CHBSHelper::getFormName('email_notification_booking_new_admin_enable'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['email_notification_booking_new_admin_enable'],0); ?>/>
+                                    <label for="<?php CHBSHelper::getFormName('email_notification_booking_new_admin_enable_0'); ?>"><?php esc_html_e('Disable','chauffeur-booking-system'); ?></label>
+                                </div>                                
+                            </div>									
                         </li>
                         <li>
                             <h5><?php esc_html_e('Nexmo SMS notifications','chauffeur-booking-system'); ?></h5>
@@ -2188,7 +2482,7 @@
                         <li>
                             <h5><?php esc_html_e('Zoom','chauffeur-booking-system'); ?></h5>
                             <span class="to-legend">
-                                <?php esc_html_e('Enter seetings for a zoom.','chauffeur-booking-system'); ?>
+                                <?php esc_html_e('Enter settings for a zoom.','chauffeur-booking-system'); ?>
                             </span> 
                             <div class="to-clear-fix">
                                 <span class="to-legend-field"><?php esc_html_e('Status:','chauffeur-booking-system'); ?></span>
@@ -2252,7 +2546,7 @@
                             <h5><?php esc_html_e('Colors','chauffeur-booking-system'); ?></h5>
                             <span class="to-legend">
                                 <?php esc_html_e('Specify color for each group of elements.','chauffeur-booking-system'); ?><br/>
-                                <?php esc_html_e('Please note that in some cases "resetting browser cache<" will be required.','chauffeur-booking-system'); ?><br/>
+                                <?php esc_html_e('Please note that in some cases "resetting browser cache" will be required.','chauffeur-booking-system'); ?><br/>
                                 <?php esc_html_e('If you use server cache control plugins in your WordPress, you need to clear its own cache as well.','chauffeur-booking-system'); ?>
                             </span> 
                             <div class="to-clear-fix">
@@ -2325,7 +2619,7 @@
 			{	
                 /***/
                 
-                var helper=new Helper();
+                var helper=new CHBSHelper();
                 helper.getMessageFromConsole();
                 
                 /***/

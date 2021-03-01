@@ -37,7 +37,7 @@ class CRBSGoogleMap
 		(
 			'DEFAULT'															=>	__('Default','car-rental-booking-system'),
 			'HORIZONTAL_BAR'													=>	__('Horizontal Bar','car-rental-booking-system'),
-			'DROPDOWN_MENU'														=>	__('Dropdown Menu','car-rental-booking-system')
+			'DROPDOWN_MENU'														=>	__('Drop down Menu','car-rental-booking-system')
 		);
         
         $this->routeAvoid=array

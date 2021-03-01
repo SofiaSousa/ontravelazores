@@ -35,8 +35,12 @@
             </li>              
             <li>
                 <h5><?php esc_html_e('Currency','chauffeur-booking-system'); ?></h5>
-                <span class="to-legend"><?php esc_html_e('Base currency. All prices in the plugin (except prices in orders) are provided in this currency.','chauffeur-booking-system'); ?></span>
+                <span class="to-legend">
+                    <?php esc_html_e('Settings for base currency used in the plugin.','chauffeur-booking-system'); ?><br/>
+                    <?php esc_html_e('If these details will be empty, default values for currency will be used.','chauffeur-booking-system'); ?><br/>
+                </span>
                 <div class="to-clear-fix">
+                    <span class="to-legend-field"><?php esc_html_e('Base currency:','chauffeur-booking-system'); ?></span>
 					<select name="<?php CHBSHelper::getFormName('currency'); ?>" id="<?php CHBSHelper::getFormName('currency'); ?>">
 <?php
 						foreach($this->data['dictionary']['currency'] as $index=>$value)
@@ -135,5 +139,5 @@
                         <label for="<?php CHBSHelper::getFormName('pricing_rule_return_use_type_2'); ?>"><?php esc_html_e('Use one way distance/duration','chauffeur-booking-system'); ?></label>
                     </div>
                 </div>
-            </li>            
+            </li>   
         </ul>

@@ -115,6 +115,8 @@ class CHBSLocation
 		CHBSHelper::setDefault($meta,'location_name','');
 		CHBSHelper::setDefault($meta,'location_name_coordinate_lat','');
 		CHBSHelper::setDefault($meta,'location_name_coordinate_lng','');
+		
+		CHBSHelper::setDefault($meta,'vehicle_bid_max_percentage_discount','');
         
         CHBSHelper::setDefault($meta,'location_dropoff_disable_service_type_1',array(-1));
         CHBSHelper::setDefault($meta,'location_dropoff_disable_service_type_2',array(-1));
@@ -124,6 +126,8 @@ class CHBSLocation
     
     function savePost($postId)
     {      
+		$Validation=new CHBSValidation();
+		
         if(!$_POST) return(false);
         
         if(CHBSHelper::checkSavePost($postId,PLUGIN_CHBS_CONTEXT.'_meta_box_location_noncename','savePost')===false) return(false);
@@ -136,7 +140,13 @@ class CHBSLocation
         $meta['location_name_coordinate_lat']=CHBSHelper::getPostValue('location_name_coordinate_lat');
         $meta['location_name_coordinate_lng']=CHBSHelper::getPostValue('location_name_coordinate_lng');
         
-        /***/
+		/***/
+		
+		$meta['vehicle_bid_max_percentage_discount']=CHBSHelper::getPostValue('vehicle_bid_max_percentage_discount');
+		if(!$Validation->isFloat($meta['vehicle_bid_max_percentage_discount'],0,99.99,false))
+			$meta['vehicle_bid_max_percentage_discount']='';
+        
+		/***/
         
         $data=array();
         

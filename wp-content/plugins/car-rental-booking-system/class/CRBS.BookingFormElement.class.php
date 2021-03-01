@@ -12,6 +12,7 @@ class CRBSBookingFormElement
 		$this->fieldType=array
 		(
 			1																	=>	array(__('Text','car-rental-booking-system')),
+			3																	=>	array(__('File','car-rental-booking-system')),
 			2																	=>	array(__('Select list','car-rental-booking-system')),
 		);
     }
@@ -152,6 +153,21 @@ class CRBSBookingFormElement
         
         return($panel);
     }
+	
+	/**************************************************************************/
+	
+	function getFieldValueByLabel($label,$meta)
+	{
+		if(is_array($meta))
+		{
+			foreach($meta['form_element_field'] as $value)
+			{
+				if($value['label']==$label) return($value['value']);
+			}
+		}
+		
+		return(null);
+	}
 
     /**************************************************************************/
     
@@ -181,44 +197,79 @@ class CRBSBookingFormElement
             {
                 $name='form_element_field_'.$value['id'];
                 
-                $html[1].=
-                '
-                    <div class="crbs-clear-fix">
-                        <div class="crbs-form-field crbs-form-field-width-100">
-                            <label>'.esc_html($value['label']).'</label>
-				';
-				
-				if((int)$value['field_type']===2)
+				if(in_array($value['field_type'],array(1,2)))
 				{
-					$fieldHtml=null;
-					$fieldValue=preg_split('/;/',$value['dictionary']);
-					
-					foreach($fieldValue as $fieldValueValue)
+					$html[1].=
+					'
+						<div class="crbs-clear-fix">
+							<div class="crbs-form-field crbs-form-field-width-100">
+								<label>'.esc_html($value['label']).((int)$value['mandatory']===1 ? ' *' : '').'</label>
+					';
+				
+					if((int)$value['field_type']===2)
 					{
-						if($Validation->isNotEmpty($fieldValueValue))
-							$fieldHtml.='<option value="'.esc_attr($fieldValueValue).'"'.CRBSHelper::selectedIf($fieldValueValue,CRBSHelper::getPostValue($name),false).'>'.esc_html($fieldValueValue).'</option>';
+						$fieldHtml=null;
+						$fieldValue=preg_split('/;/',$value['dictionary']);
+
+						foreach($fieldValue as $fieldValueValue)
+						{
+							if($Validation->isNotEmpty($fieldValueValue))
+								$fieldHtml.='<option value="'.esc_attr($fieldValueValue).'"'.CRBSHelper::selectedIf($fieldValueValue,CRBSHelper::getPostValue($name),false).'>'.esc_html($fieldValueValue).'</option>';
+						}
+
+						$html[1].=
+						'
+							<select name="'.CRBSHelper::getFormName($name,false).'">
+								'.$fieldHtml.'
+							</select>
+						';	
+					}
+					elseif((int)$value['field_type']===1)
+					{
+						$html[1].=
+						'
+							<input type="text" name="'.CRBSHelper::getFormName($name,false).'"  value="'.esc_attr(CRBSHelper::getPostValue($name)).'"/>	
+						';
+					}
+
+					$html[1].=
+					'                            
+							</div>                        
+						</div>
+					';
+				}
+				elseif((int)$value['field_type']===3)
+				{
+					$classButton=array(array('crbs-file-upload','crbs-button','crbs-button-style-3'),array('crbs-file-remove'));
+			
+					$fileName=null;
+			
+					if($Validation->isEmpty(CRBSHelper::getPostValue($name)))
+						array_push($classButton[1],'crbs-hidden');
+					else 
+					{
+						$fileName=CRBSHelper::getPostValue($name);
+						array_push($classButton[0],'crbs-hidden');
 					}
 					
 					$html[1].=
 					'
-						<select name="'.CRBSHelper::getFormName($name,false).'">
-							'.$fieldHtml.'
-						</select>
-					';	
-				}
-				else
-				{
-					$html[1].=
-					'
-						<input type="text" name="'.CRBSHelper::getFormName($name,false).'"  value="'.esc_attr(CRBSHelper::getPostValue($name)).'"/>	
+						<div class="crbs-form-field">
+							<label>'.esc_html($value['label']).((int)$value['mandatory']===1 ? ' *' : '').'</label>
+							<div'.CRBSHelper::createCSSClassAttribute($classButton[0]).'>
+								<span>'.esc_html__('Upload a file','car-rental-booking-system').'</span>
+								<input type="file" name="'.CRBSHelper::getFormName($name,false).'"></input>
+							</div>
+							<div'.CRBSHelper::createCSSClassAttribute($classButton[1]).'>
+								<span>'.esc_html__('Uploaded file:','car-rental-booking-system').'<span>'.esc_html($fileName).'</span></span>
+								<span'.CRBSHelper::createCSSClassAttribute(array('crbs-button','crbs-button-style-3')).'>'.esc_html__('Remove file','car-rental-booking-system').'</span>
+							</div>
+							<input type="hidden" name="'.CRBSHelper::getFormName($name,false).'_type"/>
+							<input type="hidden" name="'.CRBSHelper::getFormName($name,false).'_name"/>
+							<input type="hidden" name="'.CRBSHelper::getFormName($name,false).'_tmp_name"/>
+						</div>	
 					';
 				}
-			
-                $html[1].=
-                '                            
-                        </div>                        
-                    </div>
-                ';
             }
         }
         
@@ -309,20 +360,24 @@ class CRBSBookingFormElement
             
             if((int)$value['mandatory']===1)
             {
-                if(array_key_exists($name,$data))
+				$name1=$name2=$name;
+				
+				if((int)$value['field_type']===3) $name2=$name1.='_tmp_name';
+				
+                if(array_key_exists($name1,$data))
                 {
                     if($value['panel_id']==2)
                     {
                         if((int)$data['client_billing_detail_enable']===1)
                         {
-                            if($Validation->isEmpty($data[$name]))
-                                $error[]=array('name'=>CRBSHelper::getFormName($name,false),'message_error'=>$value['message_error']);                            
+                            if($Validation->isEmpty($data[$name1]))
+                                $error[]=array('name'=>CRBSHelper::getFormName($name2,false),'message_error'=>$value['message_error']);                            
                         }
                     }
                     else
                     {
-                        if($Validation->isEmpty($data[$name]))
-                            $error[]=array('name'=>CRBSHelper::getFormName($name,false),'message_error'=>$value['message_error']);
+                        if($Validation->isEmpty($data[$name1]))
+                            $error[]=array('name'=>CRBSHelper::getFormName($name2,false),'message_error'=>$value['message_error']);
                     }
                 }
             }
@@ -358,6 +413,41 @@ class CRBSBookingFormElement
         {
             $name='form_element_field_'.$value['id']; 
             $meta['form_element_field'][$index]['value']=$data[$name];
+			
+			if(array_key_exists($name.'_tmp_name',$data))
+			{
+				$file1=CRBSFile::getUploadPath().'/'.$data[$name.'_tmp_name'];
+				$file2=CRBSFile::getUploadPath().'/'.$data[$name.'_name'];
+            
+				if(rename($file1,$file2))
+				{
+					$upload=wp_upload_bits($data[$name.'_name'],null,file_get_contents($file2));
+
+					if($upload['error']===false)
+					{
+						$attachment=array
+						(
+							'post_title'										=>  $data[$name.'_name'],
+							'post_mime_type'									=>  $data[$name.'_type'],
+							'post_content'										=>  '',
+							'post_status'										=>  'inherit'
+						);
+
+						$attachmentId=wp_insert_attachment($attachment,$upload['file'],$bookingId);
+
+						if($attachmentId>0)
+						{
+							$attachmentData=wp_generate_attachment_metadata($attachmentId,$upload['file']);
+							wp_update_attachment_metadata($attachmentId,$attachmentData);
+							
+							$meta['form_element_field'][$index]['attachment_id']=$attachmentId;
+						}
+					}
+				}
+            
+				@unlink($file1);
+				@unlink($file2);
+			}
         }
         
         CRBSPostMeta::updatePostMeta($bookingId,'form_element_panel',$meta['form_element_panel']);
@@ -376,13 +466,31 @@ class CRBSBookingFormElement
         {
             if($value['panel_id']==$panelId)
             {
+				$fieldValue=esc_html($value['value']);
+				$fieldLabel=esc_html($value['label']);
+				
+				if((int)$value['field_type']===3)
+				{
+					if((int)$value['attachment_id']>0)
+					{
+						if(!is_null($file=get_post($value['attachment_id'])))
+						{
+							if($type===1)
+								$fieldValue='<a href="'.get_edit_post_link($value['attachment_id']).'" target="_blank">'.esc_html($file->post_title).'</a>';
+							else $fieldValue=esc_html($file->post_title);
+						}
+						else continue;
+					}
+					else continue;
+				}
+				
                 if($type==1)
                 {
                     $html.=
                     '
                         <div>
-                            <span class="to-legend-field">'.esc_html($value['label']).'</span>
-                            <div class="to-field-disabled">'.esc_html($value['value']).'</div>                                
+                            <span class="to-legend-field">'.$fieldLabel.': </span>
+                            <div class="to-field-disabled">'.$fieldValue.'</div>                                
                         </div>    
                     ';
                 }
@@ -391,8 +499,8 @@ class CRBSBookingFormElement
                     $html.=
                     '
                         <tr>
-                            <td '.$argument['style']['cell'][1].'>'.esc_html($value['label']).'</td>
-                            <td '.$argument['style']['cell'][2].'>'.esc_html($value['value']).'</td>
+                            <td '.$argument['style']['cell'][1].'>'.$fieldLabel.'</td>
+                            <td '.$argument['style']['cell'][2].'>'.$fieldValue.'</td>
                         </tr>
                     ';                    
                 }

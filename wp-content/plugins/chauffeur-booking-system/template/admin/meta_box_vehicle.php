@@ -1,6 +1,5 @@
 <?php 
 		echo $this->data['nonce']; 
-        
         $Length=new CHBSLength();
 ?>	
 		<div class="to">
@@ -13,6 +12,21 @@
                 </ul>
                 <div id="meta-box-vehicle-1">
                     <ul class="to-form-field-list">
+						<?php echo CHBSHelper::createPostIdField(__('Vehicle ID','chauffeur-booking-system')); ?>
+<?php
+        if(CHBSPlugin::isAutoRideTheme())
+        {
+?>
+                        <li>
+                            <h5><?php esc_html_e('Description','chauffeur-booking-system'); ?></h5>
+                            <span class="to-legend"><?php esc_html_e('Description of the vehicle.','chauffeur-booking-system'); ?></span>
+                            <div>
+                                <textarea rows="1" cols="1" name="<?php CHBSHelper::getFormName('description'); ?>" id="<?php CHBSHelper::getFormName('description'); ?>"><?php echo esc_html($this->data['meta']['description']); ?></textarea>
+                            </div>
+                        </li>            
+<?php          
+        }
+?>
                         <li>
                             <h5><?php esc_html_e('Vehicle make','chauffeur-booking-system'); ?></h5>
                             <span class="to-legend"><?php esc_html_e('Vehicle make.','chauffeur-booking-system'); ?></span>
@@ -29,7 +43,7 @@
                         </li>
                         <li>
                             <h5><?php esc_html_e('Company','chauffeur-booking-system'); ?></h5>
-                            <span class="to-legend"><?php esc_html_e('Company name of vehcile owner.','chauffeur-booking-system'); ?></span>
+                            <span class="to-legend"><?php esc_html_e('Company name of vehicle owner.','chauffeur-booking-system'); ?></span>
                             <div class="to-clear-fix">
                                 <select name="<?php CHBSHelper::getFormName('vehicle_company_id'); ?>">
 <?php
@@ -58,7 +72,7 @@
                         </li>
                         <li>
                             <h5><?php esc_html_e('Vehicle standard','chauffeur-booking-system'); ?></h5>
-                            <span class="to-legend"><?php esc_html_e('Vehicle standrad. Integer value from 1 to 4.','chauffeur-booking-system'); ?></span>
+                            <span class="to-legend"><?php esc_html_e('Vehicle standard. Integer value from 1 to 4.','chauffeur-booking-system'); ?></span>
                             <div>
                                 <input maxlength="1" type="text" name="<?php CHBSHelper::getFormName('standard'); ?>" id="<?php CHBSHelper::getFormName('standard'); ?>" value="<?php echo esc_attr($this->data['meta']['standard']); ?>"/>
                             </div>
@@ -899,7 +913,7 @@
 		<script type="text/javascript">
 			jQuery(document).ready(function($)
 			{	
-                var helper=new Helper();
+                var helper=new CHBSHelper();
                 helper.getMessageFromConsole();
                 
                 /***/
@@ -916,10 +930,10 @@
 
                     if(value===-1)
                     {
-                        checkbox.removeAttr('checked');
-                        checkbox.first().attr('checked','checked');
+                        checkbox.prop('checked',false);
+                        checkbox.first().prop('checked',true);
                     }
-                    else checkbox.first().removeAttr('checked');
+                    else checkbox.first().prop('checked',false);
                     
                     checkbox.button('refresh');
                 });
@@ -956,10 +970,10 @@
                     var value=parseInt($(this).val());
                     if(value===-1)
                     {
-                        checkbox.removeAttr('checked');
-                        checkbox.first().attr('checked','checked');
+                        checkbox.prop('checked',false);
+                        checkbox.first().prop('checked',true);
                     }
-                    else checkbox.first().removeAttr('checked');
+                    else checkbox.first().prop('checked',false);
                     
                     var checked=[];
                     checkbox.each(function()
@@ -970,8 +984,8 @@
                     
                     if(checked.length===0)
                     {
-                        checkbox.removeAttr('checked');
-                        checkbox.first().attr('checked','checked');
+                        checkbox.prop('checked',false);
+                        checkbox.first().prop('checked',true);
                     }
                     
                     checkbox.button('refresh');

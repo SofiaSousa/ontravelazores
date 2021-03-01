@@ -55,10 +55,12 @@ class CRBSValidation
 	
 	public function isEmailAddress($value,$empty=false)
 	{
+		$value=strtolower($value);
+		
 		if(($empty) && ($this->isEmpty($value))) return(true);
-        if(!preg_match('/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/i',$value)) return(false);
-        
-		return(true);
+		if(is_email($value)!==false) return(true);
+		
+		return(false);
 	}
 	
 	/**************************************************************************/

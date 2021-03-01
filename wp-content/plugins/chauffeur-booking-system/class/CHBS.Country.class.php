@@ -5,11 +5,18 @@
 
 class CHBSCountry
 {
+	/**************************************************************************/
+
+	function __construct()
+	{
+		$this->country=CHBSGlobalData::setGlobalData('country',array($this,'init'));
+	}
+	
     /**************************************************************************/
 
-    function __construct()
+    function init()
     {
-        $this->country=array
+        $country=array
         (
             'AF'                                                                =>  array(__('Afghanistan','chauffeur-booking-system')),
             'AX'                                                                =>  array(__('Aland Islands','chauffeur-booking-system')),
@@ -256,7 +263,9 @@ class CHBSCountry
             'YE'                                                                =>  array(__('Yemen','chauffeur-booking-system')),
             'ZM'                                                                =>  array(__('Zambia','chauffeur-booking-system')),
             'ZW'                                                                =>  array(__('Zimbabwe','chauffeur-booking-system'))
-        );        
+        ); 
+		
+		return($country);
     }
     
     /**************************************************************************/

@@ -9,6 +9,7 @@
                 </ul>
                 <div id="meta-box-driver-1">
                     <ul class="to-form-field-list">
+						<?php echo CHBSHelper::createPostIdField(__('Driver ID','chauffeur-booking-system')); ?>
                         <li>
                             <h5><?php esc_html_e('First name','chauffeur-booking-system'); ?></h5>
                             <span class="to-legend"><?php esc_html_e('First name.','chauffeur-booking-system'); ?></span>
@@ -58,7 +59,7 @@
                                 <input type="text" name="<?php CHBSHelper::getFormName('contact_phone_number'); ?>" id="<?php CHBSHelper::getFormName('contact_phone_number'); ?>" value="<?php echo esc_attr($this->data['meta']['contact_phone_number']); ?>"/>
                             </div>
                         </li>  
-                       <li>
+                        <li>
                             <h5><?php esc_html_e('Social profiles','chauffeur-booking-system'); ?></h5>
                             <span class="to-legend"><?php esc_html_e('Define URL addresses of available social profiles.','chauffeur-booking-system'); ?></span>
                             <div>
@@ -170,10 +171,10 @@
                     var value=parseInt($(this).val());
                     if(value===-1)
                     {
-                        checkbox.removeAttr('checked');
-                        checkbox.first().attr('checked','checked');
+                        checkbox.prop('checked',false);
+                        checkbox.first().prop('checked',true);
                     }
-                    else checkbox.first().removeAttr('checked');
+                    else checkbox.first().prop('checked',false);
                     
                     var checked=[];
                     checkbox.each(function()
@@ -184,8 +185,8 @@
                     
                     if(checked.length===0)
                     {
-                        checkbox.removeAttr('checked');
-                        checkbox.first().attr('checked','checked');
+                        checkbox.prop('checked',false);
+                        checkbox.first().prop('checked',true);
                     }
                     
                     checkbox.button('refresh');

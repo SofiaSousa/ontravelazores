@@ -34,6 +34,13 @@ class CHBSHelper
 		return(strtoupper(md5($value)));
 	}
 	
+    /**************************************************************************/
+    
+    static function createSalt()
+    {
+        return(uniqid(mt_rand(),true));
+    }
+    
 	/**************************************************************************/
 	
 	static function getPostOption($prefix=null)
@@ -332,12 +339,33 @@ class CHBSHelper
         
         foreach($data as $index=>$value)
         {
-            if($Validation->isEmailAddress($value))
+            if($Validation->isEmpty($value))
                 unset($data[$index]);
         }
         
         return($data);
     }
+	
+	/**************************************************************************/
+	
+	static function createPostIdField($label)
+	{
+		global $post;
+		
+		$html=
+		'
+			<li>
+				<h5>'.esc_html($label).'</h5>
+				<span class="to-legend">'.esc_html($label).'.</span>
+				<div class="to-field-disabled">
+					'.esc_html($post->ID).'
+					<a href="#" class="to-copy-to-clipboard to-float-right" data-clipboard-text="'.esc_attr($post->ID).'" data-label-on-success="'.esc_attr__('Copied!','chauffeur-booking-system').'">'.esc_html__('Copy','chauffeur-booking-system').'</a>
+				</div>
+			</li>		
+		';
+		
+		return($html);
+	}
     
     /**************************************************************************/
 }

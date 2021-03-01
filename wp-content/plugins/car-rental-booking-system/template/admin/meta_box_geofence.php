@@ -8,6 +8,7 @@
                 </ul>
                 <div id="meta-box-tax-rate-1">
                     <ul class="to-form-field-list">
+						<?php echo CRBSHelper::createPostIdField(__('Geofence ID','car-rental-booking-system')); ?>
                         <li>
                             <h5><?php esc_html_e('Geofence','car-rental-booking-system'); ?></h5>
                             <span class="to-legend"><?php esc_html_e('Geofence.','car-rental-booking-system'); ?></span>

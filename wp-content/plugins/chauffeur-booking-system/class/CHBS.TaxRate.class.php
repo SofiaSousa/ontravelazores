@@ -128,6 +128,8 @@ class CHBSTaxRate
         if(!$Validation->isFloat($meta['tax_rate_value'],0,100))
             $meta['tax_rate_value']=23.00;
         
+		$meta['tax_rate_value']=CHBSPrice::formatToSave($meta['tax_rate_value']);
+		
         $meta['tax_rate_default']=CHBSHelper::getPostValue('tax_rate_default');
         if(!$Validation->isBool($meta['tax_rate_default']))
             $meta['tax_rate_default']=0;

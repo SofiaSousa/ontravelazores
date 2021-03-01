@@ -20,6 +20,7 @@
 						</ul>
 						<div id="meta-box-booking-form-1-1">
 							<ul class="to-form-field-list">
+								<?php echo CRBSHelper::createPostIdField(__('Booking form ID','car-rental-booking-system')); ?>
 								<li>
 									<h5><?php esc_html_e('Shortcode','car-rental-booking-system'); ?></h5>
 									<span class="to-legend"><?php esc_html_e('Copy and paste the shortcode on a page.','car-rental-booking-system'); ?></span>
@@ -68,7 +69,10 @@
 								</li>                                                                   
 								<li>
 									<h5><?php esc_html_e('WooCommerce','car-rental-booking-system'); ?></h5>
-									<span class="to-legend"><?php esc_html_e('Enable or disable WooCommerce support for this booking form.','car-rental-booking-system'); ?></span>
+									<span class="to-legend">
+										<?php esc_html_e('Enable or disable WooCommerce support for this booking form.','car-rental-booking-system'); ?><br/>
+				                        <?php echo sprintf(__('Please make sure that you set up "Checkout page" in <a href="%s">WooCommerce settings</a>','car-rental-booking-system'),admin_url('admin.php?page=wc-settings&tab=advanced')); ?>
+									</span>
 									<div class="to-radio-button">
 										<input type="radio" value="1" id="<?php CRBSHelper::getFormName('woocommerce_enable_1'); ?>" name="<?php CRBSHelper::getFormName('woocommerce_enable'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['woocommerce_enable'],1); ?>/>
 										<label for="<?php CRBSHelper::getFormName('woocommerce_enable_1'); ?>"><?php esc_html_e('Enable','car-rental-booking-system'); ?></label>
@@ -93,16 +97,6 @@
                                         <label for="<?php CRBSHelper::getFormName('woocommerce_account_enable_type_0'); ?>"><?php esc_html_e('Disable','car-rental-booking-system'); ?></label>
                                     </div>
                                 </li>
-								<li>
-									<h5><?php esc_html_e('Coupons','car-rental-booking-system'); ?></h5>
-									<span class="to-legend"><?php esc_html_e('Enable or disable coupons for this booking form.','car-rental-booking-system'); ?></span>
-									<div class="to-radio-button">
-										<input type="radio" value="1" id="<?php CRBSHelper::getFormName('coupon_enable_1'); ?>" name="<?php CRBSHelper::getFormName('coupon_enable'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['coupon_enable'],1); ?>/>
-										<label for="<?php CRBSHelper::getFormName('coupon_enable_1'); ?>"><?php esc_html_e('Enable','car-rental-booking-system'); ?></label>
-										<input type="radio" value="0" id="<?php CRBSHelper::getFormName('coupon_enable_0'); ?>" name="<?php CRBSHelper::getFormName('coupon_enable'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['coupon_enable'],0); ?>/>
-										<label for="<?php CRBSHelper::getFormName('coupon_enable_0'); ?>"><?php esc_html_e('Disable','car-rental-booking-system'); ?></label>
-									</div>
-								</li>
 								<li>
 									<h5><?php esc_html_e('Extra days','car-rental-booking-system'); ?></h5>
 									<span class="to-legend">
@@ -160,6 +154,48 @@
 ?>                                
 									</div>
 								</li>   
+								<li>
+									<h5><?php esc_html_e('Default pickup location','car-rental-booking-system'); ?></h5>
+									<span class="to-legend">
+										<?php esc_html_e('Select default pickup location.','car-rental-booking-system'); ?>
+									</span>
+									<div class="to-checkbox-button">
+										<input type="radio" value="0" id="<?php CRBSHelper::getFormName('location_pickup_default_id_0'); ?>" name="<?php CRBSHelper::getFormName('location_pickup_default_id'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['location_pickup_default_id'],0); ?>/>
+										<label for="<?php CRBSHelper::getFormName('location_pickup_default_id_0'); ?>"><?php echo esc_html_e('[None]','car-rental-booking-system'); ?></label>
+										<input type="radio" value="-1" id="<?php CRBSHelper::getFormName('location_pickup_default_id__1'); ?>" name="<?php CRBSHelper::getFormName('location_pickup_default_id'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['location_pickup_default_id'],-1); ?>/>
+										<label for="<?php CRBSHelper::getFormName('location_pickup_default_id__1'); ?>"><?php echo esc_html_e('[Customer location]','car-rental-booking-system'); ?></label>
+<?php
+		foreach($this->data['dictionary']['location'] as $index=>$value)
+		{
+?>
+										<input type="radio" value="<?php echo esc_attr($index); ?>" id="<?php CRBSHelper::getFormName('location_pickup_default_id_'.$index); ?>" name="<?php CRBSHelper::getFormName('location_pickup_default_id'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['location_pickup_default_id'],$index); ?>/>
+										<label for="<?php CRBSHelper::getFormName('location_pickup_default_id_'.$index); ?>"><?php echo esc_html(get_the_title($index)); ?></label>
+<?php		
+		}
+?>                                
+									</div>
+								</li>   								
+								<li>
+									<h5><?php esc_html_e('Default return location','car-rental-booking-system'); ?></h5>
+									<span class="to-legend">
+										<?php esc_html_e('Select default return location.','car-rental-booking-system'); ?>
+									</span>
+									<div class="to-checkbox-button">
+										<input type="radio" value="0" id="<?php CRBSHelper::getFormName('location_return_default_id_0'); ?>" name="<?php CRBSHelper::getFormName('location_return_default_id'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['location_return_default_id'],0); ?>/>
+										<label for="<?php CRBSHelper::getFormName('location_return_default_id_0'); ?>"><?php echo esc_html_e('[None]','car-rental-booking-system'); ?></label>
+										<input type="radio" value="-1" id="<?php CRBSHelper::getFormName('location_return_default_id__1'); ?>" name="<?php CRBSHelper::getFormName('location_return_default_id'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['location_return_default_id'],-1); ?>/>
+										<label for="<?php CRBSHelper::getFormName('location_return_default_id__1'); ?>"><?php echo esc_html_e('[Customer location]','car-rental-booking-system'); ?></label>
+<?php
+		foreach($this->data['dictionary']['location'] as $index=>$value)
+		{
+?>
+										<input type="radio" value="<?php echo esc_attr($index); ?>" id="<?php CRBSHelper::getFormName('location_return_default_id_'.$index); ?>" name="<?php CRBSHelper::getFormName('location_return_default_id'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['location_return_default_id'],$index); ?>/>
+										<label for="<?php CRBSHelper::getFormName('location_return_default_id_'.$index); ?>"><?php echo esc_html(get_the_title($index)); ?></label>
+<?php		
+		}
+?>                                
+									</div>
+								</li>   								
 								<li>
 									<h5><?php esc_html_e('Customer location','car-rental-booking-system'); ?></h5>
 									<span class="to-legend">
@@ -320,6 +356,17 @@
 										<label for="<?php CRBSHelper::getFormName('location_the_same_enable_0'); ?>"><?php esc_html_e('Disable','car-rental-booking-system'); ?></label>
 									</div>
 								</li>   
+								<li>
+									<h5><?php esc_html_e('Show customer location field only','car-rental-booking-system'); ?></h5>
+									<span class="to-legend"><?php esc_html_e('Show only customer pickup/return location field.','car-rental-booking-system'); ?></span>
+									<div class="to-radio-button">
+										<input type="radio" value="1" id="<?php CRBSHelper::getFormName('location_customer_only_enable_1'); ?>" name="<?php CRBSHelper::getFormName('location_customer_only_enable'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['location_customer_only_enable'],1); ?>/>
+										<label for="<?php CRBSHelper::getFormName('location_customer_only_enable_1'); ?>"><?php esc_html_e('Enable','car-rental-booking-system'); ?></label>
+										<input type="radio" value="0" id="<?php CRBSHelper::getFormName('location_customer_only_enable_0'); ?>" name="<?php CRBSHelper::getFormName('location_customer_only_enable'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['location_customer_only_enable'],0); ?>/>
+										<label for="<?php CRBSHelper::getFormName('location_customer_only_enable_0'); ?>"><?php esc_html_e('Disable','car-rental-booking-system'); ?></label>
+									</div>
+								</li> 
+								
 							</ul>
 						</div>
 						<div id="meta-box-booking-form-1-3">
@@ -342,6 +389,31 @@
 									</div>
 								</li>
 								<li>
+									<h5><?php esc_html_e('Coupons','car-rental-booking-system'); ?></h5>
+									<span class="to-legend"><?php esc_html_e('Enable or disable coupons for this booking form.','car-rental-booking-system'); ?></span>
+									<div class="to-radio-button">
+										<input type="radio" value="1" id="<?php CRBSHelper::getFormName('coupon_enable_1'); ?>" name="<?php CRBSHelper::getFormName('coupon_enable'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['coupon_enable'],1); ?>/>
+										<label for="<?php CRBSHelper::getFormName('coupon_enable_1'); ?>"><?php esc_html_e('Enable','car-rental-booking-system'); ?></label>
+										<input type="radio" value="0" id="<?php CRBSHelper::getFormName('coupon_enable_0'); ?>" name="<?php CRBSHelper::getFormName('coupon_enable'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['coupon_enable'],0); ?>/>
+										<label for="<?php CRBSHelper::getFormName('coupon_enable_0'); ?>"><?php esc_html_e('Disable','car-rental-booking-system'); ?></label>
+									</div>
+								</li>
+								<li>
+									<h5><?php esc_html_e('Coupon','car-rental-booking-system'); ?></h5>
+									<span class="to-legend">
+										<?php esc_html_e('Select coupon which should be automatically used.','car-rental-booking-system'); ?><br/>
+									</span>                        
+									<div class="to-clear-fix">
+										<select name="<?php CRBSHelper::getFormName('coupon_id'); ?>">
+											<option value="-1" <?php CRBSHelper::selectedIf($this->data['meta']['coupon_id'],-1); ?>><?php esc_html_e('- None -','car-rental-booking-system'); ?></option>
+<?php
+        foreach($this->data['dictionary']['coupon'] as $index=>$value)
+            echo '<option value="'.esc_attr($index).'" '.(CRBSHelper::selectedIf($this->data['meta']['coupon_id'],$index,false)).'>'.esc_html($value['meta']['code']).'</option>';
+?>
+										</select>                                                
+									</div>
+								</li>
+								<li>
 									<h5><?php esc_html_e('Minimum order value','car-rental-booking-system'); ?></h5>
 									<span class="to-legend">
 										<?php esc_html_e('Specify minimum gross value of the order.','car-rental-booking-system'); ?>
@@ -350,7 +422,7 @@
 								</li>
 								<li>
 									<h5><?php esc_html_e('Hide fees','car-rental-booking-system'); ?></h5>
-									<span class="to-legend"><?php esc_html_e('Hide all addtional fees in booking summary and include them to the price of selected vehicle.','car-rental-booking-system'); ?>
+									<span class="to-legend"><?php esc_html_e('Hide all additional fees in booking summary and include them to the price of selected vehicle.','car-rental-booking-system'); ?>
 									</span>
 									<div class="to-radio-button">
 										<input type="radio" value="1" id="<?php CRBSHelper::getFormName('booking_summary_hide_fee_1'); ?>" name="<?php CRBSHelper::getFormName('booking_summary_hide_fee'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['booking_summary_hide_fee'],1); ?>/>
@@ -404,6 +476,8 @@
                                         <label for="<?php CRBSHelper::getFormName('billing_detail_state_2'); ?>"><?php esc_html_e('Checked','car-rental-booking-system'); ?></label>
                                         <input type="radio" value="3" id="<?php CRBSHelper::getFormName('billing_detail_state_3'); ?>" name="<?php CRBSHelper::getFormName('billing_detail_state'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['billing_detail_state'],3); ?>/>
                                         <label for="<?php CRBSHelper::getFormName('billing_detail_state_3'); ?>"><?php esc_html_e('Mandatory','car-rental-booking-system'); ?></label>
+										<input type="radio" value="4" id="<?php CRBSHelper::getFormName('billing_detail_state_4'); ?>" name="<?php CRBSHelper::getFormName('billing_detail_state'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['billing_detail_state'],4); ?>/>
+                                        <label for="<?php CRBSHelper::getFormName('billing_detail_state_4'); ?>"><?php esc_html_e('Hidden','car-rental-booking-system'); ?></label>
                                     </div>
                                 </li>
                                 <li>
@@ -440,12 +514,30 @@
                                     </div>
                                 </li>  
 								<li>
-									<h5><?php esc_html_e('Timepicker interval','car-rental-booking-system'); ?></h5>
+									<h5><?php esc_html_e('Time picker','car-rental-booking-system'); ?></h5>
 									<span class="to-legend">
-										<?php esc_html_e('The amount of time, in minutes, between each item in the dropdown.','car-rental-booking-system'); ?><br/>
-										<?php esc_html_e('Allowed are integer values from 1 to 9999.','car-rental-booking-system'); ?><br/>
+										<?php esc_html_e('Time picker settings.','car-rental-booking-system'); ?>
 									</span>
-									<div><input type="text" maxlength="4" name="<?php CRBSHelper::getFormName('timepicker_step'); ?>" value="<?php echo esc_attr($this->data['meta']['timepicker_step']); ?>"/></div>                                  
+                                    <div>
+                                        <span class="to-legend-field">
+											<?php esc_html_e('Interval - the amount of time, in minutes, between each item in the drop down.','car-rental-booking-system'); ?><br/>
+											<?php esc_html_e('Allowed are integer values from 1 to 9999.','car-rental-booking-system'); ?>
+										</span>
+                                        <div>
+											<input type="text" maxlength="4" name="<?php CRBSHelper::getFormName('timepicker_step'); ?>" value="<?php echo esc_attr($this->data['meta']['timepicker_step']); ?>"/>                                 
+                                        </div>                     
+                                    </div>
+                                    <div>
+                                        <span class="to-legend-field">
+											<?php esc_html_e('Start time for a current date:','car-rental-booking-system'); ?>
+										</span>		
+										<div class="to-radio-button">
+											<input type="radio" value="1" id="<?php CRBSHelper::getFormName('timepicker_today_start_time_type_1'); ?>" name="<?php CRBSHelper::getFormName('timepicker_today_start_time_type'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['timepicker_today_start_time_type'],1); ?>/>
+											<label for="<?php CRBSHelper::getFormName('timepicker_today_start_time_type_1'); ?>"><?php esc_html_e('Timepicker starts based on current time','car-rental-booking-system'); ?></label>
+											<input type="radio" value="2" id="<?php CRBSHelper::getFormName('timepicker_today_start_time_type_2'); ?>" name="<?php CRBSHelper::getFormName('timepicker_today_start_time_type'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['timepicker_today_start_time_type'],2); ?>/>
+											<label for="<?php CRBSHelper::getFormName('timepicker_today_start_time_type_2'); ?>"><?php esc_html_e('Timepicker starts based on interval','car-rental-booking-system'); ?></label>
+										</div>		
+									</div>
 								</li> 
 								<li>
 									<h5><?php esc_html_e('Total count of vehicles','car-rental-booking-system'); ?></h5>
@@ -541,6 +633,20 @@
                                         </div>                                
                                     </div>
                                 </li> 
+								<li>
+									<h5><?php esc_html_e('Vehicle attributes','car-rental-booking-system'); ?></h5>
+									<span class="to-legend"><?php esc_html_e('Enable or disable visibility of vehicle attributes displayed on list in step #2.','car-rental-booking-system'); ?></span>
+									<div class="to-checkbox-button">
+										<input type="checkbox" value="1" id="<?php CRBSHelper::getFormName('vehicle_attribute_enable_1'); ?>" name="<?php CRBSHelper::getFormName('vehicle_attribute_enable[]'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['vehicle_attribute_enable'],1); ?>/>
+										<label for="<?php CRBSHelper::getFormName('vehicle_attribute_enable_1'); ?>"><?php esc_html_e('Number of seats','car-rental-booking-system'); ?></label>
+										<input type="checkbox" value="2" id="<?php CRBSHelper::getFormName('vehicle_attribute_enable_2'); ?>" name="<?php CRBSHelper::getFormName('vehicle_attribute_enable[]'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['vehicle_attribute_enable'],2); ?>/>
+										<label for="<?php CRBSHelper::getFormName('vehicle_attribute_enable_2'); ?>"><?php esc_html_e('Number of suitcases','car-rental-booking-system'); ?></label>
+										<input type="checkbox" value="3" id="<?php CRBSHelper::getFormName('vehicle_attribute_enable_3'); ?>" name="<?php CRBSHelper::getFormName('vehicle_attribute_enable[]'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['vehicle_attribute_enable'],3); ?>/>
+										<label for="<?php CRBSHelper::getFormName('vehicle_attribute_enable_3'); ?>"><?php esc_html_e('Gearbox','car-rental-booking-system'); ?></label>
+										<input type="checkbox" value="4" id="<?php CRBSHelper::getFormName('vehicle_attribute_enable_4'); ?>" name="<?php CRBSHelper::getFormName('vehicle_attribute_enable[]'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['vehicle_attribute_enable'],4); ?>/>
+										<label for="<?php CRBSHelper::getFormName('vehicle_attribute_enable_4'); ?>"><?php esc_html_e('Fuel state','car-rental-booking-system'); ?></label>
+									</div>
+								</li>  								
 							</ul>							
 						</div>
 					</div>
@@ -708,7 +814,7 @@
                                         </td>										
                                         <td>
                                             <div class="to-clear-fix">                                                
-                                                <input type="text" name="<?php CRBSHelper::getFormName('form_element_field[dictionary][]'); ?>" title="<?php esc_attr_e('Enter values of list seperated by semicolon.','car-rental-booking-system'); ?>"/>
+                                                <input type="text" name="<?php CRBSHelper::getFormName('form_element_field[dictionary][]'); ?>" title="<?php esc_attr_e('Enter values of list separated by semicolon.','car-rental-booking-system'); ?>"/>
                                             </div>									
                                         </td>   										
                                         <td>
@@ -999,7 +1105,7 @@
                         <li>
                             <h5><?php esc_html_e('Zoom','car-rental-booking-system'); ?></h5>
                             <span class="to-legend">
-                                <?php esc_html_e('Enter seetings for a zoom.','car-rental-booking-system'); ?>
+                                <?php esc_html_e('Enter settings for a zoom.','car-rental-booking-system'); ?>
                             </span> 
                             <div class="to-clear-fix">
                                 <span class="to-legend-field"><?php esc_html_e('Status:','car-rental-booking-system'); ?></span>

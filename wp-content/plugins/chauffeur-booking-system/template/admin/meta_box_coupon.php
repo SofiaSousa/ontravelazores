@@ -9,6 +9,7 @@
                 </ul>
                 <div id="meta-box-coupon-1">
                     <ul class="to-form-field-list">
+						<?php echo CHBSHelper::createPostIdField(__('Coupon ID','chauffeur-booking-system')); ?>
                         <li>
                             <h5><?php esc_html_e('Coupon code','chauffeur-booking-system'); ?></h5>
                             <span class="to-legend"><?php esc_html_e('Unique, max 12-characters coupon code.','chauffeur-booking-system'); ?></span>
@@ -43,9 +44,9 @@
                         </li>                             
                         <li>
                             <h5><?php esc_html_e('Percentage discount','chauffeur-booking-system'); ?></h5>
-                            <span class="to-legend"><?php esc_html_e('Perecentage discount. Allowed are integer numbers from 0 to 99.','chauffeur-booking-system'); ?></span>
+                            <span class="to-legend"><?php esc_html_e('Percentage discount. Allowed are floating values from 0.00 to 99.99.','chauffeur-booking-system'); ?></span>
                             <div>
-                                <input type="text" maxlength="2" name="<?php CHBSHelper::getFormName('discount_percentage'); ?>" id="<?php CHBSHelper::getFormName('discount_percentage'); ?>" value="<?php echo esc_attr($this->data['meta']['discount_percentage']); ?>"/>
+                                <input type="text" maxlength="5" name="<?php CHBSHelper::getFormName('discount_percentage'); ?>" id="<?php CHBSHelper::getFormName('discount_percentage'); ?>" value="<?php echo esc_attr($this->data['meta']['discount_percentage']); ?>"/>
                             </div>
                         </li>     
                         <li>

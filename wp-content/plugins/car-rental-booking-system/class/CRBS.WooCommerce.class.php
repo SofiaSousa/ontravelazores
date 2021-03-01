@@ -41,10 +41,8 @@ class CRBSWooCommerce
     
         foreach($dictionary as $index=>$value)
         {
-            if(!(isset($value->enabled) && ($value->enabled==='yes')))
-            {
-                unset($dictionary[$index]);
-            }
+			if(!isset($value->enabled)) unset($dictionary[$index]);
+			if($value->enabled!='yes') unset($dictionary[$index]);
         }
         
         return($dictionary);
@@ -141,6 +139,10 @@ class CRBSWooCommerce
             }          
         }
             
+		/***/
+		
+		$this->changeStaus($order->get_id(),-1);
+		
         /***/
 
         $billing=$Booking->createBilling($bookingId);
@@ -201,7 +203,7 @@ class CRBSWooCommerce
                 
                 if(!isset($taxArray[$taxValue]))
                 {
-                    $query=$wpdb->prepare('insert into '.$wpdb->prefix.'woocommerce_order_items(order_item_name,order_item_type,order_id) VALUES (%s,%s,%d)',array('TAX-1','tax',$order->get_id()));
+                    $query=$wpdb->prepare('insert into '.$wpdb->prefix.'woocommerce_order_items(order_item_name,order_item_type,order_id) VALUES (%s,%s,%d)',array($taxLabel,'tax',$order->get_id()));
                     $wpdb->query($query);
 
                     $taxItemId=$wpdb->insert_id;
@@ -253,8 +255,8 @@ class CRBSWooCommerce
 			foreach($productId as $value) wp_delete_post($value);
             
             return($order->get_checkout_payment_url());
-        }
-                               
+		}
+		
         return(null);
     }
     
@@ -390,11 +392,11 @@ class CRBSWooCommerce
     
     function addAction()
     {
-        //add_action('woocommerce_order_status_changed',array($this,'changeStaus'));
-        //add_action('woocommerce_email_customer_details',array($this,'createOrderEmailMessageBody'));
+        add_action('woocommerce_order_status_changed',array($this,'changeStaus'));
+        add_action('woocommerce_email_customer_details',array($this,'createOrderEmailMessageBody'));
         
-        //add_filter('woocommerce_email_attachments',array($this,'addEmailAttachment'),10,2);
-        //add_filter('woocommerce_email_recipient_new_order',array($this,'addEmailRecipient'),10,2);
+        add_filter('woocommerce_email_attachments',array($this,'addEmailAttachment'),10,2);
+        add_filter('woocommerce_email_recipient_new_order',array($this,'addEmailRecipient'),10,2);
 		
 		add_action('add_meta_boxes',array($this,'addMetaBox'));
     }
@@ -436,29 +438,61 @@ class CRBSWooCommerce
     
     /**************************************************************************/
     
-    function changeStaus($order_id)
+    function changeStaus($orderId=-1,$bookingId=-1)
     {
-        $order=new WC_Order($order_id);
-
-        $status=array
-        (
-            'pending'                                                           =>  1,
-            'processing'                                                        =>  2,
-            'on-hold'                                                           =>  1,
-            'completed'                                                         =>  4,
-            'cancelled'                                                         =>  3,
-            'refunded'                                                          =>  4,
-            'failed'                                                            =>  4
-        );
-        
-        $meta=CRBSPostMeta::getPostMeta($order_id);
-        if((array_key_exists('booking_id',$meta)) && ($meta['booking_id']>0))
-        {
-            if(array_key_exists($order->status,$status))
-            {
-                CRBSPostMeta::updatePostMeta($meta['booking_id'],'booking_status_id',$status[$order->status]);
-            }
-        }
+		$bookingStatusSynchronizationId=(int)CRBSOption::getOption('booking_status_synchronization');
+		
+		if($bookingStatusSynchronizationId===1) return(false);
+			
+		/***/
+		
+		$BookingStatus=new CRBSBookingStatus();
+		
+		if((int)$orderId!==-1)
+		{
+			$orderMeta=CRBSPostMeta::getPostMeta($orderId);		
+			if((array_key_exists('booking_id',$orderMeta)) && ($orderMeta['booking_id']>0))
+				$bookingId=(int)$orderMeta['booking_id'];
+		}
+		elseif((int)$bookingId!==-1)
+		{
+			$Booking=new CRBSBooking();
+			if(($booking=$Booking->getBooking($bookingId))!==false) 		
+			{
+				if((array_key_exists('woocommerce_booking_id',$booking['meta'])) && ($booking['meta']['woocommerce_booking_id']>0))
+					$orderId=$booking['meta']['woocommerce_booking_id'];
+			}
+		}
+		
+		/***/
+		
+		if((int)$bookingStatusSynchronizationId===2)
+		{
+			if($bookingId!=-1)
+			{
+				$order=new WC_Order($orderId);
+				
+				$status=$BookingStatus->mapBookingStatus($order->get_status());
+				
+				if($status!==false) CRBSPostMeta::updatePostMeta($bookingId,'booking_status_id',$status);
+			}
+		}
+		else if((int)$bookingStatusSynchronizationId===3)
+		{
+			if($orderId!=-1)
+			{
+				$Booking=new CRBSBooking();
+				if(($booking=$Booking->getBooking($bookingId))!==false) 
+				{
+					$status=$BookingStatus->mapBookingStatus($booking['meta']['booking_status_id']);
+					if($status!==false)
+					{
+						$order=new WC_Order($orderId);
+						$order->update_status($status);
+					}
+				}
+			}			
+		}
     }
     
     /**************************************************************************/
@@ -510,9 +544,9 @@ class CRBSWooCommerce
         
         $bookingId=(int)$meta['booking_id'];
         
-        if($bookingId<=0) return;
+        if($bookingId<=0) return($recipient);
         
-        if(($booking=$Booking->getBooking($bookingId))===false) return;
+        if(($booking=$Booking->getBooking($bookingId))===false) return($recipient);
 
         $pickupLocationId=$booking['meta']['pickup_location_id'];
         $returnLocationId=$booking['meta']['return_location_id'];

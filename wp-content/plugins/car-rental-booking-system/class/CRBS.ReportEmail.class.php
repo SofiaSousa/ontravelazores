@@ -95,14 +95,14 @@ class CRBSReportEmail
                 array
                 (
                     'key'                                                       =>  PLUGIN_CRBS_CONTEXT.'_pickup_date',
-                    'value'                                                     =>  date('d-m-Y'),
+                    'value'                                                     =>  date_i18n('d-m-Y'),
                     'compare'                                                   =>  '='
                 ),
                 
                 array
                 (
                     'key'                                                       =>  PLUGIN_CRBS_CONTEXT.'_return_date',
-                    'value'                                                     =>  date('d-m-Y'),
+                    'value'                                                     =>  date_i18n('d-m-Y'),
                     'compare'                                                   =>  '='
                 )
             )           

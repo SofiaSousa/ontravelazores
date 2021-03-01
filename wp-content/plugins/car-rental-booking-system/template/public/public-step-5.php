@@ -16,12 +16,21 @@
 					<a href="#" class="crbs-button crbs-button-style-1"></a>
 				</div>
 				<div class="crbs-booking-complete-payment-stripe">
-					<a href="#" class="crbs-button crbs-button-style-1"><?php esc_html_e('Pay via Stripe','car-rental-booking-system'); ?></a>
+					<a href="#" class="crbs-button crbs-button-style-1">
+						<?php esc_html_e('Pay via Stripe','car-rental-booking-system'); ?>&nbsp;
+						<?php _e('(redirecting in <span></span> seconds...)','car-rental-booking-system'); ?>
+					</a>
 				</div>
 				<div class="crbs-booking-complete-payment-paypal">
-					<?php _e('You will be redirected to the payment page within <span>5</span> second.','car-rental-booking-system'); ?>
+					<a href="#" class="crbs-button crbs-button-style-1">
+						<?php esc_html_e('Pay via PayPal','car-rental-booking-system'); ?>&nbsp;
+						<?php _e('(redirecting in <span></span> seconds...)','car-rental-booking-system'); ?>
+					</a>					
 				</div>
 				<div class="crbs-booking-complete-payment-wire_transfer">
+					<a href="#" class="crbs-button crbs-button-style-1"></a>
+				</div>
+				<div class="crbs-booking-complete-payment-credit_card_pickup">
 					<a href="#" class="crbs-button crbs-button-style-1"></a>
 				</div>
 			</div>

@@ -9,7 +9,14 @@ class CRBSCurrency
 	
 	function __construct()
 	{
-		$this->currency=array
+		$this->currency=CRBSGlobalData::setGlobalData('currency',array($this,'init'));
+	}
+	
+	/**************************************************************************/
+	
+	function init()
+	{
+		$currency=array
 		(
 			'AFN'			=>	array
 			(
@@ -855,22 +862,26 @@ class CRBSCurrency
 			)
 		);
         
-        $this->useDefault();
+		$currency=$this->useDefault($currency);
+
+		return($currency);
 	}
     
     /**************************************************************************/
     
-    function useDefault()
+    function useDefault($currency)
     {
-        foreach($this->currency as $index=>$value)
+        foreach($currency as $index=>$value)
         {
             if(!array_key_exists('separator',$value))
-                $this->currency[$index]['separator']='.';
+                $currency[$index]['separator']='.';
             if(!array_key_exists('separator2',$value))
-                $this->currency[$index]['separator2']='';
+                $currency[$index]['separator2']='';
             if(!array_key_exists('position',$value))
-                $this->currency[$index]['position']='left';            
+                $currency[$index]['position']='left';            
         }
+		
+		return($currency);
     }
 	
 	/**************************************************************************/

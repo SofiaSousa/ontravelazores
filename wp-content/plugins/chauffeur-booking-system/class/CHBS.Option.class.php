@@ -67,6 +67,26 @@ class CHBSOption
 		update_option(PLUGIN_CHBS_OPTION_PREFIX.'_option',array());
 		self::refreshOption();		
 	}
+    
+    /**************************************************************************/
+    
+    static function getSalt()
+    {
+        $Validation=new CHBSValidation();
+        
+        $salt=self::getOption('salt');
+        
+        if($Validation->isEmpty($salt))
+        {
+            $option['salt']=CHBSHelper::createSalt();
+            
+            self::updateOption($option);
+            
+            $salt=$option['salt'];
+        }
+        
+        return($salt);
+    }
 	
 	/**************************************************************************/
 }

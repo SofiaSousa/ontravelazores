@@ -47,14 +47,14 @@
                 foreach($this->data['dictionary']['location'] as $index=>$value)
                 {
 ?>
-                                <option value="<?php echo esc_attr($index); ?>" <?php CRBSHelper::selectedIf($index,CRBSRequest::get('pickup_location_id',false)); ?>><?php esc_html_e($value['post']->post_title); ?></option>
+                                <option value="<?php echo esc_attr($index); ?>" <?php CRBSHelper::selectedIf($index,$this->data['pickup_location_id_select']); ?>><?php esc_html_e($value['post']->post_title); ?></option>
 <?php              
                 }
                 if((int)$this->data['meta']['customer_pickup_location_enable']===1)
                 {
                     $selectedCustomerPickupLocation=-1*$this->data['meta']['customer_pickup_location_id']==CRBSRequest::get('pickup_location_id',false) ? true : false;
 ?>
-                                <option value="-<?php echo esc_attr($this->data['meta']['customer_pickup_location_id']); ?>" <?php CRBSHelper::selectedIf(-1*$this->data['meta']['customer_pickup_location_id'],CRBSRequest::get('pickup_location_id')); ?>><?php esc_html_e('[My own location]','car-rental-booking-system'); ?></option>
+                                <option value="-<?php echo esc_attr($this->data['meta']['customer_pickup_location_id']); ?>" <?php CRBSHelper::selectedIf(-1*$this->data['meta']['customer_pickup_location_id'],$this->data['pickup_location_id_select']); ?>><?php esc_html_e('[My own location]','car-rental-booking-system'); ?></option>
 <?php
                 }
 ?>
@@ -122,18 +122,18 @@
                 foreach($this->data['dictionary']['location'] as $index=>$value)
                 {
 ?>
-                                <option value="<?php echo esc_attr($index); ?>" <?php CRBSHelper::selectedIf($index,CRBSRequest::get('return_location_id'),true); ?>><?php esc_html_e($value['post']->post_title); ?></option>
+                                <option value="<?php echo esc_attr($index); ?>" <?php CRBSHelper::selectedIf($index,$this->data['return_location_id_select'],true); ?>><?php esc_html_e($value['post']->post_title); ?></option>
 <?php              
                 }
                 if((int)$this->data['meta']['customer_return_location_enable']===1)
                 {
                     $selectedCustomerReturnLocation=-1*$this->data['meta']['customer_return_location_id']==CRBSRequest::get('pickup_location_id',false) ? true : false;
 ?>
-                                <option value="-<?php echo esc_attr($this->data['meta']['customer_return_location_id']); ?>" <?php CRBSHelper::selectedIf(-1*$this->data['meta']['customer_return_location_id'],CRBSRequest::get('return_location_id',false),true); ?>><?php esc_html_e('[My own location]','car-rental-booking-system'); ?></option>
+                                <option value="-<?php echo esc_attr($this->data['meta']['customer_return_location_id']); ?>" <?php CRBSHelper::selectedIf(-1*$this->data['meta']['customer_return_location_id'],$this->data['return_location_id_select'],true); ?>><?php esc_html_e('[My own location]','car-rental-booking-system'); ?></option>
 <?php
                 }
 ?>
-                                <option value="-1" <?php CRBSHelper::selectedIf(-1,CRBSRequest::get('return_location_id',false),true); ?>><?php esc_html_e('[Return to the same location]','car-rental-booking-system'); ?></option>
+                                <option value="-1" <?php CRBSHelper::selectedIf(-1,$this->data['return_location_id_select'],true); ?>><?php esc_html_e('[Return to the same location]','car-rental-booking-system'); ?></option>
                             </select>
                         </div> 
 <?php

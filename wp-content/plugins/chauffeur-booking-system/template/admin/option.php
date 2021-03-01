@@ -27,7 +27,7 @@
 							</h6>
 							&nbsp;&nbsp;
 							<a href="<?php echo esc_url('http://support.quanticalabs.com'); ?>" target="_blank"><?php esc_html_e('Support Forum','chauffeur-booking-system'); ?></a>
-							<a href="<?php echo esc_url('https://codecanyon.net/user/quanticalabs'); ?>" target="_blank"><?php esc_html_e('Plugin site','chauffeur-booking-system'); ?></a>
+							<a href="<?php echo esc_url('https://1.envato.market/chauffeur-booking-system-for-wordpress'); ?>" target="_blank"><?php esc_html_e('Plugin site','chauffeur-booking-system'); ?></a>
 						</div>
 
 						<a href="<?php echo esc_url('http://quanticalabs.com'); ?>" class="to-header-right-logo"></a>
@@ -48,10 +48,16 @@
 								<a href="#import_demo"><?php esc_html_e('Import demo','chauffeur-booking-system'); ?><span></span></a>
 							</li>
                             <li>
+								<a href="#payment"><?php esc_html_e('Payments','chauffeur-booking-system'); ?><span></span></a>
+							</li>
+                            <li>
 								<a href="#coupon_creator"><?php esc_html_e('Coupons creator','chauffeur-booking-system'); ?><span></span></a>
 							</li>
                             <li>
 								<a href="#exchange_rate"><?php esc_html_e('Exchange rates','chauffeur-booking-system'); ?><span></span></a>
+							</li>
+                            <li>
+								<a href="#booking_acceptance"><?php esc_html_e('Booking acceptance','chauffeur-booking-system'); ?><span></span></a>
 							</li>
                             <li>
 								<a href="#log_manager"><?php esc_html_e('Log manager','chauffeur-booking-system'); ?><span></span></a>
@@ -74,8 +80,10 @@
         (
             'general',
             'import_demo',
+			'payment',
             'coupon_creator',
             'exchange_rate',
+            'booking_acceptance',
             'log_manager_mail',
             'log_manager_nexmo',
             'log_manager_twilio',

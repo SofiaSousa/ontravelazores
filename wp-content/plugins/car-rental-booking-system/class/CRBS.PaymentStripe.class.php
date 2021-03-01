@@ -9,112 +9,267 @@ class CRBSPaymentStripe
 	
 	function __construct()
 	{
-
-	}
-	
-	/**************************************************************************/
-	
-	function createPaymentForm($postId,$bookingId,$bookingTitle,$amount,$publishableKey,$currency)
-	{
-		$html=
-		'
-            <form action="'.get_the_permalink($postId).'?bookingId='.(int)$bookingId.'" method="POST" name="crbs-form-stripe" >
-                <script
-                    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-					data-key="'.esc_attr($publishableKey).'"
-					data-amount="'.esc_attr($amount*100).'"
-					data-name="'.esc_attr($bookingTitle).'"
-					data-description="'.esc_attr__('New booking','car-rental-booking-system').'"
-					data-currency="'.esc_attr($currency).'"
-					data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-					data-locale="auto">
-				</script>
-				<button type="submit" formtarget="_blank" style="display:none !important;"></button>
-            </form>
-		';
-		
-		return($html);
-	}
-	
-	/**************************************************************************/
-	
-	function handle()
-	{
-		$Booking=new CRBSBooking();
-		$Location=new CRBSLocation();
-		$Validation=new CRBSValidation();
-		
-        $bookingId=CRBSHelper::getGetValue('bookingId',false);
-        $stripeToken=CRBSHelper::getPostValue('stripeToken',false);
-        
-		if($Validation->isEmpty($stripeToken)) return(false);
-
-		$booking=$Booking->getBooking($bookingId);
-		if($booking===false) return(false);
-
-		if($booking['meta']['payment_id']!=2) return(false);
-
-		$locationId=$booking['meta']['pickup_location_id'];
-		if(($dictionary=$Location->getDictionary(array('location_id'=>$locationId)))===false) return(false);
-		if(count($dictionary)!=1) return(false);
-
-		$bookingBilling=$Booking->createBilling($bookingId);
-
-		$data=array
+		$this->paymentMethod=array
 		(
-			'source'                                                            =>	$stripeToken,
-			'description'                                                       =>	$booking['post']->post_title,
-			'amount'                                                            =>	$bookingBilling['summary']['value_gross']*100,
-			'currency'                                                          =>	$booking['meta']['currency_id']
+			'alipay'															=>	array(__('Alipay','car-rental-booking-system')),
+			'card'																=>	array(__('Cards','car-rental-booking-system')),			
+			'ideal'																=>	array(__('iDEAL','car-rental-booking-system')),
+			'fpx'																=>	array(__('FPX','car-rental-booking-system')),
+			'bacs_debit'														=>	array(__('Bacs Direct Debit','car-rental-booking-system')),
+			'bancontact'														=>	array(__('Bancontact','car-rental-booking-system')),
+			'giropay'															=>	array(__('Giropay','car-rental-booking-system')),
+			'p24'																=>	array(__('Przelewy24','car-rental-booking-system')),
+			'eps'																=>	array(__('EPS','car-rental-booking-system')),
+			'sofort'															=>	array(__('Sofort','car-rental-booking-system')),
+			'sepa_debit'														=>	array(__('SEPA Direct Debit','car-rental-booking-system'))
 		);
 		
-		$string=http_build_query($data);
+		$this->event=array
+		(
+			'payment_intent.canceled',
+			'payment_intent.created',
+			'payment_intent.payment_failed',
+			'payment_intent.processing',
+			'payment_intent.requires_action',
+			'payment_intent.succeeded',
+			'payment_method.attached'
+		);
+		
+		asort($this->paymentMethod);
+	}
+	
+	/**************************************************************************/
+	
+	function getPaymentMethod()
+	{
+		return($this->paymentMethod);
+	}
+	
+	/**************************************************************************/
+	
+	function isPaymentMethod($paymentMethod)
+	{
+		return(array_key_exists($paymentMethod,$this->paymentMethod) ? true : false);
+	}
+	
+	/**************************************************************************/
+	
+	function getWebhookEndpointUrlAdress()
+	{
+		$address=add_query_arg('action','payment_stripe',home_url().'/');
+		return($address);
+	}
+	
+	/**************************************************************************/
+	
+	function createWebhookEndpoint($pickupLocation)
+	{
+		$StripeClient=new \Stripe\StripeClient($pickupLocation['meta']['payment_stripe_api_key_secret']);
+		
+		$webhookEndpoint=$StripeClient->webhookEndpoints->create(['url'=>$this->getWebhookEndpointUrlAdress(),'enabled_events'=>$this->event]);		
+		
+		CRBSOption::updateOption(array('payment_stripe_webhook_endpoint_id'=>$webhookEndpoint->id));
+	}
+	
+	/**************************************************************************/
+	
+	function updateWebhookEndpoint($pickupLocation,$webhookEndpointId)
+	{
+		$StripeClient=new \Stripe\StripeClient($pickupLocation['meta']['payment_stripe_api_key_secret']);
+		
+		$StripeClient->webhookEndpoints->update($webhookEndpointId,['url'=>$this->getWebhookEndpointUrlAdress()]);
+	}
+	
+	/**************************************************************************/
+	
+	function createSession($booking,$bookingBilling,$bookingForm)
+	{
+		$Validation=new CRBSValidation();
+		
+		$pickupLocationId=$booking['meta']['pickup_location_id'];
+		
+		$pickupLocation=$bookingForm['dictionary']['location'][$pickupLocationId];
+		
+		/***/
+		
+		Stripe\Stripe::setApiKey($pickupLocation['meta']['payment_stripe_api_key_secret']);
 
-		$ch=curl_init();
-		curl_setopt($ch,CURLOPT_URL,'https://api.stripe.com/v1/charges');
-		curl_setopt($ch,CURLOPT_USERPWD,$dictionary[$locationId]['meta']['payment_stripe_api_key_secret']);
-		curl_setopt($ch,CURLOPT_POST,1);
-		curl_setopt($ch,CURLOPT_POSTFIELDS,$string);
-		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
-		curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,0);
-		curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,0);
-		$result=curl_exec($ch);
-
-		if($result)
+		/***/
+		
+		$webhookEndpointId=CRBSOption::getOption('payment_stripe_webhook_endpoint_id');
+		
+		if($Validation->isEmpty($webhookEndpointId)) $this->createWebhookEndpoint($pickupLocation);
+		else
 		{
-			$result=json_decode($result);
-			if(property_exists($result,'error')) return(false);
-
-			$meta=CRBSPostMeta::getPostMeta($bookingId);
-
-			$paymentData=array
-			(
-				'txn_id'                                                        =>  $result->id,
-				'payment_type'                                                  =>  $result->source->object,
-				'payment_date'                                                  =>  date('Y-m-d H:i:s',$result->created),
-				'payment_status'                                                =>  $result->status,
-				'mc_gross'                                                      =>  $result->amount/100,
-				'mc_currency'                                                   =>  $result->currency        
-			);
-
-			if(!((array_key_exists('payment_data',$meta)) && (is_array($meta['payment_data']))))
-				$meta['payment_data']=array();
-
-			array_push($meta['payment_data'],$paymentData);
-
-			CRBSPostMeta::updatePostMeta($bookingId,'payment_data',$meta['payment_data']);
+			try
+			{
+				$this->updateWebhookEndpoint($pickupLocation,$webhookEndpointId);
+			} 
+			catch (Exception $ex) 
+			{
+				$this->createWebhookEndpoint($pickupLocation);
+			}
 		}
-			
-		$Booking->sendEmailBooking($bookingId,'AFTER_PAYMENT');
-        
-		if($Validation->isNotEmpty($dictionary[$locationId]['meta']['payment_stripe_redirect_url_address']))
+		
+		/***/
+		
+		$productId=$pickupLocation['meta']['payment_stripe_product_id'];
+		
+		if($Validation->isEmpty($productId))
 		{
-			wp_redirect($dictionary[$locationId]['meta']['payment_stripe_redirect_url_address']);
+			$product=\Stripe\Product::create(
+			[
+				'name'															=> __('Car rental service','car-rental-booking-system')
+			]);		
+			
+			$productId=$product->id;
+			
+			CRBSPostMeta::updatePostMeta($pickupLocationId,'payment_stripe_product_id',$productId);
+		}
+		
+		/***/
+		
+		$price=\Stripe\Price::create(
+		[
+			'product'															=>	$productId,
+			'unit_amount'														=>	$bookingBilling['summary']['pay']*100,
+			'currency'															=>	$booking['meta']['currency_id'],
+		]);
+
+		/***/
+		
+		$currentURLAddress=home_url();
+		if($Validation->isEmpty($pickupLocation['meta']['payment_stripe_success_url_address']))
+			$pickupLocation['meta']['payment_stripe_success_url_address']=$currentURLAddress;
+		if($Validation->isEmpty($pickupLocation['meta']['payment_stripe_cancel_url_address']))
+			$pickupLocation['meta']['payment_stripe_cancel_url_address']=$currentURLAddress;
+		
+		$session=\Stripe\Checkout\Session::create
+		(
+			[
+				'payment_method_types'											=>	$pickupLocation['meta']['payment_stripe_method'],
+				'mode'															=>	'payment',
+				'line_items'													=>
+				[
+					[
+						'price'													=>	$price->id,
+						'quantity'												=>	1
+					]
+				],
+				'success_url'													=>	$pickupLocation['meta']['payment_stripe_success_url_address'],
+				'cancel_url'													=>	$pickupLocation['meta']['payment_stripe_cancel_url_address']
+			]		
+		);
+		
+		CRBSPostMeta::updatePostMeta($booking['post']->ID,'payment_stripe_intent_id',$session->payment_intent);
+		
+		return($session->id);
+	}
+	
+	/**************************************************************************/
+	
+	function receivePayment()
+	{
+		if(!array_key_exists('action',$_REQUEST)) return(false);
+		
+		if($_REQUEST['action']=='payment_stripe')
+		{
+			global $post;
+			
+			$event=null;
+			$content=@file_get_contents('php://input');
+	
+			try 
+			{
+				$event=\Stripe\Event::constructFrom(json_decode($content,true));
+			} 
+			catch(\UnexpectedValueException $e) 
+			{
+				http_response_code(400);
+				exit();
+			}	
+			
+			if(in_array($event->type,$this->event))
+			{
+				$argument=array
+				(
+                    'post_type'                                                 =>	CRBSBooking::getCPTName(),
+                    'posts_per_page'                                            =>	-1,
+                    'meta_query'                                                =>  array
+                    (
+                        array
+                        (
+                            'key'                                               =>  PLUGIN_CRBS_CONTEXT.'_payment_stripe_intent_id',
+                            'value'                                             =>  $event->data->object->id
+                        )                      
+                    )
+				);
+				
+                CRBSHelper::preservePost($post,$bPost);
+				
+	            $query=new WP_Query($argument);
+                if($query!==false) 
+                {
+					while($query->have_posts())
+					{
+						$query->the_post();
+                    
+						$meta=CRBSPostMeta::getPostMeta($post);
+						
+						if(!array_key_exists('payment_stripe_data',$meta)) $meta['payment_stripe_data']=array();
+						
+						$meta['payment_stripe_data'][]=$event;
+						
+						CRBSPostMeta::updatePostMeta($post->ID,'payment_stripe_data',$meta['payment_stripe_data']);
+						
+						if($event->type=='payment_intent.succeeded')
+						{
+							if(CRBSOption::getOption('booking_status_payment_success')!=-1)
+							{
+								$oldBookingStatusId=$meta['booking_status_id'];
+								$newBookingStatusId=CRBSOption::getOption('booking_status_payment_success');
+								
+								if($oldBookingStatusId!==$newBookingStatusId)
+								{
+									CRBSPostMeta::updatePostMeta($post->ID,'booking_status_id',$newBookingStatusId);
+								
+									if((int)CRBSOption::getOption('booking_status_synchronization')===3)
+									{
+										$WooCommerce=new CRBSWooCommerce();
+										$WooCommerce->changeStaus(-1,$post->ID);
+									}
+									
+									$Booking=new CRBSBooking();
+								
+									$BookingStatus=new CRBSBookingStatus();
+									$bookingStatus=$BookingStatus->getBookingStatus($newBookingStatusId);
+
+									$recipient=array();
+									$recipient[0]=array($meta['client_contact_detail_email_address']);
+
+									$subject=sprintf(__('Booking "%s" has changed status to "%s"','car-rental-booking-system'),$post->post_title,$bookingStatus[0]);
+
+									global $crbs_logEvent;
+									
+									$crbs_logEvent=4;
+									$Booking->sendEmail($post->ID,CRBSOption::getOption('sender_default_email_account_id'),'booking_change_status',$recipient[0],$subject);           
+								}
+							}
+						}
+						
+						break;
+					}
+                }
+			
+				CRBSHelper::preservePost($post,$bPost,0);
+			}
+		
+			http_response_code(200);
 			exit();
 		}
 	}
-   
-    /**************************************************************************/
+	
+	/**************************************************************************/
 }
 
 /******************************************************************************/

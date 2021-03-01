@@ -19,6 +19,7 @@
                 </ul>
                 <div id="meta-box-booking-1">
                     <ul class="to-form-field-list">
+						<?php echo CRBSHelper::createPostIdField(__('Booking ID','car-rental-booking-system')); ?>
                         <li>
                             <h5><?php esc_html_e('Status','car-rental-booking-system'); ?></h5>
                             <span class="to-legend"><?php esc_html_e('Booking status.','car-rental-booking-system'); ?></span>
@@ -99,6 +100,21 @@
                             </div>
                         </li>  
 <?php
+        if((int)$this->data['meta']['payment_deposit_type']!==0)
+        {
+?>
+                        <li>
+                            <h5><?php esc_html_e('To Pay','car-rental-booking-system'); ?></h5>
+                            <span class="to-legend">
+                                <?php esc_html_e('To Pay (deposit).','car-rental-booking-system'); ?>
+                            </span>
+                            <div class="to-field-disabled">
+                                <?php echo esc_html(CRBSPrice::format($this->data['billing']['summary']['pay'],$this->data['meta']['currency_id']));  ?>
+                            </div>
+                        </li>              
+<?php          
+        }
+
         if($Validation->isNotEmpty($this->data['meta']['comment']))
         {
 ?>
@@ -199,7 +215,7 @@
                                         </th>      
                                         <th style="width:15%" class="to-align-right">
                                             <div>
-                                                <?php esc_html_e('Total amout','car-rental-booking-system'); ?>
+                                                <?php esc_html_e('Total amount','car-rental-booking-system'); ?>
                                                 <span class="to-legend">
                                                     <?php esc_html_e('Total gross amount.','car-rental-booking-system'); ?>
                                                 </span>
@@ -360,7 +376,7 @@
                     <ul class="to-form-field-list">
                         <li>
                             <h5><?php esc_html_e('Booking extras','car-rental-booking-system'); ?></h5>
-                            <span class="to-legend"><?php esc_html_e('List of addons ordered.','car-rental-booking-system'); ?></span>
+                            <span class="to-legend"><?php esc_html_e('List of add-ons ordered.','car-rental-booking-system'); ?></span>
                             <div>	
                                 <table class="to-table" id="to-table-vehicle-attribute">
                                     <tr>
@@ -406,7 +422,7 @@
                                         </th>
                                         <th class="to-align-right" style="width:10%">
                                             <div>
-                                                <?php esc_html_e('Total amout','car-rental-booking-system'); ?>
+                                                <?php esc_html_e('Total amount','car-rental-booking-system'); ?>
                                                 <span class="to-legend">
                                                     <?php esc_html_e('Total gross amount.','car-rental-booking-system'); ?>
                                                 </span>
@@ -431,7 +447,7 @@
                                         </td>
                                         <td class="to-align-right" style="width:10%">
                                             <div>
-                                                <?php echo number_format($value['price'],2,'.',''); ?>
+                                                <?php echo number_format($value['sum_net'],2,'.',''); ?>
                                             </div>
                                         </td>                                        
                                         <td class="to-align-right" style="width:10%">
@@ -446,7 +462,7 @@
                                         </td>                                            
                                         <td class="to-align-right" style="width:15%">
                                             <div>
-                                                <?php echo number_format(CRBSPrice::calculateGross($value['price'],0,$value['tax_rate_value'])*$value['quantity'],2,'.',''); ?>
+                                                <?php echo number_format(CRBSPrice::calculateGross($value['sum_net'],0,$value['tax_rate_value'])*$value['quantity'],2,'.',''); ?>
                                             </div>
                                         </td>                                              
                                     </tr>      
@@ -580,22 +596,26 @@
                                 <div class="to-field-disabled"><?php echo esc_html($this->data['meta']['payment_name']) ?></div>                                
                             </div>
                         </li>
-<?php          
+<?php
             if(in_array($this->data['meta']['payment_id'],array(2,3)))
             {
-                if((array_key_exists('payment_data',$this->data['meta'])) && (is_array($this->data['meta']['payment_data'])))
-                {
 ?>
                         <li>
                             <h5><?php esc_html_e('Transactions','car-rental-booking-system'); ?></h5>
                             <span class="to-legend">
                                 <?php esc_html_e('List of registered transactions for this payment.','car-rental-booking-system'); ?><br/>
                             </span>
+<?php
+				if(array_key_exists('payment_stripe_data',$this->data['meta']))
+				{
+					if((is_array($this->data['meta']['payment_stripe_data'])) && (count($this->data['meta']['payment_stripe_data'])))
+					{
+?>						
                             <div>	
-                                <table class="to-table">
-                                    <thead>
+                                <table class="to-table to-table-fixed-layout">
+                                     <thead>
                                         <tr>
-                                            <th style="width:20%">
+                                            <th style="width:15%">
                                                 <div>
                                                     <?php esc_html_e('Transaction ID','car-rental-booking-system'); ?>
                                                     <span class="to-legend"><?php esc_html_e('Transaction ID.','car-rental-booking-system'); ?></span>
@@ -607,54 +627,117 @@
                                                     <span class="to-legend"><?php esc_html_e('Type.','car-rental-booking-system'); ?></span>
                                                 </div>
                                             </th>
-                                            <th style="width:20%">
+                                            <th style="width:15%">
                                                 <div>
                                                     <?php esc_html_e('Date','car-rental-booking-system'); ?>
                                                     <span class="to-legend"><?php esc_html_e('Date.','car-rental-booking-system'); ?></span>
                                                 </div>
                                             </th>	
-                                            <th style="width:15%">
+                                            <th style="width:55%">
                                                 <div>
-                                                    <?php esc_html_e('Status','car-rental-booking-system'); ?>
+                                                    <?php esc_html_e('Details','car-rental-booking-system'); ?>
                                                     <span class="to-legend"><?php esc_html_e('Status.','car-rental-booking-system'); ?></span>
                                                 </div>
                                             </th>
-                                            <th style="width:20%">
+                                        </tr>
+                                    </thead>	
+                                    <tbody>
+<?php
+						foreach($this->data['meta']['payment_stripe_data'] as $index=>$value)
+						{
+?>
+                                        <tr>
+                                            <td><div><?php echo esc_html($value->id); ?></div></td>
+                                            <td><div><?php echo esc_html($value->type); ?></div></td>
+                                            <td><div><?php echo esc_html(date_i18n(CRBSOption::getOption('date_format').' '.CRBSOption::getOption('time_format'),$value->created)); ?></div></td>
+                                            <td>
+												<div class="to-toggle-details">
+													<a href="#"><?php esc_html_e('Toggle details','car-rental-booking-system'); ?></a>
+													<div class="to-hidden">
+														<pre>
+															<?php var_dump($value); ?>
+														</pre>
+													</div>
+												</div>
+											</td>
+                                        </tr>
+<?php
+						}
+?>
+                                    </tbody>
+								</table>
+							</div>
+<?php						
+					}
+				}
+				else if(array_key_exists('payment_paypal_data',$this->data['meta']))
+				{
+					if((is_array($this->data['meta']['payment_paypal_data'])) && (count($this->data['meta']['payment_paypal_data'])))
+					{
+?>
+
+                            <div>	
+                                <table class="to-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:15%">
                                                 <div>
-                                                    <?php esc_html_e('Amount','car-rental-booking-system'); ?>
-                                                    <span class="to-legend"><?php esc_html_e('Amount.','car-rental-booking-system'); ?></span>
+                                                    <?php esc_html_e('Transaction ID','car-rental-booking-system'); ?>
+                                                    <span class="to-legend"><?php esc_html_e('Transaction ID.','car-rental-booking-system'); ?></span>
+                                                </div>
+                                            </th>
+                                            <th style="width:15%">
+                                                <div>
+                                                    <?php esc_html_e('Status','car-rental-booking-system'); ?>
+                                                    <span class="to-legend"><?php esc_html_e('Type.','car-rental-booking-system'); ?></span>
+                                                </div>
+                                            </th>
+                                            <th style="width:15%">
+                                                <div>
+                                                    <?php esc_html_e('Date','car-rental-booking-system'); ?>
+                                                    <span class="to-legend"><?php esc_html_e('Date.','car-rental-booking-system'); ?></span>
                                                 </div>
                                             </th>	
-                                            <th style="width:10%">
+                                            <th style="width:55%">
                                                 <div>
-                                                    <?php esc_html_e('Currency','car-rental-booking-system'); ?>
-                                                    <span class="to-legend"><?php esc_html_e('Currency.','car-rental-booking-system'); ?></span>
+                                                    <?php esc_html_e('Details','car-rental-booking-system'); ?>
+                                                    <span class="to-legend"><?php esc_html_e('Details.','car-rental-booking-system'); ?></span>
                                                 </div>
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody>
 <?php
-                    foreach($this->data['meta']['payment_data'] as $index=>$value)
-                    {
+						foreach($this->data['meta']['payment_paypal_data'] as $index=>$value)
+						{
 ?>
                                         <tr>
                                             <td><div><?php echo esc_html($value['txn_id']); ?></div></td>
-                                            <td><div><?php echo esc_html($value['payment_type']); ?></div></td>
-                                            <td><div><?php echo esc_html($value['payment_date']); ?></div></td>
                                             <td><div><?php echo esc_html($value['payment_status']); ?></div></td>
-                                            <td><div><?php echo esc_html($value['mc_gross']); ?></div></td>
-                                            <td><div><?php echo esc_html($value['mc_currency']); ?></div></td>
+                                            <td><div><?php echo esc_html(date_i18n(CRBSOption::getOption('date_format').' '.CRBSOption::getOption('time_format'),$value['payment_date'])); ?></div></td>
+											<td>
+												<div class="to-toggle-details">
+													<a href="#"><?php esc_html_e('Toggle details','car-rental-booking-system'); ?></a>
+													<div class="to-hidden">
+														<pre>
+															<?php var_dump($value); ?>
+														</pre>
+													</div>
+												</div>
+											</td>
                                         </tr>
 <?php
-                    }
+						}
 ?>
                                     </tbody>
                                 </table>
                             </div>
-                        </li>
 <?php				
-                }
+					}
+				}
+?>
+						</li>
+<?php
             }
 ?>
                     </ul>
@@ -668,5 +751,12 @@
 			jQuery(document).ready(function($)
 			{	
 				$('.to').themeOptionElement({init:true});
+				
+				$('.to-toggle-details>a').on('click',function(e)
+				{
+					e.preventDefault();
+					$(this).parents('td:first').css('max-width','0px');
+					$(this).next('div').toggleClass('to-hidden');
+				});
             });
 		</script>

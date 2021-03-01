@@ -19,9 +19,21 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+$bookingId=get_post_meta($order->get_id(),'crbs_booking_id',true);
+
+$class=array('crbs-main');
+
+if($bookingId>0)
+{
+    $Booking=new CRBSBooking();
+    if(($booking=$Booking->getBooking($bookingId))!==false)
+        array_push($class,'crbs-booking-form-id-'.(int)$booking['meta']['booking_form_id']);
+}
+
 ?>
 
-<div class="crbs-main">
+<div<?php echo CRBSHelper::createCSSClassAttribute($class); ?>>
 
     <div class="woocommerce-order">
 
@@ -29,17 +41,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 
             <?php if ( $order->has_status( 'failed' ) ) : ?>
 
-                <p class="woocommerce-notice woocommerce-notice--error woocommerce-thankyou-order-failed"><?php _e( 'Unfortunately your order cannot be processed as the originating bank/merchant has declined your transaction. Please attempt your purchase again.', 'woocommerce' ); ?></p>
+                <p class="woocommerce-notice woocommerce-notice--error woocommerce-thankyou-order-failed"><?php esc_html__( 'Unfortunately your order cannot be processed as the originating bank/merchant has declined your transaction. Please attempt your purchase again.', 'car-rental-booking-system' ); ?></p>
 
             <?php else : ?>
 
-                <p class="woocommerce-notice woocommerce-notice--success woocommerce-thankyou-order-received"><?php echo apply_filters( 'woocommerce_thankyou_order_received_text', __( 'Thank you. Your order has been received.', 'woocommerce' ), $order ); ?></p>
+                <p class="woocommerce-notice woocommerce-notice--success woocommerce-thankyou-order-received"><?php echo apply_filters( 'woocommerce_thankyou_order_received_text', esc_html__( 'Thank you. Your order has been received.', 'car-rental-booking-system' ), $order ); ?></p>
 
             <?php endif; ?>
 
         <?php else : ?>
 
-            <p class="woocommerce-notice woocommerce-notice--success woocommerce-thankyou-order-received"><?php echo apply_filters( 'woocommerce_thankyou_order_received_text', __( 'Thank you. Your order has been received.', 'woocommerce' ), null ); ?></p>
+            <p class="woocommerce-notice woocommerce-notice--success woocommerce-thankyou-order-received"><?php echo apply_filters( 'woocommerce_thankyou_order_received_text', esc_html__( 'Thank you. Your order has been received.', 'car-rental-booking-system' ), null ); ?></p>
 
         <?php endif; ?>
 

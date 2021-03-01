@@ -58,13 +58,13 @@ class CHBSVehicle
 					'parent_item_colon'											=>	'',
 					'menu_name'													=>	__('Vehicles','chauffeur-booking-system')
 				),	
-				'public'														=>	(PLUGIN_CHBS_VEHICLE_TEMPLATE ? true : false),  
+				'public'														=>	CHBSPlugin::isAutoRideTheme(),  
 				'show_ui'														=>	true, 
 				'show_in_menu'													=>	'edit.php?post_type='.CHBSBooking::getCPTName(),
 				'capability_type'												=>	'post',
 				'menu_position'													=>	2,
 				'hierarchical'													=>	false,  
-				'rewrite'														=>	false,  
+				'rewrite'														=>	array( 'slug' => 'car' ),  
 				'supports'														=>	array('title','editor','thumbnail','page-attributes')
 			)
 		);
@@ -180,84 +180,102 @@ class CHBSVehicle
 
         /***/
         
+        $defaultPrice=CHBSPrice::getDefaultPrice();
+        
         if(!$PriceType->isPriceType($option['price_type']))
             $option['price_type']=1;
 
         if(!$Validation->isPrice($option['price_fixed_value'],false))
-           $option['price_fixed_value']=0.00;
+           $option['price_fixed_value']=$defaultPrice;
         if(!$TaxRate->isTaxRate($option['price_fixed_tax_rate_id']))
             $option['price_fixed_tax_rate_id']=0;
-
+		$option['price_fixed_value']=CHBSPrice::formatToSave($option['price_fixed_value'],false);
+		
         if(!$Validation->isPrice($option['price_fixed_return_value'],false))
-           $option['price_fixed_return_value']=0.00;
+           $option['price_fixed_return_value']=$defaultPrice;
         if(!$TaxRate->isTaxRate($option['price_fixed_return_tax_rate_id']))
             $option['price_fixed_return_tax_rate_id']=0;
-        
+        $option['price_fixed_return_value']=CHBSPrice::formatToSave($option['price_fixed_return_value'],false);
+		
         if(!$Validation->isPrice($option['price_fixed_return_new_ride_value'],false))
-           $option['price_fixed_return_new_ride_value']=0.00;
+           $option['price_fixed_return_new_ride_value']=$defaultPrice;
         if(!$TaxRate->isTaxRate($option['price_fixed_return_new_ride_tax_rate_id']))
             $option['price_fixed_return_new_ride_tax_rate_id']=0;        
-        
+        $option['price_fixed_return_new_ride_value']=CHBSPrice::formatToSave($option['price_fixed_return_new_ride_value'],false);
+		
         if(!$Validation->isPrice($option['price_initial_value'],false))
-           $option['price_initial_value']=0.00;
+           $option['price_initial_value']=$defaultPrice;
         if(!$TaxRate->isTaxRate($option['price_initial_tax_rate_id']))
             $option['price_initial_tax_rate_id']=0;
-
+		$option['price_initial_value']=CHBSPrice::formatToSave($option['price_initial_value'],false);
+		
         if(!$Validation->isPrice($option['price_delivery_value'],false))
-           $option['price_delivery_value']=0.00;
+           $option['price_delivery_value']=$defaultPrice;
         if(!$TaxRate->isTaxRate($option['price_delivery_tax_rate_id']))
             $option['price_delivery_tax_rate_id']=0;        
-        
+        $option['price_delivery_value']=CHBSPrice::formatToSave($option['price_delivery_value'],false);
+		
         if(!$Validation->isPrice($option['price_delivery_return_value'],false))
-           $option['price_delivery_return_value']=0.00;
+           $option['price_delivery_return_value']=$defaultPrice;
         if(!$TaxRate->isTaxRate($option['price_delivery_return_tax_rate_id']))
             $option['price_delivery_return_tax_rate_id']=0;   
-        
+        $option['price_delivery_return_value']=CHBSPrice::formatToSave($option['price_delivery_return_value'],false);
+		
         if(!$Validation->isPrice($option['price_distance_value'],false))
-           $option['price_distance_value']=0.00;
+           $option['price_distance_value']=$defaultPrice;
         if(!$TaxRate->isTaxRate($option['price_distance_tax_rate_id']))
             $option['price_distance_tax_rate_id']=0;
-
+		$option['price_distance_value']=CHBSPrice::formatToSave($option['price_distance_value'],false);
+		
         if(!$Validation->isPrice($option['price_distance_return_value'],false))
-           $option['price_distance_return_value']=0.00;
+           $option['price_distance_return_value']=$defaultPrice;
         if(!$TaxRate->isTaxRate($option['price_distance_return_tax_rate_id']))
             $option['price_distance_return_tax_rate_id']=0;
-
+		$option['price_distance_return_value']=CHBSPrice::formatToSave($option['price_distance_return_value'],false);
+		
         if(!$Validation->isPrice($option['price_distance_return_new_ride_value'],false))
-           $option['price_distance_return_new_ride_value']=0.00;
+           $option['price_distance_return_new_ride_value']=$defaultPrice;
         if(!$TaxRate->isTaxRate($option['price_distance_return_new_ride_tax_rate_id']))
             $option['price_distance_return_new_ride_tax_rate_id']=0;
-        
+        $option['price_distance_return_new_ride_value']=CHBSPrice::formatToSave($option['price_distance_return_new_ride_value'],false);
+		
         if(!$Validation->isPrice($option['price_hour_value'],false))
-           $option['price_hour_value']=0.00;
+           $option['price_hour_value']=$defaultPrice;
         if(!$TaxRate->isTaxRate($option['price_hour_tax_rate_id']))
             $option['price_hour_tax_rate_id']=0;
-        
+        $option['price_hour_value']=CHBSPrice::formatToSave($option['price_hour_value'],false);
+		
         if(!$Validation->isPrice($option['price_hour_return_value'],false))
-           $option['price_hour_return_value']=0.00;
+           $option['price_hour_return_value']=$defaultPrice;
         if(!$TaxRate->isTaxRate($option['price_hour_return_tax_rate_id']))
             $option['price_hour_return_tax_rate_id']=0;
-
+		$option['price_hour_return_value']=CHBSPrice::formatToSave($option['price_hour_return_value'],false);
+		
         if(!$Validation->isPrice($option['price_hour_return_new_ride_value'],false))
-           $option['price_hour_return_new_ride_value']=0.00;
+           $option['price_hour_return_new_ride_value']=$defaultPrice;
         if(!$TaxRate->isTaxRate($option['price_hour_return_new_ride_tax_rate_id']))
             $option['price_hour_return_new_ride_tax_rate_id']=0;              
-
+		$option['price_hour_return_new_ride_value']=CHBSPrice::formatToSave($option['price_hour_return_new_ride_value'],false);
+		
         if(!$Validation->isPrice($option['price_extra_time_value'],false))
-           $option['price_extra_time_value']=0.00;
+           $option['price_extra_time_value']=$defaultPrice;
         if(!$TaxRate->isTaxRate($option['price_extra_time_tax_rate_id']))
             $option['price_extra_time_tax_rate_id']=0; 
-        
+        $option['price_extra_time_value']=CHBSPrice::formatToSave($option['price_extra_time_value'],false);
+		
         if(!$Validation->isPrice($option['price_passenger_adult_value'],false))
-           $option['price_passenger_adult_value']=0.00;
+           $option['price_passenger_adult_value']=$defaultPrice;
         if(!$TaxRate->isTaxRate($option['price_passenger_adult_tax_rate_id']))
             $option['price_passenger_adult_tax_rate_id']=0; 
-        
+        $option['price_passenger_adult_value']=CHBSPrice::formatToSave($option['price_passenger_adult_value'],false);
+		
         if(!$Validation->isPrice($option['price_passenger_children_value'],false))
-           $option['price_passenger_children_value']=0.00;
+           $option['price_passenger_children_value']=$defaultPrice;
         if(!$TaxRate->isTaxRate($option['price_passenger_children_tax_rate_id']))
             $option['price_passenger_children_tax_rate_id']=0;
-        /***/
+        $option['price_passenger_children_value']=CHBSPrice::formatToSave($option['price_passenger_children_value'],false);
+		
+		/***/
         
         $attribute=array();
         
@@ -358,6 +376,7 @@ class CHBSVehicle
         
         $key=array
         (
+			'description',
             'vehicle_make',
             'vehicle_model',
             'vehicle_company_id',
@@ -416,6 +435,8 @@ class CHBSVehicle
         $TaxRate=new CHBSTaxRate();
         $VehicleAttribute=new CHBSVehicleAttribute();
         
+        $defaultPrice=CHBSPrice::getDefaultPrice();
+        
 		CHBSHelper::setDefault($meta,'vehicle_make','');
         CHBSHelper::setDefault($meta,'vehicle_model','');
         CHBSHelper::setDefault($meta,'vehicle_company_id',0);
@@ -432,49 +453,49 @@ class CHBSVehicle
         
         CHBSHelper::setDefault($meta,'price_type',1);
         
-        CHBSHelper::setDefault($meta,'price_fixed_value','0.00');
+        CHBSHelper::setDefault($meta,'price_fixed_value',$defaultPrice);
         CHBSHelper::setDefault($meta,'price_fixed_tax_rate_id',$TaxRate->getDefaultTaxPostId());
 
-        CHBSHelper::setDefault($meta,'price_fixed_return_value','0.00');
+        CHBSHelper::setDefault($meta,'price_fixed_return_value',$defaultPrice);
         CHBSHelper::setDefault($meta,'price_fixed_return_tax_rate_id',$TaxRate->getDefaultTaxPostId());
         
-        CHBSHelper::setDefault($meta,'price_fixed_return_new_ride_value','0.00');
+        CHBSHelper::setDefault($meta,'price_fixed_return_new_ride_value',$defaultPrice);
         CHBSHelper::setDefault($meta,'price_fixed_return_new_ride_tax_rate_id',$TaxRate->getDefaultTaxPostId());
         
-        CHBSHelper::setDefault($meta,'price_initial_value','0.00');
+        CHBSHelper::setDefault($meta,'price_initial_value',$defaultPrice);
         CHBSHelper::setDefault($meta,'price_initial_tax_rate_id',$TaxRate->getDefaultTaxPostId());
 
-        CHBSHelper::setDefault($meta,'price_delivery_value','0.00');
+        CHBSHelper::setDefault($meta,'price_delivery_value',$defaultPrice);
         CHBSHelper::setDefault($meta,'price_delivery_tax_rate_id',$TaxRate->getDefaultTaxPostId());        
         
-        CHBSHelper::setDefault($meta,'price_delivery_return_value','0.00');
+        CHBSHelper::setDefault($meta,'price_delivery_return_value',$defaultPrice);
         CHBSHelper::setDefault($meta,'price_delivery_return_tax_rate_id',$TaxRate->getDefaultTaxPostId());  
         
-        CHBSHelper::setDefault($meta,'price_distance_value','0.00');
+        CHBSHelper::setDefault($meta,'price_distance_value',$defaultPrice);
         CHBSHelper::setDefault($meta,'price_distance_tax_rate_id',$TaxRate->getDefaultTaxPostId());
 
-        CHBSHelper::setDefault($meta,'price_distance_return_value','0.00');
+        CHBSHelper::setDefault($meta,'price_distance_return_value',$defaultPrice);
         CHBSHelper::setDefault($meta,'price_distance_return_tax_rate_id',$TaxRate->getDefaultTaxPostId());
 
-        CHBSHelper::setDefault($meta,'price_distance_return_new_ride_value','0.00');
+        CHBSHelper::setDefault($meta,'price_distance_return_new_ride_value',$defaultPrice);
         CHBSHelper::setDefault($meta,'price_distance_return_new_ride_tax_rate_id',$TaxRate->getDefaultTaxPostId());
         
-        CHBSHelper::setDefault($meta,'price_hour_value','0.00');
+        CHBSHelper::setDefault($meta,'price_hour_value',$defaultPrice);
         CHBSHelper::setDefault($meta,'price_hour_tax_rate_id',$TaxRate->getDefaultTaxPostId());
 
-        CHBSHelper::setDefault($meta,'price_hour_return_value','0.00');
+        CHBSHelper::setDefault($meta,'price_hour_return_value',$defaultPrice);
         CHBSHelper::setDefault($meta,'price_hour_return_tax_rate_id',$TaxRate->getDefaultTaxPostId());
         
-        CHBSHelper::setDefault($meta,'price_hour_return_new_ride_value','0.00');
+        CHBSHelper::setDefault($meta,'price_hour_return_new_ride_value',$defaultPrice);
         CHBSHelper::setDefault($meta,'price_hour_return_new_ride_tax_rate_id',$TaxRate->getDefaultTaxPostId());        
         
-        CHBSHelper::setDefault($meta,'price_extra_time_value','0.00');
+        CHBSHelper::setDefault($meta,'price_extra_time_value',$defaultPrice);
         CHBSHelper::setDefault($meta,'price_extra_time_tax_rate_id',$TaxRate->getDefaultTaxPostId());  
 
-        CHBSHelper::setDefault($meta,'price_passenger_adult_value','0.00');
+        CHBSHelper::setDefault($meta,'price_passenger_adult_value',$defaultPrice);
         CHBSHelper::setDefault($meta,'price_passenger_adult_tax_rate_id',$TaxRate->getDefaultTaxPostId());  
 
-        CHBSHelper::setDefault($meta,'price_passenger_children_value','0.00');
+        CHBSHelper::setDefault($meta,'price_passenger_children_value',$defaultPrice);
         CHBSHelper::setDefault($meta,'price_passenger_children_tax_rate_id',$TaxRate->getDefaultTaxPostId());  
         
         $attribute=$VehicleAttribute->getDictionary();
@@ -601,15 +622,18 @@ class CHBSVehicle
     
     /**************************************************************************/
     
-    function calculatePrice($data,$calculateHiddenFee=true)
+    function calculatePrice($data,$calculateHiddenFee=true,$roundVehiclePrice=false,$bidData=array())
     {
         $Length=new CHBSLength();
         $TaxRate=new CHBSTaxRate();
         $Currency=new CHBSCurrency();
         $PriceRule=new CHBSPriceRule();
+		$Validation=new CHBSValidation();
         
         $taxRate=$TaxRate->getDictionary();
         
+		if(!count($bidData)) $bidData['enable']=1;
+		
         /***/
         
         $passengerSum=0;
@@ -714,7 +738,20 @@ class CHBSVehicle
                 }
             }
         }
-        
+		
+		/***/
+		
+		if(($bidData['enable']===1) && (array_key_exists('discount',$bidData)))
+		{
+            foreach($priceBase as $index=>$value)
+            {
+                if(preg_match('/\_value$/',$index))
+                {
+                    $priceBase[$index]=round($priceBase[$index]*(1-$bidData['discount']/100),2);
+                }
+            }	
+		}
+		
         /***/
         
         if((int)$priceBase['price_type']===2)
@@ -847,8 +884,33 @@ class CHBSVehicle
             ),
             'currency'                                                          =>  $currency
         );
+		
+		/***/
+		
+		$bidPriceEnable=false;
+		
+		if((count($bidData)===1) && ($bidData['enable']===1))
+		{
+			if(CHBSBookingHelper::isVehicleBidPriceEnable($data['booking_form']))
+			{
+				$option=CHBSHelper::getPostOption();
+
+				if((array_key_exists('vehicle_bid_price',$option)) && (is_array($option['vehicle_bid_price'])) && (isset($option['vehicle_bid_price'][$data['vehicle_id']])))
+				{
+					$bidPrice=$option['vehicle_bid_price'][$data['vehicle_id']];
+					if($Validation->isPrice($bidPrice))
+					{
+						$bidPriceEnable=true;
+					}
+				}
+			}
+		}
+		
+		/***/
         
-        if((((int)$data['booking_form']['meta']['booking_summary_hide_fee']===1) && ($calculateHiddenFee)) || (($priceBase['minimum_order_value']>0) && ((int)$priceBase['price_type']===1)))
+        $Booking=new CHBSBooking();
+        
+        if(($bidPriceEnable) || (((int)$data['booking_form']['meta']['booking_summary_hide_fee']===1) && ($calculateHiddenFee)) || (($priceBase['minimum_order_value']>0) && ((int)$priceBase['price_type']===1)))
         {
             $Date=new CHBSDate();
             
@@ -864,8 +926,6 @@ class CHBSVehicle
             
             $data2['base_location_distance']=CHBSBookingHelper::getBaseLocationDistance($data2['vehicle_id']);
             $data2['base_location_return_distance']=CHBSBookingHelper::getBaseLocationDistance($data2['vehicle_id'],true);
-            
-            $Booking=new CHBSBooking();
            
             if(($priceBase['minimum_order_value']>0) && ((int)$priceBase['price_type']===1))
             {
@@ -879,17 +939,87 @@ class CHBSVehicle
                 }
             }
             
-            if(((int)$data['booking_form']['meta']['booking_summary_hide_fee']===1) && ($calculateHiddenFee))
+            /***/
+            
+            if(((int)$data['booking_form']['meta']['booking_summary_hide_fee']===1) && (($calculateHiddenFee) || ($bidPriceEnable)))
             {
                 $priceBooking=$Booking->calculatePrice($data2,$price,true);
-                
-                $price['price']['sum']['net']['value']=number_format($priceBooking['vehicle']['sum']['net']['value'],2,'.','');
+
+				$price['price']['sum']['net']['value']=number_format($priceBooking['vehicle']['sum']['net']['value'],2,'.','');
                 $price['price']['sum']['net']['format']=CHBSPrice::format($price['price']['sum']['net']['value'],CHBSCurrency::getFormCurrency());
                 
-                $price['price']['sum']['gross']['value']=number_format($priceBooking['vehicle']['sum']['gross']['value'],2,'.','');
-                $price['price']['sum']['gross']['format']=CHBSPrice::format($price['price']['sum']['gross']['value'],CHBSCurrency::getFormCurrency());
+				$price['price']['sum']['gross']['value']=number_format($priceBooking['vehicle']['sum']['gross']['value'],2,'.','');
+				$price['price']['sum']['gross']['format']=CHBSPrice::format($price['price']['sum']['gross']['value'],CHBSCurrency::getFormCurrency());
+
+				if($bidPriceEnable)
+				{
+					if($price['price']['sum']['gross']['value']>$bidPrice)
+					{
+						$discountPercentageMax=$data['booking_form']['meta']['vehicle_bid_max_percentage_discount'];
+						
+						if((int)$data['fixed_location_pickup']>0)
+						{
+							if(array_key_exists($data['fixed_location_pickup'],$data['booking_form']['dictionary']['location']))
+							{
+								$d=$data['booking_form']['dictionary']['location'][$data['fixed_location_pickup']]['meta']['vehicle_bid_max_percentage_discount'];
+								
+								if($d>0) $discountPercentageMax=$d;
+							}
+						}
+						
+						$discountPercentage=(1-($bidPrice/$price['price']['sum']['gross']['value']))*100;
+						
+						if($data['fixed_location_pickup']>0)
+						{
+							if(array_key_exists($data['fixed_location_pickup'],$data['booking_form']['location']))
+							{
+								if($Validation->isFloat($data['booking_form']['location'][$data['fixed_location_pickup']]['meta']['vehicle_bid_max_percentage_discount'],0,99.99,true))
+									$discountPercentageMax=$data['booking_form']['location'][$data['fixed_location_pickup']]['meta']['vehicle_bid_max_percentage_discount'];
+							}
+						}
+						
+						if($discountPercentage<=$discountPercentageMax)
+						{			
+							$price=$this->calculatePrice($data,$calculateHiddenFee,$roundVehiclePrice,array('discount'=>$discountPercentage,'enable'=>$bidData['enable']));							
+							
+							$priceTemp=$this->calculatePrice($data,true,$roundVehiclePrice,array('discount'=>$discountPercentage,'enable'=>$bidData['enable']));							
+							
+							$roundValue=$bidPrice-$priceTemp['price']['sum']['gross']['value'];
+							
+							$price['price']['sum']['gross']['value']=number_format($price['price']['sum']['gross']['value']+$roundValue,2,'.','');
+							$price['price']['sum']['gross']['format']=CHBSPrice::format($price['price']['sum']['gross']['value'],CHBSCurrency::getFormCurrency());    
+
+							$price['price']['base']['round_value']=$roundValue;	
+							
+							$price['price']['other']['bid_value']=$price['price']['sum']['gross']['value'];
+						}
+						else
+						{
+							$price=$this->calculatePrice($data,true,$roundVehiclePrice,array('discount'=>0,'enable'=>0));	
+							$price['price']['other']['bid_min']=number_format($price['price']['sum']['gross']['value']*(1-$discountPercentageMax/100),2,'.','');
+						}
+		
+						return($price);
+					}		
+				}
             }
-        }
+			
+			/***/
+	    }
+        
+        /***/
+		
+		if($roundVehiclePrice)
+        {
+			$roundValue=CHBSBookingHelper::getRoundValue($data['booking_form'],$price['price']['sum']['gross']['value']);
+
+			$price['price']['sum']['gross']['value']=number_format($price['price']['sum']['gross']['value']+$roundValue,2,'.','');
+			$price['price']['sum']['gross']['format']=CHBSPrice::format($price['price']['sum']['gross']['value'],CHBSCurrency::getFormCurrency());    
+
+			$price['price']['base']['round_value']=$roundValue;
+		}
+		
+        /***/        
         
         $price['price']['sum']['gross']['formatHtml']=$this->getPriceFormatHtml($price['price']['sum']['gross']['value']);
         $price['price']['sum']['net']['formatHtml']=$this->getPriceFormatHtml($price['price']['sum']['net']['value']);
@@ -906,8 +1036,8 @@ class CHBSVehicle
         $price['price']['other']['gross']['price_passenger_children']['value']=CHBSPrice::calculateGross($price['price']['other']['net']['price_passenger_children']['value'],$price['price']['base']['price_passenger_children_tax_rate_id']);     
         $price['price']['other']['gross']['price_passenger_children']['formatHtml']=$this->getPriceFormatHtml($price['price']['other']['gross']['price_passenger_children']['value']);
         
-        /***/
-
+		/***/
+		
         return($price);
     }
     
@@ -919,8 +1049,11 @@ class CHBSVehicle
         
         $currency=$Currency->getCurrency(CHBSCurrency::getFormCurrency());
         
+        $price=number_format($price,2,$currency['separator'],$currency['separator2']);
+        
         $t=preg_split('/\\'.$currency['separator'].'/',$price);
-        $priceFormatHtml=$t[0].'<span>.'.(empty($t[1]) ? '00' : $t[1]).'</span>';
+        
+        $priceFormatHtml=$t[0].'<span>.'.$t[1].'</span>';
         
         if(isset($currency['position']) && $currency['position']==='right')
         {
@@ -1069,7 +1202,7 @@ class CHBSVehicle
                 '
                     <table class="to-table-post-list">
                         <tr>
-                            <td>'.esc_html__('Passsengers','chauffeur-booking-system').'</td>
+                            <td>'.esc_html__('Passengers','chauffeur-booking-system').'</td>
                             <td>'.$meta['passenger_count'].'</td>
                         </tr>
                         <tr>
@@ -1213,7 +1346,7 @@ class CHBSVehicle
 
         if(($Validation->isDate($returnDate)) && ($Validation->isTime($returnTime)))
         {
-            $duration/=2;
+            $duration=(int)$duration/2;
             $dateSet[0][1][0]=CHBSDate::strtotime($returnDate.' '.$returnTime);
             $dateSet[0][1][1]=CHBSDate::strtotime($returnDate.' '.$returnTime.' + '.$duration.' minute');
         }
@@ -1281,7 +1414,7 @@ class CHBSVehicle
             
             $b[0]=$Validation->isDate($pickupDate);
             $b[1]=$Validation->isTime($pickupTime);
-            $b[2]=(count($bookingFormMeta['location_fixed_pickup_service_type_'.$serviceTypeId]) && in_array($serviceTypeId,array(1,2))) || ($serviceTypeId===3);
+            $b[2]=(is_array($bookingFormMeta['location_fixed_pickup_service_type_'.$serviceTypeId])) && (count($bookingFormMeta['location_fixed_pickup_service_type_'.$serviceTypeId]) && in_array($serviceTypeId,array(1,2))) || ($serviceTypeId===3);
             $b[3]=((int)$data['transfer_type_service_type_'.$serviceTypeId]===1 && in_array($serviceTypeId,array(1,2))) || ($serviceTypeId===2);
 
             if(!in_array(false,$b,true))
@@ -1480,26 +1613,29 @@ class CHBSVehicle
                 
                 /***/
                 
-                foreach($dateSet[0] as $dateCurrent)
-                {
-                    foreach($dateSet[1] as $dateBooking)
-                    {
-                        $b=array_fill(0,4,false);
+				if(is_array($dateSet[0]))
+				{
+					foreach($dateSet[0] as $dateCurrent)
+					{
+						foreach($dateSet[1] as $dateBooking)
+						{
+							$b=array_fill(0,4,false);
 
-                        $b[0]=CHBSHelper::valueInRange($dateCurrent[0],$dateBooking[0],$dateBooking[1]);
-                        $b[1]=CHBSHelper::valueInRange($dateCurrent[1],$dateBooking[0],$dateBooking[1]);
-                        $b[2]=CHBSHelper::valueInRange($dateBooking[0],$dateCurrent[0],$dateCurrent[1]);
-                        $b[3]=CHBSHelper::valueInRange($dateBooking[1],$dateCurrent[0],$dateCurrent[1]);
+							$b[0]=CHBSHelper::valueInRange($dateCurrent[0],$dateBooking[0],$dateBooking[1]);
+							$b[1]=CHBSHelper::valueInRange($dateCurrent[1],$dateBooking[0],$dateBooking[1]);
+							$b[2]=CHBSHelper::valueInRange($dateBooking[0],$dateCurrent[0],$dateCurrent[1]);
+							$b[3]=CHBSHelper::valueInRange($dateBooking[1],$dateCurrent[0],$dateCurrent[1]);
 
-                        if(in_array(true,$b,true))
-                        {
-                            if(!in_array($meta['vehicle_id'],$vehiclePreventRemove))
-                                unset($dictionary[$meta['vehicle_id']]);
-                            
-                            continue;                    
-                        }                        
-                    }
-                }
+							if(in_array(true,$b,true))
+							{
+								if(!in_array($meta['vehicle_id'],$vehiclePreventRemove))
+									unset($dictionary[$meta['vehicle_id']]);
+
+								continue;                    
+							}                        
+						}
+					}
+				}
             }            
             
             CHBSHelper::preservePost($post,$bPost,0);

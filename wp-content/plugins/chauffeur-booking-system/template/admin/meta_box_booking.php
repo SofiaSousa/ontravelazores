@@ -17,9 +17,11 @@
                     <li><a href="#meta-box-booking-5"><?php esc_html_e('Extras','chauffeur-booking-system'); ?></a></li>
                     <li><a href="#meta-box-booking-6"><?php esc_html_e('Client','chauffeur-booking-system'); ?></a></li>
                     <li><a href="#meta-box-booking-7"><?php esc_html_e('Payment','chauffeur-booking-system'); ?></a></li>
+                    <li><a href="#meta-box-booking-8"><?php esc_html_e('Drivers','chauffeur-booking-system'); ?></a></li>
                 </ul>
                 <div id="meta-box-booking-1">
                     <ul class="to-form-field-list">
+						<?php echo CHBSHelper::createPostIdField(__('Booking ID','chauffeur-booking-system')); ?>
                         <li>
                             <h5><?php esc_html_e('Status','chauffeur-booking-system'); ?></h5>
                             <span class="to-legend"><?php esc_html_e('Booking status.','chauffeur-booking-system'); ?></span>
@@ -34,25 +36,7 @@
         }
 ?>
                             </div>
-                        </li>      
-                        <li>
-                            <h5><?php esc_html_e('Driver','chauffeur-booking-system'); ?></h5>
-                            <span class="to-legend"><?php esc_html_e('Driver assigned to this booking.','chauffeur-booking-system'); ?></span>
-                            <div class="to-radio-button">
-                                <input type="radio" value="-1" id="<?php CHBSHelper::getFormName('driver_id_0'); ?>" name="<?php CHBSHelper::getFormName('driver_id'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['driver_id'],-1); ?>/>
-                                <label for="<?php CHBSHelper::getFormName('driver_id_0'); ?>"><?php esc_html_e('- None - ','chauffeur-booking-system'); ?></label>
-
-<?php
-		foreach($this->data['dictionary']['driver'] as $index=>$value)
-		{
-?>
-                                <input type="radio" value="<?php echo esc_attr($index); ?>" id="<?php CHBSHelper::getFormName('driver_id_'.$index); ?>" name="<?php CHBSHelper::getFormName('driver_id'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['driver_id'],$index); ?>/>
-                                <label for="<?php CHBSHelper::getFormName('driver_id_'.$index); ?>"><?php echo esc_html($value['post']->post_title); ?></label>
-<?php		
-        }
-?>
-                            </div>
-                        </li>                              
+                        </li>                                  
                         <li>
                             <h5><?php esc_html_e('Service type','chauffeur-booking-system'); ?></h5>
                             <span class="to-legend"><?php esc_html_e('Service type.','chauffeur-booking-system'); ?></span>
@@ -97,7 +81,17 @@
                             <div class="to-field-disabled">
                                 <?php echo esc_html(CHBSPrice::format($this->data['billing']['summary']['value_gross'],$this->data['meta']['currency_id']));  ?>
                             </div>
-                        </li>  
+<?php
+		if($this->data['meta']['business_user_paid']==1)
+		{
+?>			
+                            <div class="to-field-disabled">
+                                <?php esc_html_e('This booking has been paid by business user.','chauffeur-booking-system');  ?>
+                            </div>		
+<?php			
+		}
+?>
+						</li>
 <?php
         if($this->data['meta']['payment_deposit_enable']==1)
         {
@@ -249,7 +243,7 @@
                                         </th>      
                                         <th style="width:15%" class="to-align-right">
                                             <div>
-                                                <?php esc_html_e('Total amout','chauffeur-booking-system'); ?>
+                                                <?php esc_html_e('Total amount','chauffeur-booking-system'); ?>
                                                 <span class="to-legend">
                                                     <?php esc_html_e('Total gross amount.','chauffeur-booking-system'); ?>
                                                 </span>
@@ -486,7 +480,7 @@
                     <ul class="to-form-field-list">
                         <li>
                             <h5><?php esc_html_e('Booking extras','chauffeur-booking-system'); ?></h5>
-                            <span class="to-legend"><?php esc_html_e('List of addons ordered.','chauffeur-booking-system'); ?></span>
+                            <span class="to-legend"><?php esc_html_e('List of add-ons ordered.','chauffeur-booking-system'); ?></span>
                             <div>	
                                 <table class="to-table" id="to-table-vehicle-attribute">
                                     <tr>
@@ -532,7 +526,7 @@
                                         </th>
                                         <th class="to-align-right" style="width:10%">
                                             <div>
-                                                <?php esc_html_e('Total amout','chauffeur-booking-system'); ?>
+                                                <?php esc_html_e('Total amount','chauffeur-booking-system'); ?>
                                                 <span class="to-legend">
                                                     <?php esc_html_e('Total gross amount.','chauffeur-booking-system'); ?>
                                                 </span>
@@ -764,22 +758,27 @@
                         </li>              
 <?php          
             }
+			
 
             if(in_array($this->data['meta']['payment_id'],array(2,3)))
             {
-                if((array_key_exists('payment_data',$this->data['meta'])) && (is_array($this->data['meta']['payment_data'])))
-                {
 ?>
                         <li>
                             <h5><?php esc_html_e('Transactions','chauffeur-booking-system'); ?></h5>
                             <span class="to-legend">
                                 <?php esc_html_e('List of registered transactions for this payment.','chauffeur-booking-system'); ?><br/>
                             </span>
+<?php
+				if(array_key_exists('payment_stripe_data',$this->data['meta']))
+				{
+					if((is_array($this->data['meta']['payment_stripe_data'])) && (count($this->data['meta']['payment_stripe_data'])))
+					{
+?>						
                             <div>	
-                                <table class="to-table">
-                                    <thead>
+                                <table class="to-table to-table-fixed-layout">
+                                     <thead>
                                         <tr>
-                                            <th style="width:20%">
+                                            <th style="width:15%">
                                                 <div>
                                                     <?php esc_html_e('Transaction ID','chauffeur-booking-system'); ?>
                                                     <span class="to-legend"><?php esc_html_e('Transaction ID.','chauffeur-booking-system'); ?></span>
@@ -791,60 +790,228 @@
                                                     <span class="to-legend"><?php esc_html_e('Type.','chauffeur-booking-system'); ?></span>
                                                 </div>
                                             </th>
-                                            <th style="width:20%">
+                                            <th style="width:15%">
                                                 <div>
                                                     <?php esc_html_e('Date','chauffeur-booking-system'); ?>
                                                     <span class="to-legend"><?php esc_html_e('Date.','chauffeur-booking-system'); ?></span>
                                                 </div>
                                             </th>	
-                                            <th style="width:15%">
+                                            <th style="width:55%">
                                                 <div>
-                                                    <?php esc_html_e('Status','chauffeur-booking-system'); ?>
+                                                    <?php esc_html_e('Details','chauffeur-booking-system'); ?>
                                                     <span class="to-legend"><?php esc_html_e('Status.','chauffeur-booking-system'); ?></span>
                                                 </div>
                                             </th>
-                                            <th style="width:20%">
+                                        </tr>
+                                    </thead>	
+                                    <tbody>
+<?php
+						foreach($this->data['meta']['payment_stripe_data'] as $index=>$value)
+						{
+?>
+                                        <tr>
+                                            <td><div><?php echo esc_html($value->id); ?></div></td>
+                                            <td><div><?php echo esc_html($value->type); ?></div></td>
+                                            <td><div><?php echo esc_html(date_i18n(CHBSOption::getOption('date_format').' '.CHBSOption::getOption('time_format'),$value->created)); ?></div></td>
+                                            <td>
+												<div class="to-toggle-details">
+													<a href="#"><?php esc_html_e('Toggle details','chauffeur-booking-system'); ?></a>
+													<div class="to-hidden">
+														<pre>
+															<?php var_dump($value); ?>
+														</pre>
+													</div>
+												</div>
+											</td>
+                                        </tr>
+<?php
+						}
+?>
+                                    </tbody>
+								</table>
+							</div>
+<?php						
+					}
+				}
+				else if(array_key_exists('payment_paypal_data',$this->data['meta']))
+				{
+					if((is_array($this->data['meta']['payment_paypal_data'])) && (count($this->data['meta']['payment_paypal_data'])))
+					{
+?>
+
+                            <div>	
+                                <table class="to-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:15%">
                                                 <div>
-                                                    <?php esc_html_e('Amount','chauffeur-booking-system'); ?>
-                                                    <span class="to-legend"><?php esc_html_e('Amount.','chauffeur-booking-system'); ?></span>
+                                                    <?php esc_html_e('Transaction ID','chauffeur-booking-system'); ?>
+                                                    <span class="to-legend"><?php esc_html_e('Transaction ID.','chauffeur-booking-system'); ?></span>
+                                                </div>
+                                            </th>
+                                            <th style="width:15%">
+                                                <div>
+                                                    <?php esc_html_e('Status','chauffeur-booking-system'); ?>
+                                                    <span class="to-legend"><?php esc_html_e('Type.','chauffeur-booking-system'); ?></span>
+                                                </div>
+                                            </th>
+                                            <th style="width:15%">
+                                                <div>
+                                                    <?php esc_html_e('Date','chauffeur-booking-system'); ?>
+                                                    <span class="to-legend"><?php esc_html_e('Date.','chauffeur-booking-system'); ?></span>
                                                 </div>
                                             </th>	
-                                            <th style="width:10%">
+                                            <th style="width:55%">
                                                 <div>
-                                                    <?php esc_html_e('Currency','chauffeur-booking-system'); ?>
-                                                    <span class="to-legend"><?php esc_html_e('Currency.','chauffeur-booking-system'); ?></span>
+                                                    <?php esc_html_e('Details','chauffeur-booking-system'); ?>
+                                                    <span class="to-legend"><?php esc_html_e('Details.','chauffeur-booking-system'); ?></span>
                                                 </div>
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody>
 <?php
-                    foreach($this->data['meta']['payment_data'] as $index=>$value)
-                    {
+						foreach($this->data['meta']['payment_paypal_data'] as $index=>$value)
+						{
 ?>
                                         <tr>
                                             <td><div><?php echo esc_html($value['txn_id']); ?></div></td>
-                                            <td><div><?php echo esc_html($value['payment_type']); ?></div></td>
-                                            <td><div><?php echo esc_html($value['payment_date']); ?></div></td>
                                             <td><div><?php echo esc_html($value['payment_status']); ?></div></td>
-                                            <td><div><?php echo esc_html($value['mc_gross']); ?></div></td>
-                                            <td><div><?php echo esc_html($value['mc_currency']); ?></div></td>
+                                            <td><div><?php echo esc_html(date_i18n(CHBSOption::getOption('date_format').' '.CHBSOption::getOption('time_format'),$value['payment_date'])); ?></div></td>
+											<td>
+												<div class="to-toggle-details">
+													<a href="#"><?php esc_html_e('Toggle details','chauffeur-booking-system'); ?></a>
+													<div class="to-hidden">
+														<pre>
+															<?php var_dump($value); ?>
+														</pre>
+													</div>
+												</div>
+											</td>
                                         </tr>
 <?php
-                    }
+						}
 ?>
                                     </tbody>
                                 </table>
                             </div>
-                        </li>
 <?php				
-                }
-            }
+					}
+				}
 ?>
-                    </ul>
+						</li>
 <?php
+            }
         }
 ?>
+                    </ul>
+                </div>
+                <div id="meta-box-booking-8">
+                    <ul class="to-form-field-list">
+                        <li>
+                            <h5><?php esc_html_e('Driver','chauffeur-booking-system'); ?></h5>
+                            <span class="to-legend"><?php esc_html_e('Driver assigned to this booking.','chauffeur-booking-system'); ?></span>
+                            <div class="to-radio-button">
+                                <input type="radio" value="-1" id="<?php CHBSHelper::getFormName('driver_id_0'); ?>" name="<?php CHBSHelper::getFormName('driver_id'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['driver_id'],-1); ?>/>
+                                <label for="<?php CHBSHelper::getFormName('driver_id_0'); ?>"><?php esc_html_e('- None - ','chauffeur-booking-system'); ?></label>
+
+<?php
+		foreach($this->data['dictionary']['driver'] as $index=>$value)
+		{
+?>
+                                <input type="radio" value="<?php echo esc_attr($index); ?>" id="<?php CHBSHelper::getFormName('driver_id_'.$index); ?>" name="<?php CHBSHelper::getFormName('driver_id'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['driver_id'],$index); ?>/>
+                                <label for="<?php CHBSHelper::getFormName('driver_id_'.$index); ?>"><?php echo esc_html($value['post']->post_title); ?></label>
+<?php		
+        }
+?>
+                            </div>
+                        </li>  
+<?php
+        if((int)CHBSOption::getOption('booking_driver_accept_enable')===1)
+        {
+?>
+                        <li>
+                            <h5><?php esc_html_e('Re-send e-mail message to the driver','chauffeur-booking-system'); ?></h5>
+                            <span class="to-legend"><?php esc_html_e('Enable this option if you need to re-send e-mail message to the driver.','chauffeur-booking-system'); ?></span>                        
+                            <div class="to-radio-button">
+                                <input type="radio" value="1" id="<?php CHBSHelper::getFormName('driver_mail_message_resend_1'); ?>" name="<?php CHBSHelper::getFormName('driver_mail_message_resend'); ?>"/>
+                                <label for="<?php CHBSHelper::getFormName('driver_mail_message_resend_1'); ?>"><?php esc_html_e('Enable (re-send message)','chauffeur-booking-system'); ?></label>
+                                <input type="radio" value="0" id="<?php CHBSHelper::getFormName('driver_mail_message_resend_0'); ?>" name="<?php CHBSHelper::getFormName('driver_mail_message_resend'); ?>" checked="checked"/>
+                                <label for="<?php CHBSHelper::getFormName('driver_mail_message_resend_0'); ?>"><?php esc_html_e('Disable','chauffeur-booking-system'); ?></label>
+                            </div>
+                        </li>    
+<?php
+            if(count($this->data['meta']['booking_driver_log']))
+            {
+?>
+                        <li>
+                            <h5><?php esc_html_e('History','chauffeur-booking-system'); ?></h5>
+                            <span class="to-legend"><?php esc_html_e('Below list shows all actions which have been done to assign driver to the booking.','chauffeur-booking-system'); ?></span>                        
+                            <div class="to-clear-fix">
+                                <table class="to-table">
+                                    <tr>
+                                        <th style="width:20%">
+                                            <div>
+                                                <?php esc_html_e('Date','chauffeur-booking-system'); ?>
+                                                <span class="to-legend">
+                                                    <?php esc_html_e('Date and time of event.','chauffeur-booking-system'); ?>
+                                                </span>
+                                            </div>
+                                        </th>
+                                        <th style="width:40%">
+                                            <div>
+                                                <?php esc_html_e('Event','chauffeur-booking-system'); ?>
+                                                <span class="to-legend">
+                                                    <?php esc_html_e('Event name.','chauffeur-booking-system'); ?>
+                                                </span>
+                                            </div>
+                                        </th>
+                                        <th style="width:40%">
+                                            <div>
+                                                <?php esc_html_e('Driver','chauffeur-booking-system'); ?>
+                                                <span class="to-legend">
+                                                    <?php esc_html_e('Driver.','chauffeur-booking-system'); ?>
+                                                </span>
+                                            </div>
+                                        </th>  
+                                    </tr>
+<?php
+                $BookingDriver=new CHBSBookingDriver();
+
+                foreach($this->data['meta']['booking_driver_log'] as $index=>$value)
+                {
+?>
+                                    <tr>
+                                        <td>
+                                            <div><?php echo esc_html($value['date']); ?></div>
+                                        </td>
+                                        <td>
+                                           <div><?php echo esc_html($BookingDriver->getEventLabel($value['booking_driver_event_id'])); ?></div> 
+                                        </td>
+                                        <td>
+                                            <div>
+<?php
+                    if($value['driver_id']>0)
+                    {
+?>
+                                                <a href="<?php echo get_edit_post_link($value['driver_id']); ?>" target="_blank"><?php echo esc_html($value['driver_first_name'].' '.$value['driver_second_name']); ?></a>
+<?php
+                    }
+?>
+                                            </div>
+                                        </td>
+                                    </tr>
+<?php                  
+                }
+?>
+                                </table>
+                            </div>
+                        </li>
+<?php
+            }
+        }
+?>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -852,5 +1019,12 @@
 			jQuery(document).ready(function($)
 			{	
 				$('.to').themeOptionElement({init:true});
+				
+				$('.to-toggle-details>a').on('click',function(e)
+				{
+					e.preventDefault();
+					$(this).parents('td:first').css('max-width','0px');
+					$(this).next('div').toggleClass('to-hidden');
+				});
             });
 		</script>

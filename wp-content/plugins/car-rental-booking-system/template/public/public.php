@@ -91,11 +91,7 @@
                 <input type="hidden" name="<?php CRBSHelper::getFormName('post_id'); ?>" data-value="<?php echo esc_attr($post->ID); ?>"/>
 				
 				<input type="hidden" name="<?php CRBSHelper::getFormName('currency'); ?>" data-value="<?php echo esc_attr($this->data['currency']); ?>"/>
-				
-				<input type="hidden" name="<?php CRBSHelper::getFormName('driver_license_file_name'); ?>"  data-value=""/>
-				<input type="hidden" name="<?php CRBSHelper::getFormName('driver_license_file_type'); ?>"  data-value=""/>
-				<input type="hidden" name="<?php CRBSHelper::getFormName('driver_license_file_tmp_name'); ?>"  data-value=""/>
-                
+				                
             </form>
             
             <div id="crbs-payment-form">
@@ -105,7 +101,7 @@
             if(in_array(3,$value['meta']['payment_id']))
             {
                 $PaymentPaypal=new CRBSPaymentPaypal();
-                echo $PaymentPaypal->createPaymentForm($post->ID,$index,$value['meta']['payment_paypal_email_address'],$value['meta']['payment_paypal_sandbox_mode_enable']);
+                echo $PaymentPaypal->createPaymentForm($post->ID,$index,$value);
             }
         }
 ?>  
@@ -125,8 +121,9 @@
         <script type="text/javascript">
             jQuery(document).ready(function($)
             {
-                $('#<?php echo esc_attr($this->data['booking_form_html_id']); ?>').CRBSBookingForm(
+                var bookingForm=$('#<?php echo esc_attr($this->data['booking_form_html_id']); ?>').CRBSBookingForm(
                 {
+					booking_form_id												:	<?php echo (int)$this->data['post']->ID; ?>,
 					plugin_version                                              :   '<?php echo PLUGIN_CRBS_VERSION; ?>',
                     widget                                                      :
                     {
@@ -141,17 +138,20 @@
                     timepicker_step                                             :   '<?php echo $this->data['meta']['timepicker_step']; ?>',
                     vehicle_count_enable                                        :   <?php echo (int)$this->data['meta']['vehicle_count_enable']; ?>,
                     summary_sidebar_sticky_enable                               :   <?php echo (int)$this->data['meta']['summary_sidebar_sticky_enable']; ?>,
+					location_customer_only_enable								:	<?php echo (int)$this->data['meta']['location_customer_only_enable']; ?>,
 					location_the_same_enable									:   <?php echo (int)$this->data['meta']['location_the_same_enable']; ?>,
                     location_date_exclude                                       :   <?php echo json_encode($this->data['location_date_exclude']); ?>,
                     location_business_hour                                      :   <?php echo json_encode($this->data['location_business_hour']); ?>,
-                    location_booking_period                                     :   <?php echo json_encode($this->data['location_booking_period']); ?>,
+                    location_pickup_period										:   <?php echo json_encode($this->data['location_pickup_period'],JSON_UNESCAPED_SLASHES); ?>,
+					location_pickup_period_format								:   <?php echo json_encode($this->data['location_pickup_period_format'],JSON_UNESCAPED_SLASHES); ?>,
                     location_coordinate                                         :   <?php echo json_encode($this->data['location_coordinate']); ?>,
                     location_info                                               :   <?php echo json_encode($this->data['location_info']); ?>,
                     location_driver_age                                         :   <?php echo ($this->data['meta']['driver_age_enable']==1 ? json_encode($this->data['location_driver_age']) : '{}'); ?>,
                     location_after_business_hour_pickup_enable					:   <?php echo json_encode($this->data['location_after_business_hour_pickup_enable']); ?>,
 					location_after_business_hour_return_enable                  :   <?php echo json_encode($this->data['location_after_business_hour_return_enable']); ?>,
                     location_vehicle_id_default                                 :   <?php echo json_encode($this->data['location_vehicle_id_default']); ?>,
-                    location_payment_stripe_window_open_default_enable			:	<?php echo json_encode($this->data['location_payment_stripe_window_open_default_enable']); ?>,
+                    location_client_country_default								:	<?php echo json_encode($this->data['location_client_country_default']); ?>,
+                    location_payment_paypal_redirect_duration					:	<?php echo json_encode($this->data['location_payment_paypal_redirect_duration']); ?>,					
 					client_coordinate                                           :   <?php echo json_encode($this->data['client_coordinate']); ?>,   
                     geolocation_enable                                          :   <?php echo json_encode($this->data['meta']['geolocation_enable']); ?>,
                     customer_pickup_location_restriction_radius                 :   <?php echo (int)$this->data['meta']['customer_pickup_location_restriction_radius']; ?>,
@@ -193,7 +193,9 @@
                     scroll_to_booking_extra_after_select_vehicle_enable         :   <?php echo (int)$this->data['meta']['scroll_to_booking_extra_after_select_vehicle_enable']; ?>,
 					current_date												:   '<?php echo date_i18n('d-m-Y'); ?>',
                     current_time                                                :   '<?php echo date_i18n('H:i'); ?>',
-                }).setup();
+                });
+		
+				bookingForm.setup();
             });
         </script>
             

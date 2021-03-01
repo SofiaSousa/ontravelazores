@@ -1,4 +1,5 @@
 <?php
+		$Payment=new CHBSPayment();
         $Validation=new CHBSValidation();
         $BookingFormElement=new CHBSBookingFormElement();
 ?>
@@ -67,14 +68,21 @@
                         {
 ?>
                             <span class="chbs-meta-icon-wallet"></span>
-                            <span class="chbs-payment-name"><?php esc_html_e('Cash Payment','chauffeur-booking-system'); ?></span>
+                            <span class="chbs-payment-name"><?php echo esc_html($Payment->getPaymentName($index)); ?></span>
 <?php
                         }
                         else if($index==4)
                         {
 ?>                            
                             <span class="chbs-meta-icon-bank"></span>
-                            <span class="chbs-payment-name"><?php esc_html_e('Wire Transfer','chauffeur-booking-system'); ?></span>
+                            <span class="chbs-payment-name"><?php echo esc_html($Payment->getPaymentName($index)); ?></span>
+<?php                          
+                        }
+                        else if($index==5)
+                        {
+?>                       
+							<span class="chbs-meta-icon-bank"></span>
+                            <span class="chbs-payment-name"><?php echo esc_html($Payment->getPaymentName($index)); ?></span>
 <?php                          
                         }
 ?>

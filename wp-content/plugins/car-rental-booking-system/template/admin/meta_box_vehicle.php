@@ -22,6 +22,7 @@
                 </ul>
                 <div id="meta-box-vehicle-1">
                     <ul class="to-form-field-list">
+						<?php echo CRBSHelper::createPostIdField(__('Vehicle ID','car-rental-booking-system')); ?>
                         <li>
                             <h5><?php esc_html_e('Locations','car-rental-booking-system'); ?></h5>
                             <span class="to-legend">
@@ -360,12 +361,12 @@
                                     <tr>
                                         <td>
                                             <div class="to-clear-fix">
-                                                <?php esc_html_e('Pickup after bussiness hours','car-rental-booking-system'); ?>
+                                                <?php esc_html_e('Pickup after business hours','car-rental-booking-system'); ?>
                                             </div>
                                         </td>							
                                         <td>
                                             <div class="to-clear-fix">
-                                                <?php esc_html_e('Fixed value added to the booking, if vehicle will be pickuped afyet business hours.','car-rental-booking-system'); ?>
+                                                <?php esc_html_e('Fixed value added to the booking, if vehicle will be pickup after business hours.','car-rental-booking-system'); ?>
                                             </div>
                                         </td>	
                                         <td>
@@ -390,7 +391,7 @@
                                     <tr>
                                         <td>
                                             <div class="to-clear-fix">
-                                                <?php esc_html_e('Return after bussiness hours','car-rental-booking-system'); ?>
+                                                <?php esc_html_e('Return after business hours','car-rental-booking-system'); ?>
                                             </div>
                                         </td>							
                                         <td>
@@ -688,10 +689,10 @@
 
                     if(value===-1)
                     {
-                        checkbox.removeAttr('checked');
-                        checkbox.first().attr('checked','checked');
+                        checkbox.prop('checked',false);
+                        checkbox.first().prop('checked',true);
                     }
-                    else checkbox.first().removeAttr('checked');
+                    else checkbox.first().prop('checked',false);
                     
                     checkbox.button('refresh');
                 });

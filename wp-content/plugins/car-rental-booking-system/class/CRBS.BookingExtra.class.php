@@ -225,6 +225,8 @@ class CRBSBookingExtra
         
         if(!$Validation->isPrice($option['price'],false))
            $option['price']=0.00;  
+		
+		$option['price']=CRBSPrice::formatToSave($option['price']);
         
         if(!$TaxRate->isTaxRate($option['tax_rate_id']))
             $option['tax_rate_id']=0;
@@ -261,7 +263,9 @@ class CRBSBookingExtra
             
             if(!$Validation->isPrice($option['vehicle_price'][$index]['price'],false))
                 $option['vehicle_price'][$index]['price']=0.00;
-            
+        
+			$option['vehicle_price'][$index]['price']=CRBSPrice::formatToSave($option['vehicle_price'][$index]['price'],true);
+			
             if(!$TaxRate->isTaxRate($option['vehicle_price'][$index]['tax_rate_id']))
                 $option['vehicle_price'][$index]['tax_rate_id']=0;
             

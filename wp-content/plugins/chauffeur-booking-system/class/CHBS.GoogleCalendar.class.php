@@ -86,8 +86,28 @@ class CHBSGoogleCalendar
             $endDate=clone $startDate;
             $endDate->modify('+'.($duration+$bookingExtraTime).' minutes');   
         }
+		
+		
+		$i=0;
+		$route=null;
+		
+        foreach($booking['meta']['coordinate'] as $index=>$value)
+        {
+            $address=esc_html($value['address']);
+            
+            if(array_key_exists('formatted_address',$value))
+            {
+                if($Validation->isNotEmpty($value['formatted_address']))
+                    $address=esc_html($value['formatted_address']);;
+            }
+			
+			if($i==0) $route.=$address;
+			if($i==count($booking['meta']['coordinate'])-1) $route.=' - '.$address;
 
-		$bookingDescription=sprintf(__('<a href="%s" target="_blank">%s</a><br>Client: %s %s','chauffeur-booking-system'),admin_url('post.php').'?post='.$bookingId.'&action=edit',$booking['post']->post_title,$booking['meta']['client_contact_detail_first_name'],$booking['meta']['client_contact_detail_last_name']);
+			$i++;
+        }
+
+		$bookingDescription=sprintf(__('<a href="%s" target="_blank">%s</a><br>Client: %s %s,<br/>Pickup date/time: %s,<br/>Route: %s','chauffeur-booking-system'),admin_url('post.php').'?post='.$bookingId.'&action=edit',$booking['post']->post_title,$booking['meta']['client_contact_detail_first_name'],$booking['meta']['client_contact_detail_last_name'],$booking['meta']['pickup_date'].' '.$booking['meta']['pickup_time'],$route);
 		
 		$bookingDetails=array
         (

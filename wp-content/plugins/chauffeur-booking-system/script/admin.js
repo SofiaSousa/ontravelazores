@@ -40,7 +40,7 @@
         
     /**************************************************************************/
     
-    var menu=$('#menu-posts-chbs_booking .wp-menu-name');
+    var menu=jQuery('#menu-posts-chbs_booking .wp-menu-name');
     if(menu.text()==='Chauffeur Booking System')
         menu.html('Chauffeur<br/>Booking System');
     
@@ -88,7 +88,7 @@ function toCreateAutocomplete(field)
     jQuery(field).each(function()
     {
         var $field=jQuery(this);
-        var id=(new Helper()).getRandomString(16);
+        var id=(new CHBSHelper()).getRandomString(16);
         
         $field.attr('id',id).on('keypress',function(e)
         {
@@ -127,27 +127,27 @@ function toPreventCheckbox(object)
 {
     object.on('change',function()
     {
-        var checkbox=$(this).parents('li:first').find('input');
+        var checkbox=jQuery(this).parents('li:first').find('input');
 
-        var value=parseInt($(this).val());
+        var value=parseInt(jQuery(this).val());
         if(value===-1)
         {
-            checkbox.removeAttr('checked');
-            checkbox.first().attr('checked','checked');
+            checkbox.prop('checked',false);
+            checkbox.first().prop('checked',true);
         }
-        else checkbox.first().removeAttr('checked');
+        else checkbox.first().prop('checked',false);
 
         var checked=[];
         checkbox.each(function()
         {
-            if($(this).is(':checked'))
-                checked.push(parseInt($(this).val(),10));
+            if(jQuery(this).is(':checked'))
+                checked.push(parseInt(jQuery(this).val(),10));
         });
 
         if(checked.length===0)
         {
-            checkbox.removeAttr('checked');
-            checkbox.first().attr('checked','checked');
+            checkbox.prop('checked',false);
+            checkbox.first().prop('checked',true);
         }
 
         checkbox.button('refresh');

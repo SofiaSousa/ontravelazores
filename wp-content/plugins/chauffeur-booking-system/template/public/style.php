@@ -21,7 +21,7 @@
                 border-top-color:#<?php echo $this->data['color'][1]; ?>;
             }
             
-            .ui-datepicker td a.ui-state-hover,
+            <?php echo $this->data['main_css_class']; ?>.ui-datepicker td a.ui-state-hover,
             <?php echo $this->data['main_css_class']; ?> .chbs-form-checkbox,
             <?php echo $this->data['main_css_class']; ?> .chbs-location-add:hover,
             <?php echo $this->data['main_css_class']; ?> .chbs-form-field .chbs-quantity-section .chbs-quantity-section-button:hover,
@@ -37,6 +37,11 @@
                 border-color:#<?php echo $this->data['color'][1]; ?>;
             }
             
+            rs-module-wrap <?php echo $this->data['main_css_class']; ?> .chbs-tab.ui-tabs .ui-tabs-nav>li.ui-tabs-active>a
+            {
+                border-color:#<?php echo $this->data['color'][1]; ?> !important;
+            }
+            
             <?php echo $this->data['main_css_class']; ?> .chbs-tab.ui-tabs .ui-tabs-nav>li.ui-tabs-active+li>a
             {
                 border-left-color:#<?php echo $this->data['color'][1]; ?>;
@@ -47,12 +52,13 @@
                 border-right-color:#<?php echo $this->data['color'][1]; ?>;
             }
             
-            .ui-datepicker td a.ui-state-hover,
-            .ui-menu .ui-menu-item.ui-state-focus,   
-            .ui-timepicker-wrapper>.ui-timepicker-list>li:hover,
-            .ui-timepicker-wrapper>.ui-timepicker-list>li.ui-timepicker-selected,
+            <?php echo $this->data['main_css_class']; ?>.ui-datepicker td a.ui-state-hover,
+            <?php echo $this->data['main_css_class']; ?> .ui-menu .ui-menu-item .ui-menu-item-wrapper.ui-state-active,   
+            <?php echo $this->data['main_css_class']; ?> .ui-timepicker-wrapper>.ui-timepicker-list>li:hover,
+            <?php echo $this->data['main_css_class']; ?> .ui-timepicker-wrapper>.ui-timepicker-list>li.ui-timepicker-selected,
             <?php echo $this->data['main_css_class']; ?> .chbs-location-add,
             <?php echo $this->data['main_css_class']; ?> .chbs-location-remove,
+            <?php echo $this->data['main_css_class']; ?> .iti__country.iti__highlight,
             <?php echo $this->data['main_css_class']; ?> .chbs-form-field .chbs-quantity-section .chbs-quantity-section-button,
             <?php echo $this->data['main_css_class']; ?> .chbs-vehicle .chbs-vehicle-content>.chbs-vehicle-content-price>span>span:first-child,
             <?php echo $this->data['main_css_class']; ?> .chbs-form-checkbox.chbs-state-selected>.chbs-meta-icon-tick,
@@ -104,23 +110,21 @@
 				color:#<?php echo $this->data['color'][3]; ?>;
 			}
             
-            .ui-menu,
-            .ui-datepicker,
-            .ui-timepicker-wrapper,
-            .ui-timepicker-wrapper>.ui-timepicker-list>li:hover,
-            .ui-timepicker-wrapper>.ui-timepicker-list>li.ui-timepicker-selected,
+            <?php echo $this->data['main_css_class']; ?> .ui-menu,
+            <?php echo $this->data['main_css_class']; ?>.ui-datepicker,
+            <?php echo $this->data['main_css_class']; ?> .ui-timepicker-wrapper,
+            <?php echo $this->data['main_css_class']; ?> .ui-timepicker-wrapper>.ui-timepicker-list>li:hover,
+            <?php echo $this->data['main_css_class']; ?> .ui-timepicker-wrapper>.ui-timepicker-list>li.ui-timepicker-selected,
+            <?php echo $this->data['main_css_class']; ?> .chbs-form-field,
             <?php echo $this->data['main_css_class']; ?> .chbs-form-checkbox,
-            <?php echo $this->data['main_css_class']; ?> .chbs-summary-price-element,
-            <?php echo $this->data['main_css_class']; ?> .chbs-button.chbs-button-style-1:hover,
+			<?php echo $this->data['main_css_class']; ?> .chbs-button.chbs-button-style-1:hover,
             <?php echo $this->data['main_css_class']; ?> .chbs-button.chbs-button-style-2:hover,
-            <?php echo $this->data['main_css_class']; ?> .chbs-button.chbs-button-selected.chbs-button-style-2
+			<?php echo $this->data['main_css_class']; ?> .chbs-button.chbs-button-style-3:hover,
+            <?php echo $this->data['main_css_class']; ?> .chbs-button.chbs-button-selected.chbs-button-style-2,
+            <?php echo $this->data['main_css_class']; ?> .chbs-tab.ui-tabs .ui-tabs-nav>li>a,
+            <?php echo $this->data['main_css_class']; ?>.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:last-child
             {
                 background-color:#<?php echo $this->data['color'][3]; ?>;
-            }
-            
-            <?php echo $this->data['main_css_class']; ?> .chbs-main-navigation-default>ul>li>a>span:first-child
-            {
-                outline:solid 10px #<?php echo $this->data['color'][3]; ?>;
             }
 <?php
 		}          
@@ -128,15 +132,16 @@
 		if(isset($this->data['color'][4]))
 		{
 ?>  
-            .ui-datepicker th,
-            .ui-datepicker .ui-datepicker-prev,
-            .ui-datepicker .ui-datepicker-next,
+            <?php echo $this->data['main_css_class']; ?>.ui-datepicker th,
+            <?php echo $this->data['main_css_class']; ?>.ui-datepicker .ui-datepicker-prev,
+            <?php echo $this->data['main_css_class']; ?>.ui-datepicker .ui-datepicker-next,
             <?php echo $this->data['main_css_class']; ?> .chbs-tooltip,
             <?php echo $this->data['main_css_class']; ?> .chbs-form-label-group,
             <?php echo $this->data['main_css_class']; ?> .chbs-form-field>label,
-            <?php echo $this->data['main_css_class']; ?> .chbs-form-field>label>a,
-            <?php echo $this->data['main_css_class']; ?> .chbs-form-field>label>a:hover,
+            <?php echo $this->data['main_css_class']; ?> .chbs-form-field>label a,
+            <?php echo $this->data['main_css_class']; ?> .chbs-form-field>label a:hover,
             <?php echo $this->data['main_css_class']; ?> .chbs-button.chbs-button-style-2,
+			<?php echo $this->data['main_css_class']; ?> .chbs-button.chbs-button-style-3,
             <?php echo $this->data['main_css_class']; ?> .chbs-tab.ui-tabs .ui-tabs-nav>li>a,
             <?php echo $this->data['main_css_class']; ?> .chbs-ride-info>div>span:first-child+span,
             <?php echo $this->data['main_css_class']; ?> .chbs-main-navigation-default>ul>li>a>span,
@@ -156,15 +161,15 @@
 		if(isset($this->data['color'][5]))
 		{
 ?>  
-            .ui-datepicker,
-            .ui-datepicker thead,
-            .ui-datepicker .ui-datepicker-prev,
-            .ui-datepicker .ui-datepicker-next,
-            .ui-autocomplete,
-            .ui-selectmenu-menu,
-            .ui-menu .ui-menu-item,
-            .ui-timepicker-wrapper,
-            .ui-timepicker-wrapper>.ui-timepicker-list>li,
+            <?php echo $this->data['main_css_class']; ?>.ui-datepicker,
+            <?php echo $this->data['main_css_class']; ?>.ui-datepicker thead,
+            <?php echo $this->data['main_css_class']; ?>.ui-datepicker .ui-datepicker-prev,
+            <?php echo $this->data['main_css_class']; ?>.ui-datepicker .ui-datepicker-next,
+            <?php echo $this->data['main_css_class']; ?> .ui-autocomplete,
+            <?php echo $this->data['main_css_class']; ?> .ui-selectmenu-menu,
+            <?php echo $this->data['main_css_class']; ?> .ui-menu .ui-menu-item,
+            <?php echo $this->data['main_css_class']; ?> .ui-timepicker-wrapper,
+            <?php echo $this->data['main_css_class']; ?> .ui-timepicker-wrapper>.ui-timepicker-list>li,
             <?php echo $this->data['main_css_class']; ?> .chbs-booking-extra-category-list>div,
             <?php echo $this->data['main_css_class']; ?> .chbs-form-field,
             <?php echo $this->data['main_css_class']; ?> .chbs-payment>li>a,
@@ -174,6 +179,7 @@
             <?php echo $this->data['main_css_class']; ?> .chbs-location-remove,
             <?php echo $this->data['main_css_class']; ?> .chbs-form-field .chbs-quantity-section .chbs-quantity-section-button,
             <?php echo $this->data['main_css_class']; ?> .chbs-button.chbs-button-style-2,
+			<?php echo $this->data['main_css_class']; ?> .chbs-button.chbs-button-style-3,
             <?php echo $this->data['main_css_class']; ?> .chbs-tab.ui-tabs .ui-tabs-panel,
             <?php echo $this->data['main_css_class']; ?> .chbs-tab.ui-tabs .ui-tabs-nav>li>a,
             body.rtl <?php echo $this->data['main_css_class']; ?> .chbs-tab.ui-tabs .ui-tabs-nav>li>a,
@@ -184,18 +190,29 @@
             <?php echo $this->data['main_css_class']; ?> .chbs-booking-complete .chbs-meta-icon-tick>div:first-child,
             <?php echo $this->data['main_css_class']; ?>.chbs-width-300 .chbs-tab.ui-tabs .ui-tabs-nav>li.ui-tabs-active+li>a,
             body.rtl <?php echo $this->data['main_css_class']; ?>.chbs-width-300 .chbs-tab.ui-tabs .ui-tabs-nav>li.ui-tabs-active+li>a,
+			<?php echo $this->data['main_css_class']; ?> .chbs-vehicle .chbs-vehicle-content>.chbs-vehicle-content-price-bid>div+div>input,
             <?php echo $this->data['main_css_class']; ?> .chbs-vehicle .chbs-vehicle-content>.chbs-vehicle-content-meta>div>div.chbs-vehicle-content-meta-button a:hover>span.chbs-circle,
-            <?php echo $this->data['main_css_class']; ?> .chbs-vehicle .chbs-vehicle-content>.chbs-vehicle-content-meta>div>div.chbs-vehicle-content-meta-button a.chbs-state-selected>span.chbs-circle
+            <?php echo $this->data['main_css_class']; ?> .chbs-vehicle .chbs-vehicle-content>.chbs-vehicle-content-meta>div>div.chbs-vehicle-content-meta-button a.chbs-state-selected>span.chbs-circle,
+            <?php echo $this->data['main_css_class']; ?>.chbs-width-480.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel .chbs-form-field,
+            <?php echo $this->data['main_css_class']; ?>.chbs-width-300.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel .chbs-form-field,
+			<?php echo $this->data['main_css_class']; ?>.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel,
+			<?php echo $this->data['main_css_class']; ?>.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel
 			{
 				border-color:#<?php echo $this->data['color'][5]; ?>;
 			}
             
-            .ui-datepicker .ui-datepicker-prev.ui-state-hover,
-            .ui-datepicker .ui-datepicker-next.ui-state-hover,       
+            rs-module <?php echo $this->data['main_css_class']; ?> .chbs-tab.ui-tabs .ui-tabs-nav>li>a
+            {
+                border-color:#<?php echo $this->data['color'][5]; ?> !important;
+            }
+            
+            <?php echo $this->data['main_css_class']; ?>.ui-datepicker .ui-datepicker-prev.ui-state-hover,
+            <?php echo $this->data['main_css_class']; ?>.ui-datepicker .ui-datepicker-next.ui-state-hover,       
             <?php echo $this->data['main_css_class']; ?> .chbs-pagination a.chbs-pagination-prev:hover,
             <?php echo $this->data['main_css_class']; ?> .chbs-pagination a.chbs-pagination-next:hover,
             <?php echo $this->data['main_css_class']; ?> .chbs-form-label-group,
             <?php echo $this->data['main_css_class']; ?> .chbs-button.chbs-button-style-2,
+			<?php echo $this->data['main_css_class']; ?> .chbs-button.chbs-button-style-3,
             <?php echo $this->data['main_css_class']; ?> .chbs-main-navigation-default>ul>li>a>span:first-child,
             <?php echo $this->data['main_css_class']; ?> .chbs-main-navigation-default>ul>li>div,
             <?php echo $this->data['main_css_class']; ?> .chbs-vehicle .chbs-vehicle-content>.chbs-vehicle-content-meta>div>div.chbs-vehicle-content-meta-button a:hover>span.chbs-circle,
@@ -209,10 +226,10 @@
 		if(isset($this->data['color'][6]))
 		{
 ?>  
-            .ui-datepicker td a,
-            .ui-datepicker .ui-datepicker-title,
-            .ui-datepicker .ui-datepicker-prev.ui-state-hover,
-            .ui-datepicker .ui-datepicker-next.ui-state-hover, 
+            <?php echo $this->data['main_css_class']; ?>.ui-datepicker td a,
+            <?php echo $this->data['main_css_class']; ?>.ui-datepicker .ui-datepicker-title,
+            <?php echo $this->data['main_css_class']; ?>.ui-datepicker .ui-datepicker-prev.ui-state-hover,
+            <?php echo $this->data['main_css_class']; ?>.ui-datepicker .ui-datepicker-next.ui-state-hover, 
             <?php echo $this->data['main_css_class']; ?> .chbs-agreement,
             <?php echo $this->data['main_css_class']; ?> .chbs-agreement a,
             <?php echo $this->data['main_css_class']; ?> .chbs-agreement a:hover,
@@ -233,8 +250,9 @@
             <?php echo $this->data['main_css_class']; ?> .chbs-ride-info>div>span:first-child+span+span,
             <?php echo $this->data['main_css_class']; ?> .chbs-booking-extra-list>ul>li>div.chbs-column-1>.booking-form-extra-name,
             <?php echo $this->data['main_css_class']; ?> .chbs-main-navigation-default>ul>li.chbs-state-selected>a>span:first-child+span,
-            <?php echo $this->data['main_css_class']; ?> .chbs-vehicle .chbs-vehicle-content>div.chbs-vehicle-content-header>span,
             <?php echo $this->data['main_css_class']; ?> .chbs-booking-extra-header>span:first-child+span,
+			<?php echo $this->data['main_css_class']; ?> .chbs-vehicle .chbs-vehicle-content>div.chbs-vehicle-content-header>span,
+			<?php echo $this->data['main_css_class']; ?> .chbs-vehicle .chbs-vehicle-content>.chbs-vehicle-content-price-bid>div+div>input,
             <?php echo $this->data['main_css_class']; ?> .chbs-vehicle .chbs-vehicle-content>.chbs-vehicle-content-meta>div>div.chbs-vehicle-content-meta-button a:hover,
             <?php echo $this->data['main_css_class']; ?> .chbs-vehicle .chbs-vehicle-content .chbs-vehicle-content-description>div>.chbs-vehicle-content-description-attribute>ul>li>div:first-child+div
 			{
@@ -251,7 +269,7 @@
         if(isset($this->data['color'][7]))
 		{
 ?>  
-            .ui-datepicker td.ui-datepicker-unselectable,
+            <?php echo $this->data['main_css_class']; ?>.ui-datepicker td.ui-datepicker-unselectable,
             <?php echo $this->data['main_css_class']; ?> .chbs-vehicle .chbs-vehicle-content>.chbs-vehicle-content-meta .chbs-meta-icon-bag,
             <?php echo $this->data['main_css_class']; ?> .chbs-vehicle .chbs-vehicle-content>.chbs-vehicle-content-meta .chbs-meta-icon-people
 			{
@@ -282,8 +300,8 @@
         if(isset($this->data['color'][9]))
 		{
 ?>  
-            .ui-menu .ui-menu-item,
-            .ui-timepicker-wrapper>.ui-timepicker-list>li,
+            <?php echo $this->data['main_css_class']; ?> .ui-menu .ui-menu-item,
+            <?php echo $this->data['main_css_class']; ?> .ui-timepicker-wrapper>.ui-timepicker-list>li,
             <?php echo $this->data['main_css_class']; ?> .chbs-booking-complete p,
             <?php echo $this->data['main_css_class']; ?> .chbs-button.chbs-button-style-1:hover
 			{

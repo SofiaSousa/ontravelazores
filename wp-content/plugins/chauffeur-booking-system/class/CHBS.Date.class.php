@@ -129,6 +129,7 @@ class CHBSDate
     {
         $Validation=new CHBSValidation();
         if($Validation->isEmpty($time)) return('');
+		if($Validation->isTime($time)) return($time);
         
         return(date_format(date_create_from_format(CHBSOption::getOption('time_format'),$time),'H:i'));
     }
@@ -164,6 +165,75 @@ class CHBSDate
     {
         return(strtotime($time,self::getNow()));
     }
+	
+	/**************************************************************************/
+	
+	static function setExcludeTime($time)
+	{
+		$excludeTime=array();
+
+		for($i=1;$i<=7;$i++)
+		{
+			if(is_array($time[$i]['hour']))
+			{
+				$excludeTime[$i][]=array(strtotime('01-01-1970 0:00'),null);
+				
+				foreach($time[$i]['hour'] as $index=>$value)
+				{
+					$excludeTime[$i][]=array(strtotime('01-01-1970 '.$value),null);
+				}
+				
+				$excludeTime[$i][]=array(strtotime('02-01-1970 00:00'),null);
+
+				sort($excludeTime[$i]);
+			}
+		}
+
+		for($i=1;$i<=7;$i++)
+		{
+			if(!isset($excludeTime[$i])) continue;
+			
+			foreach($excludeTime[$i] as $index=>$value)
+			{
+				if($index===0)
+				{
+					$st=$excludeTime[1][$index][0];
+					$sp=$excludeTime[$i][$index+1][0]-60;
+					
+					$excludeTime[$i][$index]=array($st,$sp);
+				}
+				elseif($index<count($excludeTime[$i])-1)
+				{
+					$st=$excludeTime[$i][$index][0]+60;
+					$sp=$excludeTime[$i][$index+1][0]-60;	
+					
+					$excludeTime[$i][$index]=array($st,$sp);
+				}
+				else
+				{
+					$st=-1;
+					$sp=-1;
+					
+					unset($excludeTime[$i][$index]);
+				}
+			}
+			
+			foreach($excludeTime[$i] as $index=>$value)
+			{
+				if($value[0]>=$value[1])
+				{
+					unset($excludeTime[$i][$index]);
+					continue;
+				}
+				
+				$excludeTime[$i][$index]=array(date('g:ia',$value[0]),date('g:ia',$value[1]+60));
+			}
+			
+			$excludeTime[$i]=array_values($excludeTime[$i]);
+		}
+		
+		return($excludeTime);
+	}
     
 	/**************************************************************************/
 }

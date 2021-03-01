@@ -68,9 +68,9 @@ class CRBSEmail
 	{
 		$style=array();
 		
-		$style['separator'][1]='style="padding:0px;height:45px"';
-		$style['separator'][2]='style="padding:0px;height:30px"';
-		$style['separator'][3]='style="padding:0px;height:15px"';
+		$style['separator'][1]='style="padding:0px;height:45px" height="45px"';
+		$style['separator'][2]='style="padding:0px;height:30px" height="30px"';
+		$style['separator'][3]='style="padding:0px;height:15px" height="15px"';
 
 		$style['base']='style="font-family:Arial;font-size:15px;color:#777777;line-height:150%;"';
 		

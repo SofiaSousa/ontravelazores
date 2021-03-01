@@ -9,6 +9,7 @@
                 </ul>
                 <div id="meta-box-booking-extra-1">
                     <ul class="to-form-field-list">
+						<?php echo CRBSHelper::createPostIdField(__('Booking extra ID','car-rental-booking-system')); ?>
                         <li>
                             <h5><?php esc_html_e('Locations','car-rental-booking-system'); ?></h5>
                             <span class="to-legend">

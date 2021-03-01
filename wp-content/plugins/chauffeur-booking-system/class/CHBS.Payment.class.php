@@ -14,7 +14,8 @@ class CHBSPayment
             '1'                                                                 =>  array(__('Cash','chauffeur-booking-system'),'cash'),
             '2'                                                                 =>  array(__('Stripe','chauffeur-booking-system'),'stripe'),
             '3'                                                                 =>  array(__('PayPal','chauffeur-booking-system'),'paypal'),
-            '4'                                                                 =>  array(__('Wire transfer','chauffeur-booking-system'),'wire_transfer')
+            '4'                                                                 =>  array(__('Wire transfer','chauffeur-booking-system'),'wire_transfer'),
+            '5'                                                                 =>  array(__('Credit card on pickup','chauffeur-booking-system'),'credit_card_pickup'),
         );
     }
     

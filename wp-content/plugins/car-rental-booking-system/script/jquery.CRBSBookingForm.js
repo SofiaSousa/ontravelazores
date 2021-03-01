@@ -20,6 +20,8 @@
 		var $googleMapHeightInterval;
         
         var $startLocation;
+		
+		var $sidebar;
 
         /**********************************************************************/
         
@@ -114,7 +116,7 @@
                 $self.goToStep(-1);
             });
             
-             /***/
+			/***/
             
             $self.e('form[name="crbs-form"]').on('click','.crbs-form-field',function(e)
             {
@@ -401,23 +403,23 @@
                     
                     object.qtip(
                     {
-                        show            :	
+                        show													:	
                         { 
-                            target      :	$(this) 
+                            target												:	$(this) 
                         },
-                        style           :	
+                        style													:	
                         { 
-                            classes     :	(response.error===1 ? 'crbs-qtip crbs-qtip-error' : 'crbs-qtip crbs-qtip-success')
+                            classes												:	(response.error===1 ? 'crbs-qtip crbs-qtip-error' : 'crbs-qtip crbs-qtip-success')
                         },
-                        content         : 	
+                        content													: 	
                         { 
-                            text        :	response.message 
+                            text												:	response.message 
                         },
-                        position        : 	
+                        position												: 	
                         { 
-                            my          :	($option.is_rtl ? 'bottom right' : 'bottom left'),
-                            at          :	($option.is_rtl ? 'top right' : 'top left'),
-                            container   :   object.parent()
+                            my													:	($option.is_rtl ? 'bottom right' : 'bottom left'),
+                            at													:	($option.is_rtl ? 'top right' : 'top left'),
+                            container											:   object.parent()
                         }
                     }).qtip('show');	
                     
@@ -429,33 +431,27 @@
             $('.crbs-datepicker').datepicker(
             {
                 autoSize                                                        :   true,
-                dateFormat                                                      :   $option.date_format_js,
-                beforeShow                                                      :   function(date)
+                dateFormat                                                      :   $option.date_format_js,				
+                beforeShow                                                      :   function(date,instance)
                 {
-                    var helper=new CRBSHelper();
-                    var locationId=$self.getLocationIdByField($(this));
-           
-                    var minDate=$option.location_booking_period[locationId].from;
-                    var maxDate=$option.location_booking_period[locationId].to;
-                    
-                    if(!helper.isEmpty(maxDate))
-                    {
-                        if(helper.isEmpty(minDate)) minDate=0;
-                    }
-                    
-                    $(this).datepicker('option','minDate',null);
-                    $(this).datepicker('option','maxDate',null);
-                    
-                    if(!helper.isEmpty(minDate))
-                        $(this).datepicker('option','minDate',parseInt(minDate));
-                    else $(this).datepicker('option','minDate',$option.current_date);
-						
-                    if($(date).attr('name')==='crbs_pickup_date')
-                    {
-                        if(!helper.isEmpty(maxDate))
-                            $(this).datepicker('option','maxDate',parseInt(minDate)+parseInt(maxDate)); 
-                    }
+					var helper=new CRBSHelper();
+					var value=helper.getValueFromClass($(instance.dpDiv),'crbs-booking-form-id-');
 					
+					if(value!==false) $(instance.dpDiv).removeClass('crbs-booking-form-id-'+value);
+					
+					$(instance.dpDiv).addClass('crbs-booking-form-id-'+$option.booking_form_id);
+					
+                    var dateField=$(this);
+                                        
+                    var locationId=$self.getLocationIdByField(dateField);
+					
+					$(this).datepicker('option','minDate',$option.location_pickup_period_format[locationId].min); 
+
+					if($(date).attr('name')==='crbs_pickup_date')
+					{
+						$(this).datepicker('option','maxDate',$option.location_pickup_period_format[locationId].max);
+					}
+
 					if($(date).attr('name')==='crbs_return_date')
 					{
 						try
@@ -484,21 +480,17 @@
                     
                     var locationId=$self.getLocationIdByField($(this));
                     
-                    var date=$.datepicker.formatDate('dd-mm-yy',date);
-                    
                     for(var i in $option.location_date_exclude[locationId])
                     {
-                        var r=helper.compareDate([date,$option.location_date_exclude[locationId][i].start,$option.location_date_exclude[locationId][i].stop]);
+                        var r=helper.compareDate([$.datepicker.formatDate('dd-mm-yy',date),$option.location_date_exclude[locationId][i].start,$option.location_date_exclude[locationId][i].stop]);
                         if(r) return([false,'','']);
                     }
                     
                     /***/
-                    
-                    var temp=date.split('-');
-                    var date=new Date(temp[2],temp[1]-1,temp[0]);
-                    
-                    var dayWeek=parseInt(date.getUTCDay(),10)+1;
-               
+					
+					var dayWeek=parseInt(date.getDay(),10);
+					if(dayWeek===0) dayWeek=7;
+			   
                     var test=true;
                
                     if(dateField.attr('name')==='crbs_return_date')
@@ -519,72 +511,16 @@
                     
                     return([true,'','']);
                 },
-                onSelect                                                        :   function(date)
+                onSelect                                                        :   function(date,object)
                 {
-                    var dateField=$(this);
-                                        
-                    var timeField=dateField.parent('div').parent('div').find('.crbs-timepicker');
-
-                    var locationId=$self.getLocationIdByField(dateField);
-
-                    timeField.timepicker(
-                    { 
-                        appendTo                                                :   $this,
-                        showOn                                                  :   [],
-                        showOnFocus                                             :   false,
-                        timeFormat                                              :   $option.time_format,
-                        step                                                    :   $option.timepicker_step,
-                        disableTouchKeyboard                                    :   true
-                    });
-
-                    var dayWeek=parseInt(dateField.datepicker('getDate').getUTCDay(),10)+1;
-
-                    if(new String(typeof($option.location_business_hour[locationId][dayWeek]))!=='undefined')
-                    {
-                        timeField.timepicker('option','minTime',$option.location_business_hour[locationId][dayWeek].start);
-                        timeField.timepicker('option','maxTime',$option.location_business_hour[locationId][dayWeek].stop);                        
-                    }
-                    else
-                    {
-                        timeField.timepicker('option','minTime','');
-                        timeField.timepicker('option','maxTime','');                            
-                    }
+					var dateField=$(this);
+					var dateSelected=[object.selectedDay,object.selectedMonth+1,object.selectedYear];
 					
-                    if(dateField.attr('name')==='crbs_pickup_date')
-                    {
-                        if(parseInt($option.location_after_business_hour_pickup_enable[locationId],10)===1)
-                        {
-		                    var temp=$option.current_date.split('-');
-							var date=new Date(temp[2],temp[1]-1,temp[0]);
-                    
-							if(dayWeek===parseInt(date.getUTCDay(),10)+1)
-							{
-								
-							}
-							else
-							{
-								timeField.timepicker('option','minTime','00:00');
-							}
-							
-                            timeField.timepicker('option','maxTime','23:59');                            
-                        }
-                    }
-                    
-                    if(dateField.attr('name')==='crbs_return_date')
-                    {
-                        if(parseInt($option.location_after_business_hour_return_enable[locationId],10)===1)
-                        {
-                            timeField.timepicker('option','minTime','00:00');
-                            timeField.timepicker('option','maxTime','23:59');                            
-                        }
-                    }
-                    
-                    timeField.val('').timepicker('show');
-                    timeField.blur();
-
-                    $self.setTimepicker(timeField);
+					$self.initTimeField(dateField,dateSelected,true);
                 }
             });
+			
+			$('.ui-datepicker').addClass('notranslate');
             
             $this.on('focusin','.crbs-timepicker',function()
 			{
@@ -699,10 +635,40 @@
                 if(url.indexOf('?')===-1) url+='?';
                 if(url.indexOf('&')!==-1) url+='&';
                 
-                url+=decodeURIComponent($.param(data));
+                url+=decodeURI($.param(data));
                 
                 window.location=url;
             });
+			
+			/***/
+			
+			if(parseInt($option.location_customer_only_enable,10)===1)
+			{
+				var pickupField=$self.e('[name="crbs_pickup_location_id"]');
+				var returnField=$self.e('[name="crbs_return_location_id"]');
+				
+				pickupField.children('option').each(function()
+				{
+					if($(this).val()<0)
+					{
+						$(this).attr('selected',true);
+						$(this).parents('.crbs-form-field').addClass('crbs-hidden');
+					}
+				});
+				
+				returnField.children('option').each(function()
+				{
+					if($(this).val()<-1)
+					{
+						$(this).attr('selected',true);
+						$(this).parents('.crbs-form-field').addClass('crbs-hidden');
+					}
+				});				
+				
+				$self.showHideCustomerLocation();
+			}
+			
+			$self.showHideCustomerLocation();
             
             /***/
             
@@ -713,6 +679,8 @@
             
             if(parseInt(helper.urlParam('widget_submit'))===1)    
             {
+				
+				
                 $self.goToStep(1,function()
                 {
                     $self.googleMapCreate();
@@ -728,9 +696,141 @@
                 $this.removeClass('crbs-hidden'); 
 				$self.googleMapStartCustomizeHeight();
             }
-            
+			
             /***/
         };
+		
+		/**********************************************************************/
+		
+		this.initTimeField=function(dateField,dateSelected,show)
+		{
+			var helper=new CRBSHelper();
+
+			var timeField=dateField.parent('div').parent('div').find('.crbs-timepicker');
+
+			var locationId=$self.getLocationIdByField(dateField);
+
+			timeField.timepicker(
+			{ 
+				appendTo                                                :   $this,
+				showOn                                                  :   [],
+				showOnFocus                                             :   false,
+				timeFormat                                              :   $option.time_format,
+				step                                                    :   $option.timepicker_step,
+				disableTouchKeyboard                                    :   true,
+				scrollDefault											:	'now'
+			});
+
+			/***/
+
+			for(var i in dateSelected)
+			{
+				if(new String(dateSelected[i]).length===1) dateSelected[i]='0'+dateSelected[i];
+			}
+
+			dateSelected=dateSelected[0]+'-'+dateSelected[1]+'-'+dateSelected[2];
+
+			/***/
+
+			var minTime='00:00';
+			var maxTime='23:59';
+			
+			var dayWeek=parseInt(dateField.datepicker('getDate').getDay(),10);
+			if(dayWeek===0) dayWeek=7;			
+			
+			/***/
+
+			if(new String(typeof($option.location_business_hour[locationId][dayWeek]))!=='undefined')
+			{
+				minTime=$option.location_business_hour[locationId][dayWeek].start;
+				maxTime=$option.location_business_hour[locationId][dayWeek].stop;
+			}
+
+			/***/
+
+			if(dateField.attr('name')==='crbs_pickup_date')
+			{
+				var t=$option.location_pickup_period[locationId].min.split(' ');
+				if(dateSelected===t[0])
+				{
+					if(Date.parse('01/01/1970 '+t[1])>Date.parse('01/01/1970 '+minTime))
+						minTime=t[1];
+				}
+
+				if(!helper.isEmpty($option.location_pickup_period[locationId].max))
+				{
+					var t=$option.location_pickup_period[locationId].max.split(' ');
+
+					if(dateSelected===t[0])
+					{
+						if(Date.parse('01/01/1970 '+t[1])<Date.parse('01/01/1970 '+maxTime))
+							maxTime=t[1];
+					}					
+				}
+
+				if(parseInt($option.location_after_business_hour_pickup_enable[locationId],10)===1)
+				{
+					var temp=$option.current_date.split('-');
+					var date=new Date(temp[2],temp[1]-1,temp[0]);
+
+					if(dayWeek===parseInt(date.getUTCDay(),10)+1)
+					{
+
+					}
+					else
+					{
+						minTime='00:00';
+					}
+
+					maxTime='23:59';
+				}
+			}
+
+			/***/
+
+			if(dateField.attr('name')==='crbs_return_date')
+			{
+				if(parseInt($option.location_after_business_hour_return_enable[locationId],10)===1)
+				{
+					minTime='00:00';
+					maxTime='23:59';
+				}
+			}
+
+			/***/
+			
+			timeField.timepicker('option','minTime',minTime);
+			timeField.timepicker('option','maxTime',maxTime);  
+
+			/***/
+
+			if(!helper.isEmpty($option.location_business_hour[locationId][dayWeek].break))
+			{
+				var disableTimeRanges=[];
+
+				var breakHour=$option.location_business_hour[locationId][dayWeek].break;
+
+				for(var i in breakHour)
+					disableTimeRanges.push([breakHour[i].start,breakHour[i].stop]);
+
+				timeField.timepicker('option','disableTimeRanges',disableTimeRanges);
+			}
+
+			/***/
+
+			if(typeof($option.location_business_hour[locationId][dayWeek].default_timepicker)!='undefined')
+			{
+				timeField.timepicker('option','scrollDefault',$option.location_business_hour[locationId][dayWeek].default_timepicker);
+			}
+
+			if(show)
+			{
+				timeField.timepicker('show');
+				timeField.blur();
+			}
+
+			$self.setTimepicker(timeField);	
+		};
 		
 		/**********************************************************************/
 		
@@ -766,47 +866,52 @@
         
         this.createFileField=function()
         {
-            $self.e('input[type="file"][name="crbs_driver_license_file"]').fileupload(
-            {
-                url                                                             :   $option.ajax_url,
-                dataType                                                        :   'json',
-                formData                                                        :   {'action':'crbs_driver_license_upload'},
-                done                                                            :   function(e,data) 
-                {
-					$self.setFileUploadField(true,data.result);
-                }
-            });  
-			
-			$self.e('input[type="file"][name="crbs_driver_license_file"]').parent('.crbs-file-upload').next('.crbs-file-remove').children('span:last-child').on('click',function(e)
+			$self.e('input[type="file"]').each(function()
 			{
-				e.preventDefault();
+				var field=$(this);
 				
-				$self.setFileUploadField(false,[]);
+				$(this).fileupload(
+				{
+					url															:   $option.ajax_url,
+					dataType													:   'json',
+					formData													:   {'action':'crbs_file_upload'},
+					done														:   function(e,data) 
+					{
+						$self.setFileUploadField(field,true,data.result);
+					}
+				});  
+
+				$(this).parent('.crbs-file-upload').next('.crbs-file-remove').children('span:last-child').on('click',function(e)
+				{
+					e.preventDefault();
+					$self.setFileUploadField(field,false,[]);
+				});
 			});
         };
 		
 		/**********************************************************************/
 		
-		this.setFileUploadField=function(upload,data)
+		this.setFileUploadField=function(object,upload,data)
 		{
-			var fileUploadField=$self.e('input[name="crbs_driver_license_file"]');
+			var name=object.attr('name');
+			var field=$self.e('input[name="'+name+'"]');
 			
 			if(upload)
 			{
-				fileUploadField.parent('.crbs-file-upload').addClass('crbs-hidden');
-				fileUploadField.parent('.crbs-file-upload').next('.crbs-file-remove').removeClass('crbs-hidden').find('span>span').html(data.name);
+				field.parent('.crbs-file-upload').addClass('crbs-hidden');
+				field.parent('.crbs-file-upload').next('.crbs-file-remove').removeClass('crbs-hidden').find('span>span').html(data.name);
 			}
 			else
 			{
-				fileUploadField.parent('.crbs-file-upload').removeClass('crbs-hidden');
-				fileUploadField.parent('.crbs-file-upload').next('.crbs-file-remove').addClass('crbs-hidden').find('span>span').html('');
-				
+				field.parent('.crbs-file-upload').removeClass('crbs-hidden');
+				field.parent('.crbs-file-upload').next('.crbs-file-remove').addClass('crbs-hidden').find('span>span').html('');
+
 				data={name:'',type:'',tmp_name:''};
 			}
-			
-            $self.e('input[name="crbs_driver_license_file_name"]').val(data.name);
-            $self.e('input[name="crbs_driver_license_file_type"]').val(data.type);
-            $self.e('input[name="crbs_driver_license_file_tmp_name"]').val(data.tmp_name);
+
+			$self.e('input[name="'+name+'_name"]').val(data.name);
+			$self.e('input[name="'+name+'_type"]').val(data.type);
+			$self.e('input[name="'+name+'_tmp_name"]').val(data.tmp_name);
 		};
         
         /**********************************************************************/
@@ -946,6 +1051,8 @@
         
         this.createDriverAgeField=function()
         {
+			var Helper=new CRBSHelper();
+			
             var field=$self.e('[name="crbs_driver_age"]');
             var pickupLocationId=$self.getLocationIdByField($self.e('[name="crbs_pickup_location_id"]'));
             
@@ -958,8 +1065,10 @@
                 var min=$option.location_driver_age[pickupLocationId].min;
                 var max=$option.location_driver_age[pickupLocationId].max;
                 
+				var value=parseInt(Helper.getGetValue('driver_age'),10);
+				
                 for(var i=min;i<=max;i++)
-                    field.append($('<option value="'+i+'">'+i+'</option>'));
+                    field.append($('<option value="'+i+'" '+(value===i ? ' selected="selected"' : '')+'>'+i+'</option>'));
             }
             
             if(!field.children('option').length)
@@ -1102,8 +1211,11 @@
                 $self.googleMapDuplicate(-1);
                 
                 if($self.googleMapExist())
+				{
+					$self.googleMapCreateMarker(-1);
                     google.maps.event.trigger($googleMap,'resize');
-                
+				}
+				
                 $('select[name="crbs_navigation_responsive"]').val(response.step);
                 $('select[name="crbs_navigation_responsive"]').selectmenu('refresh');
 				  
@@ -1112,7 +1224,41 @@
                 else $self.googleMapStopCustomizeHeight();
 				  
                 switch(parseInt(response.step,10))
-                {
+                {	
+					case 1:
+						
+						var helper=new CRBSHelper();
+					
+						/***/
+					
+						var pickupDateField=$self.e('[name="crbs_pickup_date"]');
+						var pickupDateValue=pickupDateField.datepicker('getDate');
+						
+						if(!helper.isEmpty(pickupDateValue))
+						{
+							var pickupDateArray=[pickupDateValue.getDate(),pickupDateValue.getMonth()+1,pickupDateValue.getFullYear()];
+							$self.e('[name="crbs_pickup_time"]').on('click',function()
+							{
+								$self.initTimeField(pickupDateField,pickupDateArray,true);
+							});
+						}
+						
+						/***/
+						
+						var returnDateField=$self.e('[name="crbs_return_date"]');
+						var returnDateValue=returnDateField.datepicker('getDate');
+						
+						if(!helper.isEmpty(returnDateValue))
+						{
+							var returnDateArray=[returnDateValue.getDate(),returnDateValue.getMonth()+1,returnDateValue.getFullYear()];
+							$self.e('[name="crbs_return_time"]').on('click',function()
+							{
+								$self.initTimeField(returnDateField,returnDateArray,true);
+							});
+						}
+					
+					break;
+					
                     case 2:
                         
                         if(typeof(response.vehicle)!=='undefined')
@@ -1182,7 +1328,7 @@
                             var selector,object;
                             
                             var sName=response.error.local[index].field.split('-');
-
+								
                             if(isNaN(sName[1])) selector='[name="'+sName[0]+'"]:eq(0)';
                             else selector='[name="'+sName[0]+'[]"]:eq('+sName[1]+')';                                    
                                     
@@ -1220,8 +1366,8 @@
                 {
                     $self.e('.crbs-main-navigation-default').addClass('crbs-hidden');
                     $self.e('.crbs-main-navigation-responsive').addClass('crbs-hidden');
-                    
-					if($.inArray(parseInt(response.payment_id,10),[1,2,3,4])>-1)
+					
+					if($.inArray(parseInt(response.payment_id,10),[1,2,3,4,5])>-1)
 					{
 						var helper=new CRBSHelper();
 						
@@ -1261,70 +1407,114 @@
 						
 						case 2:
 							
-							var section=$self.e('.crbs-booking-complete-payment-stripe');
-
-							section.css('display','block');
-
-							$self.e('form[name="crbs-form"]').after(response.form);
-
-							section.find('a').on('click',function(e)
-							{
-								e.preventDefault();
-								$self.e('form[name="crbs-form-stripe"] button').click();
-							});
+							$('body').css('display','none');
 							
-							/***/
-							
-							var pickupLocationId=$self.getLocationIdByField($self.e('[name="crbs_pickup_location_id"]'));
-							var value=parseInt($option.location_payment_stripe_window_open_default_enable[pickupLocationId],10);
-							
-							if(value===1)
-							{
-								var stripeClick=setInterval(function()
+							$.getScript('https://js.stripe.com/v3/',function() 
+							{								
+								var stripe=Stripe(response.stripe_publishable_key);
+								var section=$self.e('.crbs-booking-complete-payment-stripe');
+
+								$self.e('.crbs-booking-complete').on('click','.crbs-booking-complete-payment-stripe a',function(e)
 								{
-									$self.e('form[name="crbs-form-stripe"] button').click();
-									if($('iframe.stripe_checkout_app').css('display')==='block')
+									e.preventDefault();
+									
+									stripe.redirectToCheckout(
 									{
-										clearInterval(stripeClick);
-									}
-								},500);  
-							}
+										sessionId								:	response.stripe_session_id
+									}).then(function(result) 
+									{
+					
+									});
+								});
+								
+								var counter=parseInt(response.stripe_redirect_duration,10);
+								
+								if(counter<=0)
+								{
+									section.find('a').trigger('click');
+								}
+								else
+								{
+									$('body').css('display','block');
+									
+									section.css('display','block');
+								
+									var interval=setInterval(function()
+									{
+										counter--;
+										section.find('a>span').html(counter);
+
+										if(counter===0)
+										{
+											clearInterval(interval);
+											section.find('a').trigger('click');
+										}
+
+									},1000);  
+								}
+							});
 							
 						break;
 						
 						case 3:
 							
-							var counter=5;
-
-							$self.e('.crbs-booking-complete-payment-paypal').css('display','block');
-
-							var interval=setInterval(function()
-							{
-								counter--;
-								$self.e('.crbs-booking-complete-payment-paypal>span').html(counter);
-
-								var pickupLocationId=parseInt($self.e('[name="crbs_pickup_location_id"]').val());
-
-								if(counter===0)
-								{
-									clearInterval(interval);
-
-									var form=$self.e('form[name="crbs-form-paypal"][data-location-id="'+pickupLocationId+'"]');
-
-									for(var i in response.form)
-										form.find('input[name="'+i+'"]').val(response.form[i]);
-
-									form.submit();
-							  }
-
-							},1000);  
+							$('body').css('display','none');
 							
+							var section=$self.e('.crbs-booking-complete-payment-paypal');
+							
+							$self.e('.crbs-booking-complete').on('click','.crbs-booking-complete-payment-paypal a',function(e)
+							{
+								e.preventDefault();
+								
+								var form=$self.e('form[name="crbs-form-paypal"][data-location-id="'+pickupLocationId+'"]');
+
+								for(var i in response.form)
+									form.find('input[name="'+i+'"]').val(response.form[i]);
+
+								form.submit();
+							});
+
+							var pickupLocationId=parseInt($self.e('[name="crbs_pickup_location_id"]').val());
+
+							var counter=$option.location_payment_paypal_redirect_duration[pickupLocationId];
+							
+							if(counter<=0)
+							{
+								section.find('a').trigger('click');
+							}
+							else
+							{
+								$('body').css('display','block');
+
+								section.css('display','block');
+
+								var interval=setInterval(function()
+								{
+									counter--;
+									section.find('a>span').html(counter);
+
+									if(counter===0)
+									{
+										clearInterval(interval);
+										section.find('a').trigger('click');
+									}
+
+								},1000);  
+							}
+								
 						break;
 						
 						case 4:
 							
 							$self.e('.crbs-booking-complete-payment-wire_transfer').css('display','block');
 							$self.e('.crbs-booking-complete-payment-wire_transfer>a').attr('href',response.button_back_to_home_url_address).text(response.button_back_to_home_label);
+							
+						break;
+						
+						case 5:
+							
+							$self.e('.crbs-booking-complete-payment-credit_card_pickup').css('display','block');
+							$self.e('.crbs-booking-complete-payment-credit_card_pickup>a').attr('href',response.button_back_to_home_url_address).text(response.button_back_to_home_label);
 							
 						break;
 					}
@@ -1561,10 +1751,10 @@
                     
                     $googleMapMarker.push(marker);
                 }
-                
+				
                 if((locationIdSelected===-1) && ($googleMapMarker.length>1))
                     $googleMap.fitBounds(bound);
-                else $googleMap.setCenter(coordinate);
+				else $googleMap.setCenter(coordinate);
             }            
         };
         
@@ -1671,11 +1861,11 @@
                 $self.createStickySidebar();
 				
 				if(parseInt($option.widget.mode,10)!==1)
-                {
-                    if($.inArray(className,['300','480'])>-1)
-                        $self.googleMapStopCustomizeHeight();
-                    else $self.googleMapStartCustomizeHeight();
-                }
+				{
+					if($.inArray(className,['300','480'])>-1)
+						$self.googleMapStopCustomizeHeight();
+					else $self.googleMapStartCustomizeHeight();
+				}
             };
                         
 			setTimeout($self.setWidthClass,500);
@@ -1730,13 +1920,7 @@
             
             var step=parseInt($self.e('input[name="crbs_step"]').val(),10);
             
-            var offset=30;
-            var adminBar=$('#wpadminbar');
-            
-            if(adminBar.length===1)
-                offset+=adminBar.actual('height');
-            
-            $self.e('.crbs-main-content>.crbs-main-content-step-'+step+'>.crbs-layout-25x75 .crbs-layout-column-left:first').stick_in_parent({offset_top:offset,recalc_every:1});
+            $sidebar=$self.e('.crbs-main-content>.crbs-main-content-step-'+step+'>.crbs-layout-25x75 .crbs-layout-column-left:first').theiaStickySidebar({'additionalMarginTop':40,'additionalMarginBottom':40});
         };
         
         /**********************************************************************/
@@ -1744,9 +1928,11 @@
         this.removeStickySidebar=function()
         {
             if(parseInt($option.summary_sidebar_sticky_enable,10)!==1) return;
-            
-            var step=parseInt($self.e('input[name="crbs_step"]').val(),10);
-            $self.e('.crbs-main-content>.crbs-main-content-step-'+step+'>.crbs-layout-25x75 .crbs-layout-column-left:first').trigger('sticky_kit:detach');
+			try
+			{
+				$sidebar.destroy();
+			}
+			catch(e) {}
         };
         
         /**********************************************************************/
@@ -1783,6 +1969,7 @@
         this.googleMapStartCustomizeHeight=function()
         {
             if(parseInt($option.widget.mode,10)===1) return;
+			if(parseInt($self.e('input[name="crbs_step"]').val(),10)!==1) return;
             
             if($googleMapHeightInterval>0) return;
             
@@ -1797,6 +1984,7 @@
         this.googleMapStopCustomizeHeight=function()
         {
             if(parseInt($option.widget.mode,10)===1) return;
+			if(parseInt($self.e('input[name="crbs_step"]').val(),10)!==1) return;
             
             clearInterval($googleMapHeightInterval);
             $self.e('#crbs_google_map').height('719px');
@@ -1809,6 +1997,7 @@
         this.googleMapCustomizeHeight=function()
         {
             if(parseInt($option.widget.mode,10)===1) return;
+			if(parseInt($self.e('input[name="crbs_step"]').val(),10)!==1) return;
 			
             var columnLeft=$self.e('.crbs-main-content-step-1>div>.crbs-layout-column-left');
             

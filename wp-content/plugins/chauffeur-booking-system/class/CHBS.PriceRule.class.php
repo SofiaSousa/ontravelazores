@@ -260,7 +260,7 @@ class CHBSPriceRule
         
         CHBSHelper::setDefault($meta,'process_next_rule_enable',0);
         
-        CHBSHelper::setDefault($meta,'minimum_order_value',0.00);
+        CHBSHelper::setDefault($meta,'minimum_order_value',CHBSPrice::getDefaultPrice());
         
         CHBSHelper::setDefault($meta,'calculation_on_request_enable',0);
         CHBSHelper::setDefault($meta,'calculation_on_request_redirect_url','');
@@ -269,7 +269,7 @@ class CHBSPriceRule
         
         foreach($this->getPriceUseType() as $index=>$value)
         {
-            CHBSHelper::setDefault($meta,'price_'.$index.'_value','0.00');
+            CHBSHelper::setDefault($meta,'price_'.$index.'_value',CHBSPrice::getDefaultPrice());
             CHBSHelper::setDefault($meta,'price_'.$index.'_alter_type_id',2);
             CHBSHelper::setDefault($meta,'price_'.$index.'_tax_rate_id',$TaxRate->getDefaultTaxPostId());            
         }
@@ -546,6 +546,8 @@ class CHBSPriceRule
         
         if(!$Validation->isPrice($option['minimum_order_value'],false))
            $option['minimum_order_value']=0.00;
+		
+		$option['minimum_order_value']=CHBSPrice::formatToSave($option['minimum_order_value'],true);
        
         if(!$Validation->isBool($option['calculation_on_request_enable']))
             $option['calculation_on_request_enable']=0;         
@@ -559,6 +561,9 @@ class CHBSPriceRule
         {
             if(!$Validation->isPrice($option['price_'.$index.'_value'],false))
                 $option['price_'.$index.'_value']=0.00;
+			
+			$option['price_'.$index.'_value']=CHBSPrice::formatToSave($option['price_'.$index.'_value'],false);
+			
             if(!$this->isPriceAlterType($option['price_'.$index.'_alter_type_id']))
                 $option['price_'.$index.'_alter_type_id']=1;
             
@@ -573,7 +578,7 @@ class CHBSPriceRule
             else
             {
                 if(!$TaxRate->isTaxRate($option['price_'.$index.'_tax_rate_id']))
-                    $option['price_'.$value.'_tax_rate_id']=0; 
+                    $option['price_'.$index.'_tax_rate_id']=0; 
             }
         }
 
@@ -830,7 +835,7 @@ class CHBSPriceRule
                             <td>'.$this->displayPricingRuleAdminListValue($meta['location_fixed_pickup'],$dictionary['location'],true,true).'</td>
                         </tr>
                         <tr>
-                            <td>'.esc_html__('Dropoff location','chauffeur-booking-system').'</td>
+                            <td>'.esc_html__('Drop off location','chauffeur-booking-system').'</td>
                             <td>'.$this->displayPricingRuleAdminListValue($meta['location_fixed_dropoff'],$dictionary['location'],true,true).'</td>
                         </tr>
                         <tr>
@@ -838,7 +843,7 @@ class CHBSPriceRule
                             <td>'.$this->displayPricingRuleAdminListValue($meta['location_country_pickup'],$dictionary['country'],true,true).'</td>
                         </tr>
                         <tr>
-                            <td>'.esc_html__('Dropoff country location','chauffeur-booking-system').'</td>
+                            <td>'.esc_html__('Drop off country location','chauffeur-booking-system').'</td>
                             <td>'.$this->displayPricingRuleAdminListValue($meta['location_country_dropoff'],$dictionary['country'],true,true).'</td>
                         </tr>
                         <tr>
@@ -1370,7 +1375,7 @@ class CHBSPriceRule
 			'post_type'															=>	self::getCPTName(),
 			'post_status'														=>	'publish',
 			'posts_per_page'													=>	-1,
-			'orderby'															=>	array('menu_order'=>'asc')
+			'orderby'															=>	array('menu_order'=>'desc')
 		);
 		
 		if($attribute['price_rule_id'])

@@ -329,6 +329,14 @@ class CRBSBooking
         CRBSPostMeta::updatePostMeta($bookingId,'delivery_distance',$vehiclePrice['other']['delivery']['distance']); 
         CRBSPostMeta::updatePostMeta($bookingId,'delivery_return_distance',$vehiclePrice['other']['delivery_return']['distance']);
         
+		/***/
+		
+		$paymentDepositType=CRBSBookingFormHelper::isPaymentDepositEnable($bookingForm);
+        
+        CRBSPostMeta::updatePostMeta($bookingId,'payment_deposit_type',$paymentDepositType);
+		CRBSPostMeta::updatePostMeta($bookingId,'payment_deposit_type_fixed_value',$bookingForm['dictionary']['location'][$pickupLocationId]['meta']['payment_deposit_type_fixed_value']);
+        CRBSPostMeta::updatePostMeta($bookingId,'payment_deposit_type_percentage_value',$bookingForm['dictionary']['location'][$pickupLocationId]['meta']['payment_deposit_type_percentage_value']);
+		
         /***/
         
         if(in_array((int)$bookingForm['dictionary']['location'][$pickupLocationId]['meta']['driver_license_attach_enable'],array(1,2)))
@@ -414,9 +422,11 @@ class CRBSBooking
         CRBSPostMeta::updatePostMeta($bookingId,'payment_name',CRBSBookingHelper::getPaymentName($data['payment_id'],-1,$bookingForm['meta']));
         
         /***/
+		
+		$couponCodeSourceType=0;
         
         $Coupon=new CRBSCoupon();
-        $code=$Coupon->checkCode();
+        $code=$Coupon->checkCode($bookingForm,$couponCodeSourceType);
         
         if($code===false)
         {
@@ -441,8 +451,8 @@ class CRBSBooking
         
         if($locationDictionary[$pickupLocationId]['meta']['twilio_sms_enable']==1)
         {
-            $Nexmo=new CRBSTwilio();
-            $Nexmo->sendSMS($locationDictionary[$pickupLocationId]['meta']['twilio_sms_api_sid'],$locationDictionary[$pickupLocationId]['meta']['twilio_sms_api_token'],$locationDictionary[$pickupLocationId]['meta']['twilio_sms_sender_phone_number'],$locationDictionary[$pickupLocationId]['meta']['twilio_sms_recipient_phone_number'],$locationDictionary[$pickupLocationId]['meta']['twilio_sms_message']);
+            $Twilio=new CRBSTwilio();
+            $Twilio->sendSMS($locationDictionary[$pickupLocationId]['meta']['twilio_sms_api_sid'],$locationDictionary[$pickupLocationId]['meta']['twilio_sms_api_token'],$locationDictionary[$pickupLocationId]['meta']['twilio_sms_sender_phone_number'],$locationDictionary[$pickupLocationId]['meta']['twilio_sms_recipient_phone_number'],$locationDictionary[$pickupLocationId]['meta']['twilio_sms_message']);
         }
         
  		if($locationDictionary[$pickupLocationId]['meta']['telegram_enable']==1)
@@ -455,7 +465,7 @@ class CRBSBooking
         
         $GoogleCalendar=new CRBSGoogleCalendar();
         $GoogleCalendar->sendBooking($bookingId);
-        
+		
         /***/
 	
         return($bookingId);
@@ -482,26 +492,17 @@ class CRBSBooking
         $recipient[1]=preg_split('/;/',$locationDictionary[$pickupLocationId]['meta']['booking_new_recipient_email_address']);
         
 		global $crbs_logEvent;
-        
-		if((int)$booking['meta']['booking_new_customer_email_notification_sent']!==1)
+
+		if((int)$locationDictionary[$pickupLocationId]['meta']['booking_new_customer_email_notification']===1)
 		{
-			if((int)$locationDictionary[$pickupLocationId]['meta']['booking_new_customer_email_notification']===1)
-			{
-				if((($state=='AFTER_PAYMENT') && ((int)$locationDictionary[$pickupLocationId]['meta']['booking_new_customer_email_notification_after_payment']===1) && (in_array($booking['meta']['payment_id'],array(2,3)))) || (!in_array($booking['meta']['payment_id'],array(2,3))))
-				{	
-					$crbs_logEvent=1;
-					$this->sendEmail($bookingId,$locationDictionary[$pickupLocationId]['meta']['booking_new_sender_email_account_id'],'booking_new_client',$recipient[0],$subject);
-				
-					CRBSPostMeta::updatePostMeta($bookingId,'booking_new_customer_email_notification_sent',1);
-				}
-			}
+			$crbs_logEvent=1;
+			$this->sendEmail($bookingId,$locationDictionary[$pickupLocationId]['meta']['booking_new_sender_email_account_id'],'booking_new_client',$recipient[0],$subject);
 		}
-		
-		if((int)$booking['meta']['booking_new_defined_email_notification_sent']!==1)
+	
+		if((int)$locationDictionary[$pickupLocationId]['meta']['booking_new_admin_email_notification']===1)
 		{
 			$crbs_logEvent=2;
 			$this->sendEmail($bookingId,$locationDictionary[$pickupLocationId]['meta']['booking_new_sender_email_account_id'],'booking_new_admin',$recipient[1],$subject);
-			CRBSPostMeta::updatePostMeta($bookingId,'booking_new_defined_email_notification_sent',1);
 		}
 	}
     
@@ -516,9 +517,6 @@ class CRBSBooking
     
 	function setPostMetaDefault(&$meta)
 	{
-		CRBSHelper::setDefault($meta,'booking_new_defined_email_notification_sent',0);
-		CRBSHelper::setDefault($meta,'booking_new_customer_email_notification_sent',0);
-		
         CRBSHelper::setDefault($meta,'woocommerce_enable',0);
         CRBSHelper::setDefault($meta,'woocommerce_booking_id',0);
 		
@@ -548,6 +546,10 @@ class CRBSBooking
 			CRBSHelper::setDefault($meta,'price_'.$priceUseTypeIndex.'_value',0);
 			CRBSHelper::setDefault($meta,'price_'.$priceUseTypeIndex.'_tax_rate_value',0);			
 		}
+		
+        CRBSHelper::setDefault($meta,'payment_deposit_type',0);
+        CRBSHelper::setDefault($meta,'payment_deposit_type_fixed_value',0.00);
+        CRBSHelper::setDefault($meta,'payment_deposit_type_percentage_value',0);		
 	}
     
     /**************************************************************************/
@@ -583,6 +585,9 @@ class CRBSBooking
 			$crbs_logEvent=3;
             $this->sendEmail($postId,CRBSOption::getOption('sender_default_email_account_id'),'booking_change_status',$recipient[0],$subject);           
         }
+		
+		$WooCommerce=new CRBSWooCommerce();
+		$WooCommerce->changeStaus(-1,$postId);
 	}
 
     /**************************************************************************/
@@ -780,7 +785,7 @@ class CRBSBooking
         
         /***/
         
-        $component=array('vehicle','deposit','initial','one_way','after_business_hour_return','after_business_hour_pickup','customer_pickup_location','customer_return_location','booking_extra','total');
+        $component=array('vehicle','deposit','initial','one_way','after_business_hour_return','after_business_hour_pickup','customer_pickup_location','customer_return_location','booking_extra','total','pay');
         
         foreach($component as $value)
         {
@@ -918,6 +923,26 @@ class CRBSBooking
         $price['total']['sum']['gross']['format']=CRBSPrice::format($price['total']['sum']['gross']['value'],CRBSCurrency::getFormCurrency());
         $price['total']['sum']['net']['format']=CRBSPrice::format($price['total']['sum']['net']['value'],CRBSCurrency::getFormCurrency());
 
+        $price['pay']=$price['total'];
+        
+        if(CRBSBookingFormHelper::isPaymentDepositEnable($data['booking_form']))
+        {
+			$pickupLocationId=$data['pickup_location_id'];
+			
+			if((int)$data['booking_form']['dictionary']['location'][$pickupLocationId]['meta']['payment_deposit_type']===1)
+				$value=$data['booking_form']['dictionary']['location'][$pickupLocationId]['meta']['payment_deposit_type_fixed_value'];
+			else $value=$price['pay']['sum']['gross']['value']*($data['booking_form']['dictionary']['location'][$pickupLocationId]['meta']['payment_deposit_type_percentage_value']/100);
+			
+            $price['pay']['sum']['gross']['value']=$value;
+            $price['pay']['sum']['gross']['format']=CRBSPrice::format($price['pay']['sum']['gross']['value'],CRBSCurrency::getFormCurrency());
+        }
+		
+		$balance=$price['total']['sum']['gross']['value']-$price['pay']['sum']['gross']['value'];
+		if($balance<0) $balance=0;
+		
+		$price['balance']['sum']['gross']['value']=$balance;
+		$price['balance']['sum']['gross']['format']=CRBSPrice::format($price['balance']['sum']['gross']['value'],CRBSCurrency::getFormCurrency());		
+		
         return($price);
     }
         
@@ -1168,7 +1193,19 @@ class CRBSBooking
         }      
         
         /***/
+		
+        if((int)$booking['meta']['payment_deposit_type']!==0)
+		{
+			if((int)$booking['meta']['payment_deposit_type']===1)
+				$value=$booking['meta']['payment_deposit_type_fixed_value'];
+			else $value=number_format(round($billing['summary']['value_gross']*($booking['meta']['payment_deposit_type_percentage_value']/100),2),2,'.','');
+				
+			$billing['summary']['pay']=$value;
+		}
+		else $billing['summary']['pay']=$billing['summary']['value_gross'];
         
+		/***/
+		
         foreach($billing['detail'] as $aIndex=>$aValue)
         {
             foreach($aValue as $bIndex=>$bValue)
@@ -1226,9 +1263,9 @@ class CRBSBooking
             
             $booking['booking_title']=$booking['post']->post_title;
             if($template==='booking_new_admin')
-                $booking['booking_title']='<a href="'.get_edit_post_link($booking['post']->ID).'">'.$booking['booking_title'].'</a>';        
+                $booking['booking_title']='<a href="'.admin_url('post.php?post='.(int)$booking['post']->ID.'&action=edit').'">'.$booking['booking_title'].'</a>';        
         }
-        
+		
         /***/
         
         $data['style']=$Email->getEmailStyle();
@@ -1242,7 +1279,7 @@ class CRBSBooking
         $body=$Template->output();
         
         /***/
-        
+		
         $Email->send($recipient,$subject,$body);
     }
     

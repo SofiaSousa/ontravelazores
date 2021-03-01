@@ -64,6 +64,8 @@
     -   Responsive / Ride info
 -   WooCommerce
 -   Fancybox
+-   Intl tel input
+-   Widget
 -   Bug fixes 
 */
 
@@ -104,6 +106,12 @@ html .chbs-main .chbs-list-reset
     padding:0px;
     list-style:none;
 }
+
+	.chbs-main .chbs-list-reset li
+	{
+		margin:0px;
+		padding:0px;
+	}
 
 .chbs-main .chbs-align-right
 {
@@ -363,8 +371,10 @@ html .chbs-main .chbs-list-reset
 
 .chbs-main .chbs-button.chbs-button-style-1,
 .chbs-main .chbs-button.chbs-button-style-2,
+.chbs-main .chbs-button.chbs-button-style-3,
 .chbs-main .chbs-button.chbs-button-style-1:hover,
 .chbs-main .chbs-button.chbs-button-style-2:hover,
+.chbs-main .chbs-button.chbs-button-style-3:hover,
 .chbs-main .chbs-location-add,
 .chbs-main .chbs-location-remove,
 .chbs-main .chbs-location-add:hover,
@@ -513,7 +523,8 @@ html .chbs-main .chbs-list-reset
 }
 
 .chbs-main .chbs-button.chbs-button-style-1,
-.chbs-main .chbs-button.chbs-button-style-2
+.chbs-main .chbs-button.chbs-button-style-2,
+.chbs-main .chbs-button.chbs-button-style-3
 {
     font-size:14px;
     font-weight:400;
@@ -522,6 +533,11 @@ html .chbs-main .chbs-list-reset
     border-radius:90px;
     text-transform:uppercase;
     padding:14px 32px 16px 32px;
+}
+
+.chbs-main .chbs-button.chbs-button-style-3
+{
+	padding:8px 16px 8px 16px;
 }
 
     .chbs-main .chbs-button.chbs-button-step-next>span,
@@ -624,7 +640,7 @@ html .chbs-main .chbs-list-reset
 {
     display:block;
     width:100% !important;
-    padding:0px 20px 20px 20px;
+    padding:4px 20px 19px 20px;
 }
 
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none)
@@ -718,7 +734,12 @@ html .chbs-main .chbs-list-reset
             {
                 border-width:0px;
             }
-            
+ 
+.ui-timepicker-disabled
+{
+	display:none;
+}
+			
 /******************************************************************************/
 /* Datepicker                                                                 */
 /******************************************************************************/            
@@ -820,6 +841,7 @@ html .chbs-main .chbs-list-reset
 .ui-datepicker .ui-datepicker-next-hover
 {
     top:0px;
+    text-decoration:none;
 }
 
 .ui-datepicker .ui-datepicker-prev,
@@ -922,6 +944,11 @@ html .chbs-main .chbs-list-reset
                 border-style:solid;
                 text-transform:uppercase;
                 border-width:1px 0px 0px 1px;
+            }
+            
+            rs-module .chbs-main .chbs-tab.ui-tabs .ui-tabs-nav>li>a
+            {
+                text-align:center !important;
             }
             
             .chbs-main .chbs-tab.ui-tabs .ui-tabs-nav>li:last-child>a
@@ -1114,6 +1141,7 @@ html .chbs-main .chbs-list-reset
                         position:relative;
                         text-align:center;
                         border-radius:100%;
+						outline:solid 10px transparent;
                     }
       
                         .chbs-main .chbs-main-navigation-default>ul>li>a>span:first-child>span:first-child
@@ -1277,9 +1305,18 @@ html .chbs-main .chbs-list-reset
     .chbs-main .chbs-form-field select,
     .chbs-main .chbs-form-field textarea
     {
+		padding-top:0px;
         padding-left:20px;
         padding-right:20px;
         padding-bottom:20px;
+		line-height:31px;
+    }
+    
+    rs-module .chbs-main .chbs-form-field input,
+    rs-module .chbs-main .chbs-form-field select,
+    rs-module .chbs-main .chbs-form-field textarea
+    {
+        line-height:166.66667% !important;
     }
     
     .chbs-main .chbs-form-field input,
@@ -1430,7 +1467,6 @@ html .chbs-main .chbs-list-reset
         opacity:0;
         float:left;
         max-width:300px;
-        min-height:200px;
     }
     
     .chbs-main .chbs-vehicle .chbs-vehicle-image.chbs-vehicle-image-has-gallery
@@ -1519,6 +1555,7 @@ html .chbs-main .chbs-list-reset
         .chbs-main .chbs-vehicle .chbs-vehicle-content>.chbs-vehicle-content-price
         {
             margin-top:-5px;
+			display:inline-block;
         }
 
             .chbs-main .chbs-vehicle .chbs-vehicle-content>.chbs-vehicle-content-price>span
@@ -1538,7 +1575,52 @@ html .chbs-main .chbs-list-reset
                     font-size:14px;
                     padding-left:20px;
                 }
+				
+        /**********************************************************************/
+        /* Vehicle / Content / Bid                                          */
+        /**********************************************************************/ 
             
+		.chbs-main .chbs-vehicle .chbs-vehicle-content>.chbs-vehicle-content-price-bid
+		{
+			top:-8px;
+			margin-left:10px;
+			position:relative;
+			display:inline-block;
+		}
+		
+			.chbs-main .chbs-vehicle .chbs-vehicle-content>.chbs-vehicle-content-price-bid>div:first-child
+			{
+				
+			}
+			
+				.chbs-main .chbs-vehicle .chbs-vehicle-content>.chbs-vehicle-content-price-bid>div:first-child>a
+				{
+					
+				}
+			
+			.chbs-main .chbs-vehicle .chbs-vehicle-content>.chbs-vehicle-content-price-bid>div:first-child+div
+			{
+				
+			}
+			
+				.chbs-main .chbs-vehicle .chbs-vehicle-content>.chbs-vehicle-content-price-bid>div+div>input
+				{
+					width:100px;
+					border-width:1px;
+					border-style:solid;
+					padding:7px 10px 7px 10px;
+				}
+				
+				.chbs-main .chbs-vehicle .chbs-vehicle-content>.chbs-vehicle-content-price-bid>div+div>input+a
+				{
+					margin-left:5px;
+				}
+				
+				.chbs-main .chbs-vehicle .chbs-vehicle-content>.chbs-vehicle-content-price-bid>div+div>input+a+a
+				{
+					
+				}
+			
         /**********************************************************************/
         /* Vehicle / Content / Description                                    */
         /**********************************************************************/   
@@ -2168,7 +2250,16 @@ html .chbs-main .chbs-list-reset
         {
             background-image:url('../media/image/public/paypal.png');
         }
+		
+/******************************************************************************/
+/* My location link                                                           */
+/******************************************************************************/     
         
+.chbs-main .chbs-my-location-link
+{
+	display:none;
+}
+
 /******************************************************************************/
 /* Agreement                                                                  */
 /******************************************************************************/        
@@ -2210,18 +2301,23 @@ html .chbs-main .chbs-list-reset
         
 /******************************************************************************/
 /* Coupon                                                                     */
+/* Gratuity                                                                   */
 /******************************************************************************/            
         
+.chbs-main .chbs-gratuity-section,
 .chbs-main .chbs-coupon-code-section
+
 {
     margin-top:40px;
 }
 
+    .chbs-main .chbs-gratuity-section .chbs-form-field,
     .chbs-main .chbs-coupon-code-section .chbs-form-field
     {
         border-top-width:1px;
     }
 
+    .chbs-main .chbs-gratuity-section a.chbs-button.chbs-button-style-2,
     .chbs-main .chbs-coupon-code-section a.chbs-button.chbs-button-style-2
     {
         float:right;
@@ -2229,6 +2325,7 @@ html .chbs-main .chbs-list-reset
         display:inline-block;
     }
     
+        .chbs-main .chbs-gratuity-section a.chbs-button.chbs-button-style-2 span,
         .chbs-main .chbs-coupon-code-section a.chbs-button.chbs-button-style-2 span
         {
             display:none;
@@ -2476,41 +2573,55 @@ html .chbs-main .chbs-list-reset
             left:10px;
         }
         
-    .chbs-main .chbs-booking-complete h3,
-    .chbs-main .chbs-booking-complete p
+    .chbs-main .chbs-booking-complete h3  
     {
         margin:0px;
         padding:0px;
-    }
-
-    .chbs-main .chbs-booking-complete h3  
-    {
         font-size:26px;
         font-weight:400;
         margin-top:30px;
         line-height:37px;
     }
-
-    .chbs-main .chbs-booking-complete p 
-    {
-        display:none;
-        font-size:18px;
-        font-weight:300;
-        line-height:30px;
-        padding-top:10px;        
-    }
+	
+	.chbs-main .chbs-booking-complete .chbs-booking-complete-payment 
+	{
+		
+	}
+	
+		.chbs-main .chbs-booking-complete .chbs-booking-complete-payment>div
+		{
+			display:none;
+			font-size:18px;
+			font-weight:300;
+			line-height:30px;
+		}
+		
+			.chbs-main .chbs-booking-complete .chbs-booking-complete-payment>div>a
+			{
+				display:inline-block;
+			}
+				
+			.chbs-main .chbs-booking-complete .chbs-booking-complete-payment>div>a,
+			.chbs-main .chbs-booking-complete .chbs-booking-complete-payment>div>p,
+			.chbs-main .chbs-booking-complete .chbs-booking-complete-payment>div>div
+			{
+				margin-top:30px;
+			}
+			
+			.chbs-main .chbs-booking-complete .chbs-booking-complete-payment>div>p
+			{
+				padding:0px;
+				max-width:80%;
+				margin-left:auto;
+				margin-right:auto;
+				text-align:center;
+			}
+			
+				.chbs-main .chbs-booking-complete .chbs-booking-complete-payment>div>div>span
+				{
+					font-weight:400;
+				}
     
-        .chbs-main .chbs-booking-complete p>span
-        {
-            font-weight:400;
-        }
-        
-        .chbs-main .chbs-booking-complete p>a
-        {
-            margin-top:20px;
-            display:inline-block;
-        }
-
 .chbs-main form[name="chbs-form-stripe"]
 {
     display:none !important;
@@ -2620,10 +2731,18 @@ html .chbs-main .chbs-list-reset
         display:block;
     }
 
-    .chbs-main.chbs-width-300 .chbs-tab.ui-tabs .ui-tabs-nav>li
+    .chbs-main.chbs-width-300 .chbs-tab.ui-tabs .ui-tabs-nav>li,
+    .chbs-main.chbs-width-300.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-nav>li
     {
+        margin:0px;
         float:none;
         width:100%;
+    }
+    
+    .chbs-main.chbs-width-480.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:last-child>a,
+    .chbs-main.chbs-width-300.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:last-child>a
+    {
+        margin-right:0px;
     }
 
         .chbs-main.chbs-width-300 .chbs-tab.ui-tabs .ui-tabs-nav>li>a
@@ -3129,7 +3248,295 @@ html .fancybox-inner img
     height:auto;
     max-width:100%;
 }
+
+/******************************************************************************/
+/* Intl Tel Input                                                             */
+/******************************************************************************/
+
+.iti__flag
+{
+    background-image:url('../media/image/public/flags.png');
+}
+
+@media (-webkit-min-device-pixel-ratio:2),(min-resolution:192dpi)
+{
+    .iti__flag
+    {
+        background-image:url('../media/image/public/flags@2x.png');
+    }
+}
+
+html .iti.iti--allow-dropdown
+{
+    display:block;
+    margin:0px 20px 0px 20px;
+}
+
+html .iti--allow-dropdown .iti__flag-container
+{
+    top:1px;
+    height:27px;
+}
+
+html .iti__selected-flag
+{
+    padding:0px;
+}
+
+html .iti.iti--allow-dropdown input
+{
+    padding-left:45px;
+}
+
+html .iti__country.iti__highlight,
+html .iti--separate-dial-code .iti__selected-flag,
+html .iti--allow-dropdown .iti__flag-container:hover .iti__selected-flag
+{
+    background:transparent;
+}
+
+/******************************************************************************/
+/* Widget                                                                     */
+/******************************************************************************/
+
+.chbs-main.chbs-widget
+{
     
+}
+
+    /**************************************************************************/
+    /* Widget / Style 1                                                       */
+    /**************************************************************************/
+
+    .chbs-main.chbs-widget.chbs-widget-style-1
+    {
+		background-color:transparent;
+    }
+    
+        .chbs-main.chbs-widget.chbs-widget-style-1 .chbs-button-widget-submit
+        {
+            width:auto;
+            float:right;
+            display:block;
+        }
+        
+        .chbs-main.chbs-widget.chbs-widget-style-1 .chbs-main-content>div>div:last-child
+        {
+            margin-top:30px;
+        }
+    
+    /**************************************************************************/
+    /* Widget / Style 2                                                       */
+    /**************************************************************************/
+
+    .chbs-main.chbs-widget.chbs-widget-style-2,
+	.chbs-main.chbs-widget.chbs-widget-style-3
+    {
+		background-color:transparent;
+    }
+	
+		.chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1>div:last-child
+		{
+			text-align:right;
+		}
+
+        .chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-nav>li,
+		.chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-nav>li
+        {
+            width:auto;
+            margin-right:10px;
+            margin-bottom:10px;
+        }
+        
+        .chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-nav>li:last-child,
+		.chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-nav>li:last-child
+        {
+            margin-right:0px;
+        }
+        
+            .chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-nav>li>a,
+			.chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-nav>li>a
+            {
+                border:none;
+            }
+    
+        .chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel,
+		.chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel
+        {
+            display:flex;
+            flex-direction:row;
+        }
+		
+		.chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel
+		{
+			border-width:1px;
+			border-style:solid;
+		}
+		
+		.chbs-main.chbs-widget.chbs-widget-style-2.chbs-border-none .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel
+		{
+			border:none;
+		}
+		
+        .chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel
+        {
+			border:none;
+			flex-wrap:wrap;
+			border-style:solid;
+			border-width:1px 0px 0px 1px;
+        }
+        
+        .chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>*
+        {
+            flex-grow:1;
+            display:none;
+            flex-basis:200px;
+            border-top:none;
+            border-left:none;
+            border-bottom:none;
+        }
+		
+        .chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>*
+        {
+            flex-grow:1;
+            border-top:none;
+            border-left:none;
+            flex-basis:300px;
+        }
+        
+        .chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel .chbs-form-field
+        {
+            margin-top:0px;
+            border-bottom:none;
+        }
+		
+		.chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel .chbs-form-field
+		{
+			margin-top:0px;
+		}
+		
+			.chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel .chbs-form-field.chbs-form-field-width-50
+			{
+				border-top:none;
+				border-left:none;
+			}
+			        
+        .chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:first-child,
+        .chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:last-child,
+        .chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:first-child+div,
+        .chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs #panel-1.ui-tabs-panel>div:first-child+div+div,
+        .chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs #panel-2.ui-tabs-panel>div:first-child+div+div,
+        .chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:first-child,
+        .chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:last-child,
+        .chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:first-child+div,
+        .chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs #panel-1.ui-tabs-panel>div:first-child+div+div,
+        .chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs #panel-2.ui-tabs-panel>div:first-child+div+div
+        {
+            display:block;
+        }
+        
+            .chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:first-child>div
+            {
+                height:100%;
+                border-top:none;
+				border-left:none;
+            }
+			
+			.chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:first-child>div
+			{
+				height:100%;
+			}
+        
+        .chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:last-child
+        {
+            max-width:200px;
+            text-align:center;
+        }
+        
+            .chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:last-child>a,
+			.chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:last-child>a
+            {
+                width:auto;
+                display:block;
+                margin:20px 20px 0px 20px;
+            }
+            
+            /******************************************************************/
+            /* Widget / Style 2 / Responsive                                  */
+            /******************************************************************/
+            
+            .chbs-width-480.chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel,
+            .chbs-width-300.chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel,
+            .chbs-width-480.chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel,
+            .chbs-width-300.chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel
+            {
+                flex-direction:column;
+            }
+			
+                .chbs-width-480.chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>*,
+                .chbs-width-300.chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>*,
+                .chbs-width-480.chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>*,
+                .chbs-width-300.chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>*			
+                {
+                    flex-basis:100%;
+                }
+				
+                .chbs-width-480.chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:last-child,
+                .chbs-width-300.chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:last-child
+                {
+                    max-width:100%;
+                    text-align:right;
+                    background:transparent;
+					padding:0px 20px 20px 0px;
+                }
+				
+                .chbs-width-480.chbs-main.chbs-widget.chbs-widget-style-2.chbs-border-none .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:last-child,
+                .chbs-width-300.chbs-main.chbs-widget.chbs-widget-style-2.chbs-border-none  .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:last-child
+				{
+					padding:0px;
+				}
+				
+                    .chbs-width-480.chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:last-child>a,
+                    .chbs-width-300.chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:last-child>a,
+                    .chbs-width-480.chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:last-child>a,
+                    .chbs-width-300.chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:last-child>a
+                    {
+                        display:inline-block;
+                    }
+
+                    .chbs-width-480.chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:first-child>div,
+                    .chbs-width-300.chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:first-child>div,
+                    .chbs-width-480.chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:first-child>div,
+                    .chbs-width-300.chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel>div:first-child>div
+                    {
+                        height:auto;
+                    }
+
+                .chbs-width-480.chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel .chbs-form-field,
+                .chbs-width-300.chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel .chbs-form-field
+                {
+                    border:none;
+					border-bottom-width:1px;
+					border-bottom-style:solid;
+                }
+				
+                .chbs-width-480.chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel .chbs-form-field:first-child,
+                .chbs-width-300.chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel .chbs-form-field:first-child,
+                .chbs-width-480.chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel .chbs-form-field:first-child,
+                .chbs-width-300.chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel .chbs-form-field:first-child
+                {
+                    border-top:none;
+                }
+
+                .chbs-width-480.chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel .chbs-form-field.chbs-form-field-width-50,
+                .chbs-width-300.chbs-main.chbs-widget.chbs-widget-style-2 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel .chbs-form-field.chbs-form-field-width-50,
+	            .chbs-width-480.chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel .chbs-form-field.chbs-form-field-width-50,
+                .chbs-width-300.chbs-main.chbs-widget.chbs-widget-style-3 .chbs-main-content-step-1 .chbs-tab.ui-tabs .ui-tabs-panel .chbs-form-field.chbs-form-field-width-50
+                {
+                    float:none;
+                    width:100%;
+                }
+				    
 /******************************************************************************/
 /* Bug fixes                                                                  */
 /******************************************************************************/

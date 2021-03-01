@@ -4,7 +4,7 @@ Plugin Name: Car Rental Booking System for WordPress
 Plugin URI: https://1.envato.market/car-rental-booking-system-for-wordpress
 Description: Car Rental Booking System is a powerful online reservation WordPress plugin which provides all the tools and features needed to run your car rental business. The booking process is based on simple step-by-step navigation and you can manage it using the intuitive administration panel.
 Author: QuanticaLabs
-Version: 2.2
+Version: 2.8
 Author URI: https://1.envato.market/quanticalabs-portfolio
 */
 	

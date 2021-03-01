@@ -53,6 +53,15 @@
 }
 
 /******************************************************************************/
+/* Button radio                                                               */
+/******************************************************************************/
+
+.chbs-button-radio a
+{
+	float:left;
+}
+
+/******************************************************************************/
 /* Button navigation                                                          */
 /******************************************************************************/
 
@@ -303,11 +312,12 @@
     /* Vehicle / Content                                                      */
     /**************************************************************************/    
     
-    .chbs-main .chbs-vehicle .chbs-vehicle-image+.chbs-vehicle-content
-    {
-        margin-right:340px;
+	.chbs-main .chbs-vehicle .chbs-vehicle-image+.chbs-vehicle-content, 
+	.chbs-main .chbs-vehicle .chbs-vehicle-image+.chbs-vehicle-gallery+.chbs-vehicle-content
+	{
 		margin-left:0px;
-    }
+		margin-right:340px;
+	}
         
         /**********************************************************************/
         /* Vehicle / Content / Header                                         */
@@ -551,6 +561,11 @@
                 border-left-width:0px;
 				border-right-width:1px;
             }
+			
+			.chbs-main .chbs-booking-extra-list>ul>li.chbs-booking-extra-list-item-quantity-enable .chbs-form-field>label
+			{
+				padding-right:30px;
+			}
             
 /******************************************************************************/
 /* Booking complete                                                           */
@@ -567,7 +582,36 @@
             right:10px;
 			left:auto;
         }
-     
+		
+/******************************************************************************/
+/* Intl Tel Input                                                             */
+/******************************************************************************/
+
+html .iti--allow-dropdown .iti__flag-container
+{
+	right:0px;
+}
+
+html .iti.iti--allow-dropdown input
+{
+	padding-right:70px;
+}
+
+.iti--separate-dial-code .iti__selected-dial-code
+{
+	margin-right:6px;
+}
+
+.iti__country-list
+{
+	text-align:right;
+}
+
+.iti__country-list .iti__flag-box
+{
+	margin-left:10px;
+}
+
 /******************************************************************************/
 /* Responsive                                                                 */
 /******************************************************************************/
@@ -600,8 +644,9 @@
     /**************************************************************************/
     /* Responsive / Vehicle                                                   */
     /**************************************************************************/
-
-    .chbs-main.chbs-width-480 .chbs-vehicle .chbs-vehicle-image+.chbs-vehicle-content
+	
+	.chbs-main.chbs-width-480 .chbs-vehicle .chbs-vehicle-image+.chbs-vehicle-content, 
+	.chbs-main.chbs-width-480 .chbs-vehicle .chbs-vehicle-image+.chbs-vehicle-gallery+.chbs-vehicle-content
     {
 		margin-left:0px;
         margin-right:200px;

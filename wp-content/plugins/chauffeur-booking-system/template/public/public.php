@@ -5,6 +5,11 @@
         
         $class=array('chbs-main','chbs-booking-form-id-'.$this->data['booking_form_post_id'],'chbs-clear-fix','chbs-hidden');
 
+        if($this->data['widget_mode']==1)
+            array_push($class,'chbs-widget','chbs-widget-style-'.$this->data['widget_style']);
+        
+		array_push($class,$this->data['css_class']);
+		
         $widgetServiceTypeId=1;
 ?>
         <div<?php echo CHBSHelper::createCSSClassAttribute($class); ?> id="<?php echo esc_attr($this->data['booking_form_html_id']); ?>">
@@ -86,7 +91,7 @@
                 <input type="hidden" name="<?php CHBSHelper::getFormName('step') ?>" data-value="1"/>
                 <input type="hidden" name="<?php CHBSHelper::getFormName('step_request') ?>" data-value="1"/>
                 
-                <input type="hidden" name="<?php CHBSHelper::getFormName('payment_id') ?>" data-value="0"/>
+                <input type="hidden" name="<?php CHBSHelper::getFormName('payment_id') ?>" data-value="<?php echo (int)$this->data['meta']['payment_default_id']; ?>"/>
                 <input type="hidden" name="<?php CHBSHelper::getFormName('vehicle_id') ?>" data-value="<?php echo (int)$this->data['vehicle_id_default']; ?>"/>
                 
                 <input type="hidden" name="<?php CHBSHelper::getFormName('booking_extra_id') ?>" data-value="0"/>
@@ -125,7 +130,7 @@
                 if(array_key_exists(3,$this->data['dictionary']['payment']))
                 {
                     $PaymentPaypal=new CHBSPaymentPaypal();
-                    echo $PaymentPaypal->createPaymentForm($post->ID,$this->data['meta']['payment_paypal_email_address'],$this->data['meta']['payment_paypal_sandbox_mode_enable']);
+                    echo $PaymentPaypal->createPaymentForm($post->ID,$this->data);
                 }
             }
         }
@@ -154,9 +159,10 @@
             {
                 var bookingForm=$('#<?php echo esc_attr($this->data['booking_form_html_id']); ?>').chauffeurBookingForm(
                 {
+					booking_form_id												:	<?php echo (int)$this->data['post']->ID; ?>,
                     plugin_version                                              :   '<?php echo PLUGIN_CHBS_VERSION; ?>',
                     ajax_url                                                    :   '<?php echo $this->data['ajax_url']; ?>',
-                    length_unit                                                 :   <?php echo CHBSOption::getOption('length_unit'); ?>,
+                    length_unit                                                 :   <?php echo (int)CHBSOption::getOption('length_unit'); ?>,
                     time_format                                                 :   '<?php echo CHBSOption::getOption('time_format'); ?>',
                     date_format                                                 :   '<?php echo CHBSOption::getOption('date_format'); ?>',
                     date_format_js                                              :   '<?php echo CHBSJQueryUIDatePicker::convertDateFormat(CHBSOption::getOption('date_format')); ?>',
@@ -172,11 +178,14 @@
                         unit_time_minute_short                                  :   '<?php esc_html_e('h','chauffeur-booking-system')  ?>',
                     },
                     date_exclude                                                :   <?php echo json_encode($this->data['meta']['date_exclude']); ?>,
-                    date_available                                              :   <?php echo json_encode($this->data['date_available']); ?>,
+                    datetime_min												:   '<?php echo $this->data['datetime_period']['min']; ?>',
+					datetime_max												:   '<?php echo $this->data['datetime_period']['max']; ?>',
+                    datetime_min_format											:   '<?php echo $this->data['datetime_period']['min_format']; ?>',
+					datetime_max_format											:   '<?php echo $this->data['datetime_period']['max_format']; ?>',
                     business_hour                                               :   <?php echo json_encode($this->data['meta']['business_hour']); ?>,
-                    timepicker_step                                             :   <?php echo $this->data['meta']['timepicker_step']; ?>,
+                    timepicker_step                                             :   <?php echo (int)$this->data['meta']['timepicker_step']; ?>,
                     timepicker_dropdown_list_enable                             :   <?php echo (int)$this->data['meta']['timepicker_dropdown_list_enable']; ?>,
-                    summary_sidebar_sticky_enable                               :   <?php echo $this->data['meta']['summary_sidebar_sticky_enable']; ?>,
+                    summary_sidebar_sticky_enable                               :   <?php echo (int)$this->data['meta']['summary_sidebar_sticky_enable']; ?>,
                     ride_time_multiplier                                        :   <?php echo $this->data['meta']['ride_time_multiplier']; ?>,
                     extra_time_unit                                             :   <?php echo (int)$this->data['meta']['extra_time_unit']; ?>,
                     driving_zone                                                :
@@ -271,7 +280,9 @@
                     current_date                                                :   '<?php echo date_i18n('d-m-Y'); ?>',
                     current_time                                                :   '<?php echo date_i18n('H:i'); ?>',
                     google_autosugestion_address_type                           :   <?php echo (int)$this->data['meta']['google_autosugestion_address_type']; ?>,
-                    icon_field_enable                                           :   <?php echo (int)$this->data['meta']['icon_field_enable']; ?>
+                    icon_field_enable                                           :   <?php echo (int)$this->data['meta']['icon_field_enable']; ?>,
+					use_my_location_link_enable									:	<?php echo (int)$this->data['meta']['use_my_location_link_enable']; ?>,
+					client_country_code											:	'<?php echo $this->data['client_country_code']; ?>'	
                });
                bookingForm.setup();
             });

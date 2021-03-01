@@ -9,6 +9,7 @@
                 </ul>
                 <div id="meta-box-coupon-1">
                     <ul class="to-form-field-list">
+						<?php echo CRBSHelper::createPostIdField(__('Coupon ID','car-rental-booking-system')); ?>
                         <li>
                             <h5><?php esc_html_e('Coupon code','car-rental-booking-system'); ?></h5>
                             <span class="to-legend"><?php esc_html_e('Unique, 12-characters coupon code.','car-rental-booking-system'); ?></span>
@@ -18,35 +19,69 @@
                         </li>  
                         <li>
                             <h5><?php esc_html_e('Usage count','car-rental-booking-system'); ?></h5>
-                            <span class="to-legend"><?php esc_html_e('Current usage count of the code.','car-rental-booking-system'); ?></span>
+                            <span class="to-legend"><?php esc_html_e('Current usage count of the coupon.','car-rental-booking-system'); ?></span>
                             <div class="to-field-disabled">
                                 <?php echo esc_html($this->data['meta']['usage_count']); ?>
                             </div>
                         </li>  
                         <li>
                             <h5><?php esc_html_e('Usage limit','car-rental-booking-system'); ?></h5>
-                            <span class="to-legend"><?php esc_html_e('Usage limit of the code. Allowed are integer values from range 1-9999. Leave blank for unlimited.','car-rental-booking-system'); ?></span>
+                            <span class="to-legend"><?php esc_html_e('Usage limit of the coupon. Allowed are integer values from range 1-9999. Leave blank for unlimited.','car-rental-booking-system'); ?></span>
                             <div>
                                 <input type="text" maxlength="4" name="<?php CRBSHelper::getFormName('usage_limit'); ?>" id="<?php CRBSHelper::getFormName('usage_limit'); ?>" value="<?php echo esc_attr($this->data['meta']['usage_limit']); ?>"/>
                             </div>
                         </li>  
                         <li>
+                            <h5><?php esc_html_e('Vehicles','car-rental-booking-system'); ?></h5>
+                            <span class="to-legend"><?php esc_html_e('Select vehicles for which coupon will be applied.','car-rental-booking-system'); ?></span>
+							<div class="to-checkbox-button">
+								<input type="checkbox" value="-1" id="<?php CRBSHelper::getFormName('vehicle_id_0'); ?>" name="<?php CRBSHelper::getFormName('vehicle_id[]'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['vehicle_id'],-1); ?>/>
+								<label for="<?php CRBSHelper::getFormName('vehicle_id_0'); ?>"><?php esc_html_e('- All vehicles -','car-rental-booking-system') ?></label>
+<?php
+		foreach($this->data['dictionary']['vehicle'] as $index=>$value)
+		{
+?>
+								<input type="checkbox" value="<?php echo esc_attr($index); ?>" id="<?php CRBSHelper::getFormName('vehicle_id_'.$index); ?>" name="<?php CRBSHelper::getFormName('vehicle_id[]'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['vehicle_id'],$index); ?>/>
+								<label for="<?php CRBSHelper::getFormName('vehicle_id_'.$index); ?>"><?php echo esc_html($value['post']->post_title); ?></label>
+<?php		
+		}
+?>
+							</div>
+						</li>
+						<li>
+                            <h5><?php esc_html_e('Vehicle categories','car-rental-booking-system'); ?></h5>
+                            <span class="to-legend"><?php esc_html_e('Select vehicle categories for which coupon will be applied.','car-rental-booking-system'); ?></span>
+							<div class="to-checkbox-button">
+								<input type="checkbox" value="-1" id="<?php CRBSHelper::getFormName('vehicle_category_id_0'); ?>" name="<?php CRBSHelper::getFormName('vehicle_category_id[]'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['vehicle_category_id'],-1); ?>/>
+								<label for="<?php CRBSHelper::getFormName('vehicle_category_id_0'); ?>"><?php esc_html_e('- All vehicles -','car-rental-booking-system') ?></label>
+<?php
+		foreach($this->data['dictionary']['vehicle_category'] as $index=>$value)
+		{
+?>
+								<input type="checkbox" value="<?php echo esc_attr($index); ?>" id="<?php CRBSHelper::getFormName('vehicle_category_id_'.$index); ?>" name="<?php CRBSHelper::getFormName('vehicle_category_id[]'); ?>" <?php CRBSHelper::checkedIf($this->data['meta']['vehicle_category_id'],$index); ?>/>
+								<label for="<?php CRBSHelper::getFormName('vehicle_category_id_'.$index); ?>"><?php echo esc_html($value['name']); ?></label>
+<?php		
+		}
+?>
+							</div>							
+                        </li>
+                        <li>
                             <h5><?php esc_html_e('Active from','car-rental-booking-system'); ?></h5>
-                            <span class="to-legend"><?php esc_html_e('Start date. Leave blank for no start date.','car-rental-booking-system'); ?></span>
+                            <span class="to-legend"><?php esc_html_e('Start date. Leave blank if there is no start date.','car-rental-booking-system'); ?></span>
                             <div>
                                 <input type="text" class="to-datepicker-custom" name="<?php CRBSHelper::getFormName('active_date_start'); ?>" id="<?php CRBSHelper::getFormName('active_date_start'); ?>" value="<?php echo $Date->formatDateToDisplay($this->data['meta']['active_date_start']); ?>"/>
                             </div>
                         </li>  
                         <li>
                             <h5><?php esc_html_e('Active to','car-rental-booking-system'); ?></h5>
-                            <span class="to-legend"><?php esc_html_e('Stop date. Leave blank for no stop  date.','car-rental-booking-system'); ?></span>
+                            <span class="to-legend"><?php esc_html_e('Stop date. Leave blank if there is no stop date.','car-rental-booking-system'); ?></span>
                             <div>
                                 <input type="text" class="to-datepicker-custom" name="<?php CRBSHelper::getFormName('active_date_stop'); ?>" id="<?php CRBSHelper::getFormName('active_date_stop'); ?>" value="<?php echo $Date->formatDateToDisplay($this->data['meta']['active_date_stop']); ?>"/>
                             </div>
                         </li>  						
                         <li>
                             <h5><?php esc_html_e('Percentage discount','car-rental-booking-system'); ?></h5>
-                            <span class="to-legend"><?php esc_html_e('Perecentage discount. Allowed are integer numbers from 0-99.','car-rental-booking-system'); ?></span>
+                            <span class="to-legend"><?php esc_html_e('Percentage discount. Allowed are integer numbers from 0-99.','car-rental-booking-system'); ?></span>
                             <div>
                                 <input type="text" maxlength="2" name="<?php CRBSHelper::getFormName('discount_percentage'); ?>" id="<?php CRBSHelper::getFormName('discount_percentage'); ?>" value="<?php echo esc_attr($this->data['meta']['discount_percentage']); ?>"/>
                             </div>
@@ -196,5 +231,34 @@
                 toCreateCustomDateTimePicker(dateFormat,timeFormat);
 				
 				$('#to-table-discount-rental-day-count').table();
+				
+                $('input[name="<?php CRBSHelper::getFormName('vehicle_id'); ?>[]"],input[name="<?php CRBSHelper::getFormName('vehicle_category_id'); ?>[]"]').on('change',function()
+                {
+                    var checkbox=$(this).parents('li:first').find('input');
+                    
+                    var value=parseInt($(this).val());
+                    if(value===-1)
+                    {
+                        checkbox.prop('checked',false);
+                        checkbox.first().prop('checked',true);
+                    }
+                    else checkbox.first().prop('checked',false);
+                    
+                    var checked=[];
+                    checkbox.each(function()
+                    {
+                        if($(this).is(':checked'))
+                            checked.push(parseInt($(this).val(),10));
+                    });
+                    
+                    if(checked.length===0)
+                    {
+                        checkbox.prop('checked',false);
+                        checkbox.first().prop('checked',true);
+                    }
+                    
+                    checkbox.button('refresh');
+                });
+				
             });
 		</script>

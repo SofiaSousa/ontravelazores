@@ -75,7 +75,7 @@
         
         this.createAutoComplete=function(text)
         {
-            var id=(new Helper()).getRandomString(16);
+            var id=(new CHBSHelper()).getRandomString(16);
                 
             text.attr('id',id).on('keypress',function(e)
             {
@@ -268,7 +268,7 @@
             {
                 if (event.type!==google.maps.drawing.OverlayType.MARKER)
                 {
-                    var helper=new Helper();
+                    var helper=new CHBSHelper();
                     
                     $drawingManager.setDrawingMode(null);
            

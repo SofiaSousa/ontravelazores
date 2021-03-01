@@ -14,25 +14,33 @@ class CHBSPaymentPaypal
 	
 	/**************************************************************************/
 	
-	function createPaymentForm($postId,$paypalEmailAddress,$paypalSandboxModeEnable)
+	function createPaymentForm($postId,$bookingForm)
 	{
-        $formURL='https://www.paypal.com/cgi-bin/webscr';
-        if($paypalSandboxModeEnable==1)
-            $formURL='https://www.sandbox.paypal.com/cgi-bin/webscr';
+		$Validation=new CHBSValidation();
+		
+        $formUrl='https://www.paypal.com/cgi-bin/webscr';
+        if((int)$bookingForm['meta']['payment_paypal_sandbox_mode_enable']===1)
+            $formUrl='https://www.sandbox.paypal.com/cgi-bin/webscr';
         
+		$successUrl=$bookingForm['meta']['payment_paypal_success_url_address'];
+		if($Validation->isEmpty($successUrl)) $successUrl=add_query_arg('action','success',get_the_permalink($postId));
+		
+		$cancelUrl=$bookingForm['meta']['payment_paypal_cancel_url_address'];
+		if($Validation->isEmpty($cancelUrl)) $cancelUrl=add_query_arg('action','cancel',get_the_permalink($postId));		
+		
 		$html=
 		'
-			<form action="'.esc_attr($formURL).'" method="post" name="chbs-form-paypal">
+			<form action="'.esc_url($formUrl).'" method="post" name="chbs-form-paypal">
 				<input type="hidden" name="cmd" value="_xclick">
-				<input type="hidden" name="business" value="'.esc_attr($paypalEmailAddress).'">				
+				<input type="hidden" name="business" value="'.esc_attr($bookingForm['meta']['payment_paypal_email_address']).'">				
 				<input type="hidden" name="item_name" value="">
 				<input type="hidden" name="item_number" value="0">
 				<input type="hidden" name="amount" value="0.00">	
 				<input type="hidden" name="currency_code" value="">
 				<input type="hidden" value="1" name="no_shipping">
-				<input type="hidden" value="'.get_the_permalink($postId).'?action=ipn" name="notify_url">				
-				<input type="hidden" value="'.get_the_permalink($postId).'?action=success" name="return">
-				<input type="hidden" value="'.get_the_permalink($postId).'?action=cancel" name="cancel_return">
+				<input type="hidden" value="'.esc_url(get_the_permalink($postId)).'?action=ipn" name="notify_url">				
+				<input type="hidden" value="'.esc_url($successUrl).'" name="return">
+				<input type="hidden" value="'.esc_url($cancelUrl).'" name="cancel_return">
 			</form>
 		';
 		
@@ -77,28 +85,53 @@ class CHBSPaymentPaypal
 		curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,2);
 		curl_setopt($ch,CURLOPT_HTTPHEADER,array('Host: www.paypal.com'));
 		$response=curl_exec($ch);
-         
+		
 		if(curl_errno($ch)) return;
 		if(!strcmp($response,'VERIFIED')==0) return;
 		
         $meta=CHBSPostMeta::getPostMeta($bookingId);
-		        
-        $paymentData=array
-        (
-            'txn_id'                                                            =>  $postData['txn_id'],
-            'payment_type'                                                      =>  $postData['payment_type'],
-            'payment_date'                                                      =>  date('Y-m-d H:i:s',CHBSDate::strtotime($postData['payment_date'])),
-            'payment_status'                                                    =>  $postData['payment_status'],
-            'mc_gross'                                                          =>  $postData['mc_gross'],
-            'mc_currency'                                                       =>  $postData['mc_currency']        
-        );
-        
-        if(!((array_key_exists('payment_data',$meta)) && (is_array($meta['payment_data']))))
-            $meta['payment_data']=array();
-        
-        array_push($meta['payment_data'],$paymentData);
-        
-        CHBSPostMeta::updatePostMeta($bookingId,'payment_data',$meta['payment_data']);
+		        		
+        if(!((array_key_exists('payment_paypal_data',$meta)) && (is_array($meta['payment_paypal_data']))))
+            $meta['payment_paypal_data']=array();
+		
+		$meta['payment_paypal_data'][]=$postData;
+		
+        CHBSPostMeta::updatePostMeta($bookingId,'payment_paypal_data',$meta['payment_paypal_data']);
+		
+		if($postData['payment_status']=='Completed')
+		{
+			if(CHBSOption::getOption('booking_status_payment_success')!=-1)
+			{
+				$oldBookingStatusId=$meta['booking_status_id'];
+				$newBookingStatusId=CHBSOption::getOption('booking_status_payment_success');
+
+				if($oldBookingStatusId!==$newBookingStatusId)
+				{
+					CHBSPostMeta::updatePostMeta($bookingId,'booking_status_id',$newBookingStatusId);
+
+					if((int)CHBSOption::getOption('booking_status_synchronization')===3)
+					{
+						$WooCommerce=new CHBSWooCommerce();
+						$WooCommerce->changeStaus($bookingId,CHBSOption::getOption('booking_status_synchronization'));
+					}
+
+					$Booking=new CHBSBooking();
+
+					$BookingStatus=new CHBSBookingStatus();
+					$bookingStatus=$BookingStatus->getBookingStatus($newBookingStatusId);
+
+					$recipient=array();
+					$recipient[0]=array($meta['client_contact_detail_email_address']);
+
+					$subject=sprintf(__('Booking "%s" has changed status to "%s"','chauffeur-booking-system'),$booking['post']->post_title,$bookingStatus[0]);
+
+					global $chbs_logEvent;
+
+					$chbs_logEvent=4;
+					$Booking->sendEmail($bookingId,CHBSOption::getOption('sender_default_email_account_id'),'booking_change_status',$recipient[0],$subject);           
+				}
+			}
+		}
 	}
 	
 	/**************************************************************************/

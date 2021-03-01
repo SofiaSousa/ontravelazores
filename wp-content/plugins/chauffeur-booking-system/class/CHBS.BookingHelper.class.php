@@ -17,7 +17,7 @@ class CHBSBookingHelper
         
         if($wooCommerceEnable)
         {
-           $paymentName=$WooCommerce->getPaymentName($paymentId);
+			$paymentName=$WooCommerce->getPaymentName($paymentId);
         }
         else
         {
@@ -49,7 +49,7 @@ class CHBSBookingHelper
         {
             if($WooCommerce->isEnable($meta))
             {
-                if(empty($paymentId))
+                if((empty($paymentId)) || ((int)$paymentId===-1))
                 {
                     $paymentId=0;
                     return(true);
@@ -57,8 +57,9 @@ class CHBSBookingHelper
             }
             else
             {
-                if($paymentId==0)
+                if($paymentId==-1)
                 {
+					$paymentId=0;
                     return(true);
                 }
             }
@@ -113,10 +114,10 @@ class CHBSBookingHelper
         $sum=0;
         
         if(CHBSBookingHelper::isPassengerEnable($meta,$data['service_type_id'],'adult'))
-            $sum+=$data['passenger_adult_service_type_'.$data['service_type_id']];
+            $sum+=(int)$data['passenger_adult_service_type_'.$data['service_type_id']];
             
         if(CHBSBookingHelper::isPassengerEnable($meta,$data['service_type_id'],'children'))
-            $sum+=$data['passenger_children_service_type_'.$data['service_type_id']];            
+            $sum+=(int)$data['passenger_children_service_type_'.$data['service_type_id']];            
         
         return($sum);
     }
@@ -207,6 +208,39 @@ class CHBSBookingHelper
         }
     }
     
+    /**************************************************************************/
+    
+    static function getRoundValue($bookingForm,$price)
+    {
+        $roundValue=0.00;
+        
+        if($bookingForm['meta']['vehicle_price_round']>0.00)
+        {
+			$price=number_format($price,2,'.','');
+			
+			$roundPrice=ceil($price/$bookingForm['meta']['vehicle_price_round'])*$bookingForm['meta']['vehicle_price_round'];
+			
+            if($roundPrice>=$price) 
+			{
+				$roundValue=$roundPrice-$price;
+
+				if($roundPrice-$bookingForm['meta']['vehicle_price_round']==$price)
+				{
+					$roundValue=0.00;
+				}
+			}
+        }
+		
+        return($roundValue);
+    }
+    
+	/**************************************************************************/
+	
+	static function isVehicleBidPriceEnable($bookingForm)
+	{
+		return(((int)$bookingForm['meta']['booking_summary_hide_fee']===1) && ((int)$bookingForm['meta']['vehicle_bid_enable']===1));
+	}
+	
     /**************************************************************************/
 }
 

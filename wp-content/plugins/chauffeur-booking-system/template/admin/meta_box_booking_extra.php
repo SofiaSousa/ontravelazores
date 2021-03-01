@@ -8,6 +8,7 @@
                 </ul>
                 <div id="meta-box-vehicle-1">
                     <ul class="to-form-field-list">
+						<?php echo CHBSHelper::createPostIdField(__('Booking extra ID','chauffeur-booking-system')); ?>
                         <li>
                             <h5><?php esc_html_e('Description','chauffeur-booking-system'); ?></h5>
                             <span class="to-legend"><?php esc_html_e('Description of the additive.','chauffeur-booking-system'); ?></span>
@@ -53,7 +54,7 @@
                         </li>  
                         <li>
                             <h5><?php esc_html_e('Mandatory','chauffeur-booking-system'); ?></h5>
-                            <span class="to-legend"><?php esc_html_e('Define whether selecting of this addon has to be mandatory.','chauffeur-booking-system'); ?></span>                        
+                            <span class="to-legend"><?php esc_html_e('Define whether selecting of this add-on has to be mandatory.','chauffeur-booking-system'); ?></span>                        
                             <div class="to-radio-button">
                                 <input type="radio" value="1" id="<?php CHBSHelper::getFormName('mandatory_1'); ?>" name="<?php CHBSHelper::getFormName('mandatory'); ?>" <?php CHBSHelper::checkedIf($this->data['meta']['mandatory'],1); ?>/>
                                 <label for="<?php CHBSHelper::getFormName('mandatory_1'); ?>"><?php esc_html_e('Yes','chauffeur-booking-system'); ?></label>

@@ -56,7 +56,7 @@ class CRBSPostMeta
         
 			case PLUGIN_CRBS_CONTEXT.'_booking_form':
                 
-                self::unserialize($data,array('location_id','currency','field_mandatory','style_color','form_element_panel','form_element_field','form_element_agreement','geolocation_enable','customer_pickup_location_restriction_country','customer_return_location_restriction_country'));
+                self::unserialize($data,array('location_id','currency','field_mandatory','vehicle_attribute_enable','style_color','form_element_panel','form_element_field','form_element_agreement','geolocation_enable','customer_pickup_location_restriction_country','customer_return_location_restriction_country'));
   
 				$BookingForm=new CRBSBookingForm();
 				$BookingForm->setPostMetaDefault($data);
@@ -65,7 +65,7 @@ class CRBSPostMeta
         
 			case PLUGIN_CRBS_CONTEXT.'_booking':
                 
-                self::unserialize($data,array('booking_extra','coordinate','payment_data','form_element_panel','form_element_field'));
+                self::unserialize($data,array('booking_extra','coordinate','payment_stripe_data','payment_paypal_data','form_element_panel','form_element_field'));
   
 				$Booking=new CRBSBooking();
 				$Booking->setPostMetaDefault($data);
@@ -83,7 +83,7 @@ class CRBSPostMeta
         
             case PLUGIN_CRBS_CONTEXT.'_location':
                 
-                self::unserialize($data,array('vehicle_availability_check_type','business_hour','date_exclude','payment_id'));
+                self::unserialize($data,array('vehicle_rent_date','vehicle_availability_check_type','business_hour','date_exclude','payment_id','payment_stripe_method','country_available'));
                 
 				$Location=new CRBSLocation();
 				$Location->setPostMetaDefault($data);
@@ -94,7 +94,7 @@ class CRBSPostMeta
             
 			case PLUGIN_CRBS_CONTEXT.'_coupon':
                 
-				self::unserialize($data,array('discount_rental_day_count'));
+				self::unserialize($data,array('vehicle_id','vehicle_category_id','discount_rental_day_count'));
 				
 				$Coupon=new CRBSCoupon();
 				$Coupon->setPostMetaDefault($data);

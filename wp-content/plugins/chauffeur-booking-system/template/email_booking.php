@@ -42,7 +42,7 @@
         if((int)$this->data['document_header_exclude']!==1)
         {
             $logo=CHBSOption::getOption('logo');
-            if($Validation->isNotEmpty('logo'))
+            if($Validation->isNotEmpty($logo))
             {
 ?>
                                 <tr>
@@ -116,8 +116,25 @@
                                             <tr>
                                                 <td <?php echo $this->data['style']['cell'][1]; ?>><?php esc_html_e('Order total amount','chauffeur-booking-system'); ?></td>
                                                 <td <?php echo $this->data['style']['cell'][2]; ?>><?php echo esc_html(CHBSPrice::format($this->data['booking']['billing']['summary']['value_gross'],$this->data['booking']['meta']['currency_id'])); ?></td>
-                                            </tr>	
+                                            </tr>
 <?php
+			$taxHtml=null;
+			
+			foreach($this->data['booking']['billing']['tax_group'] as $value)
+			{
+				if(!$Validation->isEmpty($taxHtml)) $taxHtml.=', ';
+				$taxHtml.=CHBSPrice::format($value['value'],$this->data['booking']['meta']['currency_id']).' ('.$value['tax_value'].'%)';
+			}	
+			
+			if($Validation->isNotEmpty($taxHtml))
+			{
+?>
+                                            <tr>
+                                                <td <?php echo $this->data['style']['cell'][1]; ?>><?php esc_html_e('Taxes','chauffeur-booking-system'); ?></td>
+                                                <td <?php echo $this->data['style']['cell'][2]; ?>><?php echo esc_html($taxHtml); ?></td>
+                                            </tr>
+<?php
+			}
             if($this->data['booking']['meta']['payment_deposit_enable']==1)
             {
 ?>                                            
@@ -127,9 +144,10 @@
                                             </tr>	                                            
 <?php          
             }
-
-            if(in_array($this->data['booking']['meta']['service_type_id'],array(1,3)))
-            {
+		}
+		
+		if(in_array($this->data['booking']['meta']['service_type_id'],array(1,3)))
+        {
 ?>
                                             <tr>
                                                 <td <?php echo $this->data['style']['cell'][1]; ?>><?php esc_html_e('Distance','chauffeur-booking-system'); ?></td>
@@ -139,8 +157,7 @@
                                                 </td>
                                             </tr>
 <?php
-            }
-        }
+		}
 ?>
                                             <tr>
                                                 <td <?php echo $this->data['style']['cell'][1]; ?>><?php esc_html_e('Duration','chauffeur-booking-system'); ?></td>
@@ -173,7 +190,10 @@
                                 </tr>
                                             
                                 <!-- -->
-                                            
+<?php
+		if(((int)$this->data['booking']['meta']['service_type_id']===3) || (((int)$this->data['booking']['meta']['service_type_id']===3) && ((int)$this->data['booking']['meta']['extra_time_enable']===1)))
+		{
+?>                                            
                                 <tr><td <?php echo $this->data['style']['separator'][2]; ?>></td></tr>
                                 <tr>
                                     <td <?php echo $this->data['style']['header']; ?>><?php esc_html_e('Route','chauffeur-booking-system'); ?></td>
@@ -183,20 +203,20 @@
                                     <td <?php echo $this->data['style']['cell'][3]; ?>>
                                         <table cellspacing="0" cellpadding="0">
 <?php
-        if($this->data['booking']['meta']['service_type_id']==3)
-        {
+			if((int)$this->data['booking']['meta']['service_type_id']===3)
+			{
 ?>
                                             <tr>
                                                 <td <?php echo $this->data['style']['cell'][1]; ?>><?php esc_html_e('Route name','chauffeur-booking-system'); ?></td>
                                                 <td <?php echo $this->data['style']['cell'][2]; ?>><?php echo esc_html($this->data['booking']['meta']['route_name']); ?></td>
                                             </tr>
 <?php
-        }
+			}
 
-        if(in_array($this->data['booking']['meta']['service_type_id'],array(1,3)))
-        {
-            if($this->data['booking']['meta']['extra_time_enable']==1)
-            {
+			if(in_array($this->data['booking']['meta']['service_type_id'],array(1,3)))
+			{
+				if((int)$this->data['booking']['meta']['extra_time_enable']===1)
+				{
 ?>
                                             
                                             <tr>
@@ -204,13 +224,15 @@
                                                 <td <?php echo $this->data['style']['cell'][2]; ?>><?php echo esc_html($Date->formatMinuteToTime($this->data['booking']['meta']['extra_time_value'])); ?></td>
                                             </tr>                                            
 <?php
-            }
-        }
+				}
+			}
 ?>
                                         </table>
                                     </td>
                                 </tr>
-                                            
+<?php
+		}
+?>
                                 <!-- -->            
                                             
                                 <tr><td <?php echo $this->data['style']['separator'][2]; ?>></td></tr>
@@ -498,6 +520,35 @@
                                     </td>
                                 </tr>  
 <?php    
+        }
+        
+        if((array_key_exists('booking_driver_accept_link',$this->data)) && (array_key_exists('booking_driver_reject_link',$this->data)))
+        {
+?>
+                                <tr><td <?php echo $this->data['style']['separator'][2]; ?>></td></tr>
+                                <tr>
+                                    <td <?php echo $this->data['style']['header']; ?>><?php esc_html_e('Accept/reject booking','chauffeur-booking-system'); ?></td>
+                                </tr>
+                                <tr><td <?php echo $this->data['style']['separator'][3]; ?>></td></tr>
+                                <tr>
+                                    <td <?php echo $this->data['style']['cell'][3]; ?>>
+                                        <table cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td <?php echo $this->data['style']['cell'][1]; ?>><?php esc_html_e('Accept booking','chauffeur-booking-system'); ?></td>
+                                                <td <?php echo $this->data['style']['cell'][2]; ?>>                           
+                                                    <a href="<?php echo esc_url($this->data['booking_driver_accept_link']); ?>" target="_blank"><?php esc_html_e('Click to accept this booking','chauffeur-booking-system') ?></a>
+                                                </td>
+                                            </tr>  
+                                            <tr>
+                                                <td <?php echo $this->data['style']['cell'][1]; ?>><?php esc_html_e('Reject booking','chauffeur-booking-system'); ?></td>
+                                                <td <?php echo $this->data['style']['cell'][2]; ?>>                           
+                                                    <a href="<?php echo esc_url($this->data['booking_driver_reject_link']); ?>" target="_blank"><?php esc_html_e('Click to reject this booking','chauffeur-booking-system') ?></a>
+                                                </td>
+                                            </tr>    
+                                        </table>
+                                    </td>
+                                </tr>              
+<?php
         }
 ?>
 							</table>

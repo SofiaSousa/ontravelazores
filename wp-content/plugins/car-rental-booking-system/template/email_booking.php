@@ -157,7 +157,7 @@
                                                             <?php echo esc_html($value['quantity']); ?>
                                                             <?php esc_html_e('x','car-rental-booking-system'); ?>
                                                             <?php echo esc_html($value['name']); ?> -
-                                                            <?php echo CRBSPrice::format(CRBSPrice::calculateGross($value['price'],0,$value['tax_rate_value'])*$value['quantity'],$this->data['booking']['meta']['currency_id']); ?>
+                                                            <?php echo CRBSPrice::format(CRBSPrice::calculateGross($value['sum_net'],0,$value['tax_rate_value'])*$value['quantity'],$this->data['booking']['meta']['currency_id']); ?>
                                                         </li> 
 <?php
             }

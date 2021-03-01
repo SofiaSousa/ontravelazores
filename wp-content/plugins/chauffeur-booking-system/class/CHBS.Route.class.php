@@ -195,6 +195,8 @@ class CHBSRoute
         
         $dictionary=$GlobalData->setGlobalData('vehicle_dictionary',array(new CHBSVehicle(),'getDictionary'));
         
+        $defaultPrice=CHBSPrice::getDefaultPrice();
+        
         foreach($dictionary as $index=>$value)
         {
             if(isset($meta['vehicle'][$index])) continue;
@@ -203,21 +205,21 @@ class CHBSRoute
             $meta['vehicle'][$index]['price_source']='1';
             $meta['vehicle'][$index]['price_type']='1';
             
-            $meta['vehicle'][$index]['price_fixed_value']='0.00';
-            $meta['vehicle'][$index]['price_fixed_return_value']='0.00';
-            $meta['vehicle'][$index]['price_fixed_return_new_ride_value']='0.00';
-            $meta['vehicle'][$index]['price_initial_value']='0.00';
-            $meta['vehicle'][$index]['price_delivery_value']='0.00';
-            $meta['vehicle'][$index]['price_delivery_return_value']='0.00';
-            $meta['vehicle'][$index]['price_distance_value']='0.00';
-            $meta['vehicle'][$index]['price_distance_return_value']='0.00';
-            $meta['vehicle'][$index]['price_distance_return_new_ride_value']='0.00';
-            $meta['vehicle'][$index]['price_hour_value']='0.00';
-            $meta['vehicle'][$index]['price_hour_return_value']='0.00';
-            $meta['vehicle'][$index]['price_hour_return_new_ride_value']='0.00';            
-            $meta['vehicle'][$index]['price_extra_time_value']='0.00';
-            $meta['vehicle'][$index]['price_passenger_adult_value']='0.00';
-            $meta['vehicle'][$index]['price_passenger_children_value']='0.00';
+            $meta['vehicle'][$index]['price_fixed_value']=$defaultPrice;
+            $meta['vehicle'][$index]['price_fixed_return_value']=$defaultPrice;
+            $meta['vehicle'][$index]['price_fixed_return_new_ride_value']=$defaultPrice;
+            $meta['vehicle'][$index]['price_initial_value']=$defaultPrice;
+            $meta['vehicle'][$index]['price_delivery_value']=$defaultPrice;
+            $meta['vehicle'][$index]['price_delivery_return_value']=$defaultPrice;
+            $meta['vehicle'][$index]['price_distance_value']=$defaultPrice;
+            $meta['vehicle'][$index]['price_distance_return_value']=$defaultPrice;
+            $meta['vehicle'][$index]['price_distance_return_new_ride_value']=$defaultPrice;
+            $meta['vehicle'][$index]['price_hour_value']=$defaultPrice;
+            $meta['vehicle'][$index]['price_hour_return_value']=$defaultPrice;
+            $meta['vehicle'][$index]['price_hour_return_new_ride_value']=$defaultPrice;            
+            $meta['vehicle'][$index]['price_extra_time_value']=$defaultPrice;
+            $meta['vehicle'][$index]['price_passenger_adult_value']=$defaultPrice;
+            $meta['vehicle'][$index]['price_passenger_children_value']=$defaultPrice;
                       
             $meta['vehicle'][$index]['price_fixed_tax_rate_id']=$TaxRate->getDefaultTaxPostId();
             $meta['vehicle'][$index]['price_fixed_return_tax_rate_id']=$TaxRate->getDefaultTaxPostId();
@@ -235,6 +237,12 @@ class CHBSRoute
             $meta['vehicle'][$index]['price_passenger_adult_tax_rate_id']=$TaxRate->getDefaultTaxPostId();   
             $meta['vehicle'][$index]['price_passenger_children_tax_rate_id']=$TaxRate->getDefaultTaxPostId();   
         }
+		
+		for($i=1;$i<8;$i++)
+		{
+			if(!isset($meta['pickup_hour'][$i]))
+                $meta['pickup_hour'][$i]=array('hour'=>null);
+		}	
     }
     
     /**************************************************************************/
@@ -264,6 +272,7 @@ class CHBSRoute
         
 		$option=CHBSHelper::getPostOption();
         
+		$Date=new CHBSDate();
         $TaxRate=new CHBSTaxRate();
         $Vehicle=new CHBSVehicle();
         $PriceType=new CHBSPriceType();
@@ -274,6 +283,8 @@ class CHBSRoute
         CHBSPostMeta::updatePostMeta($postId,'coordinate',json_decode($option['coordinate']));
         
         /***/
+        
+        $defaultPrice=CHBSPrice::getDefaultPrice();
         
         $vehicle=array();
         
@@ -296,13 +307,15 @@ class CHBSRoute
             if((isset($option['vehicle'][$index]['price_source'])) && ($this->isPriceSource($option['vehicle'][$index]['price_source'])))
                 $vehicle[$index]['price_source']=$option['vehicle'][$index]['price_source'];
             else $vehicle[$index]['price_source']=1;
-
+		
             foreach($priceDictionary as $priceValue)
             {
                 if((isset($option['vehicle'][$index][$priceValue.'_value'])) && ($Validation->isPrice($option['vehicle'][$index][$priceValue.'_value'])))
                     $vehicle[$index][$priceValue.'_value']=$option['vehicle'][$index][$priceValue.'_value'];
-                else $vehicle[$index][$priceValue.'_value']=0.00;
+                else $vehicle[$index][$priceValue.'_value']=$defaultPrice;
 
+				$vehicle[$index][$priceValue.'_value']=CHBSPrice::formatToSave($vehicle[$index][$priceValue.'_value'],false);
+				
                 if($TaxRate->isTaxRate($option['vehicle'][$index][$priceValue.'_tax_rate_id']))
                     $vehicle[$index][$priceValue.'_tax_rate_id']=$option['vehicle'][$index][$priceValue.'_tax_rate_id'];
                 else $vehicle[$index][$priceValue.'_tax_rate_id']=0;
@@ -310,6 +323,28 @@ class CHBSRoute
         }
         
         CHBSPostMeta::updatePostMeta($postId,'vehicle',$vehicle);
+		
+		/***/
+		
+		$pickupHour=array();
+        $pickupHourPost=CHBSHelper::getPostValue('pickup_hour');
+        
+		foreach(array_keys($Date->day) as $dayIndex)
+		{
+			$hour=preg_split('/;/',$pickupHourPost[$dayIndex]['hour']);
+			
+			foreach($hour as $hourIndex=>$hourValue)
+			{
+				$hourValue=$Date->formatTimeToStandard($hourValue);
+            
+				if($Validation->isTime($hourValue,false))
+					$pickupHour[$dayIndex]['hour'][$hourIndex]=$hourValue;
+			}
+		}
+		
+		CHBSPostMeta::updatePostMeta($postId,'pickup_hour',$pickupHour);
+		
+		/***/
     }
 
 	/**************************************************************************/

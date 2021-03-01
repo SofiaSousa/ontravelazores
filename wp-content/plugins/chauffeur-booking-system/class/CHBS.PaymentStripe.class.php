@@ -9,132 +9,263 @@ class CHBSPaymentStripe
 	
 	function __construct()
 	{
-
+		$this->paymentMethod=array
+		(
+			'alipay'															=>	array(__('Alipay','chauffeur-booking-system')),
+			'card'																=>	array(__('Cards','chauffeur-booking-system')),			
+			'ideal'																=>	array(__('iDEAL','chauffeur-booking-system')),
+			'fpx'																=>	array(__('FPX','chauffeur-booking-system')),
+			'bacs_debit'														=>	array(__('Bacs Direct Debit','chauffeur-booking-system')),
+			'bancontact'														=>	array(__('Bancontact','chauffeur-booking-system')),
+			'giropay'															=>	array(__('Giropay','chauffeur-booking-system')),
+			'p24'																=>	array(__('Przelewy24','chauffeur-booking-system')),
+			'eps'																=>	array(__('EPS','chauffeur-booking-system')),
+			'sofort'															=>	array(__('Sofort','chauffeur-booking-system')),
+			'sepa_debit'														=>	array(__('SEPA Direct Debit','chauffeur-booking-system'))
+		);
+		
+		$this->event=array
+		(
+			'payment_intent.canceled',
+			'payment_intent.created',
+			'payment_intent.payment_failed',
+			'payment_intent.processing',
+			'payment_intent.requires_action',
+			'payment_intent.succeeded',
+			'payment_method.attached'
+		);
+		
+		asort($this->paymentMethod);
 	}
 	
 	/**************************************************************************/
 	
-	function createPaymentForm($postId,$bookingId,$bookingTitle,$amount,$publishableKey,$clientEmailAddress,$currency)
+	function getPaymentMethod()
 	{
-		$html=
-		'
-            <form action="'.get_the_permalink($postId).'?bookingId='.(int)$bookingId.'" method="POST" name="chbs-form-stripe" >
-                <script
-                    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-					data-key="'.esc_attr($publishableKey).'"
-					data-amount="'.esc_attr($amount*100).'"
-					data-name="'.esc_attr($bookingTitle).'"
-					data-description="'.esc_attr__('New booking','chauffeur-booking-system').'"
-					data-currency="'.esc_attr($currency).'"
-					data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-					data-locale="auto"
-                    data-email="'.esc_attr($clientEmailAddress).'">
-				</script>
-				<button type="submit" formtarget="_blank" style="display:none !important;"></button>
-            </form>
-		';
-		
-		return($html);
+		return($this->paymentMethod);
 	}
-    
-    /**************************************************************************/
-    
-	function createCharge($stripeToken,$bookingId)
+	
+	/**************************************************************************/
+	
+	function isPaymentMethod($paymentMethod)
 	{
-        $Booking=new CHBSBooking();
-        $BookingForm=new CHBSBookingForm();
-        
-		$booking=$Booking->getBooking($bookingId);
-        
-        if($booking===false) return(false);
-        
-        if($booking['meta']['payment_id']!=2) return(false);
-        
-        $bookingFormId=$booking['meta']['booking_form_id'];
-       
-        $bookingForm=$BookingForm->getDictionary(array('booking_form_id'=>$booking['meta']['booking_form_id']));
-        if(count($bookingForm)!=1) return(false);
-        
-        $bookingBilling=$Booking->createBilling($bookingId);
-        
-		$data=array
-        (
-            'source'                                                            =>	$stripeToken,
-			'description'                                                       =>	$booking['post']->post_title,
-            'amount'                                                            =>	$bookingBilling['summary']['pay']*100,
-			'currency'                                                          =>	$booking['meta']['currency_id']
-		);
-			
-        $string=http_build_query($data);
-        
-        $ch=curl_init();
-		curl_setopt($ch,CURLOPT_URL,'https://api.stripe.com/v1/charges');
-		curl_setopt($ch,CURLOPT_USERPWD,$bookingForm[$bookingFormId]['meta']['payment_stripe_api_key_secret']);
-		curl_setopt($ch,CURLOPT_POST,1);
-		curl_setopt($ch,CURLOPT_POSTFIELDS,$string);
-		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
-		curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,0);
-		curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,0);
-		$result=curl_exec($ch);
-			
-        if($result)
-        {
-            $result=json_decode($result);
-			if(property_exists($result,'error')) return(false);
+		return(array_key_exists($paymentMethod,$this->paymentMethod) ? true : false);
+	}
+	
+	/**************************************************************************/
+	
+	function getWebhookEndpointUrlAdress()
+	{
+		$address=add_query_arg('action','payment_stripe',home_url().'/');
+		return($address);
+	}
+	
+	/**************************************************************************/
+	
+	function createWebhookEndpoint($bookingForm)
+	{
+		$StripeClient=new \Stripe\StripeClient($bookingForm['meta']['payment_stripe_api_key_secret']);
+		
+		$webhookEndpoint=$StripeClient->webhookEndpoints->create(['url'=>$this->getWebhookEndpointUrlAdress(),'enabled_events'=>$this->event]);		
+		
+		CHBSOption::updateOption(array('payment_stripe_webhook_endpoint_id'=>$webhookEndpoint->id));
+	}
+	
+	/**************************************************************************/
+	
+	function updateWebhookEndpoint($bookingForm,$webhookEndpointId)
+	{
+		$StripeClient=new \Stripe\StripeClient($bookingForm['meta']['payment_stripe_api_key_secret']);
+		
+		$StripeClient->webhookEndpoints->update($webhookEndpointId,['url'=>$this->getWebhookEndpointUrlAdress()]);
+	}
+	
+	/**************************************************************************/
+	
+	function createSession($booking,$bookingBilling,$bookingForm)
+	{
+		$Validation=new CHBSValidation();
+		
+		$currentURLAddress=home_url();
+		
+		/***/
+		
+		Stripe\Stripe::setApiKey($bookingForm['meta']['payment_stripe_api_key_secret']);
 
-            $meta=CHBSPostMeta::getPostMeta($bookingId);
-		        
-            $paymentData=array
-            (
-                'txn_id'                                                        =>  $result->id,
-                'payment_type'                                                  =>  $result->source->object,
-                'payment_date'                                                  =>  date('Y-m-d H:i:s',$result->created),
-                'payment_status'                                                =>  $result->status,
-                'mc_gross'                                                      =>  $result->amount/100,
-                'mc_currency'                                                   =>  $result->currency        
-            );
-        
-            if(!((array_key_exists('payment_data',$meta)) && (is_array($meta['payment_data']))))
-                $meta['payment_data']=array();
-        
-            array_push($meta['payment_data'],$paymentData);
-        
-            CHBSPostMeta::updatePostMeta($bookingId,'payment_data',$meta['payment_data']);
-            
-            return(true);
-        }
-    }
-    
-    /**************************************************************************/
-    
-    function redirect()
-    {
-        $bookingId=CHBSHelper::getGetValue('bookingId',false);
- 		$stripeToken=CHBSHelper::getPostValue('stripeToken',false);
-        
-		if($stripeToken!==null)
+		/***/
+		
+		$webhookEndpointId=CHBSOption::getOption('payment_stripe_webhook_endpoint_id');
+		
+		if($Validation->isEmpty($webhookEndpointId)) $this->createWebhookEndpoint($bookingForm);
+		else
 		{
-			$PaymentStripe=new CHBSPaymentStripe();
-			$PaymentStripe->createCharge($stripeToken,$bookingId);
-            
-            $Booking=new CHBSBooking();
-            $BookingForm=new CHBSBookingForm();
-            
-            $Validation=new CHBSValidation();
-            
-            $booking=$Booking->getBooking($bookingId);
-        
-            $bookingFormId=$booking['meta']['booking_form_id'];
-            if(($dictionary=$BookingForm->getDictionary(array('booking_fomr_id'=>$bookingFormId)))===false) return(false);
-            if(count($dictionary)!=1) return(false);
-        
-            if($Validation->isNotEmpty($dictionary[$bookingFormId]['meta']['payment_stripe_redirect_url_address']))
-            {
-                wp_redirect($dictionary[$bookingFormId]['meta']['payment_stripe_redirect_url_address']);
-                exit();
-            }
-		}          
-    }
+			try
+			{
+				$this->updateWebhookEndpoint($bookingForm,$webhookEndpointId);
+			} 
+			catch (Exception $ex) 
+			{
+				$this->createWebhookEndpoint($bookingForm);
+			}
+		}
+		
+		/***/
+		
+		$productId=$bookingForm['meta']['payment_stripe_product_id'];
+		
+		if($Validation->isEmpty($productId))
+		{
+			$product=\Stripe\Product::create(
+			[
+				'name'															=> __('Chauffeur service','chauffeur-booking-system')
+			]);		
+			
+			$productId=$product->id;
+			
+			CHBSPostMeta::updatePostMeta($bookingForm['post']->ID,'payment_stripe_product_id',$productId);
+		}
+		
+		/***/
+		
+		$price=\Stripe\Price::create(
+		[
+			'product'															=>	$productId,
+			'unit_amount'														=>	$bookingBilling['summary']['pay']*100,
+			'currency'															=>	$booking['meta']['currency_id'],
+		]);
+
+		/***/
+		
+		
+		if($Validation->isEmpty($bookingForm['meta']['payment_stripe_success_url_address']))
+			$bookingForm['meta']['payment_stripe_success_url_address']=$currentURLAddress;
+		if($Validation->isEmpty($bookingForm['meta']['payment_stripe_cancel_url_address']))
+			$bookingForm['meta']['payment_stripe_cancel_url_address']=$currentURLAddress;
+		
+		$session=\Stripe\Checkout\Session::create
+		(
+			[
+				'payment_method_types'											=>	$bookingForm['meta']['payment_stripe_method'],
+				'mode'															=>	'payment',
+				'line_items'													=>
+				[
+					[
+						'price'													=>	$price->id,
+						'quantity'												=>	1
+					]
+				],
+				'success_url'													=>	$bookingForm['meta']['payment_stripe_success_url_address'],
+				'cancel_url'													=>	$bookingForm['meta']['payment_stripe_cancel_url_address']
+			]		
+		);
+		
+		CHBSPostMeta::updatePostMeta($booking['post']->ID,'payment_stripe_intent_id',$session->payment_intent);
+		
+		return($session->id);
+	}
+	
+	/**************************************************************************/
+	
+	function receivePayment()
+	{
+		if(!array_key_exists('action',$_REQUEST)) return(false);
+		
+		if($_REQUEST['action']=='payment_stripe')
+		{
+			global $post;
+			
+			$event=null;
+			$content=@file_get_contents('php://input');
+	
+			try 
+			{
+				$event=\Stripe\Event::constructFrom(json_decode($content,true));
+			} 
+			catch(\UnexpectedValueException $e) 
+			{
+				http_response_code(400);
+				exit();
+			}	
+			
+			if(in_array($event->type,$this->event))
+			{
+				$argument=array
+				(
+                    'post_type'                                                 =>	CHBSBooking::getCPTName(),
+                    'posts_per_page'                                            =>	-1,
+                    'meta_query'                                                =>  array
+                    (
+                        array
+                        (
+                            'key'                                               =>  PLUGIN_CHBS_CONTEXT.'_payment_stripe_intent_id',
+                            'value'                                             =>  $event->data->object->id
+                        )                      
+                    )
+				);
+				
+                CHBSHelper::preservePost($post,$bPost);
+				
+	            $query=new WP_Query($argument);
+                if($query!==false) 
+                {
+					while($query->have_posts())
+					{
+						$query->the_post();
+                    
+						$meta=CHBSPostMeta::getPostMeta($post);
+						
+						if(!array_key_exists('payment_stripe_data',$meta)) $meta['payment_stripe_data']=array();
+						
+						$meta['payment_stripe_data'][]=$event;
+						
+						CHBSPostMeta::updatePostMeta($post->ID,'payment_stripe_data',$meta['payment_stripe_data']);
+						
+						if($event->type=='payment_intent.succeeded')
+						{
+							if(CHBSOption::getOption('booking_status_payment_success')!=-1)
+							{
+								$oldBookingStatusId=$meta['booking_status_id'];
+								$newBookingStatusId=CHBSOption::getOption('booking_status_payment_success');
+								
+								if($oldBookingStatusId!==$newBookingStatusId)
+								{
+									CHBSPostMeta::updatePostMeta($post->ID,'booking_status_id',$newBookingStatusId);
+								
+									if((int)CHBSOption::getOption('booking_status_synchronization')===3)
+									{
+										$WooCommerce=new CHBSWooCommerce();
+										$WooCommerce->changeStaus($post->ID,CHBSOption::getOption('booking_status_synchronization'));
+									}
+									
+									$Booking=new CHBSBooking();
+								
+									$BookingStatus=new CHBSBookingStatus();
+									$bookingStatus=$BookingStatus->getBookingStatus($newBookingStatusId);
+
+									$recipient=array();
+									$recipient[0]=array($meta['client_contact_detail_email_address']);
+
+									$subject=sprintf(__('Booking "%s" has changed status to "%s"','chauffeur-booking-system'),$post->post_title,$bookingStatus[0]);
+
+									global $chbs_logEvent;
+									
+									$chbs_logEvent=4;
+									$Booking->sendEmail($post->ID,CHBSOption::getOption('sender_default_email_account_id'),'booking_change_status',$recipient[0],$subject);           
+								}
+							}
+						}
+						
+						break;
+					}
+                }
+			
+				CHBSHelper::preservePost($post,$bPost,0);
+			}
+		
+			http_response_code(200);
+			exit();
+		}
+	}
     
     /**************************************************************************/
 }

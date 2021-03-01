@@ -114,7 +114,7 @@ class CHBSBookingFormStyle
         $Validation=new CHBSValidation();
         $BookingForm=new CHBSBookingForm();
         
-        $dictionary=$BookingForm->getDictionary();
+        $dictionary=$BookingForm->getDictionary(array('suppress_filters'=>true));
         
         foreach($dictionary as $dictionaryIndex=>$dictionaryValue)
         {
@@ -131,6 +131,8 @@ class CHBSBookingFormStyle
             $data['color']=$meta['style_color'];
             $data['main_css_class']='.chbs-booking-form-id-'.$dictionaryIndex;
 
+			$data['booking_form_id']=$dictionaryIndex;
+			
             $Template=new CHBSTemplate($data,PLUGIN_CHBS_TEMPLATE_PATH.'public/style.php');
 		
             $content.=$Template->output();

@@ -36,6 +36,10 @@ class CHBSLogManager
                 6                                                               =>  array
                 (
                     'description'                                               =>  __('Sending an notification about new unassigned driver to the booking.','chauffeur-booking-system')
+                ),
+                7                                                               =>  array
+                (
+                    'description'                                               =>  __('Sending an notification with information about accepting/rejecting booking by driver.','chauffeur-booking-system')
                 )
             ),
             'nexmo'                                                             =>  array

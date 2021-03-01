@@ -48,6 +48,9 @@
 								<a href="#import_demo"><?php esc_html_e('Import demo','car-rental-booking-system'); ?><span></span></a>
 							</li>
                             <li>
+								<a href="#payment"><?php esc_html_e('Payments','car-rental-booking-system'); ?><span></span></a>
+							</li>
+                            <li>
 								<a href="#coupon_creator"><?php esc_html_e('Coupons creator','car-rental-booking-system'); ?><span></span></a>
 							</li>
                             <li>
@@ -58,7 +61,7 @@
                                 <ul>
 									<li><a href="#log_manager_mail"><?php esc_html_e('Mail','car-rental-booking-system'); ?></a></li>
                                     <li><a href="#log_manager_twilio"><?php esc_html_e('Twilio','car-rental-booking-system'); ?></a></li>
-									<li><a href="#log_manager_nexmo"><?php esc_html_e('Nexmo','car-rental-booking-system'); ?></a></li>
+									<li><a href="#log_manager_nexmo"><?php esc_html_e('Nexmo/Vonage','car-rental-booking-system'); ?></a></li>
                                     <li><a href="#log_manager_telegram"><?php esc_html_e('Telegram','car-rental-booking-system'); ?></a></li>
                                     <li><a href="#log_manager_geolocation"><?php esc_html_e('Geolocation','car-rental-booking-system'); ?></a></li>
 									<li><a href="#log_manager_google_calendar"><?php esc_html_e('Google Calendar','car-rental-booking-system'); ?></a></li>
@@ -74,6 +77,7 @@
         (
             'general',
             'import_demo',
+			'payment',
             'coupon_creator',
             'exchange_rate',
             'log_manager_mail',

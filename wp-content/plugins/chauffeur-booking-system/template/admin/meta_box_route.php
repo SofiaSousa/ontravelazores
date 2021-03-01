@@ -1,5 +1,7 @@
 <?php 
+		$Date=new CHBSDate();
         $Length=new CHBSLength();
+		
 		echo $this->data['nonce']; 
 ?>	
 		<div class="to">
@@ -7,9 +9,11 @@
                 <ul>
                     <li><a href="#meta-box-route-1"><?php esc_html_e('Route','chauffeur-booking-system'); ?></a></li>
                     <li><a href="#meta-box-route-2"><?php esc_html_e('Prices','chauffeur-booking-system'); ?></a></li>
+					<li><a href="#meta-box-route-3"><?php esc_html_e('Pickup hours','chauffeur-booking-system'); ?></a></li>
                 </ul>
                 <div id="meta-box-route-1">
                     <ul class="to-form-field-list">
+						<?php echo CHBSHelper::createPostIdField(__('Route ID','chauffeur-booking-system')); ?>
                         <li>
                             <h5><?php esc_html_e('Route','chauffeur-booking-system'); ?></h5>
                             <span class="to-legend">
@@ -64,7 +68,7 @@
                                         </td>
                                     </tr>
 <?php
-        if(count($this->data['meta']['coordinate']))
+        if((is_array($this->data['meta']['coordinate'])) && (count($this->data['meta']['coordinate'])))
         {
             foreach($this->data['meta']['coordinate'] as $index=>$value)
             {
@@ -609,12 +613,74 @@
         }
 ?>
                 </div>
+                <div id="meta-box-route-3">
+                    <ul class="to-form-field-list">
+                        <li>
+                            <h5><?php esc_html_e('Pickup hours','chauffeur-booking-system'); ?></h5>
+                            <span class="to-legend">
+                                <?php esc_html_e('Specify separate pickup hours for a particular day of the week for this route.','chauffeur-booking-system'); ?><br/>
+								<?php esc_html_e('Please note that entered hours should be in range of business hours defined for a booking form.','chauffeur-booking-system'); ?>
+                            </span> 
+                            <div class="to-clear-fix">
+                                <table class="to-table">
+                                    <tr>
+                                        <th style="width:50%">
+                                            <div>
+                                                <?php esc_html_e('Weekday','chauffeur-booking-system'); ?>
+                                                <span class="to-legend">
+                                                    <?php esc_html_e('Day of the week.','chauffeur-booking-system'); ?>
+                                                </span>
+                                            </div>
+                                        </th>
+                                        <th style="width:50%">
+                                            <div>
+                                                <?php esc_html_e('Pickup hour','chauffeur-booking-system'); ?>
+                                                <span class="to-legend">
+                                                    <?php esc_html_e('Pickup hours separate by semicolon, e.g: 09:00;11:15;11:30.','chauffeur-booking-system'); ?>
+                                                </span>
+                                            </div>
+                                        </th>
+                                    </tr>
+<?php
+		for($i=1;$i<8;$i++)
+		{
+			$hour=null;
+			
+			if(is_array($this->data['meta']['pickup_hour'][$i]['hour']))
+			{
+				if(count($this->data['meta']['pickup_hour'][$i]['hour']))
+				{
+					foreach($this->data['meta']['pickup_hour'][$i]['hour'] as $index=>$value)
+						$this->data['meta']['pickup_hour'][$i]['hour'][$index]=$Date->formatTimeToDisplay($value);
+					
+					$hour=implode(';',$this->data['meta']['pickup_hour'][$i]['hour']);
+				}
+			}
+?>
+                                    <tr>
+                                        <td>
+                                            <div><?php echo $Date->getDayName($i); ?></div>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <input type="text" name="<?php CHBSHelper::getFormName('pickup_hour['.$i.'][hour]'); ?>" id="<?php CHBSHelper::getFormName('pickup_hour['.$i.'][hour]'); ?>" value="<?php echo esc_attr($hour); ?>" title="<?php esc_attr_e('Enter pickup hour.','chauffeur-booking-system'); ?>"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+<?php
+		}
+?>
+                                </table>
+                            </div>
+                        </li>						
+					</ul>
+				</div>
             </div>
         </div>
 		<script type="text/javascript">
 			jQuery(document).ready(function($)
 			{
-                var helper=new Helper();
+                var helper=new CHBSHelper();
                 helper.getMessageFromConsole();
                 
 				$('.to').themeOptionElement({init:true});

@@ -10,10 +10,9 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see      https://docs.woocommerce.com/document/template-structure/
- * @author   WooThemes
- * @package  WooCommerce/Templates
- * @version  2.5.0
+ * @see https://docs.woocommerce.com/document/template-structure/
+ * @package WooCommerce/Templates
+ * @version 3.4.0
  */
 
 if(!defined('ABSPATH')) exit;
@@ -41,8 +40,10 @@ $paymentEnable=true;
             if(empty($available_gateways))
             {
                 $paymentEnable=false;
-                echo apply_filters('woocommerce_no_available_payment_methods_message',__( 'Sorry, it seems that there are no available payment methods for your location. Please contact us if you require assistance or wish to make alternate arrangements.', 'woocommerce'));
-            }
+				echo '<p class="woocommerce-notice woocommerce-notice--error">';
+                echo apply_filters('woocommerce_no_available_payment_methods_message',esc_html__( 'Sorry, it seems that there are no available payment methods for your location. Please contact us if you require assistance or wish to make alternate arrangements.', 'car-rental-booking-system'));
+				echo '</p>';
+			}
         }
 
         if($paymentEnable)

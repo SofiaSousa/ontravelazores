@@ -88,11 +88,14 @@
     background-color:#1175AE;
 }
 
-.to-booking-status.to-booking-status-2
+.to-booking-status.to-booking-status-2,
+.to-booking-status.to-booking-status-5
 {
     background-color:#C98209;    
 }
 
+.to-booking-status.to-booking-status-6,
+.to-booking-status.to-booking-status-7,
 .to-booking-status.to-booking-status-3
 {
     background-color:#FC0F0F;   

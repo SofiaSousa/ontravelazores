@@ -60,10 +60,10 @@ class CRBSBookingForm
 		
         $this->vehicleSortingType=array
         (
-            1                                                                   =>  array(__('Price ascending')),
-            2                                                                   =>  array(__('Price descending')),
-            3                                                                   =>  array(__('Vehicle number ascending')),
-            4                                                                   =>  array(__('Vehicle number descending')),
+            1                                                                   =>  array(__('Price ascending','car-rental-booking-system')),
+            2                                                                   =>  array(__('Price descending','car-rental-booking-system')),
+            3                                                                   =>  array(__('Vehicle number ascending','car-rental-booking-system')),
+            4                                                                   =>  array(__('Vehicle number descending','car-rental-booking-system')),
         );
     }
         
@@ -148,6 +148,7 @@ class CRBSBookingForm
     {
         global $post;
         
+		$Coupon=new CRBSCoupon();
         $Country=new CRBSCountry();
         $Location=new CRBSLocation();
         $Currency=new CRBSCurrency();
@@ -167,11 +168,13 @@ class CRBSBookingForm
         $data['dictionary']['location']=$Location->getDictionary();
         
         $data['dictionary']['country']=$Country->getCountry();
-       
+		
+		$data['dictionary']['coupon']=$Coupon->getDictionary();
+		
 		$data['dictionary']['currency']=$Currency->getCurrency();
 		
         $data['dictionary']['booking_status']=$BookingStatus->getBookingStatus();
-        
+		
         $data['dictionary']['form_element_panel']=$BookingFormElement->getPanel($data['meta']);
         
         $data['dictionary']['google_map']['position']=$GoogleMap->getPosition();
@@ -204,6 +207,7 @@ class CRBSBookingForm
         if(CRBSHelper::checkSavePost($postId,PLUGIN_CRBS_CONTEXT.'_meta_box_booking_form_noncename','savePost')===false) return(false);
         
         $Date=new CRBSDate();
+		$Coupon=new CRBSCoupon();
         $Country=new CRBSCountry();
         $Location=new CRBSLocation();
 		$Currency=new CRBSCurrency();
@@ -217,12 +221,12 @@ class CRBSBookingForm
         
         $option=CRBSHelper::getPostOption();
 
-        $dictionary=$Location->getDictionary();
+        $locationDictionary=$Location->getDictionary();
 		if(is_array($option['location_id']))
 		{
 			foreach($option['location_id'] as $index=>$value)
 			{
-				if(!array_key_exists($value,$dictionary))
+				if(!array_key_exists($value,$locationDictionary))
 					unset($option['location_id'][$index]);
 			}
 		}
@@ -232,11 +236,20 @@ class CRBSBookingForm
 			if(!count($option['location_id']))
 				$option['location_id']=array(-1); 
 		}
+		else $option['location_id']=array();
+		
+		if((!array_key_exists($option['location_pickup_default_id'],$locationDictionary)) && ($option['location_pickup_default_id']!=-1))
+			$option['location_pickup_default_id']=0;
+		
+		if((!array_key_exists($option['location_return_default_id'],$locationDictionary)) && ($option['location_return_default_id']!=-1))
+			$option['location_return_default_id']=0;		
 		
         if(!$Validation->isBool($option['location_single_display_enable']))
             $option['location_single_display_enable']=0;  		
         if(!$Validation->isBool($option['location_the_same_enable']))
-            $option['location_the_same_enable']=0; 		
+            $option['location_the_same_enable']=0; 	
+        if(!$Validation->isBool($option['location_customer_only_enable']))
+            $option['location_customer_only_enable']=0; 			
 		
         $option['currency']=(array)$option['currency'];
         if(in_array(-1,$option['currency']))
@@ -255,11 +268,24 @@ class CRBSBookingForm
         if(!count($option['currency']))
             $option['currency']=array(-1); 
         
+		/***/
+		
+        $couponDictionary=$Coupon->getDictionary();
+		if(!array_key_exists($option['coupon_id'],$couponDictionary))
+			$option['coupon_id']=-1;
+		
+		/***/
+		
         if(!$Validation->isPrice($option['order_value_minimum']))
             $option['order_value_minimum']=0.00;   
+		
+		$option['order_value_minimum']=CRBSPrice::formatToSave($option['order_value_minimum']);
      
         if(!$Validation->isNumber($option['timepicker_step'],1,9999))
-            $option['timepicker_step']=30;           
+            $option['timepicker_step']=30;   
+		
+        if(!in_array($option['timepicker_today_start_time_type'],array(1,2)))
+            $option['timepicker_today_start_time_type']=1;		
         
         if(!$BookingStatus->isBookingStatus($option['booking_status_id_default']))
             $option['booking_status_id_default']=1;
@@ -345,8 +371,8 @@ class CRBSBookingForm
         if((int)$option['customer_pickup_location_enable']===0)
             $option['customer_pickup_location_id']=0;
 		
-        if(!array_key_exists($option['customer_pickup_location_id'],$dictionary))
-            $option['customer_pickup_location_id']=count($dictionary) ? (int)key($dictionary) : 0;
+        if(!array_key_exists($option['customer_pickup_location_id'],$locationDictionary))
+            $option['customer_pickup_location_id']=count($locationDictionary) ? (int)key($locationDictionary) : 0;
      
         if(!$Validation->isNumber($option['customer_pickup_location_restriction_radius'],0,99999))
             $option['customer_pickup_location_restriction_radius']=50;   
@@ -375,7 +401,7 @@ class CRBSBookingForm
         if((int)$option['customer_return_location_enable']===0)
             $option['customer_return_location_id']=0;
 
-        if(!array_key_exists($option['customer_return_location_id'],$dictionary))
+        if(!array_key_exists($option['customer_return_location_id'],$locationDictionary))
             $option['customer_return_location_id']=0;        
         
         if(!$Validation->isNumber($option['customer_return_location_restriction_radius'],0,99999))
@@ -400,9 +426,21 @@ class CRBSBookingForm
         if(!$Validation->isBool($option['thank_you_page_enable']))
             $option['thank_you_page_enable']=0;		
         
-        if(!in_array($option['billing_detail_state'],array(1,2,3)))
+        if(!in_array($option['billing_detail_state'],array(1,2,3,4)))
             $option['billing_detail_state']=1;   		
 		
+		/***/
+		
+		$option['vehicle_attribute_enable']=(array)$option['vehicle_attribute_enable'];
+		foreach($option['vehicle_attribute_enable'] as $index=>$value)
+		{
+			if(!in_array($value,array(1,2,3,4)))
+				unset($option['vehicle_attribute_enable'][$index]);
+		}
+		
+		if(!is_array($option['vehicle_attribute_enable']))
+			$option['vehicle_attribute_enable']=array();
+			
         /***/
         
         foreach($option['style_color'] as $index=>$value)
@@ -452,9 +490,15 @@ class CRBSBookingForm
             'location_id',
 			'location_single_display_enable',
 			'location_the_same_enable',
+			'location_customer_only_enable',
+			'location_pickup_default_id',
+			'location_return_default_id',
 			'currency',
+			'coupon_enable',
+			'coupon_id',
             'order_value_minimum',
             'timepicker_step',
+			'timepicker_today_start_time_type',
             'booking_status_id_default',
             'geolocation_enable',
             'vehicle_count_enable',
@@ -464,7 +508,6 @@ class CRBSBookingForm
             'vehicle_price_per_day_enable',
             'scroll_to_booking_extra_after_select_vehicle_enable',
             'driver_age_enable',
-            'coupon_enable',
             'woocommerce_enable',
 			'woocommerce_account_enable_type',
             'booking_summary_hide_fee',
@@ -492,6 +535,7 @@ class CRBSBookingForm
             'customer_return_location_restriction_coordinate_lng',
             'customer_return_location_restriction_country',
 			'billing_detail_state',
+			'vehicle_attribute_enable',
 			'thank_you_page_enable',
 			'thank_you_page_button_back_to_home_label',
 			'thank_you_page_button_back_to_home_url_address',
@@ -522,15 +566,22 @@ class CRBSBookingForm
 		
         CRBSHelper::setDefault($meta,'location_single_display_enable',1);
 		CRBSHelper::setDefault($meta,'location_the_same_enable',0);
+		CRBSHelper::setDefault($meta,'location_customer_only_enable',0);
+		
+		CRBSHelper::setDefault($meta,'location_pickup_default_id',0);
+		CRBSHelper::setDefault($meta,'location_return_default_id',0);
 		
 		CRBSHelper::setDefault($meta,'currency',array(-1));
+		
+		CRBSHelper::setDefault($meta,'coupon_id',-1);
         
         CRBSHelper::setDefault($meta,'order_value_minimum',0.00);
         
         CRBSHelper::setDefault($meta,'booking_status_id_default',1);
         
         CRBSHelper::setDefault($meta,'timepicker_step',30);
-        
+		CRBSHelper::setDefault($meta,'timepicker_today_start_time_type',1);
+		
         CRBSHelper::setDefault($meta,'geolocation_enable',array());
         
         CRBSHelper::setDefault($meta,'vehicle_count_enable',1);
@@ -543,6 +594,9 @@ class CRBSBookingForm
         CRBSHelper::setDefault($meta,'woocommerce_enable',0);
 		CRBSHelper::setDefault($meta,'woocommerce_account_enable_type',1);
         CRBSHelper::setDefault($meta,'coupon_enable',0);
+		
+		CRBSHelper::setDefault($meta,'vehicle_sorting_type',1); 
+		CRBSHelper::setDefault($meta,'geolocation_server_side_enable',array()); 
         
         CRBSHelper::setDefault($meta,'booking_summary_hide_fee',0); 
         CRBSHelper::setDefault($meta,'booking_summary_display_net_price',0); 
@@ -586,6 +640,8 @@ class CRBSBookingForm
 		
 		CRBSHelper::setDefault($meta,'field_mandatory',$fieldMandatory);
 		
+		CRBSHelper::setDefault($meta,'vehicle_attribute_enable',array(1,2,3,4));
+		
         $BookingFormStyle=new CRBSBookingFormStyle();
         CRBSHelper::setDefault($meta,'style_color',array_fill(1,count($BookingFormStyle->getColor()),'')); 
         
@@ -624,7 +680,8 @@ class CRBSBookingForm
 		
 		$default=array
 		(
-			'booking_form_id'   												=>	0
+			'booking_form_id'   												=>	0,
+			'suppress_filters'													=>	false
 		);
 		
 		$attribute=shortcode_atts($default,$attr);
@@ -636,13 +693,19 @@ class CRBSBookingForm
 			'post_type'															=>	self::getCPTName(),
 			'post_status'														=>	'publish',
 			'posts_per_page'													=>	-1,
-			'orderby'															=>	array('menu_order'=>'asc','title'=>'asc'),
-            'suppress_filters'                                                  =>  true
+			'orderby'															=>	array('menu_order'=>'asc','title'=>'asc')
 		);
 		
-		if($attribute['booking_form_id'])
+		if(array_key_exists('booking_form_id',$attr))
+        {
 			$argument['p']=$attribute['booking_form_id'];
-        
+            if((int)$argument['p']<=0) return($dictionary);
+        }
+		if(array_key_exists('suppress_filters',$attr))
+        {
+			$argument['suppress_filters']=$attribute['suppress_filters'];
+        }	
+		
 		$query=new WP_Query($argument);
 		if($query===false) return($dictionary);
 		
@@ -689,7 +752,12 @@ class CRBSBookingForm
 		$PaymentPaypal=new CRBSPaymentPaypal();
         $BookingFormStyle=new CRBSBookingFormStyle();
 		
-		$PaymentPaypal->handle();
+		$action=CRBSHelper::getGetValue('action',false);
+		if($action==='ipn')
+		{
+			$PaymentPaypal->handleIPN();
+			return(null);
+		}
                 
 		$default=array
 		(
@@ -704,8 +772,8 @@ class CRBSBookingForm
         
 		$attribute=shortcode_atts($default,$attr);               
         
-        if(!is_array($data=$this->checkBookingForm($attribute['booking_form_id'],$attribute['currency'],true))) return;
-             
+        if(!is_array($data=$this->checkBookingForm($attribute['booking_form_id'],$attribute['currency'],true))) return;         
+		
         $data['ajax_url']=admin_url('admin-ajax.php');
         
         $data['booking_form_post_id']=$attribute['booking_form_id'];
@@ -763,7 +831,7 @@ class CRBSBookingForm
         $data['meta']=$bookingForm[$bookingFormId]['meta'];
        
         /****/        
-        
+
         $data['dictionary']['location']=$this->getBookingFormLocation($data['meta']);
         if(!count($data['dictionary']['location'])) 
         {
@@ -802,18 +870,13 @@ class CRBSBookingForm
 		
         $data['dictionary']['booking_extra']=$this->getBookingFormExtra($pickupLocationId);
         $data['dictionary']['vehicle_category']=$this->getBookingFormVehicleCategory();
-        
+        		
+		/***/
+		
         if(in_array(2,$data['meta']['geolocation_enable']))
-        {         
             $data['client_coordinate']=$GeoLocation->getCoordinate();
-            $data['client_country_code']=$GeoLocation->getCountryCode();
-        }
-        else
-        {
-            $data['client_coordinate']=array('lat'=>0,'lng'=>0);
-            $data['client_country_code']='';
-        }
-    
+        else $data['client_coordinate']=array('lat'=>0,'lng'=>0);
+				
         /****/
         
         if($data['meta']['customer_pickup_location_enable']===1)
@@ -836,6 +899,7 @@ class CRBSBookingForm
 	
         /****/
 
+		$Date=new CRBSDate();
         $TaxRate=new CRBSTaxRate();
         $Country=new CRBSCountry();
 		$Geofence=new CRBSGeofence();
@@ -848,24 +912,56 @@ class CRBSBookingForm
          
         $vehicleDictionaryDriverAge=$this->getBookingFormVehicle($data,false);
         
+		$countryCode=$GeoLocation->getCountryCode();
+		
         foreach($data['dictionary']['location'] as $index=>$value)
         {
+			foreach($value['meta']['business_hour'] as $businessHourIndex=>$businessHourValue)
+			{
+				if($Validation->isTime($businessHourValue['default']))
+				{
+					$date=date_i18n('d-m-Y G:i',strtotime('01-01-1970 '.$businessHourValue['default'].'+'.(int)$data['meta']['timepicker_step'].' minutes'));
+					$value['meta']['business_hour'][$businessHourIndex]['default_timepicker']=date_i18n('H:i',strtotime($date));
+					
+					if($Date->compareDate(date_i18n('d-m-Y',strtotime($date)),date_i18n('d-m-Y',strtotime('01-01-1970')))===1)
+						$value['meta']['business_hour'][$businessHourIndex]['default_timepicker']=$businessHourValue['default'];
+				}
+				
+				if((is_array($businessHourValue['break']) && (count($businessHourValue['break']))))
+				{
+					foreach($businessHourValue['break'] as $breakIndex=>$breakValue)
+						$value['meta']['business_hour'][$businessHourIndex]['break'][$breakIndex]['stop']=date_i18n('H:i',strtotime('01-01-1970 '.$breakValue['stop'].' + 1 minutes')); 
+				}
+			}
+			
             $data['location_vehicle_id_default'][$index]=$value['meta']['vehicle_id_default'];
             
-			$data['location_payment_stripe_window_open_default_enable'][$index]=$value['meta']['payment_stripe_window_open_default_enable'];
-			
             $data['location_date_exclude'][$index]=$value['meta']['date_exclude'];
             $data['location_business_hour'][$index]=$value['meta']['business_hour'];
             
-            $data['location_booking_period'][$index]=array('from'=>$value['meta']['booking_period_from'],'to'=>$value['meta']['booking_period_to']);
+            $data['location_pickup_period'][$index]=$this->getBookingFormPickupPeriod($value['meta'],$data['meta']['timepicker_step'],$data['meta']['timepicker_today_start_time_type']);
         
+			$data['location_pickup_period_format'][$index]['min']=date(CRBSOption::getOption('date_format'),strtotime($data['location_pickup_period'][$index]['min']));
+			
+			if(is_null($data['location_pickup_period'][$index]['max'])) $data['location_pickup_period_format'][$index]['max']=null;
+			else $data['location_pickup_period_format'][$index]['max']=date(CRBSOption::getOption('date_format'),strtotime($data['location_pickup_period'][$index]['max']));
+			
             $data['location_driver_age'][$index]=$this->getBookingFormDriverAge($index,$vehicleDictionaryDriverAge);
             
 			$data['location_after_business_hour_pickup_enable'][$index]=$value['meta']['after_business_hour_pickup_enable'];
             $data['location_after_business_hour_return_enable'][$index]=$value['meta']['after_business_hour_return_enable'];
             
+			$data['location_payment_paypal_redirect_duration'][$index]=$value['meta']['payment_paypal_redirect_duration'];
+			
             if(($Validation->isNotEmpty($value['meta']['coordinate_latitude'])) && ($Validation->isNotEmpty($value['meta']['coordinate_longitude'])))
                 $data['location_coordinate'][$index]=array('lat'=>$value['meta']['coordinate_latitude'],'lng'=>$value['meta']['coordinate_longitude']);
+			
+			if($value['meta']['country_default']=='-1')
+			{
+				if((int)$data['meta']['geolocation_server_side_enable']===1)
+					$data['location_client_country_default'][$index]=$countryCode;
+			}
+			else $data['location_client_country_default'][$index]=$value['meta']['country_default'];
         }
         
         /****/
@@ -926,7 +1022,15 @@ class CRBSBookingForm
                 )
             )            
         );
-        
+		
+		list(,,$pickupLocationIdSelect)=$this->getBookingFormPickupLocation($data);
+		list(,,$returnLocationIdSelect)=$this->getBookingFormReturnLocation($data);
+		
+		$data['pickup_location_id_select']=$pickupLocationIdSelect;
+        $data['return_location_id_select']=$returnLocationIdSelect;
+		
+		$data['pickup_location_id']=$pickupLocationId;
+		
         /***/
 		
         return($data);
@@ -941,9 +1045,9 @@ class CRBSBookingForm
      
         return($dictionary);
     }
-    
-    /**************************************************************************/
-    
+	
+	/**************************************************************************/
+	
     function getBookingFormLocation($meta)
     {
         $Location=new CRBSLocation();
@@ -954,8 +1058,9 @@ class CRBSBookingForm
         foreach($dictionary as $index=>$value)
         {
             if(!in_array($index,$meta['location_id']))
-               unset($dictionary[$index]);
-			else
+				unset($dictionary[$index]);
+			
+			if(array_key_exists($index,$dictionary))
 			{
 				if(($Validation->isEmpty($dictionary[$index]['meta']['coordinate_latitude'])) || ($Validation->isEmpty($dictionary[$index]['meta']['coordinate_longitude'])))
 				{
@@ -971,8 +1076,8 @@ class CRBSBookingForm
     
     function getBookingFormPickupLocation($bookingForm)
     {
-        $option=CRBSHelper::getPostOption();
-        
+        $option=array_merge(CRBSHelper::getGetOption(null,false),CRBSHelper::getPostOption());
+	
         $locationId=0;
 		$locationIdSelect=0;
         $locationCustomer=false;
@@ -982,11 +1087,22 @@ class CRBSBookingForm
             $locationId=$option['pickup_location_id'];
 			$locationIdSelect=$locationId;
 		}
+		else
+		{
+            $locationId=(int)$bookingForm['meta']['location_pickup_default_id'];
+			
+			if($locationId===-1)
+				$locationId=-1*$bookingForm['meta']['customer_pickup_location_id'];
+			
+			$locationIdSelect=$locationId;
+		}
 		
         if(($locationId<-1) && ($bookingForm['meta']['customer_pickup_location_enable']==1))
         {
             $locationId=abs($bookingForm['meta']['customer_pickup_location_id']);
-            $locationCustomer=json_decode($option['pickup_location_address_data']);
+			
+			if(array_key_exists('pickup_location_address_data',$option))
+				$locationCustomer=json_decode($option['pickup_location_address_data']);
         }
         
         if(!array_key_exists($locationId,$bookingForm['dictionary']['location']))
@@ -1002,8 +1118,10 @@ class CRBSBookingForm
     
     function getBookingFormReturnLocation($bookingForm)
     {
-        $option=CRBSHelper::getPostOption();
+        $option=array_merge(CRBSHelper::getGetOption(null,false),CRBSHelper::getPostOption());
         
+		CRBSHelper::removeUIndex($option,'return_location_address_data');
+		
         $locationId=0;
 		$locationIdSelect=0;
         $locationCustomer=false;
@@ -1012,6 +1130,15 @@ class CRBSBookingForm
 		{
             $locationId=$option['return_location_id'];
 			$locationIdSelect=$locationId;
+		}
+		else
+		{
+            $locationId=(int)$bookingForm['meta']['location_return_default_id'];
+			
+			if($locationId===-1)
+				$locationId=-1*$bookingForm['meta']['customer_return_location_id'];
+			
+			$locationIdSelect=$locationId;				
 		}
 			
         if($locationId==-1)
@@ -1087,7 +1214,7 @@ class CRBSBookingForm
         
         $driverAge=(int)$data['driver_age'];
         list($pickupLocationId)=$this->getBookingFormPickupLocation($bookingForm);
-        
+		
         $vehicle=$Vehicle->getDictionary(array(),$bookingForm['meta']['vehicle_sorting_type']);
         
         foreach($vehicle as $index=>$value)
@@ -1249,7 +1376,7 @@ class CRBSBookingForm
                 $data=CRBSBookingHelper::formatDateTimeToStandard($data);
 
                 /***/
-
+				
                 if(!$Validation->isDate($data['pickup_date']))
                 {
                     $dateTimeError=true;
@@ -1275,7 +1402,7 @@ class CRBSBookingForm
 				
                 if(!$dateTimeError)
                 {
-					$currentDate=date('d-m-Y G:i');
+					$currentDate=date_i18n('d-m-Y G:i');
 					
                     if(in_array($Date->compareDate($data['pickup_date'].' '.$data['pickup_time'],$currentDate),array(2)))
                     {
@@ -1295,33 +1422,35 @@ class CRBSBookingForm
 
                 /***/
 
-                if(!$dateTimeError)
-                {
-                    $bookingPeriodFrom=$bookingForm['dictionary']['location'][$pickupLocationId]['meta']['booking_period_from'];
-                    if(!$Validation->isNumber($bookingPeriodFrom,0,9999))
-                        $bookingPeriodFrom=0;
+				if(!$dateTimeError)
+				{
+					$bookingPeriodFrom=$bookingForm['dictionary']['location'][$pickupLocationId]['meta']['pickup_period_from'];
+					if(!$Validation->isNumber($bookingPeriodFrom,0,9999))
+						$bookingPeriodFrom=0;
 
-                    $date=date('d-m-Y',strtotime('+'.$bookingPeriodFrom.' days'));
-                    if($Date->compareDate($date,$data['pickup_date'])===1)
-                    {
-                        $this->setErrorLocal($response,CRBSHelper::getFormName('pickup_date',false),__('Enter a valid date.','car-rental-booking-system'));
-                        $dateTimeError=true;                    
-                    }       
+					list($date1,$date2)=$this->getDatePickupPeriod($data,$bookingForm['dictionary']['location'][$pickupLocationId],'pickup',$bookingPeriodFrom);
+					if($Date->compareDate($date1,$date2)===2)
+					{
+						$this->setErrorLocal($response,CRBSHelper::getFormName('pickup_date',false),__('Enter a valid date.','car-rental-booking-system'));
+						$dateTimeError=true;                    
+					}       
 
-                    $bookingPeriodTo=$bookingForm['dictionary']['location'][$pickupLocationId]['meta']['booking_period_to'];
-                    if($Validation->isNumber($bookingPeriodTo,0,9999))
-                    {
-                        $bookingPeriodTo+=$bookingPeriodFrom;
+					if(!$dateTimeError)
+					{
+						$bookingPeriodTo=$bookingForm['dictionary']['location'][$pickupLocationId]['meta']['pickup_period_to'];
+						if($Validation->isNumber($bookingPeriodTo,0,9999))
+						{
+							$bookingPeriodTo+=$bookingPeriodFrom;
 
-                        $date=date('d-m-Y',strtotime('+'.$bookingPeriodTo.' days'));
-                        if($Date->compareDate($data['pickup_date'],$date)===1)
-                        {
-                            $this->setErrorLocal($response,CRBSHelper::getFormName('pickup_date',false),__('Enter a valid date.','car-rental-booking-system'));
-                            $dateTimeError=true;                    
-                        }                               
-                    }
-                }
-
+							list($date1,$date2)=$this->getDatePickupPeriod($data,$bookingForm['dictionary']['location'][$pickupLocationId],'pickup',$bookingPeriodTo);    
+							if($Date->compareDate($date1,$date2)===1)
+							{
+								$this->setErrorLocal($response,CRBSHelper::getFormName('pickup_date',false),__('Enter a valid date.','car-rental-booking-system'));
+								$dateTimeError=true;                    
+							}                               
+						}
+					}
+				}
            
                 /***/
 
@@ -1353,7 +1482,7 @@ class CRBSBookingForm
                         
                         if($bookingForm['dictionary']['location'][$pickupLocationId]['meta']['after_business_hour_pickup_enable']==1)
                         {
-							if($number!=$Date->getDayNumberOfWeek(date('d-m-Y'))) $start='00:00';
+							if($number!=$Date->getDayNumberOfWeek(date_i18n('d-m-Y'))) $start='00:00';
                             $stop='23:59';
                         }
 						
@@ -1370,6 +1499,23 @@ class CRBSBookingForm
                             $this->setErrorLocal($response,CRBSHelper::getFormName('pickup_date',false),__('Enter a valid date.','car-rental-booking-system'));
                             $dateTimeError=true;                        
                         }
+						
+						if(!$dateTimeError)
+						{
+							$breakHour=$bookingForm['dictionary']['location'][$pickupLocationId]['meta']['business_hour'][$number]['break'];
+							if((is_array($breakHour)) && (count($breakHour)))
+							{
+								foreach($breakHour as $breakHourValue)
+								{
+									if($Date->timeInRange($data['pickup_time'],$breakHourValue['start'],$breakHourValue['stop']))
+									{
+										$this->setErrorLocal($response,CRBSHelper::getFormName('pickup_time',false),__('Enter a valid time.','car-rental-booking-system'));
+										$dateTimeError=true;										
+										break;
+									}
+								}
+							}
+						}
                     }
 
                     $number=$Date->getDayNumberOfWeek($data['return_date']);
@@ -1397,6 +1543,23 @@ class CRBSBookingForm
                             $this->setErrorLocal($response,CRBSHelper::getFormName('return_date',false),__('Enter a valid date.','car-rental-booking-system'));
                             $dateTimeError=true;                        
                         }
+						
+						if(!$dateTimeError)
+						{
+							$breakHour=$bookingForm['dictionary']['location'][$returnLocationId]['meta']['business_hour'][$number]['break'];
+							if((is_array($breakHour)) && (count($breakHour)))
+							{
+								foreach($breakHour as $breakHourValue)
+								{
+									if($Date->timeInRange($data['return_time'],$breakHourValue['start'],$breakHourValue['stop']))
+									{
+										$this->setErrorLocal($response,CRBSHelper::getFormName('return_time',false),__('Enter a valid time.','car-rental-booking-system'));
+										$dateTimeError=true;										
+										break;
+									}
+								}
+							}
+						}
                     }
                 }
                 
@@ -1406,30 +1569,64 @@ class CRBSBookingForm
                 {
                     if((int)CRBSOption::getOption('billing_type')===2)
                     {
-                        $meta=$bookingForm['dictionary']['location'][$pickupLocationId]['meta'];
+						$meta=$bookingForm['dictionary']['location'][$pickupLocationId]['meta'];
 
-                        if(($meta['vehicle_rent_day_count_min']>0) || ($meta['vehicle_rent_day_count_max']>0))
-                        {
-                            $rentalDayCount=CRBSBookingHelper::calculateRentalDayCount($data['pickup_date'],$data['pickup_time'],$data['return_date'],$data['return_time']);
-
-                            if($meta['vehicle_rent_day_count_min']>0)
-                            {
-                                if($meta['vehicle_rent_day_count_min']>$rentalDayCount)
-                                    $this->setErrorLocal($response,CRBSHelper::getFormName('return_date',false),sprintf(__('Minimun number of days to rent a car is %s.','car-rental-booking-system'),$meta['vehicle_rent_day_count_min']));
-                            }
-                            
-                            if($meta['vehicle_rent_day_count_max']>0)
-                            {
-                                if($meta['vehicle_rent_day_count_max']<$rentalDayCount)
-                                    $this->setErrorLocal($response,CRBSHelper::getFormName('return_date',false),sprintf(__('Maximum number of days to rent a car is %s.','car-rental-booking-system'),$meta['vehicle_rent_day_count_max']));                            
-                            }
-                        }
+						$rentalDayCount=CRBSBookingHelper::calculateRentalDayCount($data['pickup_date'],$data['pickup_time'],$data['return_date'],$data['return_time']);
+						
+						if(isset($meta['vehicle_rent_date']))
+						{
+							if(count($meta['vehicle_rent_date']))
+							{
+								foreach($meta['vehicle_rent_date'] as $index=>$value)
+								{
+									if($Date->dateInRange($data['pickup_date'],$value['start'],$value['stop']))
+									{
+										if($Validation->isNotEmpty($value['day_count_min']))
+										{
+											if($value['day_count_min']>$rentalDayCount)
+											{
+												$this->setErrorLocal($response,CRBSHelper::getFormName('return_date',false),sprintf(__('Minimum number of days to rent a car is %s.','car-rental-booking-system'),$value['day_count_min']));
+												$dateTimeError=true;
+											}
+										}
+										
+										if(!$dateTimeError)
+										{
+											if($Validation->isNotEmpty($value['day_count_max']))
+											{
+												if($value['day_count_max']<$rentalDayCount)
+												{
+													$this->setErrorLocal($response,CRBSHelper::getFormName('return_date',false),sprintf(__('Maximum number of days to rent a car is %s.','car-rental-booking-system'),$value['day_count_max']));
+													$dateTimeError=true;
+												}
+											}											
+										}
+									}
+								}
+							}
+						}
+						
+						if(!$dateTimeError)
+						{
+							if(($Validation->isNotEmpty($meta['vehicle_rent_day_count_min'])) || ($Validation->isNotEmpty($meta['vehicle_rent_day_count_max'])))
+							{
+								if($Validation->isNotEmpty($meta['vehicle_rent_day_count_min']))
+								{
+									if($meta['vehicle_rent_day_count_min']>$rentalDayCount)
+										$this->setErrorLocal($response,CRBSHelper::getFormName('return_date',false),sprintf(__('Minimum number of days to rent a car is %s.','car-rental-booking-system'),$meta['vehicle_rent_day_count_min']));
+								}
+								if($Validation->isNotEmpty($meta['vehicle_rent_day_count_max']))
+								{
+									if($meta['vehicle_rent_day_count_max']<$rentalDayCount)
+										$this->setErrorLocal($response,CRBSHelper::getFormName('return_date',false),sprintf(__('Maximum number of days to rent a car is %s.','car-rental-booking-system'),$meta['vehicle_rent_day_count_max']));                            
+								}
+							}
+						}
                     }
                 }
             }
             
             /***/
-            
             
             if($bookingForm['meta']['driver_age_enable']==1)
             {
@@ -1481,7 +1678,8 @@ class CRBSBookingForm
                 }
             }
             
-            if(isset($response['error'])) $response['step']=2;
+            if(isset($response['error']))
+				$data['step']=$data['step_request']=$response['step']=2;
         }
 		
         /***/
@@ -1520,53 +1718,56 @@ class CRBSBookingForm
                     if((int)$bookingForm['dictionary']['location'][$pickupLocationId]['meta']['driver_license_attach_enable']===1)
                     {
                         if($Validation->isEmpty($data['driver_license_file_tmp_name']))
-                            $this->setErrorLocal($response,CRBSHelper::getFormName('driver_license_file',false),__('Attach driver license file.','car-rental-booking-system'));
+                            $this->setErrorLocal($response,CRBSHelper::getFormName('driver_license_file_tmp_name',false),__('Attach driver license file.','car-rental-booking-system'));
                     }
                     
-                    if(((int)$data['client_billing_detail_enable']===1) || ((int)$bookingForm['meta']['billing_detail_state']===3))
-                    {
-						if(in_array('client_billing_detail_company_name',$bookingForm['meta']['field_mandatory']))
-						{							
-							if($Validation->isEmpty($data['client_billing_detail_company_name']))
-								$this->setErrorLocal($response,CRBSHelper::getFormName('client_billing_detail_company_name',false),__('Enter valid company name.','car-rental-booking-system'));               
-						}
-						if(in_array('client_billing_detail_tax_number',$bookingForm['meta']['field_mandatory']))
-						{							
-							if($Validation->isEmpty($data['client_billing_detail_tax_number']))
-								$this->setErrorLocal($response,CRBSHelper::getFormName('client_billing_detail_tax_number',false),__('Enter valid tax number.','car-rental-booking-system'));               
-						}						
-						if(in_array('client_billing_detail_street_name',$bookingForm['meta']['field_mandatory']))
+					if((int)$bookingForm['meta']['billing_detail_state']!==4)
+					{
+						if(((int)$data['client_billing_detail_enable']===1) || ((int)$bookingForm['meta']['billing_detail_state']===3))
 						{
-							if($Validation->isEmpty($data['client_billing_detail_street_name']))
-								$this->setErrorLocal($response,CRBSHelper::getFormName('client_billing_detail_street_name',false),__('Enter valid street name.','car-rental-booking-system'));               
-						}
-						if(in_array('client_billing_detail_street_number',$bookingForm['meta']['field_mandatory']))
-						{
-							if($Validation->isEmpty($data['client_billing_detail_street_number']))
-								$this->setErrorLocal($response,CRBSHelper::getFormName('client_billing_detail_street_number',false),__('Enter valid street number.','car-rental-booking-system'));               
-						}						
-						if(in_array('client_billing_detail_city',$bookingForm['meta']['field_mandatory']))
-						{
-							if($Validation->isEmpty($data['client_billing_detail_city']))
-								$this->setErrorLocal($response,CRBSHelper::getFormName('client_billing_detail_city',false),__('Enter valid city name.','car-rental-booking-system'));                 
-						}
-						if(in_array('client_billing_detail_state',$bookingForm['meta']['field_mandatory']))
-						{
-							if($Validation->isEmpty($data['client_billing_detail_state']))
-								$this->setErrorLocal($response,CRBSHelper::getFormName('client_billing_detail_state',false),__('Enter valid state name.','car-rental-booking-system'));                
-						}
-						if(in_array('client_billing_detail_postal_code',$bookingForm['meta']['field_mandatory']))	
-						{
-							if($Validation->isEmpty($data['client_billing_detail_postal_code']))
-								$this->setErrorLocal($response,CRBSHelper::getFormName('client_billing_detail_postal_code',false),__('Enter valid postal code.','car-rental-booking-system'));                  
-						}
-						if(in_array('client_billing_detail_country_code',$bookingForm['meta']['field_mandatory']))
-						{
-							if(!$Country->isCountry($data['client_billing_detail_country_code']))
-								$this->setErrorLocal($response,CRBSHelper::getFormName('client_billing_detail_country_code',false),__('Enter valid country name.','car-rental-booking-system')); 
+							if(in_array('client_billing_detail_company_name',$bookingForm['meta']['field_mandatory']))
+							{							
+								if($Validation->isEmpty($data['client_billing_detail_company_name']))
+									$this->setErrorLocal($response,CRBSHelper::getFormName('client_billing_detail_company_name',false),__('Enter valid company name.','car-rental-booking-system'));               
+							}
+							if(in_array('client_billing_detail_tax_number',$bookingForm['meta']['field_mandatory']))
+							{							
+								if($Validation->isEmpty($data['client_billing_detail_tax_number']))
+									$this->setErrorLocal($response,CRBSHelper::getFormName('client_billing_detail_tax_number',false),__('Enter valid tax number.','car-rental-booking-system'));               
+							}						
+							if(in_array('client_billing_detail_street_name',$bookingForm['meta']['field_mandatory']))
+							{
+								if($Validation->isEmpty($data['client_billing_detail_street_name']))
+									$this->setErrorLocal($response,CRBSHelper::getFormName('client_billing_detail_street_name',false),__('Enter valid street name.','car-rental-booking-system'));               
+							}
+							if(in_array('client_billing_detail_street_number',$bookingForm['meta']['field_mandatory']))
+							{
+								if($Validation->isEmpty($data['client_billing_detail_street_number']))
+									$this->setErrorLocal($response,CRBSHelper::getFormName('client_billing_detail_street_number',false),__('Enter valid street number.','car-rental-booking-system'));               
+							}						
+							if(in_array('client_billing_detail_city',$bookingForm['meta']['field_mandatory']))
+							{
+								if($Validation->isEmpty($data['client_billing_detail_city']))
+									$this->setErrorLocal($response,CRBSHelper::getFormName('client_billing_detail_city',false),__('Enter valid city name.','car-rental-booking-system'));                 
+							}
+							if(in_array('client_billing_detail_state',$bookingForm['meta']['field_mandatory']))
+							{
+								if($Validation->isEmpty($data['client_billing_detail_state']))
+									$this->setErrorLocal($response,CRBSHelper::getFormName('client_billing_detail_state',false),__('Enter valid state name.','car-rental-booking-system'));                
+							}
+							if(in_array('client_billing_detail_postal_code',$bookingForm['meta']['field_mandatory']))	
+							{
+								if($Validation->isEmpty($data['client_billing_detail_postal_code']))
+									$this->setErrorLocal($response,CRBSHelper::getFormName('client_billing_detail_postal_code',false),__('Enter valid postal code.','car-rental-booking-system'));                  
+							}
+							if(in_array('client_billing_detail_country_code',$bookingForm['meta']['field_mandatory']))
+							{
+								if(!$Country->isCountry($data['client_billing_detail_country_code']))
+									$this->setErrorLocal($response,CRBSHelper::getFormName('client_billing_detail_country_code',false),__('Enter valid country name.','car-rental-booking-system')); 
+							}
 						}
 					}
-                    
+					
                     if($WooCommerce->isEnable($bookingForm['meta']))
                     {
                         if(!$User->isSignIn())
@@ -1609,7 +1810,7 @@ class CRBSBookingForm
                 
                 if(isset($response['error']))
                 {
-                    $response['step']=3;
+                    $data['step']=$data['step_request']=$response['step']=3;
                 } 
             }
         }
@@ -1624,7 +1825,7 @@ class CRBSBookingForm
                 $WooCommerce=new CRBSWooCommerce();
                 
                 $bookingId=$Booking->sendBooking($data,$bookingForm);
-                
+               
 				if((int)$bookingForm['dictionary']['location'][$pickupLocationId]['meta']['payment_processing_enable']===1)
 				{
 					$response['step']=5;
@@ -1661,12 +1862,17 @@ class CRBSBookingForm
 							
 							$response['form']['currency_code']=$booking['meta']['currency_id'];
 
-							$response['form']['amount']=$bookingBilling['summary']['value_gross'];
+							$response['form']['amount']=$bookingBilling['summary']['pay'];
 						}
 						elseif($data['payment_id']==2)
 						{
 							$PaymentStripe=new CRBSPaymentStripe();
-							$response['form']=$PaymentStripe->createPaymentForm($data['post_id'],$bookingId,$booking['post']->post_title,$bookingBilling['summary']['value_gross'],$bookingForm['dictionary']['location'][$data['pickup_location_id']]['meta']['payment_stripe_api_key_publishable'],$booking['meta']['currency_id']);
+							
+							$sessionId=$PaymentStripe->createSession($booking,$bookingBilling,$bookingForm);
+							
+							$response['stripe_session_id']=$sessionId;
+							$response['stripe_redirect_duration']=$bookingForm['dictionary']['location'][$pickupLocationId]['meta']['payment_stripe_redirect_duration'];
+							$response['stripe_publishable_key']=$bookingForm['dictionary']['location'][$pickupLocationId]['meta']['payment_stripe_api_key_publishable'];
 						}
 					}
 					else
@@ -1719,27 +1925,26 @@ class CRBSBookingForm
             
             if(!array_key_exists('client_contact_detail_first_name',$data))
             {
-                $userData['client_billing_detail_country_code']=$bookingForm['client_country_code'];
+                $userData['client_billing_detail_country_code']=$bookingForm['location_client_country_default'][$pickupLocationId];
             }
             
             $response['client_form_sign_id']=$this->createClientFormSignIn($bookingForm);
-            $response['client_form_sign_up']=$this->createClientFormSignUp($bookingForm,$userData);
+            $response['client_form_sign_up']=$this->createClientFormSignUp($bookingForm,$userData,$pickupLocationId);
         }
         
         /***/
-		
-		
         
         if(!isset($response['error']))
+        {
             $response['step']=$data['step_request'];
+            $data['step']=$response['step'];
+        }
         else $data['step_request']=$data['step'];
                        
         $response['summary']=$this->createSummary($data,$bookingForm);
 
         $response['payment']=$this->createPayment($bookingForm['dictionary']['payment'],$bookingForm['dictionary']['payment_woocommerce'],$data['payment_id'],$bookingForm['dictionary']['location'][$pickupLocationId]['meta']);
         
-		
-		
         CRBSHelper::createJSONResponse($response);
         
         /***/
@@ -1973,7 +2178,7 @@ class CRBSBookingForm
                 </div>
             ';              
         }
-        
+		
         $html.=
         '
             <div class="crbs-summary-price-element-total">
@@ -1982,6 +2187,21 @@ class CRBSBookingForm
             </div>
         ';
 
+        if(CRBSBookingFormHelper::isPaymentDepositEnable($bookingForm))
+        {
+            $html.=
+            '
+                <div class="crbs-summary-price-element-pay">
+                    <span>'.sprintf(__('To pay (deposit)','car-rental-booking-system')).'</span>
+                    <span>'.$price['pay']['sum']['gross']['format'].'</span>
+                </div>
+                <div class="crbs-summary-price-element-balance">
+                    <span>'.sprintf(__('Balance','car-rental-booking-system')).'</span>
+                    <span>'.$price['balance']['sum']['gross']['format'].'</span>
+                </div>
+            ';
+        }
+		
         $html=
         '
             <div class="crbs-summary-price-element">
@@ -2022,7 +2242,7 @@ class CRBSBookingForm
         
         foreach($bookingExtra as $value)
         {
-            array_push($bookingExtraHtml,$value['quantity'].' x '.$value['name'].' - '.CRBSPrice::format($value['price_gross'],CRBSOption::getOption('currency')));
+            array_push($bookingExtraHtml,$value['quantity'].' x '.$value['name'].' - '.CRBSPrice::format($value['sum_gross'],CRBSOption::getOption('currency')));
         }
 
         /***/
@@ -2054,7 +2274,9 @@ class CRBSBookingForm
         
             case 3:
                 
-                $rentalPeriodHtml=sprintf(__('%s days, %s hours','car-rental-booking-system'),$rentalPeriod['day'],$rentalPeriod['hour']);
+				if($rentalPeriod['hour']===0)
+					$rentalPeriodHtml=sprintf(__('%s days','car-rental-booking-system'),$rentalPeriod['day']);
+                else $rentalPeriodHtml=sprintf(__('%s days, %s hours','car-rental-booking-system'),$rentalPeriod['day'],$rentalPeriod['hour']);
                 
             break;
         }
@@ -2263,7 +2485,7 @@ class CRBSBookingForm
                 (
                     array
                     (
-                        __('E-mail adddress','car-rental-booking-system'),
+                        __('E-mail address','car-rental-booking-system'),
                         $data['client_contact_detail_email_address']
                     )
                 );       
@@ -2281,7 +2503,7 @@ class CRBSBookingForm
                     );
                 }
                 
-                if($data['client_billing_detail_enable']==1)
+                if(($data['client_billing_detail_enable']==1) && ((int)$bookingForm['meta']['billing_detail_enable']!==4))
                 {
                     $BookingFormSummary->add
                     (
@@ -2571,7 +2793,7 @@ class CRBSBookingForm
 
 		$htmlMeta=null;
 		
-		if($Validation->isNotEmpty($data['vehicle']['meta']['passenger_count']))
+		if(($Validation->isNotEmpty($data['vehicle']['meta']['passenger_count'])) && (in_array(1,$bookingForm['meta']['vehicle_attribute_enable'])))
 		{
 			$htmlMeta.=
 			'
@@ -2581,7 +2803,7 @@ class CRBSBookingForm
 				</li>				
 			';
 		}
-		if($Validation->isNotEmpty($data['vehicle']['meta']['bag_count']))
+		if(($Validation->isNotEmpty($data['vehicle']['meta']['bag_count'])) && (in_array(2,$bookingForm['meta']['vehicle_attribute_enable'])))
 		{
 			$htmlMeta.=
 			'
@@ -2591,7 +2813,7 @@ class CRBSBookingForm
 				</li>			
 			';
 		}
-		if($Validation->isNotEmpty($data['vehicle']['meta']['gearbox_type']))
+		if(($Validation->isNotEmpty($data['vehicle']['meta']['gearbox_type'])) && (in_array(3,$bookingForm['meta']['vehicle_attribute_enable'])))
 		{
 			$htmlMeta.=
 			'
@@ -2601,7 +2823,7 @@ class CRBSBookingForm
 				</li>		
 			';
 		}
-		if($Validation->isNotEmpty($data['vehicle']['meta']['fuel_state']))
+		if(($Validation->isNotEmpty($data['vehicle']['meta']['fuel_state'])) && (in_array(4,$bookingForm['meta']['vehicle_attribute_enable'])))
 		{
 			$htmlMeta.=
 			'
@@ -2624,6 +2846,13 @@ class CRBSBookingForm
 			';
 		}
 		
+		$priceHtml=$price['price']['sum']['gross']['format'];
+		
+		if(isset($price['price_before_coupon']))
+		{
+			$priceHtml='<span>'.$price['price_before_coupon']['price']['sum']['gross']['format'].'</span>'.$priceHtml;
+		}
+	
         $html=
         '
             <div class="crbs-vehicle crbs-clear-fix" data-id="'.esc_attr($data['vehicle_id']).'">
@@ -2644,7 +2873,7 @@ class CRBSBookingForm
 
                 <div class="crbs-vehicle-price">
 
-                    <div>'.$price['price']['sum']['gross']['format'].'</div>
+                    <div>'.$priceHtml.'</div>
                         
                     '.$htmlPricePerDay.'
 
@@ -2805,12 +3034,12 @@ class CRBSBookingForm
 
                 if($paymentIdSelected==$index)
                     array_push($class,'crbs-state-selected');
-                
+
                 $html.=
                 '
                     <li>
                         <a href="#"'.CRBSHelper::createCSSClassAttribute($class).'data-payment-id="'.esc_attr($value->{'id'}).'">               
-                            <span class="crbs-payment-name">'.esc_html($value->{'method_title'}).'</span>
+                            <span class="crbs-payment-name">'.esc_html($value->{'title'}).'</span>
                             <span class="crbs-meta-icon-tick"></span>
                         </a>
                     </li>                       
@@ -2847,7 +3076,7 @@ class CRBSBookingForm
                     $html.=
                     '
                             <span class="crbs-meta-icon-wallet"></span>
-                            <span class="crbs-payment-name">'.esc_html__('Cash Payment','car-rental-booking-system').'</span>
+                            <span class="crbs-payment-name">'.esc_html($Payment->getPaymentName($index)).'</span>
                     ';
                 }
                 else if($index==4)
@@ -2855,7 +3084,15 @@ class CRBSBookingForm
                     $html.=
                     '
                             <span class="crbs-meta-icon-bank"></span>
-                            <span class="crbs-payment-name">'.esc_html__('Wire Transfer','car-rental-booking-system').'</span>
+                            <span class="crbs-payment-name">'.esc_html($Payment->getPaymentName($index)).'</span>
+                    ';
+                }
+                else if($index==5)
+                {
+                    $html.=
+                    '
+                            <span class="crbs-meta-icon-bank"></span>
+                            <span class="crbs-payment-name">'.esc_html($Payment->getPaymentName($index)).'</span>
                     ';
                 }
 
@@ -2922,6 +3159,8 @@ class CRBSBookingForm
         
         $data=CRBSHelper::getPostOption();
         $data=CRBSBookingHelper::formatDateTimeToStandard($data);
+		
+		CRBSHelper::removeUIndex($data,'driver_age');
         
         if(is_null($bookingForm))
         {
@@ -3020,8 +3259,10 @@ class CRBSBookingForm
         
         $response['html']=$this->createSummaryPriceElement($data,$bookingForm);
         
+		$couponCodeSourceType=0;
+		
         $Coupon=new CRBSCoupon();
-        $coupon=$Coupon->checkCode();
+        $coupon=$Coupon->checkCode($bookingForm,$couponCodeSourceType);
         
         $response['error']=$coupon===false ? 1 : 0;
         
@@ -3093,7 +3334,7 @@ class CRBSBookingForm
     
     /**************************************************************************/
     
-    function createClientFormSignUp($bookingForm,$userData=array())
+    function createClientFormSignUp($bookingForm,$userData=array(),$pickupLocationId=-1)
     {
         $User=new CRBSUser();
         $WooCommerce=new CRBSWooCommerce();
@@ -3111,9 +3352,16 @@ class CRBSBookingForm
         
         $htmlElementCountry=null;
         
+		$countryAvailable=array(-1);
+		if(array_key_exists($pickupLocationId,$bookingForm['dictionary']['location']))
+			$countryAvailable=$bookingForm['dictionary']['location'][$pickupLocationId]['meta']['country_available'];
+		
         foreach($bookingForm['dictionary']['country'] as $index=>$value)
-            $htmlElementCountry.='<option value="'.esc_attr($index).'" '.($data['client_billing_detail_country_code']==$index ? 'selected' : null).'>'.esc_html($value[0]).'</option>';
-        
+		{	
+			if((in_array(-1,$countryAvailable)) || (in_array($index,$countryAvailable)))
+				$htmlElementCountry.='<option value="'.esc_attr($index).'" '.($data['client_billing_detail_country_code']==$index ? 'selected' : null).'>'.esc_html($value[0]).'</option>';
+		}
+		
         $htmlElement[1]=$BookingFormElement->createField(1,$bookingForm['meta']);
         
         $htmlElement[2]=$BookingFormElement->createField(2,$bookingForm['meta']);
@@ -3211,7 +3459,7 @@ class CRBSBookingForm
 				}
             }
         }
-        
+		        
         /***/
         
         $class=array(array('crbs-client-form-sign-up','crbs-hidden'),array('crbs-form-checkbox'),array('crbs-disable-section'));
@@ -3264,12 +3512,15 @@ class CRBSBookingForm
                         <label>'.esc_html__('Driver license','car-rental-booking-system').((int)$bookingForm['dictionary']['location'][$pickupLocationId]['meta']['driver_license_attach_enable']===1 ? ' *' : '').'</label>
                         <div'.CRBSHelper::createCSSClassAttribute($classButton[0]).'>
 							<span>'.esc_html__('Upload a file','car-rental-booking-system').'</span>
-							<input type="file" name="'.CRBSHelper::getFormName('driver_license_file',false).'"></input>
+							<input type="file" name="'.CRBSHelper::getFormName('driver_license_file',false).'"></input>							
 						</div>
 						<div'.CRBSHelper::createCSSClassAttribute($classButton[1]).'>
 							<span>'.esc_html__('Uploaded file:','car-rental-booking-system').'<span>'.esc_html($fileName).'</span></span>
 							<span'.CRBSHelper::createCSSClassAttribute(array('crbs-button','crbs-button-style-3')).'>'.esc_html__('Remove file','car-rental-booking-system').'</span>
 						</div>
+						<input type="hidden" name="'.CRBSHelper::getFormName('driver_license_file_name',false).'"/>
+						<input type="hidden" name="'.CRBSHelper::getFormName('driver_license_file_type',false).'"/>
+						<input type="hidden" name="'.CRBSHelper::getFormName('driver_license_file_tmp_name',false).'"/>	
                     </div>
                 </div>                
             ';
@@ -3323,7 +3574,16 @@ class CRBSBookingForm
                 </div>
                 
                 '.$htmlElement[4].'
-                
+		';
+		
+		/***/
+		
+		if((int)$bookingForm['meta']['billing_detail_state']===4) return($html.$htmlElement[3].'</div>');
+		
+		/***/
+		
+		$html.=
+		'       
                 <div class="crbs-form-panel">
  
                     <label class="crbs-form-panel-label">
@@ -3430,15 +3690,15 @@ class CRBSBookingForm
     
     /**************************************************************************/
     
-    function driverLicenseUpload()
+    function fileUpload()
     {            
         $response=array();
-        
-        $name=PLUGIN_CRBS_CONTEXT.'_driver_license_file';
-        
-        if(!array_key_exists($name,$_FILES))
+		
+        if(!is_array($_FILES))
             CRBSHelper::createJSONResponse($response);
-                
+   
+		$name=key($_FILES);
+		
         if(!is_array($_FILES[$name]))
             CRBSHelper::createJSONResponse($response);
       
@@ -3452,6 +3712,82 @@ class CRBSBookingForm
         $response['tmp_name']=$fileName;
         
         CRBSHelper::createJSONResponse($response);
+    }
+	
+	/**************************************************************************/
+	
+    function getBookingFormPickupPeriod($meta,$interval,$intervalType)
+    {
+        $date=array();
+        
+        $Validation=new CRBSValidation();
+        
+        $type=array(1=>'days',2=>'hours',3=>'minutes');
+        
+        /***/
+		
+		$dateStart=date_i18n('d-m-Y G:i');
+		
+		if((int)$intervalType===2)
+		{
+			if($interval<=0) $interval=1;
+
+			$i=0;
+			while(1)
+			{
+				$dateTemp=strtotime($dateStart.' '.$i.' minute');
+				$minute=date('i',$dateTemp);
+				if($minute%$interval==0) break;
+				$i++;
+			}
+		}
+		else $dateTemp=strtotime($dateStart);
+		
+        $dateStart=strtotime('+ '.(int)$meta['pickup_period_from'].' '.$type[(int)$meta['pickup_period_type']],$dateTemp);
+        		
+        $offset=(int)$meta['pickup_period_from'];
+        
+        if((int)$meta['pickup_period_type']===1)
+           $offset*=24;
+        if((int)$meta['pickup_period_type']===3)
+            $offset*=3600;       
+        
+        /***/
+        
+        if($Validation->isEmpty($meta['pickup_period_to'])) $dateStop=null;
+        else $dateStop=strtotime('+ '.(int)$meta['pickup_period_to'].' '.$type[(int)$meta['pickup_period_type']],$dateStart);
+     
+        /***/
+        
+		$date['min']=date_i18n('d-m-Y H:i:s',$dateStart);
+		$date['max']=is_null($dateStop) ? null : date_i18n('d-m-Y H:i:s',$dateStop);
+
+        return($date);
+    }
+	
+	/**************************************************************************/
+	
+    function getDatePickupPeriod($data,$location,$type,$delta)
+    {
+        $date=array();
+        
+        if((int)$location['meta']['pickup_period_type']===1)
+        {
+            $date[0]=$data[$type.'_date'];
+            $date[1]=date_i18n('d-m-Y',CRBSDate::strtotime('+'.$delta.' days'));
+        }
+        elseif((int)$location['meta']['pickup_period_type']===2)
+        {
+            $date[0]=$data[$type.'_date'].' '.$data[$type.'_time'];
+            $date[1]=date_i18n('d-m-Y H:i',CRBSDate::strtotime('+'.$delta.' hours'));                            
+        }
+        elseif((int)$location['meta']['pickup_period_type']===3)
+        {
+            $date[0]=$data[$type.'_date'].' '.$data[$type.'_time'];
+            $date[1]=date_i18n('d-m-Y H:i',CRBSDate::strtotime('+'.$delta.' minutes'));                            
+        } 
+     
+        return($date);
     }
     
     /**************************************************************************/

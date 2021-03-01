@@ -154,6 +154,21 @@ class CHBSBookingFormElement
         return(false);
     }
     
+	/**************************************************************************/
+	
+	function getFieldValueByLabel($label,$meta)
+	{
+		if(is_array($meta))
+		{
+			foreach($meta['form_element_field'] as $value)
+			{
+				if($value['label']==$label) return($value['value']);
+			}
+		}
+		
+		return(null);
+	}
+		
     /**************************************************************************/
     
     function createField($panelId,$serviceTypeId,$meta)
@@ -181,7 +196,7 @@ class CHBSBookingFormElement
                 '
                     <div class="chbs-clear-fix">
                         <div class="chbs-form-field chbs-form-field-width-100">
-                            <label>'.esc_html($value['label']).'</label>
+                            <label>'.esc_html($value['label']).((int)$value['mandatory']===1 ? ' *' : '').'</label>
                             <input type="text" name="'.CHBSHelper::getFormName($name,false).'"  value="'.esc_attr(CHBSHelper::getPostValue($name)).'"/>
                         </div>                        
                     </div>

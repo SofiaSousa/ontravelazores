@@ -36,6 +36,7 @@ class CHBSBookingFormSummary
     
     function create($header,$step=-1)
     {
+		$html=null;
         $Validation=new CHBSValidation();
         
         foreach($this->data as $data)

@@ -145,7 +145,7 @@ class CHBSBookingExtra
         CHBSHelper::setDefault($meta,'quantity_max','1');
         CHBSHelper::setDefault($meta,'mandatory','0');
         
-        CHBSHelper::setDefault($meta,'price','0.00');
+        CHBSHelper::setDefault($meta,'price',CHBSPrice::getDefaultPrice());
        
         CHBSHelper::setDefault($meta,'service_type_id_enable',array_keys($ServiceType->getServiceType()));
         CHBSHelper::setDefault($meta,'transfer_type_id_enable',array_keys($TransferType->getTransferType()));
@@ -214,7 +214,9 @@ class CHBSBookingExtra
         
         $meta['price']=CHBSHelper::getPostValue('price');
         if(!$Validation->isPrice($meta['price'],false))
-           $meta['price']=0.00;  
+           $meta['price']=CHBSPrice::getDefaultPrice();  
+		
+		$meta['price']=CHBSPrice::formatToSave($meta['price'],false);
         
         $meta['tax_rate_id']=CHBSHelper::getPostValue('tax_rate_id');
         if(!$TaxRate->isTaxRate($meta['tax_rate_id']))

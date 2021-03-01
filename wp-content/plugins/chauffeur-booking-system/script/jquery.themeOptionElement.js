@@ -13,7 +13,7 @@
 		
 		var $optionDefault=
 		{
-			init		:	false
+			init:false
 		};
 		
 		var $option=$.extend($optionDefault,option);
@@ -31,7 +31,7 @@
 			this.createDatePicker();
 			this.createTimePicker();
 			this.createTab();
-            this.createCopyToClipboard();
+			this.createCopyToClipboard();
 
 			$this.css({'display':'block'});
 		};
@@ -108,10 +108,10 @@
 			{
 				$(this).datepicker(
 				{ 
-					inline														:	true,
-					dateFormat													:	'dd-mm-yy',
-                    prevText                                                    :   '&#8592;',
-                    nextText                                                    :   '&#8594;'
+					inline:true,
+					dateFormat:'dd-mm-yy',
+					prevText:'&#8592;',
+					nextText:'&#8594;'
 				});
 			});
 		};
@@ -126,8 +126,8 @@
 				
 				$(this).timepicker(
 				{ 
-					timeFormat													:	'H:i',
-					appendTo													:	$(this).parent()
+					timeFormat:'H:i',
+					appendTo:$(this).parent()
 				});
 				
 				$(this).on('showTimepicker',function()
@@ -141,16 +141,16 @@
 		
 		this.createInfieldLabel=function()
 		{
-            if($.fn.inFieldLabels)
-                $this.find('.to-infield').inFieldLabels();
+			if($.fn.inFieldLabels)
+				$this.find('.to-infield').inFieldLabels();
 		};
 		
 		/**********************************************************************/
 		
 		this.createDropkick=function()
 		{
-            if($.fn.dropkick)
-                $this.find('select:not(.to-dropkick-disable)').dropkick();
+			if($.fn.dropkick)
+				$this.find('select:not(.to-dropkick-disable)').dropkick();
 		};
 		
 		/**********************************************************************/
@@ -159,31 +159,31 @@
 		{
 			var buttonset=$this.find('.to-radio-button:not(.to-jqueryui-buttonset-disable),.to-checkbox-button:not(.to-jqueryui-buttonset-disable)');
 			if(buttonset.length)
-            {
-                buttonset.buttonset();
-            }
+			{
+				buttonset.buttonset();
+			}
 		};
 		
 		/**********************************************************************/
 		
 		this.createSlider=function(selector,min,max,value,step)
 		{
-            var slider=$this.find(selector);
+			var slider=$this.find(selector);
             
-            if(!slider.length) return;
+			if(!slider.length) return;
             
 			slider.slider(
 			{
-				min                                                             :	min,
-				max                                                             :	max,
-				range                                                           :	'min',
-				value                                                           :	value,
-				step                                                            :	(typeof(step)==='undefined' ? 1 : step),
-				slide                                                           :	function(event,ui) 
+				min:min,
+				max:max,
+				range:'min',
+				value:value,
+				step:(typeof(step)==='undefined' ? 1 : step),
+				slide:function(event,ui) 
 				{
 					$(this).nextAll('input').val(ui.value);
 				},
-				create                                                          :	function()
+				create:function()
 				{
 					$(this).nextAll('input').val($(this).slider('value'));
 				}
@@ -200,27 +200,27 @@
 
 				wp.media.frames.selectImageFrame=wp.media(
 				{
-					multiple                                                    :	multiple,
-					library                                                     : 
+					multiple:multiple,
+					library: 
 					{
-					   type                                                     :	'image',
+					   type:'image',
 					}
 				});
 
-                wp.media.frames.selectImageFrame.on('open',function()
-                {
-                    var selection=wp.media.frames.selectImageFrame.state().get('selection');
-                    
-                    var value=self.prev().val();
-                    
-                    if(parseInt(type,10)===2)
-                    {
-                        var data=value.split('.');
-                        
-                        for(var i in data)
-                            selection.add(wp.media.attachment(data[i]));
-                    }
-                });
+				wp.media.frames.selectImageFrame.on('open',function()
+				{
+					var selection=wp.media.frames.selectImageFrame.state().get('selection');
+
+					var value=self.prev().val();
+
+					if(parseInt(type,10)===2)
+					{
+						var data=value.split('.');
+
+						for(var i in data)
+							selection.add(wp.media.attachment(data[i]));
+					}
+				});
 
 				wp.media.frames.selectImageFrame.on('select',function()
 				{
@@ -228,23 +228,23 @@
 
 					if(!selection) return;
 
-                    var value='';
+					var value='';
 
 					selection.each(function(attachment)
 					{
-                        if(type===1)
-                            value=attachment.attributes.url;
-                        else
-                            value+=attachment.attributes.id+'.';
+						if(type===1)
+							value=attachment.attributes.url;
+						else
+							value+=attachment.attributes.id+'.';
 					});
                     
-                    if(type===2)
-                        value=value.substr(0,value.length-1);
+					if(type===2)
+						value=value.substr(0,value.length-1);
                     
-                    self.prev().val(value);
+					self.prev().val(value);
 				});
                 
-                wp.media.frames.selectImageFrame.open();
+				wp.media.frames.selectImageFrame.open();
 			});
 		};
 
@@ -254,19 +254,19 @@
 		{
 			$this.find(selector).autocomplete(
 			{
-				appendTo	:	$('.to:first'),
-				source		:	function(request,response) 
+				appendTo:$('.to:first'),
+				source:function(request,response) 
 				{
 					$.ajax(
 					{
-						url                                                     :	ajaxurl,
-						dataType                                                :	'json',
-						data                                                    : 
+						url:ajaxurl,
+						dataType:'json',
+						data: 
 						{
-							query                                               :	request.term,
-							action                                              :	'autocomplete_google_font'
+							query:request.term,
+							action:'autocomplete_google_font'
 						},
-						success                                                 :	function(data) 
+						success:function(data) 
 						{
 							response($.map(data,function(item) 
 							{
@@ -275,7 +275,7 @@
 						}
 					});
 				},
-				minLength                                                       :	2
+				minLength:2
 			});
 		};
 		
@@ -283,108 +283,108 @@
 		
 		this.createTab=function()
 		{
-            function getTabPanelId(tab)
-            {
-                var panel=[];
-                
-                tab.children('div').each(function()
-                {
-                    panel.push($(this).attr('id')); 
-                });
-                
-                return(panel);
-            }
-            
-            /***/
-            
-            function getTabPanelActive(tab)
-            {
-                var panelCurrent=getTabPanelId(tab);
-                
-                try
-                {
-                    var panelStorage=JSON.parse(window.sessionStorage.getItem('to-tab-panel'));
-                }
-                catch(e)
-                {
-                    panelStorage=[];
-                }
-                
-                if($.isArray(panelStorage))
-                {
-                    for(var i in panelCurrent)
-                    {
-                        if($.inArray(panelCurrent[i],panelStorage)>-1)
-                        {
-                            var listItem=tab.find('a[href="#'+panelCurrent[i]+'"]').parent('li');
-                            return(listItem.index());
-                        }
-                    }
-                }
-                
-                return(0);
-            }
-            
-            /***/
-            
-            $this.find('.ui-tabs').each(function()
-            {
-                $(this).tabs(
-                {
-                    active                                                      :   getTabPanelActive($(this)),
-                    activate                                                    :   function(event,ui)
-                    {
-                        var panelCurrent=getTabPanelId($(this));
+			function getTabPanelId(tab)
+			{
+				var panel=[];
 
-                        var panelStorage=window.sessionStorage.getItem('to-tab-panel');
+				tab.children('div').each(function()
+				{
+					panel.push($(this).attr('id')); 
+				});
 
-                        if($.isArray(panelStorage))
-                        {
-                            for(var i in panelStorage)
-                            {
-                                if((position=$.inArray(panelStorage[i],panelCurrent))>-1)
-                                {
-                                    panelStorage.splice(position,1);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            panelStorage=[];
-                            panelStorage.push(ui.newTab.attr('aria-controls'));
-                        }
-                        
-                        window.sessionStorage.setItem('to-tab-panel',JSON.stringify(panelStorage));
-                    }
-                });               
-            });
+				return(panel);
+			}
+            
+			/***/
+            
+			function getTabPanelActive(tab)
+			{
+				var panelCurrent=getTabPanelId(tab);
+
+				try
+				{
+					var panelStorage=JSON.parse(window.sessionStorage.getItem('to-tab-panel'));
+				}
+				catch(e)
+				{
+					panelStorage=[];
+				}
+
+				if($.isArray(panelStorage))
+				{
+					for(var i in panelCurrent)
+					{
+						if($.inArray(panelCurrent[i],panelStorage)>-1)
+						{
+							var listItem=tab.find('a[href="#'+panelCurrent[i]+'"]').parent('li');
+							return(listItem.index());
+						}
+					}
+				}
+
+				return(0);
+			}
+            
+			/***/
+            
+			$this.find('.ui-tabs').each(function()
+			{
+				$(this).tabs(
+				{
+					active:getTabPanelActive($(this)),
+					activate:function(event,ui)
+					{
+						var panelCurrent=getTabPanelId($(this));
+
+						var panelStorage=window.sessionStorage.getItem('to-tab-panel');
+
+						if($.isArray(panelStorage))
+						{
+							for(var i in panelStorage)
+							{
+								if((position=$.inArray(panelStorage[i],panelCurrent))>-1)
+								{
+									panelStorage.splice(position,1);
+								}
+							}
+						}
+						else
+						{
+							panelStorage=[];
+							panelStorage.push(ui.newTab.attr('aria-controls'));
+						}
+
+						window.sessionStorage.setItem('to-tab-panel',JSON.stringify(panelStorage));
+					}
+				});               
+			});
 		};
         
-        /**********************************************************************/
+		/**********************************************************************/
         
-        this.createCopyToClipboard=function()
-        {
-            try
-            {
-                if(!ClipboardJS.isSupported())
-                {
-                    $('.to-copy-to-clipboard').css({display:'none'});
-                    return;
-                }
+		this.createCopyToClipboard=function()
+		{
+			try
+			{
+				if(!ClipboardJS.isSupported())
+				{
+					$('.to-copy-to-clipboard').css({display:'none'});
+					return;
+				}
 
-                $('.to-copy-to-clipboard').bind('click',function(e)
-                {
-                    e.preventDefault();
-                });
+				$('.to-copy-to-clipboard').bind('click',function(e)
+				{
+					e.preventDefault();
+				});
 
-                var clipboard=new ClipboardJS('.to-copy-to-clipboard');
-                clipboard.on('success',function(e)
-                {
-                    $(e.trigger).html($(e.trigger).attr('data-label-on-success'));
-                });
-            }
-            catch(e) {}
-        };
+				var clipboard=new ClipboardJS('.to-copy-to-clipboard');
+				clipboard.on('success',function(e)
+				{
+					$(e.trigger).html($(e.trigger).attr('data-label-on-success'));
+				});
+			}
+			catch(e) {}
+		};
 		
 		/**********************************************************************/
 	};

@@ -129,7 +129,7 @@ class CRBSLogManager
             '
                 <li>
                     <div class="to-field-disabled to-field-disabled-full-width">
-                        ['.(++$i).']['.date('d-m-Y G:i:s',$value['timestamp']).']<br/>
+                        ['.(++$i).']['.date_i18n('d-m-Y G:i:s',$value['timestamp']).']<br/>
                         <b>'.$this->type[$type][$value['event']]['description'].'</b><br/><br/>
                         '.nl2br(htmlspecialchars($value['message'])).'
                     </div>

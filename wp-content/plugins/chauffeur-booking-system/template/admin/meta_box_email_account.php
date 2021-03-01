@@ -9,6 +9,7 @@
                 </ul>
                 <div id="meta-box-email-account-1">
                     <ul class="to-form-field-list">
+						<?php echo CHBSHelper::createPostIdField(__('E-mail account ID','chauffeur-booking-system')); ?>
                         <li>
                             <h5><?php esc_html_e('Name','chauffeur-booking-system'); ?></h5>
                             <span class="to-legend"><?php esc_html_e('Name.','chauffeur-booking-system'); ?></span>

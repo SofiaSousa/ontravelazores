@@ -22,7 +22,7 @@
             <li>
                 <h5><?php esc_html_e('Percentage discount','chauffeur-booking-system'); ?></h5>
                 <span class="to-legend">
-                    <?php esc_html_e('Perecentage discount. Allowed are integer numbers from 0 to 99.','chauffeur-booking-system'); ?></span>
+                    <?php esc_html_e('Percentage discount. Allowed are integer numbers from 0 to 99.','chauffeur-booking-system'); ?></span>
                 <div>
                     <input type="text" maxlength="2" name="<?php CHBSHelper::getFormName('coupon_generate_discount_percentage'); ?>" id="<?php CHBSHelper::getFormName('coupon_generate_discount_percentage'); ?>" value="<?php echo esc_attr($this->data['option']['coupon_generate_discount_percentage']); ?>"/>
                 </div>

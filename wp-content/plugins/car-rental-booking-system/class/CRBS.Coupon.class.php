@@ -85,6 +85,7 @@ class CRBSCoupon
         global $post;
         
         $Booking=new CRBSBooking();
+		$Vehicle=new CRBSVehicle();
         
 		$data=array();
                
@@ -105,7 +106,10 @@ class CRBSCoupon
         }
         
         $data['meta']['usage_count']=$Booking->getCouponCodeUsageCount($data['meta']['code']);
-                
+		
+		$data['dictionary']['vehicle']=$Vehicle->getDictionary();
+		$data['dictionary']['vehicle_category']=$Vehicle->getCategory();
+		
 		$Template=new CRBSTemplate($data,PLUGIN_CRBS_TEMPLATE_PATH.'admin/meta_box_coupon.php');
 		echo $Template->output();	        
     }
@@ -124,6 +128,9 @@ class CRBSCoupon
 	{
         CRBSHelper::setDefault($meta,'usage_limit','');
         
+		CRBSHelper::setDefault($meta,'vehicle_id',array(-1));
+		CRBSHelper::setDefault($meta,'vehicle_category_id',array(-1));
+		
         CRBSHelper::setDefault($meta,'discount_percentage',0);
         CRBSHelper::setDefault($meta,'discount_fixed',0);
         
@@ -142,6 +149,7 @@ class CRBSCoupon
         if(CRBSHelper::checkSavePost($postId,PLUGIN_CRBS_CONTEXT.'_meta_box_coupon_noncename','savePost')===false) return(false);
         
         $Date=new CRBSDate();
+		$Vehicle=new CRBSVehicle();
         $Validation=new CRBSValidation();
         
         $option=CRBSHelper::getPostOption();
@@ -168,6 +176,32 @@ class CRBSCoupon
 		
         $option['active_date_start']=$Date->formatDateToStandard($option['active_date_start']);
         $option['active_date_stop']=$Date->formatDateToStandard($option['active_date_stop']);
+		
+		/***/
+		
+		$vehicle=$Vehicle->getDictionary();
+		$option['vehicle_id']=(array)$option['vehicle_id'];
+		
+		foreach($option['vehicle_id'] as $index=>$value)
+		{
+			if(!array_key_exists($value,$vehicle))
+				unset($option['vehicle_id'][$index]);
+		}
+		
+		if(!count($option['vehicle_id'])) $option['vehicle_id']=array(-1);
+		
+		/***/
+		
+		$vehicleCategory=$Vehicle->getCategory();
+		$option['vehicle_category_id']=(array)$option['vehicle_category_id'];
+		
+		foreach($option['vehicle_category_id'] as $index=>$value)
+		{
+			if(!array_key_exists($value,$vehicleCategory))
+				unset($option['vehicle_category_id'][$index]);
+		}
+
+		if(!count($option['vehicle_category_id'])) $option['vehicle_category_id']=array(-1);		
 		
 		/***/
 		
@@ -207,18 +241,22 @@ class CRBSCoupon
 			
             if($d[0]>$d[1]) continue;
             
-            array_push($number,array('start'=>$d[0],'stop'=>$d[1],'discount_percentage'=>$d[2],'discount_fixed'=>$d[3]));
+            array_push($number,array('start'=>$d[0],'stop'=>$d[1],'discount_percentage'=>$d[2],'discount_fixed'=>CRBSPrice::formatToSave($d[3])));
         }
         
         $option['discount_rental_day_count']=$number;
 				
 		/***/
 		
+		$option['discount_fixed']=CRBSPrice::formatToSave($option['discount_fixed']);
+		
         $key=array
         (
             'usage_limit',
             'active_date_start',
             'active_date_stop',
+			'vehicle_id',
+			'vehicle_category_id',
             'discount_percentage',
             'discount_fixed',
 			'discount_rental_day_count'
@@ -422,19 +460,34 @@ class CRBSCoupon
     
     /**************************************************************************/
     
-    function checkCode()
+    function checkCode($bookingForm,&$couponCodeSourceType)
     {
         global $post;
         
         $Date=new CRBSDate();
         $Booking=new CRBSBooking();
         $Validation=new CRBSValidation();
-        
-        $data=CRBSHelper::getPostOption();
-        
-        if(!array_key_exists('coupon_code',$data)) return(false);
-        
-        if($Validation->isEmpty($data['coupon_code'])) return(false);
+		
+		$couponCode=null;
+		
+		$data=CRBSHelper::getPostOption();
+		
+		if($bookingForm['meta']['coupon_id']!=-1)
+		{
+			$couponCodeSourceType=1;
+			
+			$dictionary=$this->getDictionary();
+			if(array_key_exists($bookingForm['meta']['coupon_id'],$dictionary))
+				$couponCode=$dictionary[$bookingForm['meta']['coupon_id']]['meta']['code'];
+		}
+		
+		if(array_key_exists('coupon_code',$data))
+		{
+			$couponCodeSourceType=2;
+			$couponCode=$data['coupon_code'];
+		}
+		
+        if($Validation->isEmpty($couponCode)) return(false);
         
         /***/
         
@@ -444,7 +497,7 @@ class CRBSCoupon
 			'post_status'														=>	'publish',
 			'posts_per_page'													=>	-1,
             'meta_key'                                                          =>  PLUGIN_CRBS_CONTEXT.'_code',
-            'meta_value'                                                        =>  isset($data['coupon_code']) ? $data['coupon_code'] : '',
+            'meta_value'                                                        =>  $couponCode,
             'meta_compare'                                                      =>  '='
 		);
 		
@@ -463,7 +516,7 @@ class CRBSCoupon
         
         if($Validation->isNotEmpty($meta['usage_limit']))
         {    
-           $count=$Booking->getCouponCodeUsageCount($data['coupon_code']);
+           $count=$Booking->getCouponCodeUsageCount($couponCode);
       
            if($count===false) return(false);
            if($count>=$meta['usage_limit']) return(false);
@@ -473,14 +526,39 @@ class CRBSCoupon
         
         if($Validation->isNotEmpty($meta['active_date_start']))
         {
-            if($Date->compareDate(date('Y-m-d'),$meta['active_date_start'])===2) return(false);
+            if($Date->compareDate(date_i18n('Y-m-d'),$meta['active_date_start'])===2) return(false);
         }
         
         if($Validation->isNotEmpty($meta['active_date_stop']))
         {
-            if($Date->compareDate($meta['active_date_stop'],date('Y-m-d'))===2) return(false);
-        }     
-        
+            if($Date->compareDate($meta['active_date_stop'],date_i18n('Y-m-d'))===2) return(false);
+        }  
+		
+		/***/
+
+		if(array_key_exists($data['vehicle_id'],$bookingForm['dictionary']['vehicle']))
+		{
+			if((is_array($meta['vehicle_id'])) && (count($meta['vehicle_id'])) && (!in_array(-1,$meta['vehicle_id'])))
+			{
+				if(!in_array($data['vehicle_id'],$meta['vehicle_id'])) return(false);
+			}
+			if((is_array($meta['vehicle_category_id'])) && (count($meta['vehicle_category_id'])) && (!in_array(-1,$meta['vehicle_category_id'])))
+			{
+				$categoryFound=false;
+				
+				foreach($meta['vehicle_category_id'] as $value)
+				{
+					if(has_term($value,CRBSVehicle::getCPTCategoryName(),$data['vehicle_id']))
+					{
+						$categoryFound=true;
+						break;
+					}
+				}
+				
+				if(!$categoryFound) return(false);
+			}
+		}
+		
         /***/
 
         return(array('post'=>$post,'meta'=>$meta));
@@ -500,6 +578,47 @@ class CRBSCoupon
 
         return($discountPercentage);
     }
+	
+	/**************************************************************************/
+	
+    function getDictionary($attr=array())
+    {
+		global $post;
+		
+		$dictionary=array();
+		
+		$default=array
+		(
+			'coupon_id'			  												=>	0
+		);
+		
+		$attribute=shortcode_atts($default,$attr);
+		CRBSHelper::preservePost($post,$bPost);
+		
+		$argument=array
+		(
+			'post_type'															=>	self::getCPTName(),
+			'post_status'														=>	'publish',
+			'posts_per_page'													=>	-1
+		);
+		
+		if($attribute['coupon_id'])
+			$argument['p']=$attribute['coupon_id'];
+
+		$query=new WP_Query($argument);
+		if($query===false) return($dictionary);
+		
+		while($query->have_posts())
+		{
+			$query->the_post();
+			$dictionary[$post->ID]['post']=$post;
+			$dictionary[$post->ID]['meta']=CRBSPostMeta::getPostMeta($post);
+		}
+		
+		CRBSHelper::preservePost($post,$bPost,0);
+		
+		return($dictionary);
+	}
     
     /**************************************************************************/
 }

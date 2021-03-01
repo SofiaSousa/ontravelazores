@@ -99,7 +99,7 @@
             
 			line.find('select.to-dropkick-disable').each(function() 
 			{
-				var helper=new Helper();
+				var helper=new CHBSHelper();
 				var string=helper.getRandomString(16);
                 
                 var select=$(this).attr('id',$(this).attr('id')+'_'+string);

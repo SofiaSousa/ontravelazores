@@ -5,11 +5,18 @@
 
 class CRBSCountry
 {
+	/**************************************************************************/
+
+	function __construct()
+	{
+		$this->country=CRBSGlobalData::setGlobalData('country',array($this,'init'));
+	}
+	
     /**************************************************************************/
 
-    function __construct()
+    function init()
     {
-        $this->country=array
+        $country=array
         (
             'AF'                                                                =>  array(__('Afghanistan','car-rental-booking-system')),
             'AX'                                                                =>  array(__('Aland Islands','car-rental-booking-system')),
@@ -256,7 +263,9 @@ class CRBSCountry
             'YE'                                                                =>  array(__('Yemen','car-rental-booking-system')),
             'ZM'                                                                =>  array(__('Zambia','car-rental-booking-system')),
             'ZW'                                                                =>  array(__('Zimbabwe','car-rental-booking-system'))
-        );        
+        );    
+		
+		return($country);
     }
     
     /**************************************************************************/

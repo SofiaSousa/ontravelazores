@@ -59,6 +59,31 @@ class CRBSHelper
 		
 		return($option);
 	}
+	
+	/**************************************************************************/
+	
+	static function getGetOption($prefix=null,$useOptionPrefix=true)
+	{
+		if(!is_null($prefix)) $prefix='_'.$prefix.'_';
+		
+		$option=array();
+        $result=array();
+        
+        $data=filter_input_array(INPUT_GET);
+        if(!is_array($data)) $data=array();
+        
+		foreach($data as $key=>$value)
+		{
+			if((!preg_match('/^'.PLUGIN_CRBS_OPTION_PREFIX.$prefix.'/',$key,$result)) && ($useOptionPrefix)) continue;
+
+			$index=preg_replace('/^'.PLUGIN_CRBS_OPTION_PREFIX.'_/','',$key);
+			$option[$index]=$value;
+		}	
+		
+		CRBSHelper::stripslashesPOST($option);
+		
+		return($option);
+	}
 
 	/**************************************************************************/
 	
@@ -349,6 +374,27 @@ class CRBSHelper
     {
         return((ini_get('upload_tmp_dir') ? ini_get('upload_tmp_dir') : sys_get_temp_dir()).'/');
     }
+	
+	/**************************************************************************/
+	
+	static function createPostIdField($label)
+	{
+		global $post;
+		
+		$html=
+		'
+			<li>
+				<h5>'.esc_html($label).'</h5>
+				<span class="to-legend">'.esc_html($label).'.</span>
+				<div class="to-field-disabled">
+					'.esc_html($post->ID).'
+					<a href="#" class="to-copy-to-clipboard to-float-right" data-clipboard-text="'.esc_attr($post->ID).'" data-label-on-success="'.esc_attr__('Copied!','car-rental-booking-system').'">'.esc_html__('Copy','car-rental-booking-system').'</a>
+				</div>
+			</li>		
+		';
+		
+		return($html);
+	}
     
     /**************************************************************************/
 }

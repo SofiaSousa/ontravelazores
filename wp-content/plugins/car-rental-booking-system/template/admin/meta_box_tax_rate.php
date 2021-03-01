@@ -8,11 +8,12 @@
                 </ul>
                 <div id="meta-box-tax-rate-1">
                     <ul class="to-form-field-list">
+						<?php echo CRBSHelper::createPostIdField(__('Tax rate ID','car-rental-booking-system')); ?>
                         <li>
                             <h5><?php esc_html_e('Value','car-rental-booking-system'); ?></h5>
                             <span class="to-legend"><?php esc_html_e('Percentage value of tax rate. Floating point values are allowed, up to two decimal places in the range 0-100.','car-rental-booking-system'); ?></span>
                             <div>
-                                <input type="text" name="<?php CRBSHelper::getFormName('tax_rate_value'); ?>" id="<?php CRBSHelper::getFormName('tax_rate_value'); ?>" value="<?php echo esc_attr($this->data['meta']['tax_rate_value']); ?>"/>
+                                <input type="text" maxlength="5" name="<?php CRBSHelper::getFormName('tax_rate_value'); ?>" id="<?php CRBSHelper::getFormName('tax_rate_value'); ?>" value="<?php echo esc_attr($this->data['meta']['tax_rate_value']); ?>"/>
                             </div>
                         </li>  
                         <li>

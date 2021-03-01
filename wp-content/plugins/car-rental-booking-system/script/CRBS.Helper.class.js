@@ -177,6 +177,38 @@ function CRBSHelper()
 		});             
 	};
 	
+	/**************************************************************************/
+	
+	this.getGetValue=function(name) 
+	{
+		var temp=[];
+		var result=null;
+			
+		location.search.substr(1).split("&").forEach(function(item) 
+		{
+			temp=item.split("=");
+			if(temp[0]===name) result=decodeURIComponent(temp[1]);
+		});
+		
+		return(result);
+	};
+	
+	/**************************************************************************/
+	
+	this.getValueFromClass=function(object,pattern)
+	{
+		var reg=new RegExp(pattern);
+		var className=jQuery(object).attr('class').split(' ');
+
+		for(var i in className)
+		{
+			if(reg.test(className[i]))
+				return(className[i].substring(pattern.length));
+		}
+
+		return(false);		
+	};	
+	
     /**************************************************************************/
 };
 

@@ -41,10 +41,8 @@ class CHBSWooCommerce
 
         foreach($dictionary as $index=>$value)
         {
-            if(!(isset($value->enabled) && ($value->enabled==='yes')))
-            {
-                unset($dictionary[$index]);
-            }
+			if(!isset($value->enabled)) unset($dictionary[$index]);
+			if($value->enabled!='yes') unset($dictionary[$index]);
         }
         
         return($dictionary);
@@ -87,7 +85,9 @@ class CHBSWooCommerce
             $userData=$User->getCurrentUserData();
             $userId=$userData->data->ID;
         }
-        
+		
+		CHBSPostMeta::updatePostMeta($bookingId,'user_id',$userId);
+		
 		$address=array
         (
             'first_name'                                                        =>  $booking['meta']['client_contact_detail_first_name'],
@@ -102,14 +102,36 @@ class CHBSWooCommerce
 			'phone'                                                             =>  $booking['meta']['client_contact_detail_phone_number'],
             'email'                                                             =>  $booking['meta']['client_contact_detail_email_address']			
 		);
-				
-		$order=wc_create_order();
+		
+		$argument=array();
+		
+		$argument['customer_id']=$booking['meta']['user_id'];
+		
+		if((int)$booking['meta']['business_user_paid']===1) $argument['status']='completed';
+	
+		$order=wc_create_order($argument);
 		$order->set_address($address,'billing');
 		$order->set_address($address,'shipping');
         $order->set_payment_method($booking['meta']['payment_id']);
+		
+		switch((int)$booking['meta']['booking_status_id'])
+		{			
+			case 3:
+				
+				$order->update_status('cancelled');
+				
+			break;
+		
+			default:
+				
+				$order->update_status('pending');
+		}		
+
         $order->set_currency($booking['meta']['currency_id']);
         
         update_post_meta($order->get_id(),PLUGIN_CHBS_CONTEXT.'_booking_id',$bookingId);
+		
+		CHBSPostMeta::updatePostMeta($bookingId,'woocommerce_booking_id',$order->get_id());
         
         if($userId>0) 
         {
@@ -360,6 +382,7 @@ class CHBSWooCommerce
         $userData['client_billing_detail_street_name']=$billingAddress['address_1'];
         $userData['client_billing_detail_street_number']=$billingAddress['address_2'];
         $userData['client_billing_detail_city']=$billingAddress['city'];
+        $userData['client_billing_detail_state']=null;
         $userData['client_billing_detail_postal_code']=$billingAddress['postcode'];
         $userData['client_billing_detail_country_code']=$billingAddress['country'];
         
@@ -392,33 +415,79 @@ class CHBSWooCommerce
     {
         add_action('woocommerce_order_status_changed',array($this,'changeStaus'));
         add_action('woocommerce_email_customer_details',array($this,'createOrderEmailMessageBody'));
+		
+		add_action('add_meta_boxes',array($this,'addMetaBox'));
     }
+	
+	/**************************************************************************/
+	
+	function addMetaBox()
+	{
+		global $post;
+	
+		if($post->post_type=='shop_order')
+		{
+			$meta=CHBSPostMeta::getPostMeta($post);
+			
+			if((is_array($meta)) && (array_key_exists('booking_id',$meta)) && ($meta['booking_id']>0))
+			{
+				add_meta_box(PLUGIN_CHBS_CONTEXT.'_meta_box_woocommerce_product',__('Booking','chauffeur-booking-system'),array($this,'addMetaBoxWooCommerceBooking'),'shop_order','side','low');		
+			}
+		}
+	}
+	
+	/**************************************************************************/
+	
+	function addMetaBoxWooCommerceBooking()
+	{
+		global $post;
+		
+		$meta=CHBSPostMeta::getPostMeta($post);
+		
+		echo 
+		'
+			<div>
+				<div>'.esc_html__('This order has corresponding booking from "Chauffeur Booking System" plugin. Click on button below to see its details in new window.','chauffeur-booking-system').'</div>
+				<br/>
+				<a class="button button-primary" href="'.esc_url(get_edit_post_link($meta['booking_id'])).'" target="_blank">'.esc_html__('Open booking','chauffeur-booking-system').'</a>
+			</div>
+		';
+	}
     
     /**************************************************************************/
     
-    function changeStaus($order_id)
+    function changeStaus($bookingId,$bookingStatusSynchronizationId=2)
     {
-        $order=new WC_Order($order_id);
-
-        $status=array
-        (
-            'pending'                                                           =>  1,
-            'processing'                                                        =>  2,
-            'on-hold'                                                           =>  1,
-            'completed'                                                         =>  4,
-            'cancelled'                                                         =>  3,
-            'refunded'                                                          =>  4,
-            'failed'                                                            =>  4
-        );
-        
-        $meta=CHBSPostMeta::getPostMeta($order_id);
-        if((array_key_exists('booking_id',$meta)) && ($meta['booking_id']>0))
-        {
-            if(array_key_exists($order->get_status(),$status))
-            {
-                CHBSPostMeta::updatePostMeta($meta['booking_id'],'booking_status_id',$status[$order->get_status()]);
-            }
-        }
+		if(CHBSOption::getOption('booking_status_synchronization')===1) return(false);
+				
+		$BookingStatus=new CHBSBookingStatus();
+		
+		if(($bookingStatusSynchronizationId===2) && (in_array($bookingStatusSynchronizationId,array(2))))
+		{
+			$order=new WC_Order($bookingId);
+			$orderMeta=CHBSPostMeta::getPostMeta($bookingId);
+			
+			if((array_key_exists('booking_id',$orderMeta)) && ($orderMeta['booking_id']>0))
+			{
+				$status=$BookingStatus->mapBookingStatus($order->get_status());
+				if($status!==false) CHBSPostMeta::updatePostMeta($orderMeta['booking_id'],'booking_status_id',$status);
+			}
+		}
+		else if(($bookingStatusSynchronizationId===3) && (in_array($bookingStatusSynchronizationId,array(3))))
+		{
+			$Booking=new CHBSBooking();
+			if(($booking=$Booking->getBooking($bookingId))===false) return(false);
+			
+			if((array_key_exists('woocommerce_booking_id',$booking['meta'])) && ($booking['meta']['woocommerce_booking_id']>0))
+			{
+				$status=$BookingStatus->mapBookingStatus($order->get_status());
+				if($status!==false)
+				{
+					$order=new WC_Order($bookingId);
+					$order->updateStatus($status);
+				}
+			}			
+		}
     }
     
     /**************************************************************************/

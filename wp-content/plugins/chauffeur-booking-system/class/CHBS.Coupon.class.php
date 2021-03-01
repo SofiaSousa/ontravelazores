@@ -174,8 +174,10 @@ class CHBSCoupon
         
         /***/
          
-        if(!$Validation->isNumber($option['discount_percentage'],0,99,true))
-            $option['discount_percentage']=0;
+        if(!$Validation->isFloat($option['discount_percentage'],0.00,99.99,true))
+            $option['discount_percentage']=0.00;
+		
+		$option['discount_percentage']=CHBSPrice::formatToSave($option['discount_percentage']);
 
         $option['active_date_start']=$Date->formatDateToStandard($option['active_date_start']);
         $option['active_date_stop']=$Date->formatDateToStandard($option['active_date_stop']);

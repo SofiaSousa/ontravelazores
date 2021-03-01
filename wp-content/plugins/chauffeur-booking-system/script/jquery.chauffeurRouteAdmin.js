@@ -191,7 +191,7 @@
         
         this.createAutoComplete=function(text)
         {
-            var id=(new Helper()).getRandomString(16);
+            var id=(new CHBSHelper()).getRandomString(16);
                 
             text.attr('id',id).on('keypress',function(e)
             {
@@ -225,7 +225,7 @@
         
         this.getCoordinate=function()
         {
-            var helper=new Helper();
+            var helper=new CHBSHelper();
             var coordinate=new Array();
             
             $('#to-table-route tr:gt(1)').each(function()
@@ -245,7 +245,7 @@
         
         this.setAddress=function(field,callback)
         {
-            var helper=new Helper();
+            var helper=new CHBSHelper();
             
             var lat=field.attr('data-lat');
             var lng=field.attr('data-lng');

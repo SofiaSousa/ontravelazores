@@ -176,6 +176,8 @@ class CRBSVehicle
             if(!$Validation->isPrice($option['price_'.$index.'_value'],false))
                 $option['price_'.$index.'_value']=0.00;
          
+			$option['price_'.$index.'_value']=CRBSPrice::formatToSave($option['price_'.$index.'_value']);
+			
 			$taxRateIndex=$PriceRule->getTaxRateIndexName($index);
 	
 			if(!$TaxRate->isTaxRate($option['price_'.$taxRateIndex.'_tax_rate_id']))
@@ -527,7 +529,8 @@ class CRBSVehicle
         $checkType=$location[$pickupLocationId]['meta']['vehicle_availability_check_type'];
         
         /***/
-        
+		
+		if(!is_array($checkType)) return($dictionary);
         if(in_array(1,$checkType)) return($dictionary); 
         
         if(($Validation->isDate($pickupDate)) && ($Validation->isTime($pickupTime)) && ($Validation->isDate($returnDate)) && ($Validation->isTime($returnTime)))
@@ -589,7 +592,7 @@ class CRBSVehicle
                             array
                             (
                                 'key'                                           =>  PLUGIN_CRBS_CONTEXT.'_booking_status_id',
-                                'value'                                         =>  array(1,2),
+                                'value'                                         =>  array(1,2,4),
                                 'compare'                                       =>  'IN'
                             )
                         )
@@ -713,7 +716,7 @@ class CRBSVehicle
     
     /**************************************************************************/
     
-    function calculatePrice($data,$bookingForm,&$discountPercentage=0,$calculateHiddenFee=true)
+    function calculatePrice($data,$bookingForm,&$discountPercentage=0,$calculateHiddenFee=true,$useCouponEnable=true)
     {	
         $Currency=new CRBSCurrency();
         $PriceRule=new CRBSPriceRule();
@@ -771,53 +774,59 @@ class CRBSVehicle
         $period=CRBSBookingHelper::calculateRentalPeriod($data['pickup_date'],$data['pickup_time'],$data['return_date'],$data['return_time'],$bookingForm['meta'],CRBSOption::getOption('billing_type'));
         
         /***/
-        
-        $Coupon=new CRBSCoupon();
-        $coupon=$Coupon->checkCode();
-        
-        if($coupon!==false)
+		
+		$coupon=false;
+		$couponCodeSourceType=0;
+		
+		if($useCouponEnable)
         {
-            $discountPercentage=$coupon['meta']['discount_percentage'];
-            $discountFixed=$coupon['meta']['discount_fixed'];
-            
-			if((int)CRBSOption::getOption('billing_type')===2)
+			$Coupon=new CRBSCoupon();
+			$coupon=$Coupon->checkCode($bookingForm,$couponCodeSourceType);
+
+			if($coupon!==false)
 			{
-				if(array_key_exists('discount_rental_day_count',$coupon['meta']))
+				$discountPercentage=$coupon['meta']['discount_percentage'];
+				$discountFixed=$coupon['meta']['discount_fixed'];
+
+				if((int)CRBSOption::getOption('billing_type')===2)
 				{
-					if(is_array($coupon['meta']['discount_rental_day_count']))
+					if(array_key_exists('discount_rental_day_count',$coupon['meta']))
 					{
-						foreach($coupon['meta']['discount_rental_day_count'] as $index=>$value)
+						if(is_array($coupon['meta']['discount_rental_day_count']))
 						{
-							if((($value['start']<=$period['day']) && ($value['stop']>=$period['day'])))
+							foreach($coupon['meta']['discount_rental_day_count'] as $index=>$value)
 							{
-								if($value['discount_percentage']>0)
+								if((($value['start']<=$period['day']) && ($value['stop']>=$period['day'])))
 								{
-									$discountPercentage=$value['discount_percentage'];
+									if($value['discount_percentage']>0)
+									{
+										$discountPercentage=$value['discount_percentage'];
+									}
+									elseif($value['discount_fixed']>0)
+									{
+										$discountPercentage=0;
+										$discountFixed=$value['discount_fixed'];
+									}
+
+									break;
 								}
-								elseif($value['discount_fixed']>0)
-								{
-									$discountPercentage=0;
-									$discountFixed=$value['discount_fixed'];
-								}
-								
-								break;
 							}
 						}
 					}
 				}
-			}
-			
-            if($discountPercentage==0)
-            {
-                if($discountFixed>0)
-                {
-                    $discountPercentage=$Coupon->calculateDiscountPercentage($discountFixed,$period['day'],$period['hour'],$priceBase['price_rental_day_value'],$priceBase['price_rental_hour_value']);
+
+				if($discountPercentage==0)
+				{
+					if($discountFixed>0)
+					{
+						$discountPercentage=$Coupon->calculateDiscountPercentage($discountFixed,$period['day'],$period['hour'],$priceBase['price_rental_day_value'],$priceBase['price_rental_hour_value']);
+					}
 				}
-            }
-            
-            $priceBase['price_rental_day_value']=round($priceBase['price_rental_day_value']*(1-$discountPercentage/100),2);
-            $priceBase['price_rental_hour_value']=round($priceBase['price_rental_hour_value']*(1-$discountPercentage/100),2);
-        }
+
+				$priceBase['price_rental_day_value']=round($priceBase['price_rental_day_value']*(1-$discountPercentage/100),2);
+				$priceBase['price_rental_hour_value']=round($priceBase['price_rental_hour_value']*(1-$discountPercentage/100),2);
+			}
+		}
         
         $price['price']['sum']['net']['value']=$priceBase['price_rental_day_value']*$period['day']+$priceBase['price_rental_hour_value']*$period['hour'];
         $price['price']['sum']['net']['format']=CRBSPrice::format($priceBase['price_rental_day_value']*$period['day']+$priceBase['price_rental_hour_value']*$period['hour'],CRBSCurrency::getFormCurrency());
@@ -848,7 +857,7 @@ class CRBSVehicle
 		
         $price['price']['initial']['net']['value']=$priceBase['price_initial_value'];
         $price['price']['initial']['net']['format']=CRBSPrice::format($price['price']['initial']['net']['value'],CRBSCurrency::getFormCurrency());
-        $price['price']['initial']['gross']['value']=CRBSPrice::calculateGross($price['price']['initial']['net']['value'],$priceBase['price_initialt_tax_rate_id']);  
+        $price['price']['initial']['gross']['value']=CRBSPrice::calculateGross($price['price']['initial']['net']['value'],$priceBase['price_initial_tax_rate_id']);  
         $price['price']['initial']['gross']['format']=CRBSPrice::format($price['price']['initial']['gross']['value'],CRBSCurrency::getFormCurrency());
 
 		
@@ -864,7 +873,7 @@ class CRBSVehicle
             
         /***/
 		
-		$dayNumber=date('N',strtotime($data['return_date']));
+		$dayNumber=date_i18n('N',strtotime($data['return_date']));
 		
         $date1=strtotime($data['pickup_date'].' '.$data['pickup_time']);
         $date2=strtotime($data['pickup_date'].' '.$bookingForm['dictionary']['location'][$pickupLocationId]['meta']['business_hour'][$dayNumber]['start']);
@@ -950,6 +959,14 @@ class CRBSVehicle
         /***/
         
         $price['price']['base']=$priceBase;
+		
+		if($coupon!==false)
+		{
+			if($couponCodeSourceType===1)
+			{
+				$price['price_before_coupon']=$this->calculatePrice($data,$bookingForm,$discountPercentage,$calculateHiddenFee,false);
+			}
+		}
 		
         return($price);
     }

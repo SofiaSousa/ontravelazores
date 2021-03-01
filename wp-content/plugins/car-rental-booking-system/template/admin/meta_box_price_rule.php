@@ -11,6 +11,7 @@
                 </ul>
                 <div id="meta-box-price-rule-1">
                     <ul class="to-form-field-list">
+						<?php echo CRBSHelper::createPostIdField(__('Price rule ID','car-rental-booking-system')); ?>
                         <li>
                             <h5><?php esc_html_e('Booking forms','car-rental-booking-system'); ?></h5>
                             <span class="to-legend"><?php esc_html_e('Select forms.','car-rental-booking-system'); ?></span>
@@ -532,7 +533,7 @@
 							</div>
 						</li>
                         <li>
-                            <h5><?php esc_html_e('Next rule proccesing','car-rental-booking-system'); ?></h5>
+                            <h5><?php esc_html_e('Next rule processing','car-rental-booking-system'); ?></h5>
                             <span class="to-legend">
                                 <?php echo __('This option determine, whether prices will be set up based on this rule only or plugin has to processing next rule based on priority (order).','car-rental-booking-system'); ?>
                             </span>               
@@ -623,7 +624,6 @@
                                         <td>
                                             <div class="to-clear-fix">
 												<select name="<?php CRBSHelper::getFormName('price_initial_tax_rate_id'); ?>">
-
 <?php
         echo '<option value="0" '.(CRBSHelper::selectedIf($this->data['meta']['price_initial_tax_rate_id'],0,false)).'>'.esc_html__('- Not set -','car-rental-booking-system').'</option>';
         foreach($this->data['dictionary']['tax_rate'] as $index=>$value)
@@ -882,7 +882,7 @@
                                     <tr>
                                         <td>
                                             <div class="to-clear-fix">
-                                                <?php esc_html_e('Pickup after bussiness hours','car-rental-booking-system'); ?>
+                                                <?php esc_html_e('Pickup after business hours','car-rental-booking-system'); ?>
                                             </div>
                                         </td>							
                                         <td>
@@ -924,7 +924,7 @@
                                     <tr>
                                         <td>
                                             <div class="to-clear-fix">
-                                                <?php esc_html_e('Return after bussiness hours','car-rental-booking-system'); ?>
+                                                <?php esc_html_e('Return after business hours','car-rental-booking-system'); ?>
                                             </div>
                                         </td>							
                                         <td>
@@ -1070,10 +1070,10 @@
                     var value=parseInt($(this).val());
                     if(value===-1)
                     {
-                        checkbox.removeAttr('checked');
-                        checkbox.first().attr('checked','checked');
+                        checkbox.prop('checked',false);
+                        checkbox.first().prop('checked',true);
                     }
-                    else checkbox.first().removeAttr('checked');
+                    else checkbox.first().prop('checked',false);
                     
                     var checked=[];
                     checkbox.each(function()
@@ -1084,8 +1084,8 @@
                     
                     if(checked.length===0)
                     {
-                        checkbox.removeAttr('checked');
-                        checkbox.first().attr('checked','checked');
+                        checkbox.prop('checked',false);
+                        checkbox.first().prop('checked',true);
                     }
                     
                     checkbox.button('refresh');

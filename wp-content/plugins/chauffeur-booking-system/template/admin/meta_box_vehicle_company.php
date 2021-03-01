@@ -8,6 +8,7 @@
                 </ul>
                 <div id="meta-box-vehicle-company-1">
                     <ul class="to-form-field-list">
+						<?php echo CHBSHelper::createPostIdField(__('Vehicle company ID','chauffeur-booking-system')); ?>
                         <li>
                             <h5><?php esc_html_e('Contact details','chauffeur-booking-system'); ?></h5>
                             <span class="to-legend"><?php esc_html_e('Contact details.','chauffeur-booking-system'); ?></span>

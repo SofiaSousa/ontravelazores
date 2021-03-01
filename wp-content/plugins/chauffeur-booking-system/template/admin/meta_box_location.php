@@ -9,6 +9,7 @@
                 </ul>
                 <div id="meta-box-location-1">
                     <ul class="to-form-field-list">
+						<?php echo CHBSHelper::createPostIdField(__('Location ID','chauffeur-booking-system')); ?>
                         <li>
                             <h5><?php esc_html_e('Address','chauffeur-booking-system'); ?></h5>
                             <span class="to-legend"><?php esc_html_e('Enter address of the location.','chauffeur-booking-system'); ?></span>
@@ -17,7 +18,17 @@
                                 <input type="hidden" name="<?php CHBSHelper::getFormName('location_name_coordinate_lat'); ?>" value="<?php echo esc_attr($this->data['meta']['location_name_coordinate_lat']); ?>"/>
                                 <input type="hidden" name="<?php CHBSHelper::getFormName('location_name_coordinate_lng'); ?>" value="<?php echo esc_attr($this->data['meta']['location_name_coordinate_lng']); ?>"/>                            
                             </div>
-                        </li>  
+                        </li> 
+						<li>
+							<h5><?php esc_html_e('Discount for vehicle price','chauffeur-booking-system'); ?></h5>
+							<span class="to-legend">
+								<?php esc_html_e('Maximum percentage discount for vehicle if "Bid vehicle price" is enabled for a booking form.','chauffeur-booking-system'); ?><br/>
+							</span>
+							<div>
+								<input type="text" maxlength="5" name="<?php CHBSHelper::getFormName('vehicle_bid_max_percentage_discount'); ?>" value="<?php echo esc_attr($this->data['meta']['vehicle_bid_max_percentage_discount']); ?>"/>
+							</div>									
+						</li>
+						
                     </ul>
                 </div>
                 <div id="meta-box-location-2">
@@ -126,7 +137,7 @@
 		<script type="text/javascript">
 			jQuery(document).ready(function($)
 			{	
-                var helper=new Helper();
+                var helper=new CHBSHelper();
                 helper.getMessageFromConsole();
                 
 				$('.to').themeOptionElement({init:true});

@@ -9,6 +9,7 @@
                 </ul>
                 <div id="meta-box-email-account-1">
                     <ul class="to-form-field-list">
+						<?php echo CRBSHelper::createPostIdField(__('Email account ID','car-rental-booking-system')); ?>
                         <li>
                             <h5><?php esc_html_e('Name','car-rental-booking-system'); ?></h5>
                             <span class="to-legend"><?php esc_html_e('Name.','car-rental-booking-system'); ?></span>

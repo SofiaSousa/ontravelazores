@@ -27,33 +27,40 @@
             $fixedLocationClass=array('chbs-selectmenu-disable','chbs-hidden'); 
         
         /***/
+		
+		$tabClass=array();
+		
+		if((count($this->data['meta']['service_type_id'])<=1) && ((int)$this->data['meta']['service_tab_enable']===0))
+			array_push($tabClass,'chbs-hidden');
+		
+		/***/
 ?>
         <div<?php echo CHBSHelper::createCSSClassAttribute($class); ?>>
 
             <div class="chbs-layout-column-left">
-
+			
                 <div class="chbs-tab chbs-box-shadow">
 
-                    <ul>
+                    <ul<?php echo CHBSHelper::createCSSClassAttribute($tabClass); ?>>
 <?php
-        if(in_array(1,$this->data['meta']['service_type_id']))
-        {
+		if(in_array(1,$this->data['meta']['service_type_id']))
+		{
 ?>
-                        <li data-id="1"><a href="#panel-1"><?php esc_html_e('Transfer','chauffeur-booking-system'); ?></a></li>
+                        <li data-id="1"><a href="#panel-1"><?php esc_html_e('Distance','chauffeur-booking-system'); ?></a></li>
 <?php
-        }
-        if(in_array(2,$this->data['meta']['service_type_id']))
-        {        
+		}
+		if(in_array(2,$this->data['meta']['service_type_id']))
+		{        
 ?>
-                        <li data-id="2"><a href="#panel-2"><?php esc_html_e('At Disposal','chauffeur-booking-system'); ?></a></li>
+                        <li data-id="2"><a href="#panel-2"><?php esc_html_e('Hourly','chauffeur-booking-system'); ?></a></li>
 <?php
-        }
-        if(in_array(3,$this->data['meta']['service_type_id']))
-        {
+		}
+		if(in_array(3,$this->data['meta']['service_type_id']))
+		{
 ?>
                         <li data-id="3"><a href="#panel-3"><?php esc_html_e('Flat rate','chauffeur-booking-system'); ?></a></li>
 <?php
-        }
+		}
 ?>
                     </ul>
 <?php
@@ -109,8 +116,8 @@
                         <div class="chbs-form-field chbs-form-field-location-fixed">
                             <label>
                                 <?php esc_html_e('Pickup location','chauffeur-booking-system'); ?>
-                                <span class="chbs-tooltip chbs-meta-icon-question" title="<?php esc_html_e('The address when your journey will start.','chauffeur-booking-system'); ?>"></span>
-                            </label>
+                                <span class="chbs-tooltip chbs-meta-icon-question" title="<?php esc_html_e('The address where your journey will start.','chauffeur-booking-system'); ?>"></span>
+							</label>
 <?php
                 if((int)$this->data['meta']['location_fixed_autocomplete_enable']===1)
                 {
@@ -139,8 +146,9 @@
                         <div class="chbs-form-field chbs-form-field-location-autocomplete chbs-form-field-location-switch" data-label-waypoint="<?php esc_attr_e('Waypoint'); ?>">
                             <label>
                                 <?php esc_html_e('Pickup location','chauffeur-booking-system'); ?>
-                                <span class="chbs-tooltip chbs-meta-icon-question" title="<?php esc_html_e('The address when your journey will start.','chauffeur-booking-system'); ?>"></span>
-                            </label>
+                            	<span class="chbs-my-location-link">&nbsp;&nbsp;-&nbsp;&nbsp;<a href="#"><?php esc_html_e('Use my location','chauffeur-booking-system'); ?></a></span>
+								<span class="chbs-tooltip chbs-meta-icon-question" title="<?php esc_html_e('The address where your journey will start.','chauffeur-booking-system'); ?>"></span>
+							</label>
                             <input type="text" autocomplete="off" name="<?php CHBSHelper::getFormName('pickup_location_service_type_1'); ?>" value="<?php echo esc_attr(CHBSRequestData::getFromWidget(1,'pickup_location_text')); ?>"/>
                             <input type="hidden" name="<?php CHBSHelper::getFormName('pickup_location_coordinate_service_type_1'); ?>" value="<?php echo esc_attr(CHBSRequestData::getCoordinateFromWidget(1,'pickup_location')); ?>"/>
 <?php
@@ -162,7 +170,7 @@
                         <div class="chbs-form-field chbs-form-field-location-fixed">
                             <label>
                                 <?php esc_html_e('Drop-off location','chauffeur-booking-system'); ?>
-                                <span class="chbs-tooltip chbs-meta-icon-question" title="<?php esc_html_e('The address when your journey will end.','chauffeur-booking-system'); ?>"></span>
+                                <span class="chbs-tooltip chbs-meta-icon-question" title="<?php esc_html_e('The address where your journey will end.','chauffeur-booking-system'); ?>"></span>
                             </label>
 <?php
                 if((int)$this->data['meta']['location_fixed_autocomplete_enable']===1)
@@ -192,7 +200,7 @@
                         <div class="chbs-form-field chbs-form-field-location-autocomplete">
                             <label>
                                 <?php esc_html_e('Drop-off location','chauffeur-booking-system'); ?>
-                                <span class="chbs-tooltip chbs-meta-icon-question" title="<?php esc_html_e('The address when your journey will end.','chauffeur-booking-system'); ?>"></span>                           
+                                <span class="chbs-tooltip chbs-meta-icon-question" title="<?php esc_html_e('The address where your journey will end.','chauffeur-booking-system'); ?>"></span>                           
                             </label>
                             <input type="text" autocomplete="off" name="<?php CHBSHelper::getFormName('dropoff_location_service_type_1'); ?>" value="<?php echo esc_attr(CHBSRequestData::getFromWidget(1,'dropoff_location_text')); ?>"/>
                             <input type="hidden" name="<?php CHBSHelper::getFormName('dropoff_location_coordinate_service_type_1'); ?>" value="<?php echo esc_attr(CHBSRequestData::getCoordinateFromWidget(1,'dropoff_location')); ?>"/>
@@ -357,7 +365,8 @@
                         <div class="chbs-form-field chbs-form-field-location-fixed">
                             <label>
                                 <?php esc_html_e('Pickup location','chauffeur-booking-system'); ?>
-                                <span class="chbs-tooltip chbs-meta-icon-question" title="<?php esc_html_e('The address when your journey will start.','chauffeur-booking-system'); ?>"></span>
+								<span class="chbs-my-location-link">&nbsp;&nbsp;-&nbsp;&nbsp;<a href="#"><?php esc_html_e('Use my location','chauffeur-booking-system'); ?></a></span>
+                                <span class="chbs-tooltip chbs-meta-icon-question" title="<?php esc_html_e('The address where your journey will start.','chauffeur-booking-system'); ?>"></span>
                             </label>
 <?php
                 if((int)$this->data['meta']['location_fixed_autocomplete_enable']===1)
@@ -387,7 +396,7 @@
                         <div class="chbs-form-field chbs-form-field-location-autocomplete">
                             <label>
                                 <?php esc_html_e('Pickup location','chauffeur-booking-system'); ?>
-                                <span class="chbs-tooltip chbs-meta-icon-question" title="<?php esc_html_e('The address when your journey will start.','chauffeur-booking-system'); ?>"></span>
+                                <span class="chbs-tooltip chbs-meta-icon-question" title="<?php esc_html_e('The address where your journey will start.','chauffeur-booking-system'); ?>"></span>
                             </label>
                             <input type="text" autocomplete="off" name="<?php CHBSHelper::getFormName('pickup_location_service_type_2'); ?>" value="<?php echo esc_attr(CHBSRequestData::getFromWidget(2,'pickup_location_text')); ?>"/>
                             <input type="hidden" name="<?php CHBSHelper::getFormName('pickup_location_coordinate_service_type_2'); ?>" value="<?php echo esc_attr(CHBSRequestData::getCoordinateFromWidget(2,'pickup_location')); ?>"/>
@@ -459,56 +468,59 @@
 <?php    
             }
 
-            if($this->data['widget_mode']!=1)
-            {
+			if((int)$this->data['meta']['dropoff_location_field_enable']===1)
+			{
+				if($this->data['widget_mode']!=1)
+				{
 ?>
                         <label class="chbs-form-label-group"><?php esc_html_e('Extra options','chauffeur-booking-system'); ?></label>
 <?php
-            }
+				}
 
-            if(count($this->data['meta']['location_fixed_dropoff_service_type_2']))
-            {
+				if(count($this->data['meta']['location_fixed_dropoff_service_type_2']))
+				{
 ?>
                         <div class="chbs-form-field chbs-form-field-location-fixed">
                             <label>
                                 <?php esc_html_e('Drop-off location','chauffeur-booking-system'); ?>
-                                <span class="chbs-tooltip chbs-meta-icon-question" title="<?php esc_html_e('The address when your journey will end.','chauffeur-booking-system'); ?>"></span>
+                                <span class="chbs-tooltip chbs-meta-icon-question" title="<?php esc_html_e('The address where your journey will end.','chauffeur-booking-system'); ?>"></span>
                             </label>
 <?php
-                if((int)$this->data['meta']['location_fixed_autocomplete_enable']===1)
-                {
+					if((int)$this->data['meta']['location_fixed_autocomplete_enable']===1)
+					{
 ?>
 							<input name="<?php CHBSHelper::getFormName('fixed_location_dropoff_service_type_2_autocomplete'); ?>" class="chbs-form-field-location-fixed-autocomplete" type="text" value="<?php echo esc_attr(is_null(CHBSRequestData::getFromWidget(2,'fixed_location_dropoff_id')) ? '' : $this->data['meta']['location_fixed_dropoff_service_type_2'][CHBSRequestData::getFromWidget(2,'fixed_location_dropoff_id')]['formatted_address']); ?>"/>
  <?php
-                }
+					}
  ?>
                             <select name="<?php CHBSHelper::getFormName('fixed_location_dropoff_service_type_2'); ?>"<?php echo CHBSHelper::createCSSClassAttribute($fixedLocationClass); ?>>
 <?php
-                echo $fixedLocationEmptyItemHtml;
-                foreach($this->data['meta']['location_fixed_dropoff_service_type_2'] as $index=>$value)
-                {
+					echo $fixedLocationEmptyItemHtml;
+					foreach($this->data['meta']['location_fixed_dropoff_service_type_2'] as $index=>$value)
+					{
 ?>
                                 <option value="<?php echo esc_attr($index); ?>" data-location="<?php echo esc_attr(json_encode($value)); ?>"<?php CHBSHelper::selectedIf(CHBSRequestData::getFromWidget(2,'fixed_location_dropoff_id'),$index); ?>><?php echo esc_html($value['formatted_address']); ?></option>
 <?php              
-                }
+					}
 ?>                                    
                             </select>
                         </div>                   
 <?php
-            }
-            else
-            {
+				}
+				else
+				{
 ?>
                         <div class="chbs-form-field chbs-form-field-location-autocomplete">
                             <label>
                                 <?php esc_html_e('Drop-off location','chauffeur-booking-system'); ?>
-                                <span class="chbs-tooltip chbs-meta-icon-question" title="<?php esc_html_e('The address when your journey will end.','chauffeur-booking-system'); ?>"></span>
+                                <span class="chbs-tooltip chbs-meta-icon-question" title="<?php esc_html_e('The address where your journey will end.','chauffeur-booking-system'); ?>"></span>
                             </label>
                             <input type="text" autocomplete="off" name="<?php CHBSHelper::getFormName('dropoff_location_service_type_2'); ?>" value="<?php echo esc_attr(CHBSRequestData::getFromWidget(2,'dropoff_location_text')); ?>"/>
                             <input type="hidden" name="<?php CHBSHelper::getFormName('dropoff_location_coordinate_service_type_2'); ?>" value="<?php echo esc_attr(CHBSRequestData::getCoordinateFromWidget(2,'dropoff_location')); ?>"/>
                         </div>
 <?php
-            }
+				}
+			}
 ?>
                     </div>
 <?php
@@ -541,7 +553,7 @@
                                     <?php esc_html_e('Pickup time','chauffeur-booking-system'); ?>
                                     <span class="chbs-tooltip chbs-meta-icon-question" title="<?php esc_html_e('The time when your journey will start.','chauffeur-booking-system'); ?>"></span>
                                 </label>
-                                <input type="text" name="<?php CHBSHelper::getFormName('pickup_time_service_type_3'); ?>"  class="chbs-timepicker" value="<?php echo esc_attr(CHBSRequestData::getFromWidget(3,'pickup_time')); ?>"/>
+                                <input type="text" name="<?php CHBSHelper::getFormName('pickup_time_service_type_3'); ?>" class="chbs-timepicker" value="<?php echo esc_attr(CHBSRequestData::getFromWidget(3,'pickup_time')); ?>"/>
                             </div>
 
                         </div>
@@ -558,8 +570,9 @@
 
             foreach($this->data['dictionary']['route'] as $index=>$value)
             {
+				$excludeTime=CHBSDate::setExcludeTime($value['meta']['pickup_hour']);
 ?>
-                                <option value="<?php echo esc_attr($index); ?>" data-coordinate="<?php echo esc_attr(json_encode($value['meta']['coordinate'])); ?>" <?php CHBSHelper::selectedIf(CHBSRequestData::getFromWidget(3,'route_id'),$index); ?>><?php echo get_the_title($index); ?></option>
+                                <option value="<?php echo esc_attr($index); ?>" data-coordinate="<?php echo esc_attr(json_encode($value['meta']['coordinate'])); ?>" data-time_exclude="<?php echo esc_attr(json_encode($excludeTime)); ?>" <?php CHBSHelper::selectedIf(CHBSRequestData::getFromWidget(3,'route_id'),$index); ?>><?php echo get_the_title($index); ?></option>
 <?php
             }
 ?>

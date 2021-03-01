@@ -12,7 +12,8 @@ class CRBSPriceRule
 		$this->priceSourceType													=	array
 		(
 			1																	=>	array(__('Set directly in rule','car-rental-booking-system')),
-			2																	=>	array(__('Calculation based on rental dates','car-rental-booking-system')),
+			2																	=>	array(__('Calculation based on rental dates (all ranges)','car-rental-booking-system')),
+			5																	=>	array(__('Calculation based on rental dates (exact date)','car-rental-booking-system')),
 			3																	=>	array(__('Calculation based on rental days number (all ranges)','car-rental-booking-system')),
 			4																	=>	array(__('Calculation based on rental days number (exact range)','car-rental-booking-system')),
 		);
@@ -36,8 +37,8 @@ class CRBSPriceRule
             'delivery_return'                                                   =>  array(__('Delivery (return)','car-rental-booking-system')),            
             'deposit'															=>  array(__('Deposit','car-rental-booking-system')),
             'one_way'															=>  array(__('One way','car-rental-booking-system')),   
-			'after_business_hour_pickup'										=>  array(__('Pickup after bussiness hours','car-rental-booking-system')),
-            'after_business_hour_return'										=>  array(__('Return after bussiness hours','car-rental-booking-system')),
+			'after_business_hour_pickup'										=>  array(__('Pickup after business hours','car-rental-booking-system')),
+            'after_business_hour_return'										=>  array(__('Return after business hours','car-rental-booking-system')),
 			'customer_pickup_location'											=>	array(__('Customer pickup location','car-rental-booking-system')),
 			'customer_return_location'											=>	array(__('Customer return location','car-rental-booking-system'))
         );
@@ -112,6 +113,8 @@ class CRBSPriceRule
     
     function extractPriceFromData($price,$data)
     {
+		CRBSHelper::removeUIndex($data,'price_type');
+		
         $priceComponent=array('value','alter_type_id','tax_rate_id');
         
         foreach($this->getPriceUseType() as $priceUseTypeIndex=>$priceUseTypeValue)
@@ -368,7 +371,7 @@ class CRBSPriceRule
             
 			if(!$Validation->isPrice($d[2],true)) $d[2]=0.00;
 			
-            array_push($date,array('start'=>$d[0],'stop'=>$d[1],'price'=>$d[2]));
+            array_push($date,array('start'=>$d[0],'stop'=>$d[1],'price'=>CRBSPrice::formatToSave($d[2],true)));
         }
 
         $option['pickup_date']=$date;
@@ -388,7 +391,7 @@ class CRBSPriceRule
             
             if($d[0]>$d[1]) continue;
             
-            array_push($number,array('start'=>$d[0],'stop'=>$d[1],'price'=>$d[2]));
+            array_push($number,array('start'=>$d[0],'stop'=>$d[1],'price'=>CRBSPrice::formatToSave($d[2],true)));
         }
         
         $option['rental_day_count']=$number;
@@ -442,6 +445,9 @@ class CRBSPriceRule
 		{
             if(!$Validation->isPrice($option['price_'.$index.'_value'],false))
                 $option['price_'.$index.'_value']=0.00;
+			
+			$option['price_'.$index.'_value']=CRBSPrice::formatToSave($option['price_'.$index.'_value']);
+			
             if(!$this->isPriceAlterType($option['price_'.$index.'_alter_type_id']))
                 $option['price_'.$index.'_alter_type_id']=1;
             
@@ -871,7 +877,7 @@ class CRBSPriceRule
                 {
                     $date=$Date->formatDateToStandard($bookingData['pickup_date']);
 
-                    if(!in_array(date('N',strtotime($date)),$ruleData['meta']['pickup_day_number'])) continue;
+                    if(!in_array(date_i18n('N',strtotime($date)),$ruleData['meta']['pickup_day_number'])) continue;
                 }
             }
             
@@ -881,44 +887,60 @@ class CRBSPriceRule
                 {
                     $match=!count($ruleData['meta']['pickup_date']);
 					
-					if(((int)$ruleData['meta']['price_source_type']===2) && ((int)CRBSOption::getOption('billing_type')===2))
+					if((in_array($ruleData['meta']['price_source_type'],array(2,5))) && ((int)CRBSOption::getOption('billing_type')===2))
 					{
 						$sum=0;
 						$match=true;
 						
-						$dateStart=$Date->formatDateToStandard($bookingData['pickup_date']);
-						
-                        $period=CRBSBookingHelper::calculateRentalPeriod($bookingData['pickup_date'],$bookingData['pickup_time'],$bookingData['return_date'],$bookingData['return_time'],$bookingForm['meta'],CRBSOption::getOption('billing_type'));
-
-						for($i=0;$i<$period['day'];$i++)
+						if((int)$ruleData['meta']['price_source_type']===2)
 						{
-							$date=date('d-m-Y',strtotime('+'.$i.' day', strtotime($dateStart)));
-								
-							$dateIndex=-1;
-							
-							foreach($ruleData['meta']['pickup_date'] as $index=>$value)
+							$dateStart=$Date->formatDateToStandard($bookingData['pickup_date']);
+
+							$period=CRBSBookingHelper::calculateRentalPeriod($bookingData['pickup_date'],$bookingData['pickup_time'],$bookingData['return_date'],$bookingData['return_time'],$bookingForm['meta'],CRBSOption::getOption('billing_type'));
+
+							for($i=0;$i<$period['day'];$i++)
 							{
-								if($Date->dateInRange($date,$value['start'],$value['stop']))
+								$date=date_i18n('d-m-Y',strtotime('+'.$i.' day', strtotime($dateStart)));
+
+								$dateIndex=-1;
+
+								foreach($ruleData['meta']['pickup_date'] as $index=>$value)
 								{
-									$dateIndex=$index;
+									if($Date->dateInRange($date,$value['start'],$value['stop']))
+									{
+										$dateIndex=$index;
+										break;
+									}
+								}
+
+								if($dateIndex!=-1)
+								{
+									$sum+=$ruleData['meta']['pickup_date'][$dateIndex]['price'];
+								}
+								else
+								{
+									$match=false;
 									break;
 								}
 							}
-							
-							if($dateIndex!=-1)
+
+							if($match)
 							{
-								$sum+=$ruleData['meta']['pickup_date'][$dateIndex]['price'];
-							}
-							else
-							{
-								$match=false;
-								break;
+								$pricePerDay=$sum/$period['day'];
 							}
 						}
-						
-						if($match)
+						else if((int)$ruleData['meta']['price_source_type']===5)
 						{
-							$pricePerDay=$sum/$period['day'];
+							$date=$Date->formatDateToStandard($bookingData['pickup_date']);
+
+							foreach($ruleData['meta']['pickup_date'] as $value)
+							{
+								if($Date->dateInRange($date,$value['start'],$value['stop']))
+								{
+									$pricePerDay=$value['price'];
+									break;
+								}
+							}							
 						}
 					}
 					else
@@ -982,7 +1004,6 @@ class CRBSPriceRule
 						}
                         else
                         {
-                        
                             foreach($ruleData['meta']['rental_day_count'] as $value)
                             {
                                 if(($value['start']<=$period['day']) && ($period['day']<=$value['stop']))

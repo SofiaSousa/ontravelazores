@@ -305,8 +305,8 @@
 .crbs-main .crbs-vehicle .crbs-vehicle-content>.crbs-vehicle-content-meta a:hover>span+span,
 .ui-datepicker .ui-datepicker-prev,
 .ui-datepicker .ui-datepicker-next,    
-.ui-datepicker .ui-datepicker-prev.ui-state-hover,
-.ui-datepicker .ui-datepicker-next.ui-state-hover   
+.ui-datepicker .ui-datepicker-prev:hover,
+.ui-datepicker .ui-datepicker-next:hover   
 {
     transition:all 150ms ease;
 }
@@ -529,6 +529,11 @@
 {
  
 }
+	.crbs-main .crbs-main-content-navigation-button a
+	{
+		width:auto;
+		display:inline-block;
+	}
 
     .crbs-main .crbs-main-content-navigation-button .crbs-button.crbs-button-step-prev
     {
@@ -557,6 +562,11 @@
 	margin:10px 0px 20px 20px;
 }
 
+.crbs-form-field .crbs-file-upload
+{
+	margin-bottom:15px;
+}
+
 	.crbs-file-upload>span
 	{	
 		
@@ -574,7 +584,7 @@
 
 .crbs-form-field .crbs-file-remove
 {
-	display:table;
+	display:inline-block;
 	vertical-align:middle;
 }
 
@@ -690,6 +700,11 @@
             {
                 border-width:0px;
             }
+			
+.ui-timepicker-disabled
+{
+	display:none;
+}
             
 /******************************************************************************/
 /* Datepicker                                                                 */
@@ -705,17 +720,17 @@
     padding:20px 18px 30px 17px;
 }
 
-	html .ui-widget-content .ui-icon, .ui-widget-header .ui-icon
+	.ui-widget-content .ui-icon, .ui-widget-header .ui-icon
 	{
 		background:none;
 	}
 
-	html .ui-datepicker .ui-datepicker-header
+	.ui-datepicker .ui-datepicker-header
 	{
 		padding:0px;
 	}
 	
-	html .ui-widget-header
+	.ui-widget-header
 	{
 		border:0px;
 	}
@@ -779,26 +794,20 @@
         html .ui-datepicker td a,
         html .ui-datepicker td span
         {
+            width:55px;
+            height:55px;
 			padding:0px;
+			line-height:54px;
 			text-align:center;
-            width:55px !important;
-            height:55px !important;
-			line-height:54px !important;
         }
 		
-		html .ui-datepicker td a.ui-state-highlight
-		{
-			border:none !important;
-			background:none !important;
-		}
-		
-        
-        .ui-datepicker td a.ui-state-hover
+        html .ui-datepicker td a:hover,
+        html .ui-datepicker td a.ui-state-hover
         {
+			line-height:50px;
             border-width:2px;
             border-style:solid;
             border-radius:9999em;
-			line-height:50px !important;
         }
         
 .ui-datepicker .ui-datepicker-prev,
@@ -1015,13 +1024,15 @@
 
         .crbs-main .crbs-main-navigation-default>ul
         {
-
+			list-style:none;
         }
 
             .crbs-main .crbs-main-navigation-default>ul>li
             {
                 width:25%;
                 float:left;
+				margin:0px;
+				padding:0px;
                 position:relative;  
                 text-align:center;
             }
@@ -1075,6 +1086,7 @@
                         border-width:2px;
                         border-radius:100%;
                         border-style:solid;
+						outline:solid 10px transparent;
                     }
       
                         .crbs-main .crbs-main-navigation-default>ul>li>a>span:first-child>span:first-child
@@ -1466,12 +1478,19 @@
         position:relative;
         text-align:center;
     }
-    
+	
         .crbs-main .crbs-vehicle .crbs-vehicle-price>div:first-child
         {
             font-size:26px;
             font-weight:400;
         }
+		
+			.crbs-main .crbs-vehicle .crbs-vehicle-price>div:first-child>span
+			{
+				display:block;
+				font-size:18px;
+				text-decoration:line-through;
+			}
         
         .crbs-main .crbs-vehicle .crbs-vehicle-price>div:first-child+div
         {
@@ -1771,6 +1790,12 @@
             border-style:solid;
             border-width:1px 0px 0px 0px;               
         }
+		
+		
+		.crbs-main .crbs-summary-price-element>div.crbs-summary-price-element-balance>span
+		{
+			font-weight:600;
+		}
 
 /******************************************************************************/
 /* Payment                                                                    */
@@ -1851,7 +1876,9 @@
                 position:relative;
             }
             
-            .crbs-main #crbs-payment>ul>li>a.crbs-payment-type-1>span.crbs-payment-name
+            .crbs-main #crbs-payment>ul>li>a.crbs-payment-type-1>span.crbs-payment-name,
+			.crbs-main #crbs-payment>ul>li>a.crbs-payment-type-4>span.crbs-payment-name,
+			.crbs-main #crbs-payment>ul>li>a.crbs-payment-type-5>span.crbs-payment-name
             {
                 top:-10px;
                 left:10px;                
@@ -2438,7 +2465,7 @@
     {
         margin-top:40px;
     }
-    
+
     /**************************************************************************/
     /* Responsive / Summary field                                             */
     /**************************************************************************/
@@ -2478,6 +2505,20 @@
     /* Responsive / Step                                                      */
     /**************************************************************************/
 
+	.crbs-main.crbs-width-300 .crbs-main-content .crbs-main-content-step-1>.crbs-layout-50x50,
+	.crbs-main.crbs-width-480 .crbs-main-content .crbs-main-content-step-1>.crbs-layout-50x50
+	{
+		display:block;
+	}
+
+	.crbs-main.crbs-width-300 .crbs-main-content .crbs-main-content-step-1>.crbs-layout-50x50>.crbs-layout-column-left,
+	.crbs-main.crbs-width-300 .crbs-main-content .crbs-main-content-step-1>.crbs-layout-50x50>.crbs-layout-column-right,
+	.crbs-main.crbs-width-480 .crbs-main-content .crbs-main-content-step-1>.crbs-layout-50x50>.crbs-layout-column-left,
+	.crbs-main.crbs-width-480 .crbs-main-content .crbs-main-content-step-1>.crbs-layout-50x50>.crbs-layout-column-right
+	{
+		width:100%;
+	}
+	
     .crbs-main.crbs-width-300 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left
     {
         border:none;
@@ -2494,6 +2535,12 @@
     {
         border:none;
     }
+	
+	.crbs-main.crbs-width-300 .crbs-main-content .crbs-main-content-step-1>crbs-layout-50x50,
+	.crbs-main.crbs-width-480 .crbs-main-content .crbs-main-content-step-1>crbs-layout-50x50
+	{
+		display:block;
+	}
     
     /**************************************************************************/
     /* Responsive / Vehicle                                                   */
@@ -2847,17 +2894,17 @@
         padding:15px 10px 15px 10px;
     }
 
-    .ui-datepicker td a, 
-    .ui-datepicker td span
+    html .ui-datepicker td a, 
+    html .ui-datepicker td span
     {
         width:34px;
         height:34px;
         line-height:34px;
     }
 
-    .ui-datepicker td a.ui-state-hover
+    html.ui-datepicker td a.ui-state-hover
     {
-        line-height:30px
+        line-height:34px
     }
 
     .ui-datepicker td,
@@ -2930,7 +2977,8 @@ html .crbs-main #payment .wc_payment_methods
     
         html .crbs-main #payment .wc_payment_methods .wc_payment_method label
         {
-            
+            top:-2px;
+			position:relative;
         }
     
             html .crbs-main #payment .wc_payment_methods .wc_payment_method label a,
@@ -2965,7 +3013,7 @@ html .crbs-main .woocommerce-notice
 {
     margin:0px;
     padding:10px;
-    font-size:13px;
+    font-size:16px;
     font-weight:500;
     border-style:solid;
     border-width:0px 0px 0px 4px;
@@ -3040,20 +3088,24 @@ html .crbs-main .woocommerce-notice.woocommerce-notice--error
             {
                 display:flex;
             }
-            
+			
+			.crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-form-field
+			{
+				border-left:0px;
+			}
+			
+			.crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>.crbs-layout-100
+			{
+				border-style:solid;
+				border-color:red;
+				border-width:0px 0px 0px 1px;
+			}
+			
                 .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel .crbs-form-panel-content>*
                 {
                     flex-grow:1;
                 }
-                
-                    .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child>.crbs-form-panel-content>div:last-child>.crbs-form-field,
-                    .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child+.crbs-form-panel>.crbs-form-panel-content>div:last-child>.crbs-form-field,  
-                    .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child+.crbs-form-panel>.crbs-form-panel-content>div.crbs-form-field:first-child,
-                    .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child+.crbs-form-panel+.crbs-form-panel>.crbs-form-panel-content>div.crbs-form-field:first-child              
-                    {
-                        border-left-width:0px;
-                    }
-                    
+   
                     .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel .crbs-form-panel-content .crbs-customer-location
                     {
                         top:0px;
@@ -3061,12 +3113,22 @@ html .crbs-main .woocommerce-notice.woocommerce-notice--error
                         position:absolute;
                         background:#FFFFFF;
                     }
-                    
+					
+					.crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel .crbs-form-panel-content>.crbs-hidden+.crbs-customer-location
+					{
+						position:static;
+					}
+                   
                         .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel .crbs-form-panel-content .crbs-customer-location .crbs-form-field
                         {
-                            border:none;
+                            border-width:0px;
                         }
-                    
+						
+                        .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel .crbs-form-panel-content>.crbs-hidden+.crbs-customer-location .crbs-form-field
+                        {
+                            border-width:0px 1px 1px 1px;
+                        }
+				   
                     .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child>.crbs-form-panel-content>.crbs-form-field:first-child,
                     .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child+.crbs-form-panel>.crbs-form-panel-content>.crbs-form-field:first-child
                     {
@@ -3082,7 +3144,6 @@ html .crbs-main .woocommerce-notice.woocommerce-notice--error
                     .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child+.crbs-form-panel+.crbs-form-panel>.crbs-form-panel-content>.crbs-form-field:first-child
                     {
                         min-width:140px;
-                        max-width:140px;
                     }
                     
                         .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child+.crbs-form-panel+.crbs-form-panel>.crbs-form-panel-content>.crbs-form-field:first-child .crbs-customer-location
@@ -3090,15 +3151,7 @@ html .crbs-main .woocommerce-notice.woocommerce-notice--error
                             min-width:100px;
                             max-width:100px;
                         }
-   
-        .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-widthlt-960 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child+.crbs-form-panel>.crbs-form-panel-content>.crbs-form-field:first-child,
-        .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-widthlt-960 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child+.crbs-form-panel+.crbs-form-panel>.crbs-form-panel-content>div.crbs-form-field:first-child,   
-        .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-width-300 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child>.crbs-form-panel-content>div:last-child>.crbs-form-field,
-        .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-width-300 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child+.crbs-form-panel>.crbs-form-panel-content>div:last-child>.crbs-form-field 
-        {
-            border-left-width:1px;
-        }
-        
+	 
         .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-widthlt-960 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel:first-child+.crbs-form-panel+.crbs-form-panel>.crbs-form-panel-content>.crbs-form-field:first-child
         {
             min-width:100%;
@@ -3110,13 +3163,18 @@ html .crbs-main .woocommerce-notice.woocommerce-notice--error
                 min-width:calc(100% - 60px);
                 max-width:calc(100% - 60px);
             }
-               
+		  
         .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-widthlt-960 .crbs-main-content-step-1>div>.crbs-layout-column-left,
         .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-width-300 .crbs-main-content-step-1 .crbs-layout-50x50>.crbs-layout-column-left .crbs-form-panel .crbs-form-panel-content,
         .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-width-300 .crbs-main-content-step-1 .crbs-layout-50x50>.crbs-layout-column-left .crbs-form-panel .crbs-form-panel-content>*
         {
             display:block;
         }
+		
+		.crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-width-300 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel .crbs-form-panel-content
+		{
+			display:block;
+		}
         
         .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-widthlt-960 .crbs-main-content-step-1 .crbs-layout-50x50>.crbs-layout-column-left .crbs-form-panel+.crbs-form-panel .crbs-form-panel-content,
         .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-widthlt-960 .crbs-main-content-step-1 .crbs-layout-50x50>.crbs-layout-column-left .crbs-form-panel+.crbs-form-panel+.crbs-form-panel .crbs-form-panel-content
@@ -3137,13 +3195,18 @@ html .crbs-main .woocommerce-notice.woocommerce-notice--error
                     }
                     
                     .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-width-300 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel .crbs-form-panel-content .crbs-customer-location
+					{
+						width:calc(100% - 60px);
+					}
+					
+                    .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-width-300 .crbs-main-content .crbs-main-content-step-1>div>.crbs-layout-column-left .crbs-form-panel .crbs-form-panel-content>.crbs-hidden+.crbs-customer-location
                     {
-                        width:calc(100% - 60px);
+						width:100%;
                     }
          
         .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-width-300 .crbs-main-content .crbs-main-content-step-1 .crbs-main-content-navigation-button
-        {
-            margin-top:-30px;
+		{
+            margin-top:10px;
         }
                     
             .crbs-main.crbs-booking-form-widget-mode.crbs-booking-form-widget-mode-style-2.crbs-width-300 .crbs-main-content .crbs-main-content-step-1 .crbs-main-content-navigation-button a

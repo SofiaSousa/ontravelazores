@@ -80,7 +80,7 @@ class CRBSDate
 
     function getDayNumberOfWeek($date)
     {
-        return(date('N',strtotime($date)));
+        return(date_i18n('N',strtotime($date)));
     }
     
     /**************************************************************************/
@@ -109,7 +109,6 @@ class CRBSDate
     {
         $Validation=new CRBSValidation();
         if($Validation->isEmpty($date)) return('');
-		if($Validation->isDate($date)) return($date);
 		
         return(date_format(date_create_from_format(CRBSOption::getOption('date_format'),$date),'d-m-Y'));
     }
@@ -143,6 +142,20 @@ class CRBSDate
         if($Validation->isEmpty($time)) return('');
         
         return(date_format(date_create_from_format($sourceFormat,$time),CRBSOption::getOption('time_format')));
+    }
+	
+    /**************************************************************************/
+    
+    static function getNow()
+    {
+        return(strtotime(date_i18n('d-m-Y H:i')));
+    }
+	
+    /**************************************************************************/
+    
+    static function strtotime($time)
+    {
+        return(strtotime($time,self::getNow()));
     }
     
 	/**************************************************************************/

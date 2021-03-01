@@ -90,7 +90,7 @@ class CRBSBookingFormStyle
         $Validation=new CRBSValidation();
         $BookingForm=new CRBSBookingForm();
         
-        $dictionary=$BookingForm->getDictionary();
+        $dictionary=$BookingForm->getDictionary(array('suppress_filters'=>true));
         
         foreach($dictionary as $dictionaryIndex=>$dictionaryValue)
         {

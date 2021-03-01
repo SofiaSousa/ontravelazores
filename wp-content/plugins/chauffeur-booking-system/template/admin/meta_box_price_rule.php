@@ -12,6 +12,7 @@
                 </ul>
                 <div id="meta-box-price-rule-1">
                     <ul class="to-form-field-list">
+						<?php echo CHBSHelper::createPostIdField(__('Pricing rule ID','chauffeur-booking-system')); ?>
                         <li>
                             <h5><?php esc_html_e('Booking forms','chauffeur-booking-system'); ?></h5>
                             <span class="to-legend"><?php esc_html_e('Select forms.','chauffeur-booking-system'); ?></span>
@@ -189,7 +190,7 @@
 ?>
                             </div>
                         </li>
-                       <li>
+						<li>
                             <h5><?php esc_html_e('Drop off geofence','chauffeur-booking-system'); ?></h5>
                             <span class="to-legend"><?php esc_html_e('Geofence for drop off locations.','chauffeur-booking-system'); ?></span>
                             <div class="to-checkbox-button">
@@ -751,7 +752,7 @@
                 <div id="meta-box-price-rule-2">
                     <ul class="to-form-field-list">
                         <li>
-                            <h5><?php esc_html_e('Next rule proccesing','chauffeur-booking-system'); ?></h5>
+                            <h5><?php esc_html_e('Next rule processing','chauffeur-booking-system'); ?></h5>
                             <span class="to-legend">
                                 <?php echo __('This option determine, whether prices will be set up based on this rule only or plugin has to processing next rule based on priority (order).','chauffeur-booking-system'); ?>
                             </span>               
@@ -1621,10 +1622,10 @@
                     var value=parseInt($(this).val());
                     if(value===-1)
                     {
-                        checkbox.removeAttr('checked');
-                        checkbox.first().attr('checked','checked');
+                        checkbox.prop('checked',false);
+                        checkbox.first().prop('checked',true);
                     }
-                    else checkbox.first().removeAttr('checked');
+                    else checkbox.first().prop('checked',false);
                     
                     var checked=[];
                     checkbox.each(function()
@@ -1635,8 +1636,8 @@
                     
                     if(checked.length===0)
                     {
-                        checkbox.removeAttr('checked');
-                        checkbox.first().attr('checked','checked');
+                        checkbox.prop('checked',false);
+                        checkbox.first().prop('checked',true);
                     }
                     
                     checkbox.button('refresh');

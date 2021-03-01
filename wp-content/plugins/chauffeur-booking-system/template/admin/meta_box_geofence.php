@@ -9,6 +9,7 @@
                 </ul>
                 <div id="meta-box-tax-rate-1">
                     <ul class="to-form-field-list">
+						<?php echo CHBSHelper::createPostIdField(__('Geofence ID','chauffeur-booking-system')); ?>
                         <li>
                             <h5><?php esc_html_e('Geofence','chauffeur-booking-system'); ?></h5>
                             <span class="to-legend"><?php esc_html_e('Geofence.','chauffeur-booking-system'); ?></span>

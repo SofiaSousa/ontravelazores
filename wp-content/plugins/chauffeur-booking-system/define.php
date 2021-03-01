@@ -3,9 +3,7 @@
 /******************************************************************************/
 /******************************************************************************/
 
-define('PLUGIN_CHBS_VEHICLE_TEMPLATE',true);
-
-define('PLUGIN_CHBS_VERSION','5.0');
+define('PLUGIN_CHBS_VERSION','5.8');
 
 define('PLUGIN_CHBS_CONTEXT','chbs');
 define('PLUGIN_CHBS_CLASS_PREFIX','CHBS');

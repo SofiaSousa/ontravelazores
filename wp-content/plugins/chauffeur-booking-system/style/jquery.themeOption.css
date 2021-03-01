@@ -15,7 +15,7 @@
 .to select,
 .to textarea,
 .to .dk_container a,
-.to .ui-buttonset .ui-button,
+.to .ui-button,
 .to .dk_container a.dk_toggle:hover,
 .to .dk_container a.dk_toggle:focus,
 .to .dk_container a.dk_toggle:active,
@@ -23,7 +23,9 @@
 .ui-datepicker *
 {
 	font-size:14px;
-	font-family:Arial;
+    min-height:auto;
+    line-height:150%;
+    font-family:Arial;
 }
 
 .to .to-clear-fix:after
@@ -223,8 +225,9 @@
 	.ui-datepicker a,
 	.ui-datepicker td span,
 	.to input,
-	.to select,
 	.to textarea,
+	.to select option,
+	.to select option:hover,
     .to table.to-table td>div,
 	.to label.to-infield,
 	.to label.to-label-1,
@@ -236,7 +239,7 @@
 	.to .dk_container .dk_options_inner li a,
 	.to .ui-timepicker-list li,
 	.to .ui-tabs .ui-tabs-nav li a,
-	.to .ui-buttonset .ui-button .ui-button-text,
+	.to .ui-button,
 	.to .to-content #to_panel .to-panel-description,
     .to .to-slider-range,
     .to .to-field-disabled,
@@ -271,11 +274,11 @@
 	.to .to-qtip,
 	.to .to-header .to-header-left h3,
     .to .ui-tooltip-error .ui-tooltip-content,
-	.to .ui-autocomplete li.ui-menu-item.ui-state-focus,
+	.to .ui-autocomplete li.ui-menu-item:hover,
 	.to .ui-timepicker-list li:hover, 
 	.to .ui-timepicker-list .ui-timepicker-selected:hover,
-    .to .ui-buttonset .ui-button.ui-state-active span,
-    .to .ui-buttonset .ui-button.ui-state-active.ui-state-hover span,
+    .to .ui-button.ui-state-active,
+    .to .ui-button.ui-state-active:hover,
     .to .ui-tabs .ui-tabs-nav .ui-state-active a,
     .to .ui-tabs .ui-tabs-nav .ui-state-active.ui-state-hover a,
 	.to .dk_options_inner li a:hover,
@@ -314,8 +317,8 @@
         color:#111111;
     }
     
-    .to .ui-tabs .ui-tabs-nav .ui-state-hover a,
-    .to .ui-buttonset .ui-button.ui-state-hover span
+	.to .ui-button:hover,
+    .to .ui-tabs .ui-tabs-nav .ui-state-hover a
     {
         color:#0073AA;
     }
@@ -333,10 +336,9 @@
 	.to table.to-table td,
 	.to table.to-table th,
 	.to .ui-autocomplete,
-	.to .ui-autocomplete .ui-state-hover,
-	.to .ui-buttonset .ui-state-hover,
-	.to .ui-buttonset .ui-state-active,
-	.to .ui-buttonset .ui-state-default,
+	.to .ui-button,
+	.to .ui-button:hover,
+	.to .ui-button.ui-state-active,
 	.to .dk_toggle,
 	.to .dk_toggle:hover,
 	.to .dk_toggle:focus,
@@ -363,9 +365,7 @@
 	}
 
 	.to .ui-widget-content,
-	.to .ui-slider-handle.ui-state-hover,
-	.to .ui-slider-handle.ui-state-active,
-	.to .ui-slider-handle.ui-state-focus
+	.to .ui-slider-handle:hover
 	{
 		border-color:#DDDDDD;
 	}
@@ -391,7 +391,7 @@
 	}
     
     .to .ui-tabs .ui-tabs-nav .ui-state-active,
-    .to .ui-buttonset .ui-button.ui-state-active
+    .to .ui-button.ui-state-active
     {
         border-color:#0073AA;
     }
@@ -447,10 +447,8 @@
     .to .dk_toggle,
 	.to .ui-autocomplete,
 	.to .ui-slider-handle.ui-state-default,
-	.to .ui-slider-handle.ui-state-focus,
-	.to .ui-slider-handle.ui-state-hover,
-	.to .ui-slider-handle.ui-state-active,
-	.to .ui-buttonset .ui-state-default,
+	.to .ui-slider-handle:hover,
+	.to .ui-button,
 	.to .to-header .to-header-right,
 	.to .to-content .to-content-right,
 	.to .to-footer .to-footer-right,
@@ -461,7 +459,7 @@
 	{
 		background-color:#FFFFFF;
 	}
-
+	
 	.to input[type="submit"].to-button,
 	.to input[type="button"].to-button
 	{
@@ -483,10 +481,10 @@
     .to li.ui-timepicker-selected, 
 	.to .dk_options a:hover,
 	.to .dk_options .dk_option_current a,
-	.to .ui-autocomplete li.ui-menu-item.ui-state-focus,
+	.to .ui-autocomplete li.ui-menu-item:hover,
 	.to .ui-timepicker-list li:hover, 
 	.to .ui-timepicker-list .ui-timepicker-selected:hover,
-    .to .ui-buttonset .ui-state-active,
+    .to .ui-button.ui-state-active,
     .to .ui-tabs .ui-tabs-nav .ui-state-active a,
     .to .ui-widget-header
     {
@@ -525,9 +523,7 @@
 	.to .ui-state-default,
 	.to .ui-widget-header,
 	.to .ui-slider-handle,
-	.to .ui-slider-handle.ui-state-hover,
-	.to .ui-slider-handle.ui-state-active,
-	.to .ui-slider-handle.ui-state-focus
+	.to .ui-slider-handle:hover
 	{
 		background-image:none !important;
 	}
@@ -571,6 +567,11 @@
 .postbox.to-postbox-1
 {
     border:none !important;
+}
+
+.block-editor .postbox.to-postbox-1
+{
+    margin-top:20px;
 }
 
     .postbox.to-postbox-1>h2,
@@ -1101,36 +1102,31 @@
 			position:relative;
 		}
 
-		.to .ui-buttonset
+		.to .ui-button
 		{
+			float:left;
 			margin:0px;
+			height:auto;
+			cursor:pointer;
+			box-shadow:none;
+			border-width:1px;
+			border-radius:0px;
+			margin-right:-1px;	
+			border-style:solid;
+			font-weight:normal;
+			padding:10px 15px 10px 15px;
 		}
 
-			.to .ui-buttonset .ui-button
-			{
-				float:left;
-				margin:0px;
-				height:auto;
-				cursor:pointer;
-				box-shadow:none;
-				border-width:1px;
-				border-radius:0px;
-				margin-right:-1px;	
-				border-style:solid;
-				font-weight:normal;
-			}
-			
-			.to .ui-buttonset .ui-button:active
-			{
-				transform:none;
-			}
-
-				.to .ui-buttonset .ui-button .ui-button-text
-				{
-					display:block;
-					padding:12px 15px 12px 15px;
-				}
-
+		.to .ui-button:active
+		{
+			transform:none;
+		}
+		
+		.to .ui-button .ui-button-text
+		{
+			padding:0px;
+		}
+		
 		/**********************************************************************/
 		/* Panel / Form Element / Dropkick									  */
 		/**********************************************************************/
@@ -1235,9 +1231,7 @@
 		}
 
 		.to .ui-slider .ui-slider-handle,
-		.to .ui-slider .ui-slider-handle.ui-state-focus,
-		.to .ui-slider .ui-slider-handle.ui-state-hover,
-		.to .ui-slider .ui-slider-handle.ui-state-active
+		.to .ui-slider .ui-slider-handle:hover
 		{
 			background-image:none !important;
 		}
@@ -1279,8 +1273,7 @@
 		/* Panel / Form Element / Autocomplete								  */
 		/**********************************************************************/
 
-		.to .ui-autocomplete,
-		.to .ui-autocomplete .ui-state-hover
+		.to .ui-autocomplete
 		{
 			border-width:1px;
 			border-style:solid;
@@ -1294,21 +1287,17 @@
 		}
 		
 			.to .ui-autocomplete li.ui-menu-item,
-            .to .ui-autocomplete li.ui-menu-item.ui-state-focus,
-            .to .ui-autocomplete li.ui-menu-item.ui-state-active
+            .to .ui-autocomplete li.ui-menu-item:hover,
+			.to .ui-autocomplete li.ui-menu-item.ui-state-active
 			{
                 margin:0px;
+				text-shadow:none;
 				padding:8px 10px 8px 10px;
 			}
             
 			.to .ui-autocomplete li.ui-menu-item
 			{
 				box-sizing:border-box;
-			}
-
-			.to .ui-autocomplete li.ui-menu-item.ui-state-focus
-			{
-				text-shadow:none;
 			}
 
 			.to input[type="text"].ui-autocomplete-loading
@@ -1673,4 +1662,13 @@
 	height:440px;
 	overflow-y:auto;
 	padding-right:20px;
+}
+
+/******************************************************************************/
+/* Gutenberg																  */
+/******************************************************************************/
+
+.block-editor .postbox.to-postbox-1
+{
+	margin-top:20px;
 }

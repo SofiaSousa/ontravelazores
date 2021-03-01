@@ -58,7 +58,16 @@ class CHBSPlugin
             'pricing_rule_return_use_type'                                      =>  '1',
             'google_map_duplicate_script_remove'                                =>  '0',
             'geolocation_server_id'                                             =>  '1',
-            'geolocation_server_id_3_api_key'                                   =>  ''
+            'geolocation_server_id_3_api_key'                                   =>  '',
+            'salt'                                                              =>  CHBSHelper::createSalt(),
+            'booking_driver_accept_enable'                                      =>  0,
+            'booking_driver_confirmation_page'                                  =>  '',
+            'booking_driver_status_after_accept'                                =>  2,
+            'booking_driver_status_after_reject'                                =>  1,
+            'booking_driver_email_recipient'                                    =>  '',
+			'payment_stripe_webhook_endpoint_id'								=>	'',
+			'booking_status_payment_success'									=>	'-1',
+			'booking_status_synchronization'									=>	'1'
         );
         
         /***/
@@ -135,10 +144,15 @@ class CHBSPlugin
 				(
 					'file'														=>	'jquery.blockUI.js'
 				),
-				'jquery-sticky-kit'                                             =>	array
+				'resizesensor'													=>	array
 				(
-                    'use'                                                       =>  3,
-					'file'														=>	'jquery.sticky-kit.min.js'
+					'use'														=>	2,
+					'file'														=>	'ResizeSensor.min.js'
+				),				
+				'jquery-theia-sticky-sidebar'									=>	array
+				(
+					'use'														=>	2,
+					'file'														=>	'jquery.theia-sticky-sidebar.min.js'
 				),
 				'jquery-fancybox'                                               =>	array
 				(
@@ -155,6 +169,16 @@ class CHBSPlugin
                     'use'                                                       =>  3,
 					'file'														=>	'jquery.fancybox-buttons.js'
 				),                    
+				'jquery-intlTelInput'                                           =>	array
+				(
+                    'use'                                                       =>  3,
+					'file'														=>	'intlTelInput.min.js'
+				),  
+				'jquery-intlTelInputUtil'                                       =>	array
+				(
+                    'use'                                                       =>  3,
+					'file'														=>	'intlTelInputUtil.min.js'
+				),                  
 				'jquery-table'                                                  =>	array
 				(
 					'file'														=>	'jquery.table.js'
@@ -183,7 +207,7 @@ class CHBSPlugin
 				'chbs-helper'                                                    =>	array
 				(
                     'use'                                                       =>  3,
-					'file'														=>	'helper.js'
+					'file'														=>	'CHBS.Helper.class.js'
 				),
 				'chbs-admin'                                                    =>	array
 				(
@@ -265,6 +289,11 @@ class CHBSPlugin
                     'use'                                                       =>  3,
 					'file'														=>	'fancybox/jquery.fancybox.css'
 				),
+				'jquery-intlTelInput'                                           =>	array
+				(
+                    'use'                                                       =>  3,
+					'file'														=>	'intlTelInput.min.css'
+				),                
 				'jquery-themeOption'											=>	array
 				(
 					'file'														=>	'jquery.themeOption.css'
@@ -274,7 +303,7 @@ class CHBSPlugin
 					'inc'														=>	false,
 					'file'														=>	'jquery.themeOption.rtl.css'
 				),
-				'jquery-themeOption-overwrite'                                  =>	array
+				'chbs-themeOption-overwrite'									=>	array
 				(
 					'file'														=>	'jquery.themeOption.overwrite.css'
 				),
@@ -670,7 +699,7 @@ class CHBSPlugin
 	/**************************************************************************/
 	
 	public function init()
-	{
+	{	
         $Booking=new CHBSBooking();
         $BookingForm=new CHBSBookingForm();
         $BookingExtra=new CHBSBookingExtra();
@@ -711,9 +740,12 @@ class CHBSPlugin
         $EmailAccount->init();
         
         $Geofence->init();
-        
+    
+		$User=new CHBSUser();
+		$User->init();
+		
         $ExchangeRateProvider=new CHBSExchangeRateProvider();
-        
+	
         add_filter('custom_menu_order',array($this,'adminCustomMenuOrder'));
         
         add_action('admin_init',array($this,'adminInit'));
@@ -745,6 +777,12 @@ class CHBSPlugin
         add_action('wp_ajax_'.PLUGIN_CHBS_CONTEXT.'_coupon_code_check',array($BookingForm,'checkCouponCode'));
 		add_action('wp_ajax_nopriv_'.PLUGIN_CHBS_CONTEXT.'_coupon_code_check',array($BookingForm,'checkCouponCode'));  
         
+        add_action('wp_ajax_'.PLUGIN_CHBS_CONTEXT.'_vehicle_bid_price_check',array($BookingForm,'checkVehicleBidPrice'));
+		add_action('wp_ajax_nopriv_'.PLUGIN_CHBS_CONTEXT.'_vehicle_bid_price_check',array($BookingForm,'checkVehicleBidPrice')); 
+		
+        add_action('wp_ajax_'.PLUGIN_CHBS_CONTEXT.'_gratuity_customer_set',array($BookingForm,'setGratuityCustomer'));
+		add_action('wp_ajax_nopriv_'.PLUGIN_CHBS_CONTEXT.'_gratuity_customer_set',array($BookingForm,'setGratuityCustomer'));          
+        
         add_action('admin_notices',array($this,'adminNotice'));
        
         add_action('wp_mail_failed',array($LogManager,'logWPMailError'));
@@ -762,8 +800,8 @@ class CHBSPlugin
             $PaymentStripe=new CHBSPaymentStripe();
             
 			add_action('wp_enqueue_scripts',array($this,'publicInit'));
-         
-            add_action('wp_loaded',array($PaymentStripe,'redirect'));
+			
+            add_action('wp_loaded',array($PaymentStripe,'receivePayment'));
         }
                
 		if(function_exists('register_block_type'))
@@ -845,6 +883,7 @@ class CHBSPlugin
         $Currency=new CHBSCurrency();
         $GeoLocation=new CHBSGeoLocation();
         $EmailAccount=new CHBSEmailAccount();
+        $BookingStatus=new CHBSBookingStatus();
         $ExchangeRateProvider=new CHBSExchangeRateProvider();
         
         $data['option']=CHBSOption::getOptionObject();
@@ -858,6 +897,9 @@ class CHBSPlugin
         
         $data['dictionary']['geolocation_server']=$GeoLocation->getServer();
         
+        $data['dictionary']['booking_status']=$BookingStatus->getBookingStatus();
+        $data['dictionary']['booking_status_synchronization']=$BookingStatus->getBookingStatusSynchronization();
+		
         wp_enqueue_media();
         
 		$Template=new CHBSTemplate($data,PLUGIN_CHBS_TEMPLATE_PATH.'admin/option.php');
@@ -876,6 +918,7 @@ class CHBSPlugin
         $Length=new CHBSLength();
         $Currency=new CHBSCurrency();
         $Validation=new CHBSValidation();
+        $BookingStatus=new CHBSBookingStatus();
         
         $invalidValue=__('This field includes invalid value.','chauffeur-booking-system');
         
@@ -890,7 +933,18 @@ class CHBSPlugin
             $Notice->addError(CHBSHelper::getFormName('date_format',false),$invalidValue);
         if($Validation->isEmpty($option['time_format']))
             $Notice->addError(CHBSHelper::getFormName('time_format',false),$invalidValue);        
+        if(!in_array($option['pricing_rule_return_use_type'],array(1,2)))
+            $Notice->addError(CHBSHelper::getFormName('pricing_rule_return_use_type',false),$invalidValue);  
         
+		/* Payment */
+		if((int)$option['booking_status_payment_success']!==-1)
+		{
+			if(!$BookingStatus->isBookingStatus($option['booking_status_payment_success']))
+				$Notice->addError(CHBSHelper::getFormName('booking_status_payment_success',false),$invalidValue);	
+		}
+		if(!$BookingStatus->isBookingStatusSynchronization($option['booking_status_synchronization']))
+            $Notice->addError(CHBSHelper::getFormName('booking_status_synchronization',false),$invalidValue);	
+		
         /* Currency */
         foreach($option['currency_exchange_rate'] as $index=>$value)
         {
@@ -909,9 +963,24 @@ class CHBSPlugin
             $option['currency_exchange_rate'][$index]=preg_replace('/,/','.',$value);
         }
         
-        if(!in_array($option['pricing_rule_return_use_type'],array(1,2)))
-            $Notice->addError(CHBSHelper::getFormName('pricing_rule_return_use_type',false),$invalidValue);           
-               
+        /* Booking acceptance */
+        if(!$Validation->isBool($option['booking_driver_accept_enable']))
+            $Notice->addError(CHBSHelper::getFormName('booking_driver_accept_enable',false),$invalidValue);
+        if(!$Validation->isNumber($option['booking_driver_confirmation_page'],1,999999,true))
+            $Notice->addError(CHBSHelper::getFormName('booking_driver_confirmation_page',false),$invalidValue); 
+        if(!$Validation->isEmailAddress($option['booking_driver_email_recipient'],true))
+            $Notice->addError(CHBSHelper::getFormName('booking_driver_email_recipient',false),$invalidValue); 		
+		if((int)$option['booking_driver_status_after_accept']!==0)
+		{
+			if(!$BookingStatus->isBookingStatus($option['booking_driver_status_after_accept']))
+				$Notice->addError(CHBSHelper::getFormName('booking_driver_status_after_accept',false),$invalidValue);        
+		}
+		if((int)$option['booking_driver_status_after_reject']!==0)
+		{
+			if(!$BookingStatus->isBookingStatus($option['booking_driver_status_after_reject']))
+				$Notice->addError(CHBSHelper::getFormName('booking_driver_status_after_reject',false),$invalidValue);            
+		}
+		
 		if($Notice->isError())
 		{
 			$response['local']=$Notice->getError();
@@ -943,7 +1012,7 @@ class CHBSPlugin
 		if($buffer!==false)
 		{
 			$response['global']['error']=0;
-			$subtitle=__('Seems, that demo data has been imported. To make sure if this process has been sucessfully completed,please check below content of buffer returned by external applications.','chauffeur-booking-system');
+			$subtitle=__('Seems, that demo data has been imported. To make sure if this process has been successfully completed,please check below content of buffer returned by external applications.','chauffeur-booking-system');
 		}
 		else
 		{
@@ -1067,6 +1136,21 @@ class CHBSPlugin
             }
         }
     }
+	
+	/**************************************************************************/
+	
+	static function isAutoRideTheme()
+	{
+		$theme=wp_get_theme();
+		$themeName=strtolower($theme->get('Name'));
+
+		$parentTheme=is_object($theme->parent()) ? $theme->parent() : null;
+		$parentThemeName=strtolower(is_null($parentTheme) ? null : $parentTheme->get('Name'));
+
+		if(($themeName=='autoride') || ($parentThemeName=='autoride')) return(true);	
+		
+		return(false);
+	}
     
     /**************************************************************************/
 }

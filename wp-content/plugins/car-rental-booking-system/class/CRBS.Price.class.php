@@ -21,6 +21,19 @@ class CRBSPrice
         return($value);
     }
     
+	/**************************************************************************/
+	
+	static function formatToSave($value,$empty=false)
+	{
+		$Validation=new CRBSValidation();
+		
+		if(($Validation->isEmpty($value)) && ($empty)) return('');
+		
+		$value=preg_replace('/,/','.',$value);
+		$value=number_format($value,2,'.','');
+		return($value);
+	}
+	
     /**************************************************************************/
     
     static function numberFormat($value,$currencyIndex)

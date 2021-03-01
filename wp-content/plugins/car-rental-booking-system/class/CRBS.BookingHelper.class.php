@@ -74,8 +74,27 @@ class CRBSBookingHelper
             case 3:
                 
                 $period['day']=floor($hour/24);
-                $period['hour']=$hour-$period['day']*24;
-        
+                $period['hour']=$hour-$period['day']*24; 
+				
+				/*
+                $period['day']=floor($hour/24);
+                $period['hour']=$hour-$period['day']*24; 
+				
+				if($period['day']===0)
+				{
+					$period['day']=1;
+					$period['hour']=0;
+					break;
+				}
+				
+				if($period['hour']>3)
+				{
+					$period['day']++;
+					$period['hour']=0;
+					break;
+				}
+				*/
+				
             break;
         }
         
@@ -161,9 +180,8 @@ class CRBSBookingHelper
         
         return($data);
     }
-    
-    /**************************************************************************/
+	
+	/**************************************************************************/
 }
-
 /******************************************************************************/
 /******************************************************************************/

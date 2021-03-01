@@ -90,7 +90,8 @@ class CRBSLocation
         $Payment=new CRBSPayment();
         $Vehicle=new CRBSVehicle();
         $EmailAccount=new CRBSEmailAccount();
-        
+        $PaymentStripe=new CRBSPaymentStripe();
+		
 		$data=array();
         
         $data['meta']=CRBSPostMeta::getPostMeta($post);
@@ -103,6 +104,8 @@ class CRBSLocation
         
         $data['dictionary']['email_account']=$EmailAccount->getDictionary();
         
+		$data['dictionary']['payment_stripe_method']=$PaymentStripe->getPaymentMethod();
+		
 		$Template=new CRBSTemplate($data,PLUGIN_CRBS_TEMPLATE_PATH.'admin/meta_box_location.php');
 		echo $Template->output();	        
     }
@@ -121,14 +124,20 @@ class CRBSLocation
 	{
         $GeoLocation=new CRBSGeoLocation();         
         
-        CRBSHelper::setDefault($meta,'booking_period_from','0');
-        CRBSHelper::setDefault($meta,'booking_period_to','');
+        CRBSHelper::setDefault($meta,'pickup_period_from','0');
+        CRBSHelper::setDefault($meta,'pickup_period_to','');
+		CRBSHelper::setDefault($meta,'pickup_period_type',1);
         
 		CRBSHelper::setDefault($meta,'booking_interval',0);
 		
         CRBSHelper::setDefault($meta,'vehicle_rent_day_count_min','');
         CRBSHelper::setDefault($meta,'vehicle_rent_day_count_max','');
         
+		if(!array_key_exists('vehicle_rent_date',$meta))
+			$meta['vehicle_rent_date']=array();
+		
+		CRBSHelper::setDefault($meta,'country_default',-1);
+		CRBSHelper::setDefault($meta,'country_available',array(-1));
         CRBSHelper::setDefault($meta,'vehicle_id_default',-1);
         
         CRBSHelper::setDefault($meta,'vehicle_availability_check_type',array(2,3));
@@ -156,12 +165,25 @@ class CRBSLocation
 		for($i=1;$i<8;$i++)
 		{
 			if(!isset($meta['business_hour'][$i]))
-                $meta['business_hour'][$i]=array('start'=>null,'stop'=>null);
+                $meta['business_hour'][$i]=array('start'=>null,'stop'=>null,'default'=>null,'break'=>null);
+			
+			if(!isset($meta['business_hour'][$i]['start']))
+				$meta['business_hour'][$i]['start']=null;
+			if(!isset($meta['business_hour'][$i]['stop']))
+				$meta['business_hour'][$i]['stop']=null;
+			if(!isset($meta['business_hour'][$i]['default']))
+				$meta['business_hour'][$i]['default']=null;		
+			if(!isset($meta['business_hour'][$i]['break']))
+				$meta['business_hour'][$i]['break']=null;
 		}	
         
 		if(!array_key_exists('date_exclude',$meta))
 			$meta['date_exclude']=array();
-        
+		
+		CRBSHelper::setDefault($meta,'payment_deposit_type',0);
+		CRBSHelper::setDefault($meta,'payment_deposit_type_efixed_value',0.00);	
+		CRBSHelper::setDefault($meta,'payment_deposit_type_percentage_value',0.00);			
+		
         CRBSHelper::setDefault($meta,'payment_mandatory_enable',0);
         
         CRBSHelper::setDefault($meta,'payment_id',array(1));
@@ -174,12 +196,19 @@ class CRBSLocation
 
         CRBSHelper::setDefault($meta,'payment_stripe_api_key_secret','');
         CRBSHelper::setDefault($meta,'payment_stripe_api_key_publishable','');
-        CRBSHelper::setDefault($meta,'payment_stripe_redirect_url_address','');
+		CRBSHelper::setDefault($meta,'payment_stripe_method',array('card'));
+		
+		CRBSHelper::setDefault($meta,'payment_stripe_product_id','');
+		CRBSHelper::setDefault($meta,'payment_stripe_redirect_duration','5');
+		CRBSHelper::setDefault($meta,'payment_stripe_success_url_address','');
+		CRBSHelper::setDefault($meta,'payment_stripe_cancel_url_address','');
 		CRBSHelper::setDefault($meta,'payment_stripe_logo_src','');
 		CRBSHelper::setDefault($meta,'payment_stripe_info','');
-		CRBSHelper::setDefault($meta,'payment_stripe_window_open_default_enable',0);
 		
         CRBSHelper::setDefault($meta,'payment_paypal_email_address','');
+		CRBSHelper::setDefault($meta,'payment_paypal_redirect_duration','5');
+		CRBSHelper::setDefault($meta,'payment_paypal_success_url_address','');
+		CRBSHelper::setDefault($meta,'payment_paypal_cancel_url_address','');
         CRBSHelper::setDefault($meta,'payment_paypal_sandbox_mode_enable',0);
 		CRBSHelper::setDefault($meta,'payment_paypal_logo_src','');        
 		CRBSHelper::setDefault($meta,'payment_paypal_info','');
@@ -187,11 +216,15 @@ class CRBSLocation
 		CRBSHelper::setDefault($meta,'payment_wire_transfer_logo_src','');
 		CRBSHelper::setDefault($meta,'payment_wire_transfer_info','');
         
+		CRBSHelper::setDefault($meta,'payment_credit_card_pickup_logo_src','');
+		CRBSHelper::setDefault($meta,'payment_credit_card_pickup_info','');
+		
         CRBSHelper::setDefault($meta,'booking_new_sender_email_account_id',-1);
         CRBSHelper::setDefault($meta,'booking_new_recipient_email_address','');
+        
+		CRBSHelper::setDefault($meta,'booking_new_admin_email_notification',1);
+		CRBSHelper::setDefault($meta,'booking_new_customer_email_notification',1);
         CRBSHelper::setDefault($meta,'booking_new_woocommerce_email_notification',0);
-        CRBSHelper::setDefault($meta,'booking_new_customer_email_notification',1);
-		CRBSHelper::setDefault($meta,'booking_new_customer_email_notification_after_payment',0);
         
         CRBSHelper::setDefault($meta,'nexmo_sms_enable',0);
         CRBSHelper::setDefault($meta,'nexmo_sms_api_key','');
@@ -232,16 +265,21 @@ class CRBSLocation
         $Vehicle=new CRBSVehicle();
         $Validation=new CRBSValidation();
         $EmailAccount=new CRBSEmailAccount();
-        
+        $PaymentStripe=new CRBSPaymentStripe();
+		
         $data=CRBSHelper::getPostOption();
         
         $dataIndex=array
         (
 			'booking_interval',
-            'booking_period_from',
-            'booking_period_to',
+            'pickup_period_from',
+			'pickup_period_type',
+            'pickup_period_to',
             'vehicle_rent_day_count_min',
             'vehicle_rent_day_count_max',
+			'vehicle_rent_date',
+			'country_default',
+			'country_available',
             'vehicle_id_default',
             'vehicle_availability_check_type',
 			'after_business_hour_pickup_enable',
@@ -261,6 +299,9 @@ class CRBSLocation
             'coordinate_longitude',
             'business_hour',
             'date_exclude',
+			'payment_deposit_type',
+			'payment_deposit_type_fixed_value',
+			'payment_deposit_type_percentage_value',
             'payment_mandatory_enable',
 			'payment_processing_enable',
 			'payment_woocommerce_step_3_enable',
@@ -270,16 +311,24 @@ class CRBSLocation
 			'payment_cash_info',
             'payment_stripe_api_key_secret',
             'payment_stripe_api_key_publishable',
-            'payment_stripe_redirect_url_address',
+			'payment_stripe_method',
+			'payment_stripe_product_id',
+			'payment_stripe_redirect_duration',
+            'payment_stripe_success_url_address',
+			'payment_stripe_cancel_url_address',
 			'payment_stripe_logo_src',
 			'payment_stripe_info',
-			'payment_stripe_window_open_default_enable',
             'payment_paypal_email_address',
+			'payment_paypal_redirect_duration',
+            'payment_paypal_success_url_address',
+			'payment_paypal_cancel_url_address',
             'payment_paypal_sandbox_mode_enable',
 			'payment_paypal_logo_src',
 			'payment_paypal_info',	
 			'payment_wire_transfer_logo_src',
 			'payment_wire_transfer_info',
+			'payment_credit_card_pickup_logo_src',
+			'payment_credit_card_pickup_info',			
             'nexmo_sms_enable',
             'nexmo_sms_api_key',
             'nexmo_sms_api_key_secret',
@@ -300,26 +349,28 @@ class CRBSLocation
             'booking_new_recipient_email_address',
             'booking_new_woocommerce_email_notification',
 			'booking_new_customer_email_notification',
-			'booking_new_customer_email_notification_after_payment',
+			'booking_new_admin_email_notification',
             'google_calendar_enable',
             'google_calendar_id',
             'google_calendar_settings'
         );
 		               
-        if(!$Validation->isNumber($data['booking_period_from'],0,9999))
-            $data['booking_period_from']='';          
-        if(!$Validation->isNumber($data['booking_period_to'],0,9999))
-            $data['booking_period_to']='';  
+        if(!$Validation->isNumber($data['pickup_period_from'],0,9999))
+            $data['pickup_period_from']='';          
+        if(!$Validation->isNumber($data['pickup_period_to'],0,9999))
+            $data['pickup_period_to']='';
+		if(!in_array($data['pickup_period_type'],array(1,2,3)))
+			$data['pickup_period_type']=1;	
        
         if(!$Validation->isNumber($data['booking_interval'],0,9999))
             $data['booking_interval']=0;   		
 		
-        if(!$Validation->isNumber($data['vehicle_rent_day_count_min'],0,9999))
+        if(!$Validation->isNumber($data['vehicle_rent_day_count_min'],1,9999))
             $data['vehicle_rent_day_count_min']='';          
-        if(!$Validation->isNumber($data['vehicle_rent_day_count_max'],0,9999))
+        if(!$Validation->isNumber($data['vehicle_rent_day_count_max'],1,9999))
             $data['vehicle_rent_day_count_max']='';          
         
-        if(((int)$data['vehicle_rent_day_count_min']>0) && ((int)$data['vehicle_rent_day_count_max']>0))
+        if(($Validation->isNotEmpty($data['vehicle_rent_day_count_min'])) && ($Validation->isNotEmpty($data['vehicle_rent_day_count_max'])))
         {
             if($data['vehicle_rent_day_count_min']>$data['vehicle_rent_day_count_max'])
             {
@@ -327,7 +378,69 @@ class CRBSLocation
                 $data['vehicle_rent_day_count_max']='';
             }
         }
-        
+		
+		/***/
+		
+		$vehicleRentDate=array();
+        $vehicleRentDatePost=CRBSHelper::getPostValue('vehicle_rent_date');
+      
+		$count=count($vehicleRentDatePost['start']);
+		
+		for($i=0;$i<$count;$i++)
+		{
+			if(!$Validation->isDate($vehicleRentDatePost['start'][$i])) continue;
+			if(!$Validation->isDate($vehicleRentDatePost['stop'][$i])) continue;
+
+			if($Date->compareDate($vehicleRentDatePost['start'][$i],$vehicleRentDatePost['stop'][$i])==1) continue;
+			if($Date->compareDate(date_i18n('d-m-Y'),$vehicleRentDatePost['stop'][$i])==1) continue;
+			
+			if(!$Validation->isNumber($vehicleRentDatePost['day_count_min'][$i],1,9999,true)) continue;
+			if(!$Validation->isNumber($vehicleRentDatePost['day_count_max'][$i],1,9999,true)) continue;
+			
+			if(($Validation->isEmpty($vehicleRentDatePost['day_count_min'][$i])) && ($Validation->isEmpty($vehicleRentDatePost['day_count_max'][$i]))) continue;
+			
+			if(($Validation->isNotEmpty($vehicleRentDatePost['day_count_min'][$i])) && ($Validation->isNotEmpty($vehicleRentDatePost['day_count_max'][$i])))
+			{
+				if($vehicleRentDatePost['day_count_min'][$i]>$vehicleRentDatePost['day_count_max'][$i]) continue;
+			}
+			
+			$vehicleRentDate[]=array
+			(
+				'start'															=>	$vehicleRentDatePost['start'][$i],
+				'stop'															=>	$vehicleRentDatePost['stop'][$i],
+				'day_count_min'													=>	$vehicleRentDatePost['day_count_min'][$i],
+				'day_count_max'													=>	$vehicleRentDatePost['day_count_max'][$i]
+			);
+		}
+		
+		$data['vehicle_rent_date']=$vehicleRentDate;
+		
+		/***/
+		
+		if(!$Country->isCountry($data['country_default']))
+			$data['country_default']=-1;
+		
+		/***/
+		
+		if(is_array($data['country_available']))
+		{
+			if(in_array(-1,$data['country_available']))
+				$data['country_available']=array(-1);
+			else
+			{
+				foreach($data['country_available'] as $index=>$value)
+				{
+					if(!$Country->isCountry($value))
+						unset($data['country_available'][$index]);
+				}
+			}
+		}
+		
+		if((!is_array($data['country_available'])) || (!count($data['country_available'])))
+			$data['country_available'][$index]=-1;		
+		
+		/***/
+		
         $vehicle=$Vehicle->getDictionary();
         if(!array_key_exists($data['vehicle_id_default'],$vehicle))
             $data['vehicle_id_default']=-1;
@@ -356,10 +469,10 @@ class CRBSLocation
         
 		$businessHour=array();
         $businessHourPost=CRBSHelper::getPostValue('business_hour');
-        
+  
 		foreach(array_keys($Date->day) as $index)
 		{
-			$businessHour[$index]=array('start'=>null,'stop'=>null);
+			$businessHour[$index]=array('start'=>null,'stop'=>null,'default'=>null,'break'=>null);
 			
             if((isset($businessHourPost[$index][0])) && (isset($businessHourPost[$index][1])))
             {
@@ -368,11 +481,38 @@ class CRBSLocation
                     $result=$Date->compareTime($businessHourPost[$index][0],$businessHourPost[$index][1]);
 
                     if($result==2)
+					{
                         $businessHour[$index]=array('start'=>$businessHourPost[$index][0],'stop'=>$businessHourPost[$index][1]);
+					
+						if(($Validation->isTime($businessHourPost[$index][2],false)))
+						{
+							$result=$Date->timeInRange($businessHourPost[$index][2],$businessHourPost[$index][0],$businessHourPost[$index][1]);
+							if($result) $businessHour[$index]['default']=$businessHourPost[$index][2];
+						}
+						
+						if($Validation->isNotEmpty($businessHourPost[$index][3]))
+						{
+							$breakHour=preg_split('/;/',$businessHourPost[$index][3]);
+							
+							foreach($breakHour as $breakHourValue)
+							{
+								list($start,$stop)=preg_split('/-/',$breakHourValue);
+								
+								if(($Validation->isTime($start)) && ($Validation->isTime($stop)))
+								{
+									$result=$Date->compareTime($start,$stop);
+									if($result===2)
+									{
+										$businessHour[$index]['break'][]=array('start'=>$start,'stop'=>$stop);
+									}
+								}
+							}
+						}
+					}
                 }
             }
 		}
-		
+				
 		$data['business_hour']=$businessHour;
         
         /***/
@@ -403,6 +543,13 @@ class CRBSLocation
 		$data['date_exclude']=$dateExclude;
         
         /***/
+		
+        if(!in_array($data['payment_deposit_type'],array(0,1,2)))
+            $data['payment_deposit_type']=0; 		
+        if(!$Validation->isPrice($data['payment_deposit_type_fixed_value']))
+            $data['payment_deposit_type_fixed_value']=0.00;    		
+        if(!$Validation->isFloat($data['payment_deposit_type_fixed_value'],0,100))
+            $data['payment_deposit_type_percentage_value']=0; 		
         
         if(!$Validation->isBool($data['payment_mandatory_enable']))
             $data['payment_mandatory_enable']=0;     
@@ -413,33 +560,29 @@ class CRBSLocation
 		if(!$Payment->isPayment($data['payment_default_id']))
 			$data['payment_default_id']=-1;
 		
-        if(!$Validation->isBool($data['payment_stripe_window_open_default_enable']))
-            $data['payment_stripe_window_open_default_enable']=0; 		
+		if(!$Validation->isNumber($data['payment_paypal_redirect_duration'],-1,99))
+			$data['payment_paypal_redirect_duration']=5;
 		
+		if(!$Validation->isNumber($data['payment_stripe_redirect_duration'],-1,99))
+			$data['payment_stripe_redirect_duration']=5;	
+
+		if(is_array($data['payment_stripe_method']))
+		{
+			foreach($data['payment_stripe_method'] as $index=>$value)
+			{
+				if(!$PaymentStripe->isPaymentMethod($value))
+					unset($data['payment_stripe_method'][$index]);
+			}
+		}
+			
+		if((!is_array($data['payment_stripe_method'])) || (!count($data['payment_stripe_method'])))
+			$data['payment_stripe_method']=array('card');
+			
         foreach($data['payment_id'] as $index=>$value)
         {
             if($Payment->isPayment($value)) continue;
             unset($data['payment_id'][$value]);
         }
-
-        if(!in_array(2,$data['payment_id']))
-        {
-            $data['payment_stripe_api_key_secret']='';
-            $data['payment_stripe_api_key_publishable']='';
-            $data['payment_stripe_redirect_url_address']='';
-			$data['payment_stripe_window_open_default_enable']='';
-        }
-        
-        if(!in_array(3,$data['payment_id']))
-        {
-            $data['payment_paypal_email_address']='';
-            $data['payment_paypal_sandbox_mode_enable']=0;
-        }  
-        
-        if(!$Validation->isBool($data['payment_paypal_sandbox_mode_enable']))
-            $data['payment_paypal_sandbox_mode_enable']=0;   
-        
-        /***/
              
         if(!$Validation->isBool($data['nexmo_sms_enable']))
             $data['nexmo_sms_enable']=0;
@@ -478,8 +621,8 @@ class CRBSLocation
             $data['booking_new_woocommerce_email_notification']=0;   
         if(!$Validation->isBool($data['booking_new_customer_email_notification']))
             $data['booking_new_customer_email_notification']=0;  
-        if(!$Validation->isBool($data['booking_new_customer_email_notification_after_payment']))
-            $data['booking_new_customer_email_notification_after_payment']=0;  		
+        if(!$Validation->isBool($data['booking_new_admin_email_notification']))
+            $data['booking_new_admin_email_notification']=0;  		
 		
         /***/
         

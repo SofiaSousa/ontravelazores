@@ -3,7 +3,7 @@
 /******************************************************************************/
 /******************************************************************************/
 
-define('PLUGIN_CRBS_VERSION','2.2');
+define('PLUGIN_CRBS_VERSION','2.8');
 
 define('PLUGIN_CRBS_CONTEXT','crbs');
 define('PLUGIN_CRBS_CLASS_PREFIX','CRBS');

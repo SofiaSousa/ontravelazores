@@ -11,7 +11,7 @@ class CRBSEmailAccount
     {
 		$this->secureConnectionType=array
 		(
-			'none'																=>	array(__('None','car-rental-booking-system')),
+			'none'																=>	array(__('- None -','car-rental-booking-system')),
 			'ssl'																=>	array(__('SSL','car-rental-booking-system')),
 			'tls'																=>	array(__('TLS','car-rental-booking-system')),
 		);

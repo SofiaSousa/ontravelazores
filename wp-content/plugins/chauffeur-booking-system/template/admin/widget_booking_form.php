@@ -2,10 +2,21 @@
         $Currency=new CHBSCurrency();
         $BookingForm=new CHBSBookingForm();
         $ServiceType=new CHBSServiceType();
+        $WidgetBookingForm=new CHBSWidgetBookingForm();
         
         $bookingForm=$BookingForm->getDictionary();
         $serviceType=$ServiceType->getServiceType();
-
+?>
+		<p>
+			<label for="<?php echo esc_attr($this->data['option']['widget_style']['id']); ?>"><?php esc_html_e('Style','chauffeur-booking-system'); ?>:</label>
+            <select class="widefat" id="<?php echo esc_attr($this->data['option']['widget_style']['id']); ?>" name="<?php echo esc_attr($this->data['option']['widget_style']['name']); ?>">
+<?php
+        foreach($WidgetBookingForm->getStyle() as $index=>$value)
+            echo '<option value="'.esc_attr($index).'" '.($index==$this->data['option']['widget_style']['value'] ? 'selected=""' : null).'>'.esc_html($value[0]).'</option>';
+?>
+            </select>
+		</p>
+<?php
         if(count($bookingForm))
         {
 ?>
@@ -48,3 +59,8 @@
 		</p>
 <?php
         }
+?>
+		<p>
+			<label for="<?php echo esc_attr($this->data['option']['css_class']['id']); ?>"><?php esc_html_e('CSS class','chauffeur-booking-system'); ?>:</label>
+			<input class="widefat" id="<?php echo esc_attr($this->data['option']['css_class']['id']); ?>" name="<?php echo esc_attr($this->data['option']['css_class']['name']); ?>" type="text" value="<?php echo esc_attr($this->data['option']['css_class']['value']); ?>" />
+		</p>

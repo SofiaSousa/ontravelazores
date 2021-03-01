@@ -82,7 +82,8 @@ class CHBSBooking
     function addMetaBox()
     {
         add_meta_box(PLUGIN_CHBS_CONTEXT.'_meta_box_booking_form',__('Main','chauffeur-booking-system'),array($this,'addMetaBoxMain'),self::getCPTName(),'normal','low');		
-    }
+        add_meta_box(PLUGIN_CHBS_CONTEXT.'_meta_box_booking_form_woocommerce',__('WooCommerce','chauffeur-booking-system'),array($this,'addMetaBoxWooCommerce'),self::getCPTName(),'side','low');		
+	}
     
     /**************************************************************************/
     
@@ -99,6 +100,36 @@ class CHBSBooking
 		$Template=new CHBSTemplate($data,PLUGIN_CHBS_TEMPLATE_PATH.'admin/meta_box_booking.php');
 		echo $Template->output();	        
     }
+	
+	/**************************************************************************/
+
+	function addMetaBoxWooCommerce()
+	{
+		global $post;
+		
+		$booking=$this->getBooking($post->ID);
+		
+		if((int)$booking['meta']['woocommerce_booking_id']>0)
+		{
+			echo 
+			'
+				<div>
+					<div>'.esc_html__('This booking has corresponding wooCommerce order. Click on button below to see its details in new window.','chauffeur-booking-system').'</div>
+					<br/>
+					<a class="button button-primary" href="'.esc_url(get_edit_post_link($booking['meta']['woocommerce_booking_id'])).'" target="_blank">'.esc_html__('Open booking','chauffeur-booking-system').'</a>
+				</div>
+			';
+		}
+		else
+		{
+			echo 
+			'
+				<div>
+					<div>'.esc_html__('This booking hasn\'t corresponding wooCommerce order.','chauffeur-booking-system').'</div>
+				</div>
+			';			
+		}
+	}
     
     /**************************************************************************/
     
@@ -123,7 +154,6 @@ class CHBSBooking
         $booking=array();
         
         $Driver=new CHBSDriver();
-        $Vehicle=new CHBSVehicle();
         $Country=new CHBSCountry();
         $WooCommerce=new CHBSWooCommerce();
         $ServiceType=new CHBSServiceType();
@@ -180,6 +210,17 @@ class CHBSBooking
         
         /***/
         
+        $driverId=$booking['meta']['driver_id'];
+        if($driverId>0)
+        {
+            if(array_key_exists($driverId,$booking['dictionary']['driver']))
+            {
+                $booking['driver_full_name']=$booking['dictionary']['driver'][$driverId]['meta']['first_name'].' '.$booking['dictionary']['driver'][$driverId]['meta']['second_name'];
+            }
+        }
+        
+        /***/
+        
         $booking['vehicle_bag_count']=null;
         $booking['vehicle_passenger_count']=null;
         
@@ -227,11 +268,14 @@ class CHBSBooking
         /***/
         
         $WPML=new CHBSWPML();
+		$User=new CHBSUser();
         $Driver=new CHBSDriver();
         $TaxRate=new CHBSTaxRate();
         $Vehicle=new CHBSVehicle();
+        $Validation=new CHBSValidation();
         $WooCommerce=new CHBSWooCommerce();
         $TransferType=new CHBSTransferType();
+		$BookingGratuity=new CHBSBookingGratuity();
         $BookingFormElement=new CHBSBookingFormElement();
         
         $taxRateDictionary=$TaxRate->getDictionary();
@@ -250,6 +294,11 @@ class CHBSBooking
             if(CHBSBookingHelper::isPassengerEnable($bookingForm['meta'],$data['service_type_id'],'children'))
                 $passenger['children']=$data['passenger_children_service_type_'.$data['service_type_id']];            
         }
+		
+		$userId=0;
+		if($User->isSignIn()) $userId=$User->getUserId();
+		
+		CHBSPostMeta::updatePostMeta($bookingId,'user_id',$userId);
         
         CHBSPostMeta::updatePostMeta($bookingId,'passenger_enable',$passenger['enable']);
         CHBSPostMeta::updatePostMeta($bookingId,'passenger_adult_number',$passenger['adult']);
@@ -402,7 +451,7 @@ class CHBSBooking
             'booking_form'                                                      =>  $bookingForm
         );        
         
-        $vehiclePrice=$Vehicle->calculatePrice($argument);
+        $vehiclePrice=$Vehicle->calculatePrice($argument,true,true);
                
         CHBSPostMeta::updatePostMeta($bookingId,'vehicle_id',$WPML->translateID($data['vehicle_id']));
         CHBSPostMeta::updatePostMeta($bookingId,'vehicle_name',$vehicle['post']->post_title);
@@ -439,8 +488,9 @@ class CHBSBooking
             'price_passenger_adult_value'                                       =>  $vehiclePrice['price']['base']['price_passenger_adult_value'],
             'price_passenger_adult_tax_rate_value'                              =>  $TaxRate->getTaxRateValue($vehiclePrice['price']['base']['price_passenger_adult_tax_rate_id'],$taxRateDictionary),
             'price_passenger_children_value'                                    =>  $vehiclePrice['price']['base']['price_passenger_children_value'],
-            'price_passenger_children_tax_rate_value'                           =>  $TaxRate->getTaxRateValue($vehiclePrice['price']['base']['price_passenger_children_tax_rate_id'],$taxRateDictionary)
-        );     
+            'price_passenger_children_tax_rate_value'                           =>  $TaxRate->getTaxRateValue($vehiclePrice['price']['base']['price_passenger_children_tax_rate_id'],$taxRateDictionary),
+			'price_round_value'													=>	$vehiclePrice['price']['base']['round_value']
+		);     
              
         foreach($vehiclePriceBooking as $index=>$value)
             CHBSPostMeta::updatePostMeta($bookingId,$index,$value);
@@ -460,7 +510,7 @@ class CHBSBooking
             CHBSPostMeta::updatePostMeta($bookingId,'coupon_code',$code['meta']['code']);
             CHBSPostMeta::updatePostMeta($bookingId,'coupon_discount_percentage',$code['meta']['discount_percentage']);            
         }
-        
+		        
         /***/
         
         $BookingFormElement->sendBookingField($bookingId,$bookingForm['meta'],$data);
@@ -511,6 +561,27 @@ class CHBSBooking
         CHBSPostMeta::updatePostMeta($bookingId,'base_location_return_distance',$data['base_location_return_distance']);
         
         /***/
+		
+		$data2=$data;
+		$data2['booking_form']=$bookingForm;
+		
+		$bookingPrice=$this->calculatePrice($data2,null,false,true);
+		
+		$gratuityValue=$BookingGratuity->calculateBookingGratuity($bookingForm['meta'],$bookingPrice['total']['sum']['net']['value']);
+        
+		CHBSPostMeta::updatePostMeta($bookingId,'gratuity_value',$gratuityValue);
+		
+		/***/
+					
+		if($User->isUserBusinessAccount($bookingForm,$bookingId,$data['pickup_date_service_type_'.$data['service_type_id']]))
+		{
+			CHBSPostMeta::updatePostMeta($bookingId,'booking_status_id',2);
+			CHBSPostMeta::updatePostMeta($bookingId,'business_user_paid',1);
+
+			$User->updateUserBusinessAccountTransaction($bookingId);
+		}
+		
+        /***/
         
         if($WooCommerce->isEnable($bookingForm['meta']))
             $WooCommerce->sendBooking($bookingId,$bookingForm,$data);
@@ -519,23 +590,25 @@ class CHBSBooking
         
         $subject=sprintf(__('New booking "%s" has been received','chauffeur-booking-system'),$bookingTitle);
         
-        $recipient=array();
-        $recipient[0]=array($data['client_contact_detail_email_address']);
-        $recipient[1]=preg_split('/;/',$bookingForm['meta']['booking_new_recipient_email_address']);
-        $recipient[2]=$Driver->getNotificationRecipient($bookingId);
-        
         global $chbs_logEvent;
         
-        $chbs_logEvent=1;
-		$this->sendEmail($bookingId,$bookingForm['meta']['booking_new_sender_email_account_id'],'booking_new_client',$recipient[0],$subject);
+		if((int)$bookingForm['meta']['email_notification_booking_new_client_enable']===1)
+		{
+			$chbs_logEvent=1;
+			$this->sendEmail($bookingId,$bookingForm['meta']['booking_new_sender_email_account_id'],'booking_new_client',array($data['client_contact_detail_email_address']),$subject);
+		}
+
+		if((int)$bookingForm['meta']['email_notification_booking_new_admin_enable']===1)
+		{		
+			$chbs_logEvent=2;
+			$this->sendEmail($bookingId,$bookingForm['meta']['booking_new_sender_email_account_id'],'booking_new_admin',preg_split('/;/',$bookingForm['meta']['booking_new_recipient_email_address']),$subject);
+		}
 		
-        $chbs_logEvent=2;
-        $this->sendEmail($bookingId,$bookingForm['meta']['booking_new_sender_email_account_id'],'booking_new_admin',$recipient[1],$subject);
-        
-        if(count($recipient[2]))
+		$recipient=$Driver->getNotificationRecipient($bookingId);
+        if(count($recipient))
         {
             $chbs_logEvent=3;
-            $this->sendEmail($bookingId,$bookingForm['meta']['booking_new_sender_email_account_id'],'booking_assign_driver',$recipient[2],sprintf(__('You have been assigned to a booking "%s"','chauffeur-booking-system'),$bookingTitle));
+            $this->sendEmail($bookingId,$bookingForm['meta']['booking_new_sender_email_account_id'],'booking_assign_driver',$recipient,sprintf(__('You have been assigned to a booking "%s"','chauffeur-booking-system'),$bookingTitle));
         }
         
         if($bookingForm['meta']['nexmo_sms_enable']==1)
@@ -563,6 +636,16 @@ class CHBSBooking
         
         /***/
         
+        if((int)$bookingForm['meta']['driver_default_id']>0)
+        {
+            $booking=$this->getBooking($bookingId);
+            
+            $BookingDriver=new CHBSBookingDriver();
+            $BookingDriver->setDriver($booking,false,false,false);
+        }
+		
+        /***/
+		
         return($bookingId);
     }
     
@@ -570,8 +653,14 @@ class CHBSBooking
     
 	function setPostMetaDefault(&$meta)
 	{
+		CHBSHelper::setDefault($meta,'business_user_paid',0);
+		
+        CHBSHelper::setDefault($meta,'gratuity_value',CHBSPrice::getDefaultPrice());
+        
         CHBSHelper::setDefault($meta,'calculation_method',1);
         
+		CHBSHelper::setDefault($meta,'user_id',0);
+		
         CHBSHelper::setDefault($meta,'driver_id',-1);
 
         CHBSHelper::setDefault($meta,'coupon_code','');
@@ -585,14 +674,21 @@ class CHBSBooking
         CHBSHelper::setDefault($meta,'price_hide',0);
         
         CHBSHelper::setDefault($meta,'woocommerce_enable',0);
+		CHBSHelper::setDefault($meta,'woocommerce_booking_id',0);
+		
 		CHBSHelper::setDefault($meta,'booking_status_id',1);
         CHBSHelper::setDefault($meta,'transfer_type_id',1);
         
         CHBSHelper::setDefault($meta,'base_location_distance',0);
         CHBSHelper::setDefault($meta,'base_location_return_distance',0);
         
-        CHBSHelper::setDefault($meta,'price_delivery_return_value','0.00');
+        CHBSHelper::setDefault($meta,'price_delivery_return_value',CHBSPrice::getDefaultPrice());
         CHBSHelper::setDefault($meta,'price_delivery_return_tax_rate_id',0);
+        
+		CHBSHelper::setDefault($meta,'price_round_value',CHBSPrice::getDefaultPrice()); 
+		
+        $BookingDriver=new CHBSBookingDriver();
+        $BookingDriver->setPostMetaDefault($meta);
 	}
     
     /**************************************************************************/
@@ -603,67 +699,48 @@ class CHBSBooking
         
         if(CHBSHelper::checkSavePost($postId,PLUGIN_CHBS_CONTEXT.'_meta_box_booking_noncename','savePost')===false) return(false);
 	
-		$oldMeta=CHBSPostMeta::getPostMeta($postId);
-		
         $Driver=new CHBSDriver();
 		$BookingStatus=new CHBSBookingStatus();
+        $BookingDriver=new CHBSBookingDriver();
 		
+        /***/
+        
+        if(($oldBooking=$this->getBooking($postId))===false) return;
+        
+        /***/
+        
         if($BookingStatus->isBookingStatus(CHBSHelper::getPostValue('booking_status_id')))
            CHBSPostMeta::updatePostMeta($postId,'booking_status_id',CHBSHelper::getPostValue('booking_status_id')); 
-            
-        /***/
-        
-        $driverId=-1;
-        $driverDictionary=$Driver->getDictionary();
-        
-        if(array_key_exists(CHBSHelper::getPostValue('driver_id'),$driverDictionary))
-            $driverId=CHBSHelper::getPostValue('driver_id');    
-            
-        CHBSPostMeta::updatePostMeta($postId,'driver_id',$driverId);     
+             
+        $dictionary=$Driver->getDictionary();
+        if(array_key_exists(CHBSHelper::getPostValue('driver_id'),$dictionary))
+            CHBSPostMeta::updatePostMeta($postId,'driver_id',CHBSHelper::getPostValue('driver_id'));
+        else CHBSPostMeta::updatePostMeta($postId,'driver_id',-1);
         
         /***/
         
-        $newPost=get_post($postId);
-		$newMeta=CHBSPostMeta::getPostMeta($postId);
-		
+        if(($newBooking=$this->getBooking($postId))===false) return;
+                
+        /***/
+    
+        $BookingDriver->setDriver($newBooking,$oldBooking,CHBSHelper::getPostValue('driver_mail_message_resend'));
+        
         /***/
         
-		if($oldMeta['booking_status_id']!=$newMeta['booking_status_id'])
+		if($oldBooking['meta']['booking_status_id']!=$newBooking['meta']['booking_status_id'])
         {
             $BookingStatus=new CHBSBookingStatus();
-            $bookingStatus=$BookingStatus->getBookingStatus($newMeta['booking_status_id']);
+            $bookingStatus=$BookingStatus->getBookingStatus($newBooking['meta']['booking_status_id']);
             
             $recipient=array();
-            $recipient[0]=array($newMeta['client_contact_detail_email_address']);
+            $recipient[0]=array($newBooking['meta']['client_contact_detail_email_address']);
        
-            $subject=sprintf(__('Booking "%s" has changed status to "%s"','chauffeur-booking-system'),$newPost->post_title,$bookingStatus[0]);
+            $subject=sprintf(__('Booking "%s" has changed status to "%s"','chauffeur-booking-system'),$newBooking['post']->post_title,$bookingStatus[0]);
         
             $chbs_logEvent=4;
             $this->sendEmail($postId,CHBSOption::getOption('sender_default_email_account_id'),'booking_change_status',$recipient[0],$subject);           
         }
-        
-        /***/
-        
-        if($oldMeta['driver_id']!=$newMeta['driver_id'])
-        {
-            $recipient=array();
-            
-            $recipient[0]=$Driver->getNotificationRecipient($postId,1);
-            $recipient[1]=$Driver->getNotificationRecipient($oldMeta['driver_id'],1,'driver');
-            
-            if(count($recipient[0]))
-            {
-                $chbs_logEvent=5;
-                $this->sendEmail($postId,CHBSOption::getOption('sender_default_email_account_id'),'booking_assign_driver',$recipient[0],sprintf(__('You have been assigned to a booking "%s"','chauffeur-booking-system'),$newPost->post_title));                 
-            }
-            
-            if(count($recipient[1]))
-            {
-                $chbs_logEvent=6;
-                $this->sendEmail($postId,CHBSOption::getOption('sender_default_email_account_id'),'booking_unassign_driver',$recipient[0],sprintf(__('You has been unassigned from booking "%s"','chauffeur-booking-system'),$newPost->post_title));                 
-            }
-        }
-        
+                
         /***/
 	}
 
@@ -859,12 +936,13 @@ class CHBSBooking
     
     /**************************************************************************/
     
-    function calculatePrice($data,$vehiclePrice=null,$hideFee=false)
+    function calculatePrice($data,$vehiclePrice=null,$hideFee=false,$roundVehiclePrice=false)
     {     
         $Length=new CHBSLength();
         $TaxRate=new CHBSTaxRate();
         $Vehicle=new CHBSVehicle();
         $BookingExtra=new CHBSBookingExtra();
+        $BookingGratuity=new CHBSBookingGratuity();
         
         $taxRateDictionary=$TaxRate->getDictionary();
         
@@ -891,10 +969,6 @@ class CHBSBooking
             );
         }
         
-        /***/
-
-        if(!in_array($data['service_type_id'],$data['booking_form']['meta']['service_type_id'])) return(false);
-
         /***/
         
         if(array_key_exists($data['vehicle_id'],$data['booking_form']['dictionary']['vehicle']))
@@ -929,15 +1003,20 @@ class CHBSBooking
             );
             
             if(is_null($vehiclePrice))
+			{
                 $vehiclePrice=$Vehicle->calculatePrice($argument,false);
-            
+			}
+			
             if(CHBSOption::getOption('length_unit')==2)
             {
                 $data['distance_map']=$Length->convertUnit($data['distance_map']);
                 $data['base_location_distance']=$Length->convertUnit($data['base_location_distance']);
                 $data['base_location_return_distance']=$Length->convertUnit($data['base_location_return_distance']);
             }
-                        
+			
+			if(array_key_exists('other',$vehiclePrice['price']))
+				$price['other']=$vehiclePrice['price']['other'];
+					
             $price['vehicle']['sum']['net']['value']=$vehiclePrice['price']['sum']['net']['value'];
             $price['vehicle']['sum']['gross']['value']=$vehiclePrice['price']['sum']['gross']['value'];        
 
@@ -951,10 +1030,10 @@ class CHBSBooking
                     $transferTypeId=$data['transfer_type_service_type_'.$serviceTypeId];
                     if(in_array($transferTypeId,$data['booking_form']['meta']['transfer_type_enable_'.$serviceTypeId]))
                     {
-                        if(in_array($transferTypeId,array(3)))
+                        if(in_array($transferTypeId,array(2,3)))
                         {
-                            $price['initial']['sum']['net']['value']*=2;
-                            $price['initial']['sum']['gross']['value']*=2;
+                            //$price['initial']['sum']['net']['value']*=2;
+                            //$price['initial']['sum']['gross']['value']*=2;
 
                             $data['base_location_distance']*=2;
                             $data['base_location_return_distance']*=2;
@@ -1018,13 +1097,22 @@ class CHBSBooking
                 $price['extra_time']['sum']['net']['format']=CHBSPrice::format($price['extra_time']['sum']['net']['value'],CHBSCurrency::getFormCurrency());
                 $price['extra_time']['sum']['gross']['format']=CHBSPrice::format($price['extra_time']['sum']['gross']['value'],CHBSCurrency::getFormCurrency());
             }
-            
+			
+			if($roundVehiclePrice)
+			{
+				$roundValue=CHBSBookingHelper::getRoundValue($data['booking_form'],$price['vehicle']['sum']['gross']['value']);
+				$price['vehicle']['sum']['gross']['value']+=$roundValue;
+			}
+			
             $price['vehicle']['sum']['net']['format']=CHBSPrice::format($price['vehicle']['sum']['net']['value'],CHBSCurrency::getFormCurrency());
             $price['vehicle']['sum']['gross']['format']=CHBSPrice::format($price['vehicle']['sum']['gross']['value'],CHBSCurrency::getFormCurrency());
             
+			$price['vehicle']['sum']['net']['formatHtml']=$Vehicle->getPriceFormatHtml($price['vehicle']['sum']['net']['value']);
+			$price['vehicle']['sum']['gross']['formatHtml']=$Vehicle->getPriceFormatHtml($price['vehicle']['sum']['gross']['value']);
+			
             /***/
         }
-        
+                
         /***/
 
         $bookingExtra=$BookingExtra->validate($data,$data['booking_form'],$taxRateDictionary);      
@@ -1042,21 +1130,45 @@ class CHBSBooking
         if($hideFee)
         {
             $price['total']['sum']['net']['value']=$price['vehicle']['sum']['net']['value']+$price['booking_extra']['sum']['net']['value'];
-            $price['total']['sum']['gross']['value']=$price['vehicle']['sum']['gross']['value']+$price['booking_extra']['sum']['gross']['value'];
         }
         else 
         {
             $price['total']['sum']['net']['value']=$price['initial']['sum']['net']['value']+$price['delivery']['sum']['net']['value']+$price['delivery_return']['sum']['net']['value']+$price['extra_time']['sum']['net']['value']+$price['vehicle']['sum']['net']['value']+$price['booking_extra']['sum']['net']['value'];
-            $price['total']['sum']['gross']['value']=$price['initial']['sum']['gross']['value']+$price['delivery']['sum']['gross']['value']+$price['delivery_return']['sum']['gross']['value']+$price['extra_time']['sum']['gross']['value']+$price['vehicle']['sum']['gross']['value']+$price['booking_extra']['sum']['gross']['value'];
         }
         
         /***/
         
+        $price['gratuity']['value']=$BookingGratuity->calculateBookingGratuity($data['booking_form']['meta'],$price['total']['sum']['net']['value']);
+        $price['gratuity']['format']=CHBSPrice::format($price['gratuity']['value'],CHBSCurrency::getFormCurrency());
+		
+		/***/
+		
+        if($hideFee)
+        {
+            $price['total']['sum']['gross']['value']=$price['vehicle']['sum']['gross']['value']+$price['booking_extra']['sum']['gross']['value'];
+        }
+        else 
+        {
+            $price['total']['sum']['gross']['value']=$price['initial']['sum']['gross']['value']+$price['delivery']['sum']['gross']['value']+$price['delivery_return']['sum']['gross']['value']+$price['extra_time']['sum']['gross']['value']+$price['vehicle']['sum']['gross']['value']+$price['booking_extra']['sum']['gross']['value'];
+        }  
+		
+        /***/
+        
+		$price['tax']['sum']['value']=0.0;
+		
+		if($price['total']['sum']['gross']['value']>=$price['total']['sum']['net']['value'])
+		{
+			$price['tax']['sum']['value']=$price['total']['sum']['gross']['value']-$price['total']['sum']['net']['value'];
+		}
+		
+		$price['tax']['sum']['format']=CHBSPrice::format($price['tax']['sum']['value'],CHBSCurrency::getFormCurrency());
+		
+		/***/
+		
+        $price['total']['sum']['gross']['value']+=$price['gratuity']['value'];        
+        
         $price['total']['sum']['net']['format']=CHBSPrice::format($price['total']['sum']['net']['value'],CHBSCurrency::getFormCurrency());
         $price['total']['sum']['gross']['format']=CHBSPrice::format($price['total']['sum']['gross']['value'],CHBSCurrency::getFormCurrency());
-        
-        $price['tax']['sum']['value']=$price['total']['sum']['gross']['value']-$price['total']['sum']['net']['value'];
-        $price['tax']['sum']['format']=CHBSPrice::format($price['tax']['sum']['value'],CHBSCurrency::getFormCurrency());
         
         $price['pay']=$price['total'];
         
@@ -1076,12 +1188,21 @@ class CHBSBooking
         echo json_encode($response);
         exit;             
     }
+	
+	/**************************************************************************/
+	
+	static function createBillingTaxGroup(&$group,$taxValue,$valueNet,$valueGross)
+	{
+		if(!isset($group[$taxValue]) || !is_array($group[$taxValue])) $group[$taxValue]=array('tax_value'=>$taxValue,'value'=>0.00);
+		
+		$group[$taxValue]['value']+=$valueGross-$valueNet;
+	}
     
     /**************************************************************************/
     
     function createBilling($bookingId)
     {
-        $billing=array();
+        $billing=array('detail'=>array());
         
         if(($booking=$this->getBooking($bookingId))===false) return($billing);
 
@@ -1121,14 +1242,14 @@ class CHBSBooking
         // Initial fee
         if($booking['meta']['price_initial_value']>0)
         {
-            $valueNet=$booking['meta']['price_initial_value']*$returnFactorA;
+            $valueNet=$booking['meta']['price_initial_value'];
 
             $billing['detail'][]=array
             (
                 'type'                                                          =>  'initial_fee',
                 'name'                                                          =>  __('Initial fee','chauffeur-booking-system'),
                 'unit'                                                          =>  __('Item','chauffeur-booking-system'),  
-                'quantity'                                                      =>  $returnFactorA,
+                'quantity'                                                      =>  1,
                 'duration'                                                      =>  0,
                 'distance'                                                      =>  0,
                 'price_net'                                                     =>  $booking['meta']['price_initial_value'],
@@ -1259,43 +1380,37 @@ class CHBSBooking
                 $taxValueDuration=$booking['meta']['price_hour_tax_rate_value'];
                 $valueNetDuration=$priceNetDuration*($duration/60); 
    
-                if($priceNetDuration>0)
-                {
-                    $billing['detail'][]=array
-                    (
-                        'type'                                                  =>  'chauffeur_service_duration',
-                        'name'                                                  =>  __('Chauffeur service (duration)','chauffeur-booking-system'),
-                        'unit'                                                  =>  __('Hours','chauffeur-booking-system'),
-                        'quantity'                                              =>  $Date->formatMinuteToTime($duration),
-                        'duration'                                              =>  $duration,
-                        'distance'                                              =>  0,
-                        'price_net'                                             =>  $priceNetDuration,
-                        'value_net'                                             =>  $valueNetDuration,                   
-                        'tax_value'                                             =>  $taxValueDuration,
-                        'value_gross'                                           =>  CHBSPrice::calculateGross($valueNetDuration,0,$taxValueDuration)
-                    );
-                }   
+				$billing['detail'][]=array
+				(
+					'type'														=>  'chauffeur_service_duration',
+					'name'														=>  __('Chauffeur service (duration)','chauffeur-booking-system'),
+					'unit'														=>  __('Hours','chauffeur-booking-system'),
+					'quantity'													=>  $Date->formatMinuteToTime($duration),
+					'duration'													=>  $duration,
+					'distance'													=>  0,
+					'price_net'													=>  $priceNetDuration,
+					'value_net'													=>  $valueNetDuration,                   
+					'tax_value'													=>  $taxValueDuration,
+					'value_gross'												=>  CHBSPrice::calculateGross($valueNetDuration,0,$taxValueDuration)
+				);
                 
                 $priceNetDistance=$booking['meta']['price_distance_value'];
                 $taxValueDistance=$booking['meta']['price_distance_tax_rate_value'];
                 $valueNetDistance=$priceNetDistance*$distance; 
    
-                if($priceNetDistance>0)
-                {
-                    $billing['detail'][]=array
-                    (
-                        'type'                                                  =>  'chauffeur_service_distance',
-                        'name'                                                  =>  __('Chauffeur service (distance)','chauffeur-booking-system'),
-                        'unit'                                                  =>  $Length->getUnitName($booking['meta']['length_unit']),
-                        'quantity'                                              =>  $distance,
-                        'duration'                                              =>  0,
-                        'distance'                                              =>  $distance,
-                        'price_net'                                             =>  $priceNetDistance,
-                        'value_net'                                             =>  $valueNetDistance,                   
-                        'tax_value'                                             =>  $taxValueDistance,
-                        'value_gross'                                           =>  CHBSPrice::calculateGross($valueNetDistance,0,$taxValueDistance)
-                    );
-                }                   
+				$billing['detail'][]=array
+				(
+					'type'														=>  'chauffeur_service_distance',
+					'name'														=>  __('Chauffeur service (distance)','chauffeur-booking-system'),
+					'unit'														=>  $Length->getUnitName($booking['meta']['length_unit']),
+					'quantity'													=>  $distance,
+					'duration'													=>  0,
+					'distance'													=>  $distance,
+					'price_net'													=>  $priceNetDistance,
+					'value_net'													=>  $valueNetDistance,                   
+					'tax_value'													=>  $taxValueDistance,
+					'value_gross'												=>  CHBSPrice::calculateGross($valueNetDistance,0,$taxValueDistance)
+				);
             }
             else
             {
@@ -1549,6 +1664,40 @@ class CHBSBooking
             }
         }
         
+        if($booking['meta']['gratuity_value']>0.00)
+        {
+            $billing['detail'][]=array
+            (
+                'type'                                                          =>  'gratuity',
+                'name'                                                          =>  __('Gratuity','chauffeur-booking-system'),
+                'unit'                                                          =>  __('Item','chauffeur-booking-system'),    
+                'quantity'                                                      =>  1,
+                'duration'                                                      =>  0,
+                'distance'                                                      =>  0,
+                'price_net'                                                     =>  $booking['meta']['gratuity_value'],
+                'value_net'                                                     =>  $booking['meta']['gratuity_value'],                   
+                'tax_value'                                                     =>  0.00,
+                'value_gross'                                                   =>  $booking['meta']['gratuity_value']
+            );            
+        }
+		
+        if($booking['meta']['price_round_value']!=0.00)
+        {
+            $billing['detail'][]=array
+            (
+                'type'                                                          =>  'round_value',
+                'name'                                                          =>  __('Round value','chauffeur-booking-system'),
+                'unit'                                                          =>  __('Item','chauffeur-booking-system'),    
+                'quantity'                                                      =>  1,
+                'duration'                                                      =>  0,
+                'distance'                                                      =>  0,
+                'price_net'                                                     =>  $booking['meta']['price_round_value'],
+                'value_net'                                                     =>  $booking['meta']['price_round_value'],                   
+                'tax_value'                                                     =>  0.00,
+                'value_gross'                                                   =>  $booking['meta']['price_round_value']
+            );            
+        }		
+        
         /***/
         
         $billing['summary']['duration']=0;
@@ -1569,6 +1718,8 @@ class CHBSBooking
         
         $billing['summary']['duration']=$Date->formatMinuteToTime($billing['summary']['duration']);
         
+        /***/
+        
         foreach($billing['summary'] as $aIndex=>$aValue)
         {
             if(in_array($aIndex,array('value_net','value_gross')))
@@ -1581,6 +1732,13 @@ class CHBSBooking
         
         /***/
         
+		$taxGroup=array();
+		
+		foreach($billing['detail'] as $value)
+			self::createBillingTaxGroup($taxGroup,$value['tax_value'],$value['value_net'],$value['value_gross']);
+		
+		/***/
+		
         foreach($billing['detail'] as $aIndex=>$aValue)
         {
             foreach($aValue as $bIndex=>$bValue)
@@ -1591,7 +1749,11 @@ class CHBSBooking
                     $billing['detail'][$aIndex][$bIndex]=$Date->formatMinuteToTime($bValue);
             }
         }
-        
+		
+		/***/
+		
+		$billing['tax_group']=$taxGroup;
+        		
         /***/
         
         return($billing);
@@ -1635,21 +1797,44 @@ class CHBSBooking
         /***/
         
         $booking['booking_title']=$booking['post']->post_title;
+       
+        if(in_array($template,array('booking_new_admin','booking_driver_accept','booking_driver_reject')))
+            $booking['booking_title']='<a href="'.admin_url('post.php?post='.(int)$booking['post']->ID.'&action=edit').'">'.$booking['booking_title'].'</a>';      
+        else unset($booking['booking_form_name']);
         
         if(in_array($template,array('booking_new_admin','booking_new_client','booking_assign_driver','booking_change_status')))
         {
             $templateFile='email_booking.php';
-            
-            if($template==='booking_new_admin')
-                $booking['booking_title']='<a href="'.get_edit_post_link($booking['post']->ID).'">'.$booking['booking_title'].'</a>';      
-            else unset($booking['booking_form_name']);
         }
-        
+		
         if(in_array($template,array('booking_unassign_driver')))
         {
             $templateFile='email_booking_unassign_driver.php';
         }
         
+        if(in_array($template,array('booking_assign_driver')))
+        {
+            $BookingDriver=new CHBSBookingDriver();
+            
+            $link=$BookingDriver->generateLink($booking['post']->ID);
+            
+            if(is_array($link))
+            {
+                $data['booking_driver_accept_link']=$link['accept'];
+                $data['booking_driver_reject_link']=$link['reject'];  
+            }
+        }
+       
+        if(in_array($template,array('booking_driver_accept')))
+        {
+            $templateFile='email_booking_driver_accept.php';
+        }
+        
+        if(in_array($template,array('booking_driver_reject')))
+        {
+            $templateFile='email_booking_driver_reject.php';
+        }       
+            
         /***/
         
         $data['style']=$Email->getEmailStyle();
@@ -1661,9 +1846,9 @@ class CHBSBooking
                 
         $Template=new CHBSTemplate($data,PLUGIN_CHBS_TEMPLATE_PATH.$templateFile);
         $body=$Template->output();
-        
+		
         /***/
-        
+     
         $Email->send($recipient,$subject,$body);
     }
     
@@ -1686,6 +1871,73 @@ class CHBSBooking
         
         return($query->found_posts);
     }
+	
+	/**************************************************************************/
+	
+	function getUserBooking($userId,$argument)
+	{
+		$argument=array
+		(
+			'post_type'															=>	CHBSBooking::getCPTName(),
+			'post_status'														=>	'publish',
+			'posts_per_page'													=>	-1,
+			'meta_query'														=>  array
+			(
+				array
+				(
+					'key'														=>  PLUGIN_CHBS_CONTEXT.'_pickup_date',
+					'value'														=>  $argument['date_from'],
+					'compare'													=>  '>='
+				),                       
+				array
+				(
+					'key'														=>  PLUGIN_CHBS_CONTEXT.'_pickup_date',
+					'value'														=>  $argument['date_to'],
+					'compare'													=>  '<=',
+				),                        
+				array
+				(
+					'key'														=>  PLUGIN_CHBS_CONTEXT.'_user_id',
+					'value'														=>  $userId
+				),
+				array
+				(
+					'key'														=>  PLUGIN_CHBS_CONTEXT.'_business_user_paid',
+					'value'														=>  1
+				)			
+			)
+		);	
+
+        $query=new WP_Query($argument);
+		
+		return($query);
+	}
+	
+	/**************************************************************************/
+	
+	function getSumBooking($query)
+	{
+		$sum=0.00;
+		
+		if($query===false) return($sum);
+		
+        global $post;        
+
+		CHBSHelper::preservePost($post,$bPost);
+				
+        while($query->have_posts())
+        {
+			$query->the_post();
+
+			$billing=$this->createBilling($post->ID);
+			
+			$sum+=$billing['summary']['value_gross'];
+        }
+                
+        CHBSHelper::preservePost($post,$bPost,0);
+		
+		return($sum);
+	}
     
     /**************************************************************************/
 }

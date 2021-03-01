@@ -62,7 +62,10 @@ class CRBSPlugin
             'email_report_sender_email_account_id'                              =>  '-1',
             'email_report_recipient_email_address'                              =>  '',
             'currency_exchange_rate'                                            =>  array(),
-            'fixer_io_api_key'                                                  =>  ''
+            'fixer_io_api_key'                                                  =>  '',
+			'booking_status_payment_success'									=>	'-1',
+			'booking_status_synchronization'									=>	'1',
+			'payment_stripe_webhook_endpoint_id'								=>	''
         );
         
         /***/
@@ -144,10 +147,15 @@ class CRBSPlugin
 				(
 					'file'														=>	'jquery.blockUI.js'
 				),
-				'jquery-sticky-kit'                                             =>	array
+				'resizesensor'													=>	array
 				(
-                    'use'                                                       =>  3,
-					'file'														=>	'jquery.sticky-kit.min.js'
+					'use'														=>	2,
+					'file'														=>	'ResizeSensor.min.js'
+				),				
+				'jquery-theia-sticky-sidebar'									=>	array
+				(
+					'use'														=>	2,
+					'file'														=>	'jquery.theia-sticky-sidebar.min.js'
 				),
 				'jquery-table'                                                  =>	array
 				(
@@ -197,15 +205,13 @@ class CRBSPlugin
 				(
                     'use'                                                       =>  2,
 					'file'														=>	'jquery.CRBSBookingForm.js'
-				)
-				/*
+				),	                
 				'google-map'        											=>	array
 				(
 					'use'														=>	3,
 					'path'														=>	'',
 					'file'														=>	add_query_arg(array('key'=>urlencode(CRBSOption::getOption('google_map_api_key')),'libraries'=>'places,drawing'),'//maps.google.com/maps/api/js'),
-				),
-				*/
+				),	
 			),
 			'style'																=>	array
 			(
@@ -511,8 +517,8 @@ class CRBSPlugin
 		add_action('wp_ajax_'.PLUGIN_CRBS_CONTEXT.'_go_to_step',array($BookingForm,'goToStep'));
 		add_action('wp_ajax_nopriv_'.PLUGIN_CRBS_CONTEXT.'_go_to_step',array($BookingForm,'goToStep'));
         
-		add_action('wp_ajax_'.PLUGIN_CRBS_CONTEXT.'_driver_license_upload',array($BookingForm,'driverLicenseUpload'));
-		add_action('wp_ajax_nopriv_'.PLUGIN_CRBS_CONTEXT.'_driver_license_upload',array($BookingForm,'driverLicenseUpload'));
+		add_action('wp_ajax_'.PLUGIN_CRBS_CONTEXT.'_file_upload',array($BookingForm,'fileUpload'));
+		add_action('wp_ajax_nopriv_'.PLUGIN_CRBS_CONTEXT.'_file_upload',array($BookingForm,'fileUpload'));
         
 		add_action('wp_ajax_'.PLUGIN_CRBS_CONTEXT.'_vehicle_filter',array($BookingForm,'vehicleFilter'));
 		add_action('wp_ajax_nopriv_'.PLUGIN_CRBS_CONTEXT.'_vehicle_filter',array($BookingForm,'vehicleFilter'));        
@@ -548,10 +554,11 @@ class CRBSPlugin
         
 		if(!is_admin())
         {
-            $PaymentStripe=new CRBSPaymentStripe();
+			$PaymentStripe=new CRBSPaymentStripe();
             
-            add_action('wp_loaded',array($PaymentStripe,'handle'));
 			add_action('wp_enqueue_scripts',array($this,'publicInit'));
+			
+            add_action('wp_loaded',array($PaymentStripe,'receivePayment'));
         }
         
         $WooCommerce=new CRBSWooCommerce();
@@ -614,6 +621,7 @@ class CRBSPlugin
         $GeoLocation=new CRBSGeoLocation();
         $BillingType=new CRBSBillingType();
         $EmailAccount=new CRBSEmailAccount();
+		$BookingStatus=new CRBSBookingStatus();
 		$ExchangeRateProvider=new CRBSExchangeRateProvider();
         
         $data['option']=CRBSOption::getOptionObject();
@@ -626,6 +634,9 @@ class CRBSPlugin
         $data['dictionary']['geolocation_server']=$GeoLocation->getServer();
         
 		$data['dictionary']['exchange_rate_provider']=$ExchangeRateProvider->getProvider();
+		
+		$data['dictionary']['booking_status']=$BookingStatus->getBookingStatus();
+        $data['dictionary']['booking_status_synchronization']=$BookingStatus->getBookingStatusSynchronization();
 		
         wp_enqueue_media();
         
@@ -645,6 +656,7 @@ class CRBSPlugin
         $Currency=new CRBSCurrency();
         $Validation=new CRBSValidation();
         $BillingType=new CRBSBillingType();
+		$BookingStatus=new CRBSBookingStatus();
         
         $invalidValue=__('This field includes invalid value.','car-rental-booking-system');
         
@@ -662,6 +674,15 @@ class CRBSPlugin
         if(!$Validation->isBool($option['email_report_status']))
             $Notice->addError(CRBSHelper::getFormName('email_report_status',false),$invalidValue);
         
+		/* Payment */
+		if((int)$option['booking_status_payment_success']!==-1)
+		{
+			if(!$BookingStatus->isBookingStatus($option['booking_status_payment_success']))
+				$Notice->addError(CRBSHelper::getFormName('booking_status_payment_success',false),$invalidValue);	
+		}
+		if(!$BookingStatus->isBookingStatusSynchronization($option['booking_status_synchronization']))
+            $Notice->addError(CRBSHelper::getFormName('booking_status_synchronization',false),$invalidValue);	
+		
 		if($Notice->isError())
 		{
 			$response['local']=$Notice->getError();
@@ -693,7 +714,7 @@ class CRBSPlugin
 		if($buffer!==false)
 		{
 			$response['global']['error']=0;
-			$subtitle=__('Seems, that demo data has been imported. To make sure if this process has been sucessfully completed,please check below content of buffer returned by external applications.','car-rental-booking-system');
+			$subtitle=__('Seems, that demo data has been imported. To make sure if this process has been successfully completed,please check below content of buffer returned by external applications.','car-rental-booking-system');
 		}
 		else
 		{
