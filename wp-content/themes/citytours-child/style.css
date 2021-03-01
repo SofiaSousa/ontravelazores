@@ -151,3 +151,26 @@ a#phone:before {
   max-width: 100%;
   height: auto;
 }
+
+.woocommerce-message a {
+  background-color: #1cbbb4;
+}
+
+.btn_cart_outine:hover {
+  background: #1cbbb4;
+  border:2px solid #1cbbb4;
+}
+
+.shop_table .cart_item td.product-name:not(dl) {
+  font-weight: bold;
+  color: #1cbbb4;
+}
+
+.shop_table .cart_item td.product-name dt,
+.shop_table .cart_item td.product-name dd {
+  color: #565a5c;
+}
+
+.shop_table .cart_item td.product-name dd {
+  font-weight: lighter;
+}
