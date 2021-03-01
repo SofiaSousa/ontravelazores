@@ -141,12 +141,6 @@ if ( function_exists( 'acf_add_options_page' ) ) {
 	);
 }
 
-// Adicionar folha de estilo personalizada (hotfix)
-add_action( 'wp_enqueue_scripts', 'child_enqueue_styles');
-function child_enqueue_styles() {
-	wp_enqueue_style( 'style-exclude-autoptimize', get_stylesheet_directory_uri() . '/style-exclude-autoptimize.css', array(), '11.25');
-}
-
 // Widget for Footer logo 1.
 add_action(
 	'widgets_init',
