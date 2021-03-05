@@ -231,3 +231,8 @@ a#phone:before {
 .crbs-main .crbs-summary-price-element>div.crbs-summary-price-element-total>span:first-child+span {
   right: 5px!important;
 }
+
+.crbs-booking-complete,
+.chbs-booking-complete {
+  display: none !important;
+}
