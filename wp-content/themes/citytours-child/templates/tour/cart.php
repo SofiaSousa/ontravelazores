@@ -290,6 +290,7 @@ if ( ! $ct_tour_checkout_page_url ) {
 			$('#tour-cart input').change(function(){
 				$('.update-cart-btn').css('display', 'inline-block');
 				$('.book-now-btn').hide();
+				$('.update-cart-btn').trigger('click');
 			});
 
 			$('.update-cart-btn').click(function(e){
