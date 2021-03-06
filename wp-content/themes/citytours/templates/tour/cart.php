@@ -1,7 +1,7 @@
 <?php
 /* Tour Cart Page Template */
-if ( ! defined( 'ABSPATH' ) ) { 
-	exit; 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
 // validation
@@ -39,7 +39,6 @@ if ( ! empty( $is_repeated ) ) {
 
 $adults      = ( isset( $_REQUEST['adults'] ) ) ? $_REQUEST['adults'] : 1;
 $kids        = ( isset( $_REQUEST['kids'] ) ) ? $_REQUEST['kids'] : 0;
-$infants     = ( isset( $_REQUEST['infants'] ) ) ? $_REQUEST['infants'] : 0;
 
 $uid = $tour_id . $date;
 if ( $cart_data = CT_Hotel_Cart::get( $uid ) ) {
@@ -54,21 +53,19 @@ if ( $cart_data = CT_Hotel_Cart::get( $uid ) ) {
 	$cart_data['tour']['total'] = $total_price;
 	$cart_data['total_adults'] = $adults;
 	$cart_data['total_kids'] = $kids;
-	$cart_data['total_infants'] = $infants;
 	$cart_data['time'] = $time;
 
 	$cart_data['total_price'] = $cart_data['total_price'] + $total_price;
-	
+
 	CT_Hotel_Cart::set( $uid, $cart_data );
 } else {
 	// init cart if it is empty
-	
-	$total_price = ct_tour_calc_tour_price( $tour_id, $date, $adults, $kids, $infants );
+
+	$total_price = ct_tour_calc_tour_price( $tour_id, $date, $adults, $kids );
 	$cart_data   = array(
 		'tour'          => array(
-			'adults'    => $adults, 
-			'kids'      => $kids, 
-			'infants'   => $infants, 
+			'adults'    => $adults,
+			'kids'      => $kids,
 			'total'     => $total_price,
 		),
 		'tour_id'       => $tour_id,
@@ -76,7 +73,6 @@ if ( $cart_data = CT_Hotel_Cart::get( $uid ) ) {
 		'time'			=> $time,
 		'total_adults'  => $adults,
 		'total_kids'    => $kids,
-		'total_infants' => $infants,
 		'total_price'   => $total_price,
 	);
 
@@ -88,16 +84,16 @@ $cart_service = $cart->get_field( $uid, 'add_service' );
 $ct_tour_checkout_page_url = apply_filters( 'ct_get_woocommerce_cart_url', ct_get_tour_checkout_page() );
 
 // main function
-if ( ! $ct_tour_checkout_page_url ) { 
+if ( ! $ct_tour_checkout_page_url ) {
 	?>
 
 	<h5 class="alert alert-warning"><?php echo esc_html__( 'Please set checkout page in theme options panel.', 'citytours' ) ?></h5>
 
-	<?php 
+	<?php
 } else {
-	
+
 	// function
-	$is_available = ct_tour_check_availability( $tour_id, $date, $time, $adults, $kids, $infants );
+	$is_available = ct_tour_check_availability( $tour_id, $date, $time, $adults, $kids );
 	if ( true === $is_available ) : ?>
 
 	<form id="tour-cart" action="<?php echo esc_url( add_query_arg( array('uid'=> $uid), $ct_tour_checkout_page_url ) ); ?>">
@@ -114,7 +110,6 @@ if ( ! $ct_tour_checkout_page_url ) {
 							<th><?php echo esc_html__( 'Item', 'citytours' ) ?></th>
 							<th><?php echo esc_html__( 'Adults', 'citytours' ) ?></th>
 							<th><?php echo esc_html__( 'Children', 'citytours' ) ?></th>
-							<th><?php echo esc_html__( 'Infants', 'citytours' ) ?></th>
 							<th><?php echo esc_html__( 'Total', 'citytours' ) ?></th>
 						</tr>
 					</thead>
@@ -130,7 +125,7 @@ if ( ! $ct_tour_checkout_page_url ) {
 							<td data-title="<?php esc_attr_e( 'Adults', 'citytours' ) ?>">
 								<div class="numbers-row" data-min="1">
 									<input type="text" class="qty2 form-control tour-adults" name="adults" value="<?php echo esc_attr( $adults ) ?>">
-									
+
 									<div class="inc button_inc">+</div>
 									<div class="dec button_inc">-</div>
 								</div>
@@ -138,15 +133,7 @@ if ( ! $ct_tour_checkout_page_url ) {
 							<td data-title="<?php esc_attr_e( 'Children', 'citytours' ) ?>">
 								<div class="numbers-row" data-min="0">
 									<input type="text" class="qty2 form-control tour-kids" name="kids" value="<?php echo esc_attr( $kids ) ?>" <?php if ( ! empty( $price_type ) && $price_type != 'per_group' && empty( $charge_child ) ) echo 'disabled'; ?>>
-									
-									<div class="inc button_inc">+</div>
-									<div class="dec button_inc">-</div>
-								</div>
-							</td>
-							<td data-title="<?php esc_attr_e( 'Infants', 'citytours' ) ?>">
-								<div class="numbers-row" data-min="0">
-									<input type="text" class="qty2 form-control tour-infants" name="infants" value="<?php echo esc_attr( $infants ) ?>">
-									
+
 									<div class="inc button_inc">+</div>
 									<div class="dec button_inc">-</div>
 								</div>
@@ -173,7 +160,7 @@ if ( ! $ct_tour_checkout_page_url ) {
 										<i class="<?php echo esc_attr( $service->icon_class ); ?>"></i>
 									</td>
 									<td>
-										<?php echo esc_attr( $service->title ); ?> 
+										<?php echo esc_attr( $service->title ); ?>
 										<strong>+<?php echo ct_price( $service->price ); ?></strong>
 									</td>
 									<td>
@@ -186,10 +173,10 @@ if ( ! $ct_tour_checkout_page_url ) {
 											$temp_value = isset( $_REQUEST[ $field_name ] ) ? $_REQUEST[ $field_name ] : 1;
 										}
 										?>
-										
+
 										<div class="numbers-row post-right <?php if ( empty( $cart_service ) || empty( $cart_service[ $service->id ] ) ) echo 'hide-row';  ?>" data-min="1">
 											<input type="text" class="qty2 form-control <?php echo esc_attr( $field_name ); ?>" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( $temp_value ); ?>">
-										
+
 											<div class="inc button_inc">+</div>
 											<div class="dec button_inc">-</div>
 										</div>
@@ -236,16 +223,12 @@ if ( ! $ct_tour_checkout_page_url ) {
 							</tr>
 							<?php endif; ?>
 							<tr>
-								<td><?php echo esc_html__( 'Adults (+11 Years)', 'citytours' ) ?></td>
+								<td><?php echo esc_html__( 'Adults', 'citytours' ) ?></td>
 								<td class="text-right"><?php echo esc_html( $adults ) ?></td>
 							</tr>
 							<tr>
-								<td><?php echo esc_html__( 'Children (3 - 10 Years)', 'citytours' ) ?></td>
+								<td><?php echo esc_html__( 'Children', 'citytours' ) ?></td>
 								<td class="text-right"><?php echo esc_html( $kids ) ?></td>
-							</tr>
-							<tr>
-								<td><?php echo esc_html__( 'Infants (0 - 2 Years)', 'citytours' ) ?></td>
-								<td class="text-right"><?php echo esc_html( $infants ) ?></td>
 							</tr>
 							<?php if ( ! empty( $cart_service ) ) {
 								foreach ( $cart_service as $key => $service ) { ?>
@@ -259,13 +242,15 @@ if ( ! $ct_tour_checkout_page_url ) {
 								<td class="text-right"><?php $total_price = $cart->get_field( $uid, 'total_price' ); if ( ! empty( $total_price ) ) echo ct_price( $total_price ) ?></td>
 							</tr>
 							<tr>
+								<td><?php echo sprintf( esc_html__( 'Security Deposit (%d%%)', 'citytours' ), $deposit_rate ) ?></td>
+								<td class="text-right"><?php if ( ! empty( $total_price ) ) echo ct_price( $total_price * $deposit_rate / 100 ) ?></td>
 							</tr>
 						</tbody>
 					</table>
 
 					<a class="btn_full book-now-btn" href="#"><?php echo esc_html__( 'Book now', 'citytours' ) ?></a>
-					<a class="btn_full update-cart-btn" href="#"><?php echo esc_html__( 'Update booking', 'citytours' ) ?></a>
-					<a class="btn_full_outline" href="<?php echo esc_url( get_permalink( $tour_id ) ) ?>"><i class="icon-right"></i> <?php echo esc_html__( 'Modify your booking', 'citytours' ) ?></a>
+					<a class="btn_full update-cart-btn" href="#"><?php echo esc_html__( 'Update Cart', 'citytours' ) ?></a>
+					<a class="btn_full_outline" href="<?php echo esc_url( get_permalink( $tour_id ) ) ?>"><i class="icon-right"></i> <?php echo esc_html__( 'Modify your search', 'citytours' ) ?></a>
 
 					<input type="hidden" name="action" value="ct_tour_book">
 					<input type="hidden" name="tour_id" value="<?php echo esc_attr( $tour_id ) ?>">
@@ -286,7 +271,7 @@ if ( ! $ct_tour_checkout_page_url ) {
 		var ajaxurl = '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ) ?>';
 		var is_woocommerce_enabled = '<?php if ( ct_is_woocommerce_integration_enabled() ) echo "true"; else echo "false" ?>';
 
-		jQuery(document).ready( function($){ 
+		jQuery(document).ready( function($){
 			$('#tour-cart input').change(function(){
 				$('.update-cart-btn').css('display', 'inline-block');
 				$('.book-now-btn').hide();
@@ -311,11 +296,9 @@ if ( ! $ct_tour_checkout_page_url ) {
 							search_params.delete('time');
 							search_params.delete('adults');
 							search_params.delete('kids');
-							search_params.delete('infants');
 							search_params.append('time', $('input[name="time"]').val());
 							search_params.append('adults', $('input[name="adults"]').val());
 							search_params.append('kids', $('input[name="kids"]').val());
-							search_params.append('infants', $('input[name="infants"]').val());
 							url.search = search_params.toString();
 							document.location.href = url.toString();
 						} else {
@@ -333,7 +316,7 @@ if ( ! $ct_tour_checkout_page_url ) {
 
 				if ( qty_display.hasClass("hide-row") ) {
 					qty_display.removeClass("hide-row");
-				} else { 
+				} else {
 					qty_display.addClass("hide-row");
 				}
 			});
@@ -341,7 +324,7 @@ if ( ! $ct_tour_checkout_page_url ) {
 			$('.book-now-btn').click(function(e){
 				e.preventDefault();
 
-				if ( is_woocommerce_enabled == "true" ) { 
+				if ( is_woocommerce_enabled == "true" ) {
 					$('#overlay').fadeIn();
 					$('input[name="action"]').val('ct_add_tour_to_woo_cart');
 
@@ -358,7 +341,7 @@ if ( ! $ct_tour_checkout_page_url ) {
 							}
 						}
 					});
-				} else { 
+				} else {
 					document.location.href=$("#tour-cart").attr('action');
 				}
 			})
