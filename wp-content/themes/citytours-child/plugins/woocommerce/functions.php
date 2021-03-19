@@ -27,7 +27,12 @@ function ot_wc_init() {
 	add_action( 'woocommerce_cart_calculate_fees', 'ot_wc_add_checkout_fee_for_paypal' );
 	add_action( 'woocommerce_review_order_before_payment', 'ot_wc_refresh_checkout_on_payment_methods_change' );
 
+	// Enabling shipping fields to be used as Client fields.
+	add_filter( 'woocommerce_cart_needs_shipping_address', function() { return true; } );
+
 	add_action( 'woocommerce_thankyou', 'ot_conversion_tracking_thank_you_page', 95, 1 );
+
+	add_action( 'woocommerce_after_checkout_shipping_form', 'ot_shipping_script' );
 
 	// Remove actions.
 	remove_action( 'woocommerce_order_status_changed', 'ct_woocommerce_payment_complete', 50, 4 );
@@ -117,7 +122,7 @@ function ot_wc_extra_booking_info( $item_data, $cart_item ) {
 }
 
 /**
- * Add custom classes intp billing form fields.
+ * Add custom classes into billing form fields.
  */
 function ot_wc_form_field_args( $args, $key, $value ) {
 	$args['class'][] = 'form-group';
@@ -130,6 +135,8 @@ function ot_wc_form_field_args( $args, $key, $value ) {
 		case 'hotel':
 		case 'language':
 		case 'billing_address_1':
+		case 'shipping_email':
+		case 'shipping_phone':
 			$args['class'][] = 'col-sm-6';
 			break;
 
@@ -460,6 +467,23 @@ function ot_conversion_tracking_thank_you_page( $order_id ) {
 		'currency': '<?php echo esc_attr( $order->get_currency() ); ?>',
 		'transaction_id': '<?php echo esc_attr( $order->get_transaction_id() ? $order->get_transaction_id() : $order_id ); ?>'
 	});
+	</script>
+	<?php
+}
+
+/**
+ * Shipping checkbox script (inverse logic).
+ */
+function ot_shipping_script() {
+	?>
+	<script>
+	jQuery( function( $ ) {
+		$( 'form.checkout' ).on( 'change', '#ship-to-different-address-aux input', function(e) {
+			e.preventDefault();
+
+			$( 'form.checkout #ship-to-different-address input' ).prop( 'checked', ! $( this ).is( ':checked' ) ).trigger( 'change' );
+		} );
+	} );
 	</script>
 	<?php
 }
