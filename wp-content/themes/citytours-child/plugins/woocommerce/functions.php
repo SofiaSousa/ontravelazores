@@ -17,12 +17,12 @@ function ot_wc_init() {
 	add_filter( 'woocommerce_form_field_args', 'ot_wc_form_field_args', 10, 3 );
 	add_action( 'woocommerce_checkout_create_order_line_item', 'ot_wc_checkout_create_order_line_item', 20, 4 );
 
-	add_action( 'woocommerce_before_order_notes', 'ot_wc_custom_checkout_fields', 1 );
+	add_action( 'woocommerce_after_checkout_billing_form', 'ot_wc_custom_checkout_fields', 10, 1 );
 	add_action( 'woocommerce_checkout_process', 'ot_wc_checkout_process', 1 );
 	add_action( 'woocommerce_checkout_update_order_meta', 'ot_wc_checkout_update_order_meta', 10, 2 );
 	add_action( 'woocommerce_admin_order_data_after_billing_address', 'ot_wc_admin_order_meta_data', 10, 1 );
-	add_action( 'woocommerce_email_after_order_table', 'ot_wc_admin_order_meta_data', 10, 1 );
-	add_action( 'woocommerce_order_details_after_order_table', 'ot_wc_order_details_after_order_table', 10, 1 );
+	// add_action( 'woocommerce_email_after_order_table', 'ot_wc_admin_order_meta_data', 10, 1 );
+	// add_action( 'woocommerce_order_details_after_order_table', 'ot_wc_order_details_after_order_table', 10, 1 );
 
 	add_action( 'woocommerce_cart_calculate_fees', 'ot_wc_add_checkout_fee_for_paypal' );
 	add_action( 'woocommerce_review_order_before_payment', 'ot_wc_refresh_checkout_on_payment_methods_change' );

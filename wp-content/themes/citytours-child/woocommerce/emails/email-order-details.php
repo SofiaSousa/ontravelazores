@@ -104,14 +104,6 @@ do_action( 'woocommerce_email_before_order_table', $order, $sent_to_admin, $plai
 					<?php
 				}
 			}
-			if ( $order->get_customer_note() ) {
-				?>
-				<tr>
-					<td class="td" scope="row" colspan="3" style="text-align:left; border-top: 1px solid #dcdcdc; padding: 5px 5px;"><b><?php esc_html_e( 'Note', 'smart-emails' ); ?></b></td>
-					<td class="td" style="border-top:1px solid #dcdcdc; text-align:right; padding: 0px 0px 0px 30px;"><?php echo wp_kses_post( nl2br( wptexturize( $order->get_customer_note() ) ) ); ?></td>
-				</tr>
-				<?php
-			}
 			?>
 		</tfoot>
 	</table>

@@ -23,7 +23,13 @@ $downloads             = $order->get_downloadable_items();
 $show_downloads        = $order->has_downloadable_item() && $order->is_download_permitted();
 
 if ( $show_downloads ) {
-	wc_get_template( 'order/order-downloads.php', array( 'downloads' => $downloads, 'show_title' => true ) );
+	wc_get_template(
+		'order/order-downloads.php',
+		array(
+			'downloads'  => $downloads,
+			'show_title' => true,
+		)
+	);
 }
 ?>
 
@@ -40,39 +46,36 @@ if ( $show_downloads ) {
 
 	<tbody>
 		<?php
-			foreach( $order_items as $item_id => $item ) {
-				$product = apply_filters( 'woocommerce_order_item_product', $item->get_product(), $item );
+		foreach ( $order_items as $item_id => $item ) {
+			$product = apply_filters( 'woocommerce_order_item_product', $item->get_product(), $item );
 
-				wc_get_template( 'order/order-details-item.php', array(
-					'order'			     => $order,
-					'item_id'		     => $item_id,
-					'item'			     => $item,
+			wc_get_template(
+				'order/order-details-item.php',
+				array(
+					'order'              => $order,
+					'item_id'            => $item_id,
+					'item'               => $item,
 					'show_purchase_note' => $show_purchase_note,
-					'purchase_note'	     => $product ? $product->get_purchase_note() : '',
-					'product'	         => $product,
-				) );
-			}
+					'purchase_note'      => $product ? $product->get_purchase_note() : '',
+					'product'            => $product,
+				)
+			);
+		}
 		?>
 		<?php do_action( 'woocommerce_order_items_table', $order ); ?>
 	</tbody>
 
 	<tfoot>
 		<?php
-			foreach ( $order->get_order_item_totals() as $key => $total ) {
-				?>
-				<tr>
-					<th scope="row"><?php echo $total['label']; ?></th>
-					<td><?php echo $total['value']; ?></td>
-				</tr>
-				<?php
-			}
-		?>
-		<?php if ( $order->get_customer_note() ) : ?>
+		foreach ( $order->get_order_item_totals() as $key => $total ) {
+			?>
 			<tr>
-				<th><?php _e( 'Note:', 'citytours' ); ?></th>
-				<td><?php echo wptexturize( $order->get_customer_note() ); ?></td>
+				<th scope="row"><?php echo $total['label']; ?></th>
+				<td><?php echo $total['value']; ?></td>
 			</tr>
-		<?php endif; ?>
+			<?php
+		}
+		?>
 	</tfoot>
 
 </table>
@@ -80,6 +83,9 @@ if ( $show_downloads ) {
 <?php
 do_action( 'woocommerce_order_details_after_order_table', $order );
 
-if ( $show_customer_details ) :
-	wc_get_template( 'order/order-details-customer.php', array( 'order' =>  $order ) );
-endif;
+if ( $show_customer_details ) {
+	wc_get_template(
+		'order/order-details-customer.php',
+		array( 'order' => $order )
+	);
+}
