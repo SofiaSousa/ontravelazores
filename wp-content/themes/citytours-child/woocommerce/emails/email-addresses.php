@@ -26,7 +26,7 @@ $shipping   = $order->get_formatted_shipping_address();
 ?><table id="addresses" cellspacing="0" cellpadding="0" style="width: 100%; vertical-align: top; margin-bottom: 40px; padding:0;" border="0">
 	<tr>
 		<td style="text-align:<?php echo esc_attr( $text_align ); ?>; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; border:0; padding:0;" valign="top" width="50%">
-			<h2><?php esc_html_e( 'Customer Details', 'citytours' ); ?></h2>
+			<h2><?php esc_html_e( 'Billing Details', 'citytours' ); ?></h2>
 
 			<div>
 				<?php
@@ -196,57 +196,56 @@ $shipping   = $order->get_formatted_shipping_address();
 		}
 		?>
 	</tr>
-	<tr>
-		<td style="text-align:<?php echo esc_attr( $text_align ); ?>; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; border:0; padding:0;" valign="top" width="50%">
+</table>
 
+<div>
+	<?php
+	$extra_fields = ot_get_tours_extra_fields();
+	$extra_data   = get_post_meta( $order->get_id(), 'extra_fields', true );
+
+	if ( isset( $extra_data ) ) {
+		?>
+		<div class="woocommerce-column woocommerce-column--1 col-1">
 			<?php
-			$extra_fields = ot_get_tours_extra_fields();
-			$extra_data   = get_post_meta( $order->get_id(), 'extra_fields', true );
-
-			if ( isset( $extra_data ) ) {
+			foreach ( $extra_data as $i => $tour_data ) {
 				?>
-				<div class="woocommerce-column woocommerce-column--1 col-1">
+				<h2><?php echo esc_attr( $tour_data['name'] ); ?></h2>
+				<div>
 					<?php
-					foreach ( $extra_data as $i => $tour_data ) {
-						?>
-						<h2><?php echo esc_attr( $tour_data['name'] ); ?></h2>
-						<div>
-							<?php
-							$extra_fields_groups = explode( ',', $tour_data['groups'] );
+					$extra_fields_groups = explode( ',', $tour_data['groups'] );
 
-							foreach ( $extra_fields_groups as $group ) {
-								$fields = $extra_fields[ $group ];
+					foreach ( $extra_fields_groups as $group ) {
+						$fields = $extra_fields[ $group ];
 
-								if ( $group && ! empty( $fields ) ) {
-									foreach ( $fields as $k_field => $field ) {
-										echo '<div><b>' . esc_html( $extra_fields[ $group ][ $k_field ]['label'] ) . ':</b> ' . '<span>' . esc_attr( $tour_data['fields'][ $k_field ] ) . '</span></div>';
-									}
-								}
+						if ( $group && ! empty( $fields ) ) {
+							foreach ( $fields as $k_field => $field ) {
+								echo '<div><b>' . esc_html( $extra_fields[ $group ][ $k_field ]['label'] ) . ':</b> ' . '<span>' . esc_attr( $tour_data['fields'][ $k_field ] ) . '</span></div>';
 							}
-							?>
-						</div>
-						<?php
+						}
 					}
 					?>
 				</div>
 				<?php
 			}
 			?>
-		</td>
-		<td style="text-align:<?php echo esc_attr( $text_align ); ?>; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; border:0; padding:0;" valign="top" width="50%">
+		</div>
 		<?php
-		if ( $order->get_customer_note() ) {
-			?>
-			<h2><?php _e( 'Additional information', 'citytours' ); ?></h2>
-			<div>
-				<?php echo wptexturize( $order->get_customer_note() ); ?>
-			</div>
-			<?php
-		}
+	}
+	?>
+</div>
+
+<div>
+	<?php
+	if ( $order->get_customer_note() ) {
 		?>
-		</td>
-	</tr>
-</table>
+		<h2><?php _e( 'Additional information', 'citytours' ); ?></h2>
+		<div>
+			<?php echo wptexturize( $order->get_customer_note() ); ?>
+		</div>
+		<?php
+	}
+	?>
+</div>
 
 
 

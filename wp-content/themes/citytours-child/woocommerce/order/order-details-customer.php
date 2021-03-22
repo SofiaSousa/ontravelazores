@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <section class="woocommerce-columns woocommerce-columns--2 col2-set">
 
 	<div class="woocommerce-column woocommerce-column--1 col-1">
-		<div><h3><?php _e( 'Customer Details', 'citytours' ); ?></h3></div>
+		<div><h3><?php _e( 'Billing Details', 'citytours' ); ?></h3></div>
 
 		<div class="customer_details">
 			<?php
