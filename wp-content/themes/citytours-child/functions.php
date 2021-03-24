@@ -49,7 +49,7 @@ function bbloomer_change_return_shop_url() {
 return home_url();
 }
 
-add_filter( 'woocommerce_default_address_fields' , 'custom_override_default_address_fields' );
+add_filter( 'woocommerce_default_address_fields', 'custom_override_default_address_fields' );
 function custom_override_default_address_fields($address_fields) {
 
 
@@ -334,7 +334,7 @@ add_action(
 
 
 /**
- * Sortinf search results by date.
+ * Sorting search results by date.
  */
 if ( ! function_exists( 'ct_tour_get_search_result' ) ) {
 	function ct_tour_get_search_result( $args ) {
