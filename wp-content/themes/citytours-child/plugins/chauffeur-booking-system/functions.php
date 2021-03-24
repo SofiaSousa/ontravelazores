@@ -8,8 +8,10 @@
  * @package ChauffeurBookingSystem
  */
 
-if ( ! defined( 'PLUGIN_CHBS_CONTEXT' ) ) {
-	define( 'PLUGIN_CHBS_CONTEXT', 'chbs' );
+if ( class_exists( 'CHBSPlugin' ) ) {
+	if ( ! defined( 'PLUGIN_CHBS_CONTEXT' ) ) {
+		define( 'PLUGIN_CHBS_CONTEXT', 'chbs' );
+	}
 }
 
 add_action( 'init', 'ot_chbs_init' );

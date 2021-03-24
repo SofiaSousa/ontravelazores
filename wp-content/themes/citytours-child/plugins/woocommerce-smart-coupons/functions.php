@@ -3,8 +3,10 @@
  * WooCommerce Smart Coupons
  */
 
-add_action( 'init', 'ot_smart_coupons_init' );
-add_action( 'admin_init', 'ot_smart_coupons_admin_init' );
+if ( class_exists( 'WC_Smart_Coupons' ) ) {
+	add_action( 'init', 'ot_smart_coupons_init' );
+	add_action( 'admin_init', 'ot_smart_coupons_admin_init' );
+}
 
 /**
  * Initial setup.
