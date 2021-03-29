@@ -495,44 +495,46 @@ function ot_shipping_script() {
  * @param Array $fields The shipping fields.
  */
 function ot_prefill_shipping_fields( $fields ) {
-	foreach ( WC()->cart->get_cart() as $cart_item ) {
-		$product_id = $cart_item['product_id'];
+	if ( ! is_null( WC()->cart ) ) {
+		foreach ( WC()->cart->get_cart() as $cart_item ) {
+			$product_id = $cart_item['product_id'];
 
-		if ( ! empty( $product_id ) ) {
-			$booking_id = get_post_meta( $product_id, 'crbs_booking_id', true );
-
-			if ( ! empty( $booking_id ) ) {
-				$first_name = get_post_meta( $booking_id, 'crbs_client_contact_detail_first_name', true );
-				$last_name  = get_post_meta( $booking_id, 'crbs_client_contact_detail_last_name', true );
-				$email      = get_post_meta( $booking_id, 'crbs_client_contact_detail_email_address', true );
-				$phone      = get_post_meta( $booking_id, 'crbs_client_contact_detail_phone_number', true );
-			} else {
-				$booking_id = get_post_meta( $product_id, 'chbs_booking_id', true );
+			if ( ! empty( $product_id ) ) {
+				$booking_id = get_post_meta( $product_id, 'crbs_booking_id', true );
 
 				if ( ! empty( $booking_id ) ) {
-					$first_name = get_post_meta( $booking_id, 'chbs_client_contact_detail_first_name', true );
-					$last_name  = get_post_meta( $booking_id, 'chbs_client_contact_detail_last_name', true );
-					$email      = get_post_meta( $booking_id, 'chbs_client_contact_detail_email_address', true );
-					$phone      = get_post_meta( $booking_id, 'chbs_client_contact_detail_phone_number', true );
+					$first_name = get_post_meta( $booking_id, 'crbs_client_contact_detail_first_name', true );
+					$last_name  = get_post_meta( $booking_id, 'crbs_client_contact_detail_last_name', true );
+					$email      = get_post_meta( $booking_id, 'crbs_client_contact_detail_email_address', true );
+					$phone      = get_post_meta( $booking_id, 'crbs_client_contact_detail_phone_number', true );
+				} else {
+					$booking_id = get_post_meta( $product_id, 'chbs_booking_id', true );
+
+					if ( ! empty( $booking_id ) ) {
+						$first_name = get_post_meta( $booking_id, 'chbs_client_contact_detail_first_name', true );
+						$last_name  = get_post_meta( $booking_id, 'chbs_client_contact_detail_last_name', true );
+						$email      = get_post_meta( $booking_id, 'chbs_client_contact_detail_email_address', true );
+						$phone      = get_post_meta( $booking_id, 'chbs_client_contact_detail_phone_number', true );
+					}
 				}
 			}
 		}
-	}
 
-	if ( ! empty( $first_name ) ) {
-		$fields['shipping_first_name']['default'] = $first_name;
-	}
+		if ( ! empty( $first_name ) ) {
+			$fields['shipping_first_name']['default'] = $first_name;
+		}
 
-	if ( ! empty( $last_name ) ) {
-		$fields['shipping_last_name']['default'] = $last_name;
-	}
+		if ( ! empty( $last_name ) ) {
+			$fields['shipping_last_name']['default'] = $last_name;
+		}
 
-	if ( ! empty( $email ) ) {
-		$fields['shipping_email']['default'] = $email;
-	}
+		if ( ! empty( $email ) ) {
+			$fields['shipping_email']['default'] = $email;
+		}
 
-	if ( ! empty( $phone ) ) {
-		$fields['shipping_phone']['default'] = $phone;
+		if ( ! empty( $phone ) ) {
+			$fields['shipping_phone']['default'] = $phone;
+		}
 	}
 
 	return $fields;
