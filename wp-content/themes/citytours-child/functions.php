@@ -423,7 +423,10 @@ if ( ! function_exists( 'ct_tour_get_search_result' ) ) {
 		if ( ! empty( $tour_type ) && trim( implode( '', $tour_type ) ) != "" ) {
 			$sql .= " INNER JOIN {$tbl_term_relationships} AS tr ON tr.object_id = post_s1.ID
 					INNER JOIN {$tbl_term_taxonomy} AS tt ON tt.term_taxonomy_id = tr.term_taxonomy_id";
-			$where .= " AND tt.taxonomy = 'tour_type' AND tt.term_id IN (" . esc_sql( implode( ',', $tour_type ) ) . ")";
+
+			$where .= " AND tt.taxonomy = 'tour_type' AND
+				(tt.parent != 0 AND tt.term_id IN (" . esc_sql( implode( ',', $tour_type ) ) . ")) OR
+				(tt.parent IN (" . esc_sql( implode( ',', $tour_type ) ) . "))";
 		}
 
 		// price filter
@@ -477,5 +480,81 @@ if ( ! function_exists( 'ct_tour_get_search_result' ) ) {
 		$ids = $wpdb->get_results( $main_sql, ARRAY_A );
 
 		return array( 'count' => $count, 'ids' => $ids );
+	}
+}
+
+/**
+ * Grouping search results by categories.
+ */
+if ( ! function_exists( 'ct_tour_get_search_result_count' ) ) {
+	function ct_tour_get_search_result_count( $args ) {
+		global $ct_options, $wpdb;
+
+		$tour_type = array();
+		$price_filter = array();
+		$rating_filter = array();
+		$facility_filter = array();
+		extract( $args );
+		$tbl_posts = esc_sql( $wpdb->posts );
+		$tbl_postmeta = esc_sql( $wpdb->postmeta );
+		$tbl_terms = esc_sql( $wpdb->prefix . 'terms' );
+		$tbl_term_taxonomy = esc_sql( $wpdb->prefix . 'term_taxonomy' );
+		$tbl_term_relationships = esc_sql( $wpdb->prefix . 'term_relationships' );
+		$temp_tbl_name = ct_get_temp_table_name();
+		$result = array();
+
+		if ( $by == 'tour_type' ) {
+
+			$sql = "SELECT tt.term_id as tour_type, tt.parent as tour_parent, COUNT(*) AS counts FROM {$temp_tbl_name} AS t1
+					INNER JOIN {$tbl_posts} post_s1 ON (t1.tour_id = post_s1.ID) AND (post_s1.post_status = 'publish') AND (post_s1.post_type = 'tour')
+					INNER JOIN {$tbl_term_relationships} AS tr ON tr.object_id = t1.tour_id
+					INNER JOIN {$tbl_term_taxonomy} AS tt ON tt.term_taxonomy_id = tr.term_taxonomy_id";
+			$where = " WHERE 1=1 AND tt.taxonomy = 'tour_type'";
+
+			if ( ! empty( $price_filter ) && trim( implode( '', $price_filter ) ) != "" ) {
+				$sql .= " LEFT JOIN {$tbl_postmeta} AS meta_price ON t1.tour_id = meta_price.post_id AND meta_price.meta_key = '_tour_price'";
+				$price_where = array();
+				$price_steps = empty( $ct_options['tour_price_filter_steps'] ) ? '50,80,100' : $ct_options['tour_price_filter_steps'];
+				$step_arr = explode( ',', $price_steps );
+				array_unshift($step_arr, 0);
+				foreach ( $price_filter as $index ) {
+					if ( $index < count( $step_arr ) -1 ) {
+						// 80 ~ 100 case
+						$price_where[] = "( cast(meta_price.meta_value as unsigned) BETWEEN " . esc_sql( $step_arr[$index] ) . " AND " . esc_sql( $step_arr[$index+1] ) . " )";
+					} else {
+						// 200+ case
+						$price_where[] = "( cast(meta_price.meta_value as unsigned) >= " . esc_sql( $step_arr[$index] ) . " )";
+					}
+				}
+				$where .= " AND ( " . implode( ' OR ', $price_where ) . " )";
+			}
+
+			if ( ! empty( $rating_filter ) && trim( implode( '', $rating_filter ) ) != "" ) {
+				$sql .= " LEFT JOIN {$tbl_postmeta} AS meta_rating ON t1.tour_id = meta_rating.post_id AND meta_rating.meta_key = '_review'";
+				$where .= " AND round( cast( IFNULL( meta_rating.meta_value, 0 ) AS decimal(2,1) ) ) IN ( " . esc_sql( implode( ',', $rating_filter) ) . " )";
+			}
+
+			if ( ! empty( $facility_filter ) && trim( implode( '', $facility_filter ) ) != "" ) {
+				$where .= " AND (( SELECT COUNT(1) FROM {$tbl_term_relationships} AS tr1
+						INNER JOIN {$tbl_term_taxonomy} AS tt1 ON ( tr1.term_taxonomy_id= tt1.term_taxonomy_id )
+						WHERE tt1.taxonomy = 'tour_facility' AND tt1.term_id IN (" . esc_sql( implode( ',', $facility_filter ) ) . ") AND tr1.object_id = t1.tour_id ) = " . count( $facility_filter ) . ")";
+			}
+
+			$sql .= $where . " GROUP BY tt.term_id";
+			$query_result = $wpdb->get_results( $sql, ARRAY_A );
+
+			$keys = array_map( function($a){return $a['tour_type'];}, $query_result );
+			$values = array_map( function($a){return $a['counts'];}, $query_result );
+
+			$result = array_combine( $keys , $values );
+
+			foreach ( $query_result as $t_id => $tour ) {
+				if ( (int) $tour['tour_parent' ] > 0 ) {
+					$result[$tour['tour_parent' ]] += (int) $tour['counts'];
+				}
+			}
+		}
+
+		return $result;
 	}
 }

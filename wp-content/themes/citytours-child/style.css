@@ -236,3 +236,36 @@ a#phone:before {
 .chbs-booking-complete {
   display: none !important;
 }
+
+ul#cat_nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul#cat_nav li a:after {
+  content: ''; /* '\e89d'; */
+}
+
+ul#cat_nav li a .icon-angle-right,
+ul#cat_nav li a .icon-angle-down {
+  float: right;
+}
+
+ul#cat_nav li ul li:first-child {
+  border-top: 1px solid #ddd;
+}
+
+ul#cat_nav li a + ul {
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.65, 0.05, 0.36, 1);
+}
+
+ul#cat_nav li a + ul.open {
+  max-height: 100vh;
+}
+
+ul#cat_nav li ul li a {
+  padding-left: 40px;
+}
