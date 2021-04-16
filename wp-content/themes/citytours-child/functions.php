@@ -425,7 +425,7 @@ if ( ! function_exists( 'ct_tour_get_search_result' ) ) {
 					INNER JOIN {$tbl_term_taxonomy} AS tt ON tt.term_taxonomy_id = tr.term_taxonomy_id";
 
 			$where .= " AND tt.taxonomy = 'tour_type' AND
-				(tt.parent = 0 AND tt.term_id IN (" . esc_sql( implode( ',', $tour_type ) ) . ")) OR
+				(tt.term_id IN (" . esc_sql( implode( ',', $tour_type ) ) . ")) OR
 				(tt.parent IN (" . esc_sql( implode( ',', $tour_type ) ) . "))";
 		}
 
