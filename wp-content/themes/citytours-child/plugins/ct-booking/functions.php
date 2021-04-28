@@ -1,5 +1,6 @@
 <?php
 add_action( 'init', 'ot_ctb_init' );
+add_filter( 'mb_settings_pages', 'ot_tours_settings_page' );
 
 /**
  * Extending CT Booking tours.
@@ -10,8 +11,12 @@ function ot_ctb_init() {
 	add_filter( 'woocommerce_cart_totals_coupon_label', 'ot_cart_totals_smart_coupons_label', 10, 2 );
 	add_action( 'wp_enqueue_scripts', 'ot_remove_conflicted_assets', 99 );
 
+	add_filter( 'rwmb_meta_boxes', 'ot_tour_meta_box' );
+	add_filter( 'rwmb_meta_boxes', 'ot_tours_settings_meta_box' );
+
 	ot_register_tour_extra_fields_taxonomy();
 }
+
 
 /**
  * Add discount category for the tours that have a discount set.
@@ -143,4 +148,112 @@ function ot_register_tour_extra_fields_taxonomy() {
 	);
 
 	register_taxonomy( 'tour_extra_fields', array( 'tour' ), $args );
+}
+
+/**
+ * Block dates metabox for tours.
+ *
+ * @param array $meta_boxes Array of MetaBoxes.
+ *
+ * @return array
+ */
+function ot_tour_meta_box( $meta_boxes ) {
+	// Block dates.
+	$meta_boxes[] = array(
+		'id'       => 'blocking_dates',
+		'class'    => 'ot-meta-box',
+		'title'    => 'Tour dates blocked',
+		'pages'    => array( 'tour' ),
+		'context'  => 'normal',
+		'priority' => 'core',
+		'fields'   => array(
+			array(
+				'name'       => 'Start Date',
+				'id'         => 'tour_blocked_start_dates',
+				'class'      => 'ot-meta-box__col ot-meta-box__col--1-2',
+				'type'       => 'date',
+				'clone'      => true,
+				'add_button' => '+ Add Start Date',
+			),
+			array(
+				'name'       => 'End Date',
+				'id'         => 'tour_blocked_end_dates',
+				'class'      => 'ot-meta-box__col ot-meta-box__col--1-2 ot-meta-box__col--right',
+				'type'       => 'date',
+				'clone'      => true,
+				'add_button' => '+ Add End Date',
+			),
+			array(
+				'name'  => 'Number of days to block',
+				'id'    => 'tours_number_days_to_block',
+				'class' => 'ot-meta-box__col ot-meta-box__col--1-2',
+				'type'  => 'number',
+				'desc'  => 'Block next days from today (optional).',
+			),
+		),
+	);
+
+	return $meta_boxes;
+}
+
+/**
+ * Settings page for tours.
+ *
+ * @param array $settings_pages Array of settings page.
+ *
+ * @return array
+ */
+function ot_tours_settings_page( $settings_pages ) {
+	$settings_pages[] = array(
+		'id'          => 'tours-settings',
+		'option_name' => 'tours_settings',
+		'menu_title'  => 'Tours Settings',
+		'icon_url'    => 'dashicons-edit',
+		'parent'      => 'edit.php?post_type=tour',
+		'style'       => 'boxes',
+		'columns'     => 2,
+		'tabs'        => array(
+			'general' => 'General Settings',
+		),
+	);
+
+	return $settings_pages;
+}
+
+/**
+ * Global block dates metabox for tours.
+ *
+ * @param array $meta_boxes Array of MetaBoxes.
+ *
+ * @return array
+ */
+function ot_tours_settings_meta_box( $meta_boxes ) {
+	// Global block dates.
+	$meta_boxes[] = array(
+		'id'             => 'global_blocking_dates',
+		'class'          => 'ot-meta-box',
+		'title'          => 'Dates blocked',
+		'settings_pages' => 'tours-settings',
+		'tab'            => 'general',
+		'fields'         => array(
+			array(
+				'name'       => 'Start Date',
+				'id'         => 'tours_blocked_start_dates',
+				'class'      => 'ot-meta-box__col ot-meta-box__col--1-2',
+				'type'       => 'date',
+				'clone'      => true,
+				'add_button' => '+ Add Start Date',
+			),
+			array(
+				'name'       => 'End Date',
+				'id'         => 'tours_blocked_end_dates',
+				'class'      => 'ot-meta-box__col ot-meta-box__col--1-2 ot-meta-box__col--right',
+				'type'       => 'date',
+				'clone'      => true,
+				'add_button' => '+ Add End Date',
+			),
+		),
+	);
+
+	return $meta_boxes;
 }

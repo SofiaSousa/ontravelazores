@@ -1,0 +1,25 @@
+/* Admin */
+
+@media only screen and (min-width: 880px) {
+  .ot-meta-box .ot-meta-box__col--1-2 {
+    width: 45%;
+    display: inline-block;
+  }
+
+  .ot-meta-box .ot-meta-box__col--right {
+    float: right;
+  }
+
+  .ot-meta-box .ot-meta-box__col--left {
+    float: left;
+  }
+
+  .ot-meta-box .ot-meta-box__col--1-2 .rwmb-label,
+  .ot-meta-box .ot-meta-box__col--1-2 .rwmb-input {
+    width: 50%;
+  }
+}
+
+.ot-meta-box .ot-meta-box__col--1-2 .rwmb-input .rwmb-clone {
+  padding-left: 0;
+}

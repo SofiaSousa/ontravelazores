@@ -545,7 +545,7 @@ if ( have_posts() ) {
                 $tour_end_date_milli_sec = strtotime( $tour_end_date) * 1000;
             }
 
-            $next_days_block_optional = get_field('tours_number_days_to_block');
+            $next_days_block_optional = rwmb_meta( 'tours_number_days_to_block' );
             $next_days_block_optional = ($next_days_block_optional == '' ? '0' : $next_days_block_optional);
         ?>
 
@@ -588,123 +588,87 @@ if ( have_posts() ) {
                 tour_end_date.setHours(0, 0, 0, 0);
 
                 <?php
-                    $arr_dates_blocked = array();
-                    $tmp_datepicker_string = '';
+                $arr_dates_blocked = array();
+                $tmp_datepicker_string = '';
 
-                    $post_id = get_the_ID();
-                    if( have_rows('tours_blocked_dates_repeater', $post_id) ) {
+                $post_id = get_the_ID();
 
-                        while ( have_rows('tours_blocked_dates_repeater', $post_id) ) {
-                            the_row();
+                $start_dates = rwmb_meta( 'tour_blocked_start_dates' );
+                $end_dates   = rwmb_meta( 'tour_blocked_end_dates' );
 
-                            if( have_rows('tours_blocked_dates_group') ) {
-                                while ( have_rows('tours_blocked_dates_group') ) {
-                                    the_row();
-                                    $start_date = get_sub_field('tours_blocked_dates_startDate', $post_id);
-                                    $end_date = get_sub_field('tours_blocked_dates_endDate', $post_id);
+                if ( $start_dates && is_array( $start_dates ) && $end_dates && is_array( $end_dates ) ) {
+                    foreach ( $start_dates as $k => $start_date ) {
+                        if ( $end_dates[$k] ) {
+                            $end_date = $end_dates[$k];
 
-                                    // return: Y-m-d
-                                    $temp_start_date    = date("Y-m-d", strtotime($start_date));
-                                    $temp_end_date      = date("Y-m-d", strtotime($end_date));
+                            // return: Y-m-d
+                            $temp_start_date = date( 'Y-m-d', strtotime( $start_date ) );
+                            $temp_end_date   = date( 'Y-m-d', strtotime( $end_date ) );
 
-                                    if ( $temp_start_date < $temp_end_date ) {
+                            if ( $temp_start_date < $temp_end_date ) {
+                                $begin = new DateTime( $start_date );
+                                $end   = new DateTime( $end_date );
 
-                                        $begin = new DateTime($start_date);
-                                        $end = new DateTime($end_date);
+                                $interval = DateInterval::createFromDateString( '1 day' );
+                                $period   = new DatePeriod( $begin, $interval, $end );
 
-                                        $interval = DateInterval::createFromDateString('1 day');
-                                        $period = new DatePeriod($begin, $interval, $end);
-
-                                        foreach ($period as $dt) {
-                                            $date = $dt->format('Y-m-d');
-                                            array_push($arr_dates_blocked, $date);
-                                        }
-
-                                        array_push($arr_dates_blocked, $end_date);
-                                    } else if ( $temp_start_date == $temp_end_date ) {
-                                        $begin = new DateTime($start_date);
-                                        array_push($arr_dates_blocked, $end_date);
-                                    }
-
+                                foreach ( $period as $dt ) {
+                                    $date = $dt->format( 'Y-m-d' );
+                                    array_push( $arr_dates_blocked, $date );
                                 }
                             }
 
+                            array_push( $arr_dates_blocked, $end_date );
                         }
-
-                        for ($i=0; $i < count($arr_dates_blocked) ; $i++) {
-
-                            $temp_date = $arr_dates_blocked[$i];
-                            $new_date = str_replace('-', '/', $temp_date );
-                            $new_date = date('d/m/Y', strtotime($new_date));
-
-                            $tmp_datepicker_string .= '"'.$new_date.'"';
-                            if ($i < (count($arr_dates_blocked)-1)) {
-                                $tmp_datepicker_string .= ',';
-                            }
-                        }
-
                     }
+                }
 
+                $g_start_dates = rwmb_meta( 'tours_blocked_start_dates', ['object_type' => 'setting'], 'tours_settings' );
+                $g_end_dates   = rwmb_meta( 'tours_blocked_end_dates', ['object_type' => 'setting'], 'tours_settings' );
 
-                    if( have_rows('options_tours_blocked_dates_repeater', 'option') ) {
-                        while ( have_rows('options_tours_blocked_dates_repeater', 'option') ) {
-                            the_row();
+                if ( $g_start_dates && is_array( $g_start_dates ) && $g_end_dates && is_array( $g_end_dates ) ) {
+                    foreach ( $g_start_dates as $k => $start_date ) {
+                        if ( $g_end_dates[$k] ) {
+                            $end_date = $g_end_dates[$k];
 
-                            if( have_rows('options_tours_blocked_dates_group', 'option') ) {
-                                while ( have_rows('options_tours_blocked_dates_group', 'option') ) {
-                                    the_row();
-                                    $start_date = get_sub_field('options_tours_blocked_dates_startDate', 'option');
-                                    $end_date = get_sub_field('options_tours_blocked_dates_endDate', 'option');
+                            // return: Y-m-d
+                            $temp_start_date = date( 'Y-m-d', strtotime( $start_date ) );
+                            $temp_end_date   = date( 'Y-m-d', strtotime( $end_date ) );
 
-                                    // return: Y-m-d
-                                    $temp_start_date    = date("Y-m-d", strtotime($start_date));
-                                    $temp_end_date      = date("Y-m-d", strtotime($end_date));
+                            if ( $temp_start_date < $temp_end_date ) {
 
-                                    if ( $temp_start_date < $temp_end_date ) {
+                                $begin = new DateTime( $start_date );
+                                  $end   = new DateTime( $end_date );
 
-                                        $begin = new DateTime($start_date);
-                                        $end = new DateTime($end_date);
+                                $interval = DateInterval::createFromDateString( '1 day' );
+                                $period   = new DatePeriod( $begin, $interval, $end );
 
-                                        $interval = DateInterval::createFromDateString('1 day');
-                                        $period = new DatePeriod($begin, $interval, $end);
-
-                                        foreach ($period as $dt) {
-                                            $date = $dt->format('Y-m-d');
-                                            array_push($arr_dates_blocked, $date);
-                                        }
-
-                                        array_push($arr_dates_blocked, $end_date);
-                                    } else if ( $temp_start_date == $temp_end_date ) {
-
-                                        array_push($arr_dates_blocked, $temp_start_date);
-
-                                    }
-
+                                foreach ( $period as $dt ) {
+                                    $date = $dt->format( 'Y-m-d' );
+                                    array_push( $arr_dates_blocked, $date );
                                 }
                             }
 
+                            array_push( $arr_dates_blocked, $end_date );
                         }
+                    }
+                }
 
-                        for ($i=0; $i < count($arr_dates_blocked) ; $i++) {
+                for ( $i=0; $i < count( $arr_dates_blocked ) ; $i++ ) {
+                    $temp_date = $arr_dates_blocked[$i];
+                    $new_date = str_replace( '-', '/', $temp_date );
+                    $new_date = date( 'd/m/Y', strtotime( $new_date ) );
 
-                            $temp_date = $arr_dates_blocked[$i];
-                            $new_date = str_replace('-', '/', $temp_date );
-                            $new_date = date('d/m/Y', strtotime($new_date));
-
-                            if ( $tmp_datepicker_string == '' ) {
-                                $tmp_datepicker_string .= '"'.$new_date.'"';
-                            } else {
-                                $tmp_datepicker_string .= ',"'.$new_date.'"';
-                            }
-
-                            if ($i < (count($arr_dates_blocked)-1)) {
-                                $tmp_datepicker_string .= ',';
-                            }
-                        }
-
+                    if ( $tmp_datepicker_string == '' ) {
+                        $tmp_datepicker_string .= '"'.$new_date.'"';
+                    } else {
+                        $tmp_datepicker_string .= ',"'.$new_date.'"';
                     }
 
-
+                    if ( $i < ( count( $arr_dates_blocked ) - 1 ) ) {
+                        $tmp_datepicker_string .= ',';
+                    }
+                }
                 ?>
 
                 var disableDates = [<?php  echo $tmp_datepicker_string; ?>];
@@ -714,7 +678,7 @@ if ( have_posts() ) {
                 }
 
                 <?php
-                    $next_days_block_optional = get_field( 'tours_number_days_to_block', get_the_ID() );
+                    $next_days_block_optional = rwmb_meta( 'tours_number_days_to_block' );
                     $next_days_block_optional = ($next_days_block_optional == '' ? '0' : $next_days_block_optional);
                 ?>
                 var ttt = tour_start_date.getDate();
