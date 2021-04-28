@@ -10,14 +10,31 @@ add_action(
 			}, 100);
 		})(jQuery);
 		</script>
+		<script type="text/javascript">
+			(function($){
+				$(document).on('change', '#test_from', function() {
+					$('input[name="update_cart"]').prop('disabled', false);
+					$('input[name="update_cart"]').trigger('click');
+					$('input[name="update_cart"]').prop('disabled', true);
+				});
+			})(jQuery);
+		</script>
 		<?php
 	},
 	99
 );
 
+add_action(
+	'admin_enqueue_scripts',
+	function() {
+		wp_enqueue_style( 'ot_admin_css', get_stylesheet_directory_uri() . '/css/admin.css', array() );
+	}
+);
+
 // Loading theme includes.
 require_once get_stylesheet_directory() . '/plugins/loader.php';
 require_once get_stylesheet_directory() . '/inc/position-field.php';
+require_once get_stylesheet_directory() . '/inc/mb-settings-page/mb-settings-page.php';
 
 /**
  * Remove related products output
@@ -250,25 +267,37 @@ add_action(
 			<br>
 			<h3><b><?php echo esc_html__( 'Add your Azores Safe Vouchers', 'ontravelazores' ); ?></b></h3>
 			<br>
+			<label>
+				<?php echo esc_html__( 'Covid-19 tests were performed:', 'ontravelazores' ); ?>
+				<select name="test_from" id="test_from">
+					<option value="pt" <?php echo ('pt' == $_REQUEST['test_from'] ? 'selected' : ''); ?>><?php echo esc_html__( 'In Portugal', 'ontravelazores' ); ?></option>
+					<option value="not_pt" <?php echo ('not_pt' == $_REQUEST['test_from'] ? 'selected' : ''); ?>><?php echo esc_html__( 'Outside Portugal', 'ontravelazores' ); ?></option>
+				</select>
+			</label>
 			<?php
 		}
 	}
 );
 
-// Remove '(discount:-35%)' from Açores Voucher name.
+// Remove '(discount:-35%)' from Azores Voucher name.
+// Change fee when tests origin in not Portugal
 add_action(
 	'woocommerce_cart_calculate_fees',
 	function( $cart ) {
 		$fees = $cart->fees_api()->get_fees();
 
+		$is_international = isset( $_REQUEST['test_from'] ) && 'not_pt' == $_REQUEST['test_from'];
+
 		if ( isset( $fees ) && ! empty( $fees ) ) {
-			$update_fees = false;
-			$fee_str     = '(discount:-35%)';
+			$fee_str = '(discount:-35%)';
 
 			foreach ( $fees as &$f ) {
 				if ( false !== strpos( $f->name, $fee_str ) ) {
-					$update_fees = true;
-					$f->name     = str_replace( $fee_str, '', $f->name );
+					$f->name = str_replace( $fee_str, '', $f->name );
+
+					if ( $is_international ) {
+						$f->amount = -50;
+					}
 				}
 			}
 		}
