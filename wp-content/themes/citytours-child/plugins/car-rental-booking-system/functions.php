@@ -12,9 +12,9 @@ if ( class_exists( 'CRBSPlugin' ) ) {
 	if ( ! defined( 'PLUGIN_CRBS_CONTEXT' ) ) {
 		define( 'PLUGIN_CRBS_CONTEXT', 'crbs' );
 	}
-}
 
-add_action( 'init', 'ot_crbs_init' );
+	add_action( 'init', 'ot_crbs_init' );
+}
 
 /**
  * Add Temp Product product's category, and add actions and filters.

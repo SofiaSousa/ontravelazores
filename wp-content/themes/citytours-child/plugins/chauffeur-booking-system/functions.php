@@ -12,9 +12,9 @@ if ( class_exists( 'CHBSPlugin' ) ) {
 	if ( ! defined( 'PLUGIN_CHBS_CONTEXT' ) ) {
 		define( 'PLUGIN_CHBS_CONTEXT', 'chbs' );
 	}
-}
 
-add_action( 'init', 'ot_chbs_init' );
+	add_action( 'init', 'ot_chbs_init' );
+}
 
 /**
  * Initial setup.
@@ -200,6 +200,14 @@ function ot_chbs_wc_get_item_data( $item_data, $cart_item ) {
 			);
 		}
 
+		$duration = get_post_meta( $booking_id, 'chbs_duration', true );
+		if ( $duration ) {
+			$item_data[] = array(
+				'name'  => __( 'Duration', 'citytours' ),
+				'value' => date( 'H:i', mktime( 0, $duration ) ),
+			);
+		}
+
 		$element_field = get_post_meta( $booking_id, 'chbs_form_element_field', true );
 		foreach ( $element_field as $field ) {
 			$item_data[] = array(
@@ -254,6 +262,11 @@ function ot_chbs_wc_checkout_create_order_line_item( $item, $cart_item_key, $val
 
 		if ( $return_date && '00-00-0000' !== $return_date && $return_time ) {
 			$item->update_meta_data( __( 'Drop Off Date', 'citytours' ), $return_date . ' ' . $return_time );
+		}
+
+		$duration = get_post_meta( $booking_id, 'chbs_duration', true );
+		if ( $duration ) {
+			$item->update_meta_data( __( 'Duration', 'citytours' ), date( 'H:i', mktime( 0, $duration ) ) );
 		}
 
 		$element_field = get_post_meta( $booking_id, 'chbs_form_element_field', true );
