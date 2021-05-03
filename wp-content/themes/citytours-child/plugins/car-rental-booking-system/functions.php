@@ -198,6 +198,16 @@ function ot_crbs_wc_get_item_data( $item_data, $cart_item ) {
 			'name'  => __( 'Drop Off Location', 'citytours' ),
 			'value' => $return_loc,
 		);
+
+		$element_field = get_post_meta( $booking_id, 'crbs_form_element_field', true );
+		foreach ( $element_field as $field ) {
+			if ( $field['value'] ) {
+				$item_data[] = array(
+					'name'  => $field['label'],
+					'value' => $field['value'],
+				);
+			}
+		}
 	}
 
 	return $item_data;
@@ -231,6 +241,13 @@ function ot_crbs_wc_checkout_create_order_line_item( $item, $cart_item_key, $val
 
 		$return_loc = get_post_meta( $booking_id, 'crbs_return_location_name', true );
 		$item->update_meta_data( __( 'Drop Off Location', 'citytours' ), $return_loc );
+
+		$element_field = get_post_meta( $booking_id, 'crbs_form_element_field', true );
+		foreach ( $element_field as $field ) {
+			if ( $field['value'] ) {
+				$item->update_meta_data( $field['label'], $field['value'] );
+			}
+		}
 	}
 }
 
