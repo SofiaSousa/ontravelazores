@@ -18,6 +18,11 @@
   .ot-meta-box .ot-meta-box__col--1-2 .rwmb-input {
     width: 50%;
   }
+
+  .ot-meta-box .ot-meta-box__col--1-3 {
+    width: 33%;
+    display: inline-block;
+  }
 }
 
 .ot-meta-box .ot-meta-box__col--1-2 .rwmb-input .rwmb-clone {

@@ -41,11 +41,17 @@ function ot_crbs_init() {
 	add_filter( 'woocommerce_cart_item_permalink', 'ot_crbs_wc_cart_item_permalink', 10, 3 );
 
 	add_action( 'wp_footer', 'ot_crbs_remove_form' );
+
+	// Vehicles Availability by location.
+	add_filter( 'rwmb_meta_boxes', 'ot_crbs_vehicles_block_meta_box' );
 }
 
 /**
  * Workaround to override the step 5 of CRBS reservation wizard, in order to
  * add the bookings' items to the chart before doing the checkout manually.
+ *
+ * Also, to override the step 2, updating the available vehicles list according
+ * custom settings.
  */
 function ot_crbs_go_to_step() {
 	if ( class_exists( 'CRBSHelper' ) && class_exists( 'CRBSBooking' ) ) {
@@ -54,19 +60,19 @@ function ot_crbs_go_to_step() {
 
 		$data = CRBSHelper::getPostOption();
 
-		if ( 5 == $data['step_request'] && 4 == $data['step'] ) {
-			$response = array();
+		$response = array();
 
-			$form = $booking_form->checkBookingForm( $data['booking_form_id'] );
+		$form = $booking_form->checkBookingForm( $data['booking_form_id'] );
 
-			if ( ! is_array( $form ) ) {
-				if ( -3 === $form ) {
-					$response['step'] = 1;
-					CRBSBooking::setErrorGlobal( $response, __( 'Cannot find at least one vehicle available in selected time period.', 'car-rental-booking-system' ) );
-					CRBSHelper::createJSONResponse( $response );
-				}
+		if ( ! is_array( $form ) ) {
+			if ( -3 === $form ) {
+				$response['step'] = 1;
+				CRBSBooking::setErrorGlobal( $response, __( 'Cannot find at least one vehicle available in selected time period.', 'car-rental-booking-system' ) );
+				CRBSHelper::createJSONResponse( $response );
 			}
+		}
 
+		if ( 5 == $data['step_request'] && 4 == $data['step'] ) {
 			$booking      = new CRBSBooking();
 			$woo_commerce = new CRBSWooCommerce();
 
@@ -142,7 +148,138 @@ function ot_crbs_go_to_step() {
 
 			CRBSHelper::createJSONResponse( $response );
 		}
+
+		// Step 2 - Vehicles
+		if ( 2 == $data['step_request'] ) {
+			list( $pickupLocationId, $pickupLocationCustomerAddress )= $booking_form->getBookingFormPickupLocation( $form );
+
+			$response['booking_extra'] = $booking_form->createBookingExtra( $data, $form );
+			$response['payment'] = $booking_form->createPayment( $form['dictionary']['payment'], $form['dictionary']['payment_woocommerce'], $data['payment_id'], $form['dictionary']['location'][$pickupLocationId]['meta']);
+			$response['step'] = $data['step_request'];
+			$response['summary'] = $booking_form->createSummary( $data, $form );
+
+			$vehicleHtml = ot_vehicle_filter( $form );
+			if ( ( $vehicleHtml ) !== false ) {
+				$response['vehicle'] = $vehicleHtml;
+			}
+
+			$response['fifienz'] = 'was here';
+
+			CRBSHelper::createJSONResponse( $response );
+		}
 	}
+}
+
+/**
+ * Workaround to take in account new settings for vehicles availability.
+ */
+function ot_vehicle_filter( $bookingForm = null ) {
+	$html = null;
+	$response = array();
+
+	$Validation = new CRBSValidation();
+
+	$booking_form = new CRBSBookingForm();
+	$booking_form->init();
+	$data = CRBSHelper::getPostOption();
+	$data = CRBSBookingHelper::formatDateTimeToStandard( $data );
+
+	CRBSHelper::removeUIndex( $data, 'driver_age' );
+
+	if ( is_null( $bookingForm ) ) {
+		if ( ! is_array( $bookingForm = $booking_form->checkBookingForm( $data['booking_form_id'] ) ) ) {
+			return false;
+		}
+	}
+
+	list( $data['pickup_location_id'] ) = $booking_form->getBookingFormPickupLocation( $bookingForm );
+	list( $data['return_location_id'] ) = $booking_form->getBookingFormReturnLocation( $bookingForm) ;
+
+	if ( ! $Validation->isNumber( $data['vehicle_bag_count'], 1, 99 ) ) {
+		$data['vehicle_bag_count'] = 1;
+	}
+
+	if ( ! $Validation->isNumber( $data['vehicle_passenger_count'], 1, 99 ) ) {
+		$data['vehicle_passenger_count'] = 1;
+	}
+
+	/***/
+	$vehicleHtml  = array();
+	$vehiclePrice = array();
+
+	$categoryId = (int) $data['vehicle_category'];
+
+	foreach ( $bookingForm['dictionary']['vehicle'] as $index => $value ) {
+		if ( $categoryId > 0 ) {
+			if ( ! has_term( $categoryId, CRBSVehicle::getCPTCategoryName(), $index ) ) {
+				continue;
+			}
+		}
+
+		if ( ! ( ( $value['meta']['passenger_count'] >= $data['vehicle_passenger_count'] ) && ( $value['meta']['bag_count'] >= $data['vehicle_bag_count'] ) ) ) {
+			continue;
+		}
+
+		$locations_blocked = rwmb_meta( 'vehicles_location', array(), $value['post']->ID );
+
+		if ( in_array( $data['pickup_location_id'], $locations_blocked , true ) ) {
+			$is_blocked = false;
+
+			$start_dates = rwmb_meta( 'vehicles_blocked_start_dates', array(), $value['post']->ID );
+			$end_dates   = rwmb_meta( 'vehicles_blocked_end_dates', array(), $value['post']->ID );
+
+			$pickup_date = date( 'Y-m-d', strtotime( $data['pickup_date'] ) );
+			// $return_date = date( 'Y-m-d', strtotime( $data['return_date'] ) );
+
+			foreach ( $locations_blocked as $i => $loc_id ) {
+				if ( (int) $data['pickup_location_id'] === (int) $loc_id ) {
+					$start_date = date( 'Y-m-d', strtotime( $start_dates[$i] ) );
+					$end_date   = date( 'Y-m-d', strtotime( $end_dates[$i] ) );
+
+					if ( $start_date <= $pickup_date && $end_date >= $pickup_date ) {
+						$is_blocked = true;
+						continue;
+					}
+				}
+			}
+
+			if ( $is_blocked ) {
+				continue;
+			}
+		}
+
+		$argument = array (
+			'booking_form_id'     => $bookingForm['post']->ID,
+			'vehicle'             => $value,
+			'vehicle_id'          => $value['post']->ID,
+			'vehicle_selected_id' => $data['vehicle_id'],
+			'pickup_location_id'  => $data['pickup_location_id'],
+			'pickup_date'         => $data['pickup_date'],
+			'pickup_time'         => $data['pickup_time'],
+			'return_location_id'  => $data['return_location_id'],
+			'return_date'         => $data['return_date'],
+			'return_time'         => $data['return_time'],
+			'driver_age'          => $data['driver_age']
+		);
+
+		$price = 0;
+
+		$vehicleHtml[$index]  = $booking_form->createVehicle( $argument, $bookingForm, $price );
+		$vehiclePrice[$index] = $price;
+	}
+
+	if ( in_array( (int) $bookingForm['meta']['vehicle_sorting_type'], array( 1, 2 ) ) ) {
+		asort( $vehiclePrice );
+		if ( (int) $bookingForm['meta']['vehicle_sorting_type'] === 2 ) {
+			$vehiclePrice = array_reverse( $vehiclePrice, true );
+		}
+	}
+
+	foreach ( $vehiclePrice as $index => $value ) {
+		$html .= '<li>' . $vehicleHtml[$index] . '</li>';
+	}
+
+	return $html;
 }
 
 /**
@@ -296,4 +433,62 @@ function ot_crbs_remove_form() {
 		});
 	</script>
 	<?php
+}
+
+/**
+ * Block dates metabox for vehicle.
+ *
+ * @param array $meta_boxes Array of MetaBoxes.
+ *
+ * @return array
+ */
+ function ot_crbs_vehicles_block_meta_box( $meta_boxes ) {
+	$location_instance = new CRBSLocation();
+	$locations = $location_instance->getDictionary();
+
+	$options = array_map(
+		function ($loc) {
+			return $loc['post']->post_title;
+		},
+		$locations
+	);
+
+	// Block dates.
+	$meta_boxes[] = array(
+		'id'       => 'blocking_dates',
+		'class'    => 'ot-meta-box',
+		'title'    => 'Exclude dates by Location',
+		'pages'    => array( 'crbs_vehicle' ),
+		'context'  => 'normal',
+		'priority' => 'core',
+		'fields'   => array(
+			array(
+				'name'       => 'Location',
+				'id'         => 'vehicles_location',
+				'class'      => 'ot-meta-box__col ot-meta-box__col--1-3 ot-meta-box__col--left',
+				'type'       => 'select',
+				'clone'      => true,
+				'add_button' => '+ Add Location',
+				'options'    => $options,
+			),
+			array(
+				'name'       => 'Start Date',
+				'id'         => 'vehicles_blocked_start_dates',
+				'class'      => 'ot-meta-box__col ot-meta-box__col--1-3',
+				'type'       => 'date',
+				'clone'      => true,
+				'add_button' => '+ Add Start Date',
+			),
+			array(
+				'name'       => 'End Date',
+				'id'         => 'vehicles_blocked_end_dates',
+				'class'      => 'ot-meta-box__col ot-meta-box__col--1-3 ot-meta-box__col--right',
+				'type'       => 'date',
+				'clone'      => true,
+				'add_button' => '+ Add End Date',
+			),
+		),
+	);
+
+	return $meta_boxes;
 }
