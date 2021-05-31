@@ -470,6 +470,7 @@ function ot_crbs_remove_form() {
 				'clone'      => true,
 				'add_button' => '+ Add Location',
 				'options'    => $options,
+				'placeholder'     => 'Select an Item',
 			),
 			array(
 				'name'       => 'Start Date',
