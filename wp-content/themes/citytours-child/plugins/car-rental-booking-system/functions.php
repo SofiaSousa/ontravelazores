@@ -447,7 +447,7 @@ function ot_crbs_remove_form() {
 	$locations = $location_instance->getDictionary();
 
 	$options = array_map(
-		function ($loc) {
+		function ( $loc ) {
 			return $loc['post']->post_title;
 		},
 		$locations
