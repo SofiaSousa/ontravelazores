@@ -463,14 +463,14 @@ function ot_crbs_remove_form() {
 		'priority' => 'core',
 		'fields'   => array(
 			array(
-				'name'       => 'Location',
-				'id'         => 'vehicles_location',
-				'class'      => 'ot-meta-box__col ot-meta-box__col--1-3 ot-meta-box__col--left',
-				'type'       => 'select',
-				'clone'      => true,
-				'add_button' => '+ Add Location',
-				'options'    => $options,
-				'placeholder'     => 'Select an Item',
+				'name'        => 'Location',
+				'id'          => 'vehicles_location',
+				'class'       => 'ot-meta-box__col ot-meta-box__col--1-3 ot-meta-box__col--left',
+				'type'        => 'select',
+				'clone'       => true,
+				'add_button'  => '+ Add Location',
+				'options'     => $options,
+				'placeholder' => 'Select an Item',
 			),
 			array(
 				'name'       => 'Start Date',
