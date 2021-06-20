@@ -266,6 +266,7 @@ add_action(
 			<br>
 			<br>
 			<h3><b><?php echo esc_html__( 'Add your Azores Safe Vouchers', 'ontravelazores' ); ?></b></h3>
+			<?php /*
 			<br>
 			<label>
 				<?php echo esc_html__( 'Covid-19 tests were performed:', 'ontravelazores' ); ?>
@@ -275,6 +276,7 @@ add_action(
 				</select>
 			</label>
 			<?php
+			*/
 		}
 	}
 );
@@ -286,7 +288,7 @@ add_action(
 	function( $cart ) {
 		$fees = $cart->fees_api()->get_fees();
 
-		$is_international = isset( $_REQUEST['test_from'] ) && 'not_pt' == $_REQUEST['test_from'];
+		// $is_international = isset( $_REQUEST['test_from'] ) && 'not_pt' == $_REQUEST['test_from'];
 
 		if ( isset( $fees ) && ! empty( $fees ) ) {
 			$fee_str = '(discount:-35%)';
@@ -295,9 +297,9 @@ add_action(
 				if ( false !== strpos( $f->name, $fee_str ) ) {
 					$f->name = str_replace( $fee_str, '', $f->name );
 
-					if ( $is_international ) {
-						$f->amount = -50;
-					}
+					// if ( $is_international ) {
+					// 	$f->amount = -50;
+					// }
 				}
 			}
 		}
