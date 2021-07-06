@@ -426,7 +426,7 @@ function ot_wc_add_checkout_fee_for_paypal() {
 
 	if ( 'paypal' === $chosen_gateway ) {
 		$cart_total = $woocommerce->cart->cart_contents_total;
-		$paypal_fee = 0.032;
+		$paypal_fee = 0.035;
 		$amount     = $cart_total * $paypal_fee;
 		$feed_name  = __( 'PayPal Fee', 'citytours' ) . ' - ' . ( $paypal_fee * 100 ) . '%';
 
