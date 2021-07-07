@@ -44,6 +44,9 @@ function ot_crbs_init() {
 
 	// Vehicles Availability by location.
 	add_filter( 'rwmb_meta_boxes', 'ot_crbs_vehicles_block_meta_box' );
+
+	add_action( 'wp_ajax_' . PLUGIN_CRBS_CONTEXT . '_vehicle_filter', 'ot_vehicle_filter' );
+	add_action( 'wp_ajax_nopriv_' . PLUGIN_CRBS_CONTEXT . '_vehicle_filter', 'ot_vehicle_filter' );
 }
 
 /**
@@ -72,6 +75,7 @@ function ot_crbs_go_to_step() {
 			}
 		}
 
+		// Step 5 - Checkout.
 		if ( 5 == $data['step_request'] && 4 == $data['step'] ) {
 			$booking      = new CRBSBooking();
 			$woo_commerce = new CRBSWooCommerce();
@@ -149,7 +153,7 @@ function ot_crbs_go_to_step() {
 			CRBSHelper::createJSONResponse( $response );
 		}
 
-		// Step 2 - Vehicles
+		// Step 2 - Vehicles.
 		if ( 2 == $data['step_request'] ) {
 			list( $pickupLocationId, $pickupLocationCustomerAddress )= $booking_form->getBookingFormPickupLocation( $form );
 
@@ -158,12 +162,10 @@ function ot_crbs_go_to_step() {
 			$response['step'] = $data['step_request'];
 			$response['summary'] = $booking_form->createSummary( $data, $form );
 
-			$vehicleHtml = ot_vehicle_filter( $form );
+			$vehicleHtml = ot_vehicle_filter( false, $form );
 			if ( ( $vehicleHtml ) !== false ) {
 				$response['vehicle'] = $vehicleHtml;
 			}
-
-			$response['fifienz'] = 'was here';
 
 			CRBSHelper::createJSONResponse( $response );
 		}
@@ -173,14 +175,19 @@ function ot_crbs_go_to_step() {
 /**
  * Workaround to take in account new settings for vehicles availability.
  */
-function ot_vehicle_filter( $bookingForm = null ) {
-	$html = null;
+function ot_vehicle_filter( $ajax = true, $bookingForm = null ) {
+	if ( !is_bool( $ajax ) ) {
+		$ajax = true;
+	}
+
+	$html     = null;
 	$response = array();
 
 	$Validation = new CRBSValidation();
 
 	$booking_form = new CRBSBookingForm();
 	$booking_form->init();
+
 	$data = CRBSHelper::getPostOption();
 	$data = CRBSBookingHelper::formatDateTimeToStandard( $data );
 
@@ -188,7 +195,12 @@ function ot_vehicle_filter( $bookingForm = null ) {
 
 	if ( is_null( $bookingForm ) ) {
 		if ( ! is_array( $bookingForm = $booking_form->checkBookingForm( $data['booking_form_id'] ) ) ) {
-			return false;
+			if ( ! $ajax ) {
+				return false;
+			}
+
+			$booking_form->setErrorGlobal( $response, __( 'There are no vehicles which match your filter criteria.', 'car-rental-booking-system' ) );
+			CRBSHelper::createJSONResponse( $response );
 		}
 	}
 
@@ -204,6 +216,7 @@ function ot_vehicle_filter( $bookingForm = null ) {
 	}
 
 	/***/
+
 	$vehicleHtml  = array();
 	$vehiclePrice = array();
 
@@ -220,6 +233,7 @@ function ot_vehicle_filter( $bookingForm = null ) {
 			continue;
 		}
 
+		////
 		$locations_blocked = rwmb_meta( 'vehicles_location', array(), $value['post']->ID );
 
 		if ( in_array( $data['pickup_location_id'], $locations_blocked , true ) ) {
@@ -247,6 +261,7 @@ function ot_vehicle_filter( $bookingForm = null ) {
 				continue;
 			}
 		}
+		////
 
 		$argument = array (
 			'booking_form_id'     => $bookingForm['post']->ID,
@@ -279,7 +294,20 @@ function ot_vehicle_filter( $bookingForm = null ) {
 		$html .= '<li>' . $vehicleHtml[$index] . '</li>';
 	}
 
-	return $html;
+	$response['html'] = $html;
+
+	if ( $Validation->isEmpty( $html ) ) {
+		if ( $ajax ) {
+			$this->setErrorGlobal( $response, __( 'There are no vehicles which match your filter criteria.', 'car-rental-booking-system' ) );
+			CRBSHelper::createJSONResponse( $response );
+		}
+	}
+
+	if ( ! $ajax ) {
+		return $html;
+	}
+
+	CRBSHelper::createJSONResponse( $response );
 }
 
 /**
