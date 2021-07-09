@@ -45,8 +45,8 @@ function ot_crbs_init() {
 	// Vehicles Availability by location.
 	add_filter( 'rwmb_meta_boxes', 'ot_crbs_vehicles_block_meta_box' );
 
-	add_action( 'wp_ajax_' . PLUGIN_CRBS_CONTEXT . '_vehicle_filter', 'ot_vehicle_filter' );
-	add_action( 'wp_ajax_nopriv_' . PLUGIN_CRBS_CONTEXT . '_vehicle_filter', 'ot_vehicle_filter' );
+	add_action( 'wp_ajax_' . PLUGIN_CRBS_CONTEXT . '_vehicle_filter', 'ot_vehicle_filter', 1, 2 );
+	add_action( 'wp_ajax_nopriv_' . PLUGIN_CRBS_CONTEXT . '_vehicle_filter', 'ot_vehicle_filter', 1, 2 );
 }
 
 /**
@@ -176,7 +176,7 @@ function ot_crbs_go_to_step() {
  * Workaround to take in account new settings for vehicles availability.
  */
 function ot_vehicle_filter( $ajax = true, $bookingForm = null ) {
-	if ( !is_bool( $ajax ) ) {
+	if ( ! is_bool( $ajax ) ) {
 		$ajax = true;
 	}
 
@@ -205,7 +205,7 @@ function ot_vehicle_filter( $ajax = true, $bookingForm = null ) {
 	}
 
 	list( $data['pickup_location_id'] ) = $booking_form->getBookingFormPickupLocation( $bookingForm );
-	list( $data['return_location_id'] ) = $booking_form->getBookingFormReturnLocation( $bookingForm) ;
+	list( $data['return_location_id'] ) = $booking_form->getBookingFormReturnLocation( $bookingForm );
 
 	if ( ! $Validation->isNumber( $data['vehicle_bag_count'], 1, 99 ) ) {
 		$data['vehicle_bag_count'] = 1;
