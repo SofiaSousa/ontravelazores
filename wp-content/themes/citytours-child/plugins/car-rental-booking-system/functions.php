@@ -243,14 +243,14 @@ function ot_vehicle_filter( $ajax = true, $bookingForm = null ) {
 			$end_dates   = rwmb_meta( 'vehicles_blocked_end_dates', array(), $value['post']->ID );
 
 			$pickup_date = date( 'Y-m-d', strtotime( $data['pickup_date'] ) );
-			// $return_date = date( 'Y-m-d', strtotime( $data['return_date'] ) );
+			$return_date = date( 'Y-m-d', strtotime( $data['return_date'] ) );
 
 			foreach ( $locations_blocked as $i => $loc_id ) {
 				if ( (int) $data['pickup_location_id'] === (int) $loc_id ) {
 					$start_date = date( 'Y-m-d', strtotime( $start_dates[$i] ) );
 					$end_date   = date( 'Y-m-d', strtotime( $end_dates[$i] ) );
 
-					if ( $start_date <= $pickup_date && $end_date >= $pickup_date ) {
+					if ( $start_date <= $pickup_date && $end_date >= $pickup_date || $start_date <= $return_date && $end_date >= $return_date ) {
 						$is_blocked = true;
 						continue;
 					}
@@ -298,7 +298,7 @@ function ot_vehicle_filter( $ajax = true, $bookingForm = null ) {
 
 	if ( $Validation->isEmpty( $html ) ) {
 		if ( $ajax ) {
-			$this->setErrorGlobal( $response, __( 'There are no vehicles which match your filter criteria.', 'car-rental-booking-system' ) );
+			$booking_form->setErrorGlobal( $response, __( 'There are no vehicles which match your filter criteria.', 'car-rental-booking-system' ) );
 			CRBSHelper::createJSONResponse( $response );
 		}
 	}
