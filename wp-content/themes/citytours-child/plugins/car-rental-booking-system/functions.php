@@ -70,8 +70,23 @@ function ot_crbs_go_to_step() {
 		if ( ! is_array( $form ) ) {
 			if ( -3 === $form ) {
 				$response['step'] = 1;
-				CRBSBooking::setErrorGlobal( $response, __( 'Cannot find at least one vehicle available in selected time period.', 'car-rental-booking-system' ) );
+				$booking_form->setErrorGlobal( $response, __( 'Cannot find at least one vehicle available in selected time period.', 'car-rental-booking-system' ) );
 				CRBSHelper::createJSONResponse( $response );
+			}
+		}
+
+		if ( ( ! in_array( $data['step_request'], array( 2, 3, 4, 5 ) ) ) || ( ! in_array( $data['step'], array( 1, 2, 3, 4 ) ) ) ) {
+			$response['step'] = 1;
+			CRBSHelper::createJSONResponse( $response );
+		}
+
+		if ( $data['step_request'] > 2 ) {
+			if ( ! array_key_exists( $data['vehicle_id'], $form['dictionary']['vehicle'] ) ) {
+				$booking_form->setErrorGlobal( $response, __( 'Select a vehicle.', 'car-rental-booking-system' ) );
+			}
+
+			if ( isset( $response['error'] ) ) {
+				$data['step'] = $data['step_request'] = $response['step'] = 2;
 			}
 		}
 
