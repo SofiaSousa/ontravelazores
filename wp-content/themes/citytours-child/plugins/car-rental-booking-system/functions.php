@@ -81,7 +81,7 @@ function ot_crbs_go_to_step() {
 		}
 
 		if ( $data['step_request'] > 2 ) {
-			if ( ! array_key_exists( $data['vehicle_id'], $form['dictionary']['vehicle'] ) ) {
+			if ( empty($data['vehicle_id']) || ot_is_vehicle_blocked( $data, $form['dictionary']['vehicle'][ $data['vehicle_id'] ] ) ) {
 				$booking_form->setErrorGlobal( $response, __( 'Select a vehicle.', 'car-rental-booking-system' ) );
 			}
 
@@ -249,32 +249,8 @@ function ot_vehicle_filter( $ajax = true, $bookingForm = null ) {
 		}
 
 		////
-		$locations_blocked = rwmb_meta( 'vehicles_location', array(), $value['post']->ID );
-
-		if ( in_array( $data['pickup_location_id'], $locations_blocked , true ) ) {
-			$is_blocked = false;
-
-			$start_dates = rwmb_meta( 'vehicles_blocked_start_dates', array(), $value['post']->ID );
-			$end_dates   = rwmb_meta( 'vehicles_blocked_end_dates', array(), $value['post']->ID );
-
-			$pickup_date = date( 'Y-m-d', strtotime( $data['pickup_date'] ) );
-			$return_date = date( 'Y-m-d', strtotime( $data['return_date'] ) );
-
-			foreach ( $locations_blocked as $i => $loc_id ) {
-				if ( (int) $data['pickup_location_id'] === (int) $loc_id ) {
-					$start_date = date( 'Y-m-d', strtotime( $start_dates[$i] ) );
-					$end_date   = date( 'Y-m-d', strtotime( $end_dates[$i] ) );
-
-					if ( $start_date <= $pickup_date && $end_date >= $pickup_date || $start_date <= $return_date && $end_date >= $return_date ) {
-						$is_blocked = true;
-						continue;
-					}
-				}
-			}
-
-			if ( $is_blocked ) {
-				continue;
-			}
+		if ( ot_is_vehicle_blocked( $data, $value ) ) {
+			continue;
 		}
 		////
 
@@ -323,6 +299,37 @@ function ot_vehicle_filter( $ajax = true, $bookingForm = null ) {
 	}
 
 	CRBSHelper::createJSONResponse( $response );
+}
+
+/**
+ * Check if vehicle is blocked according to blocked dates.
+ */
+function ot_is_vehicle_blocked( $data, $value ) {
+	$is_blocked = false;
+
+	$locations_blocked = rwmb_meta( 'vehicles_location', array(), $value['post']->ID );
+
+	if ( in_array( $data['pickup_location_id'], $locations_blocked , true ) ) {
+		$start_dates = rwmb_meta( 'vehicles_blocked_start_dates', array(), $value['post']->ID );
+		$end_dates   = rwmb_meta( 'vehicles_blocked_end_dates', array(), $value['post']->ID );
+
+		$pickup_date = date( 'Y-m-d', strtotime( $data['pickup_date'] ) );
+		$return_date = date( 'Y-m-d', strtotime( $data['return_date'] ) );
+
+		foreach ( $locations_blocked as $i => $loc_id ) {
+			if ( (int) $data['pickup_location_id'] === (int) $loc_id ) {
+				$start_date = date( 'Y-m-d', strtotime( $start_dates[ $i ] ) );
+				$end_date   = date( 'Y-m-d', strtotime( $end_dates[ $i ] ) );
+
+				if ( $start_date <= $pickup_date && $end_date >= $pickup_date || $start_date <= $return_date && $end_date >= $return_date ) {
+					$is_blocked = true;
+					continue;
+				}
+			}
+		}
+	}
+
+	return $is_blocked;
 }
 
 /**
