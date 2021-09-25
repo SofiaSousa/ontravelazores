@@ -257,56 +257,6 @@ if ( ! function_exists( 'ct_tour_generate_conf_mail' ) ) {
 	}
 }
 
-// Add heading for upload files section in cart page.
-add_action(
-	'woocommerce_after_cart_table',
-	function() {
-		if ( is_plugin_active( 'customer-upload-files-for-woocommerce/customer-upload-files-for-woocommerce.php' ) ) {
-			?>
-			<br>
-			<br>
-			<h3><b><?php echo esc_html__( 'Add your Azores Safe Vouchers', 'ontravelazores' ); ?></b></h3>
-			<?php /*
-			<br>
-			<label>
-				<?php echo esc_html__( 'Covid-19 tests were performed:', 'ontravelazores' ); ?>
-				<select name="test_from" id="test_from">
-					<option value="pt" <?php echo ('pt' == $_REQUEST['test_from'] ? 'selected' : ''); ?>><?php echo esc_html__( 'In Portugal', 'ontravelazores' ); ?></option>
-					<option value="not_pt" <?php echo ('not_pt' == $_REQUEST['test_from'] ? 'selected' : ''); ?>><?php echo esc_html__( 'Outside Portugal', 'ontravelazores' ); ?></option>
-				</select>
-			</label>
-			<?php
-			*/
-		}
-	}
-);
-
-// Remove '(discount:-35%)' from Azores Voucher name.
-// Change fee when tests origin in not Portugal
-add_action(
-	'woocommerce_cart_calculate_fees',
-	function( $cart ) {
-		$fees = $cart->fees_api()->get_fees();
-
-		// $is_international = isset( $_REQUEST['test_from'] ) && 'not_pt' == $_REQUEST['test_from'];
-
-		if ( isset( $fees ) && ! empty( $fees ) ) {
-			$fee_str = '(discount:-35%)';
-
-			foreach ( $fees as &$f ) {
-				if ( false !== strpos( $f->name, $fee_str ) ) {
-					$f->name = str_replace( $fee_str, '', $f->name );
-
-					// if ( $is_international ) {
-					// 	$f->amount = -50;
-					// }
-				}
-			}
-		}
-	}
-);
-
-
 // Script for FB chat.
 add_action(
 	'wp_footer',
