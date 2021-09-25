@@ -82,6 +82,7 @@ class BQW_SliderPro_Admin {
 		add_action( 'wp_ajax_sliderpro_clear_all_cache', array( $this, 'ajax_clear_all_cache' ) );
 		add_action( 'wp_ajax_sliderpro_close_getting_started', array( $this, 'ajax_close_getting_started' ) );
 		add_action( 'wp_ajax_sliderpro_close_image_size_warning', array( $this, 'ajax_close_image_size_warning' ) );
+		add_action( 'wp_ajax_sliderpro_close_custom_css_js_warning', array( $this, 'ajax_close_custom_css_js_warning' ) );
 	}
 
 	/**
@@ -115,33 +116,17 @@ class BQW_SliderPro_Admin {
 
 		if ( in_array( $screen->id, $this->plugin_screen_hook_suffixes ) ) {
 			if ( get_option( 'sliderpro_load_unminified_scripts' ) == true ) {
-				wp_enqueue_style( $this->plugin_slug . '-admin-style', plugins_url( 'sliderpro/admin/assets/css/sliderpro-admin.css' ), array(), BQW_SliderPro::VERSION );
-				wp_enqueue_style( $this->plugin_slug . '-plugin-style', plugins_url( 'sliderpro/public/assets/css/slider-pro.css' ), array(), BQW_SliderPro::VERSION );
+				wp_enqueue_style( $this->plugin_slug . '-admin-style', plugins_url( 'admin/assets/css/sliderpro-admin.css', dirname( __FILE__ ) ), array(), BQW_SliderPro::VERSION );
+				wp_enqueue_style( $this->plugin_slug . '-plugin-style', plugins_url( 'public/assets/css/slider-pro.css', dirname( __FILE__ ) ), array(), BQW_SliderPro::VERSION );
+				wp_enqueue_style( $this->plugin_slug . '-lightbox-style', plugins_url( 'public/assets/libs/fancybox/jquery.fancybox.css', dirname( __FILE__ ) ), array(), BQW_SliderPro::VERSION );
 			} else {
-				wp_enqueue_style( $this->plugin_slug . '-admin-style', plugins_url( 'sliderpro/admin/assets/css/sliderpro-admin.min.css' ), array(), BQW_SliderPro::VERSION );
-				wp_enqueue_style( $this->plugin_slug . '-plugin-style', plugins_url( 'sliderpro/public/assets/css/slider-pro.min.css' ), array(), BQW_SliderPro::VERSION );
-			}
-
-			wp_enqueue_style( $this->plugin_slug . '-lightbox-style', plugins_url( 'sliderpro/public/assets/libs/fancybox/jquery.fancybox.css' ), array(), BQW_SliderPro::VERSION );
+				wp_enqueue_style( $this->plugin_slug . '-admin-style', plugins_url( 'admin/assets/css/sliderpro-admin.min.css', dirname( __FILE__ ) ), array(), BQW_SliderPro::VERSION );
+				wp_enqueue_style( $this->plugin_slug . '-plugin-style', plugins_url( 'public/assets/css/slider-pro.min.css', dirname( __FILE__ ) ), array(), BQW_SliderPro::VERSION );
+				wp_enqueue_style( $this->plugin_slug . '-lightbox-style', plugins_url( 'public/assets/libs/fancybox/jquery.fancybox.min.css', dirname( __FILE__ ) ), array(), BQW_SliderPro::VERSION );
+			}			
 
 			if ( get_option( 'sliderpro_is_custom_css') == true ) {
-				if ( get_option( 'sliderpro_load_custom_css_js' ) === 'in_files' ) {
-					global $blog_id;
-					$file_suffix = '';
-
-					if ( ! is_main_site( $blog_id ) ) {
-						$file_suffix = '-' . $blog_id;
-					}
-
-					$custom_css_path = plugins_url( 'sliderpro-custom/custom' . $file_suffix . '.css' );
-					$custom_css_dir_path = WP_PLUGIN_DIR . '/sliderpro-custom/custom' . $file_suffix . '.css';
-
-					if ( file_exists( $custom_css_dir_path ) ) {
-						wp_enqueue_style( $this->plugin_slug . '-plugin-custom-style', $custom_css_path, array(), BQW_SliderPro::VERSION );
-					}
-				} else {
-					wp_add_inline_style( $this->plugin_slug . '-plugin-style', stripslashes( get_option( 'sliderpro_custom_css' ) ) );
-				}
+				wp_add_inline_style( $this->plugin_slug . '-plugin-style', stripslashes( get_option( 'sliderpro_custom_css' ) ) );
 			}
 		}
 	}
@@ -167,37 +152,21 @@ class BQW_SliderPro_Admin {
 			}
 			
 			if ( get_option( 'sliderpro_load_unminified_scripts' ) == true ) {
-				wp_enqueue_script( $this->plugin_slug . '-admin-script', plugins_url( 'sliderpro/admin/assets/js/sliderpro-admin.js' ), array( 'jquery' ), BQW_SliderPro::VERSION );
-				wp_enqueue_script( $this->plugin_slug . '-plugin-script', plugins_url( 'sliderpro/public/assets/js/jquery.sliderPro.js' ), array( 'jquery' ), BQW_SliderPro::VERSION );
+				wp_enqueue_script( $this->plugin_slug . '-admin-script', plugins_url( 'admin/assets/js/sliderpro-admin.js', dirname( __FILE__ ) ), array( 'jquery' ), BQW_SliderPro::VERSION );
+				wp_enqueue_script( $this->plugin_slug . '-plugin-script', plugins_url( 'public/assets/js/jquery.sliderPro.js', dirname( __FILE__ ) ), array( 'jquery' ), BQW_SliderPro::VERSION );
+				wp_enqueue_script( $this->plugin_slug . '-lightbox-script', plugins_url( 'public/assets/libs/fancybox/jquery.fancybox.js', dirname( __FILE__ ) ), array(), BQW_SliderPro::VERSION );
 			} else {
-				wp_enqueue_script( $this->plugin_slug . '-admin-script', plugins_url( 'sliderpro/admin/assets/js/sliderpro-admin.min.js' ), array( 'jquery' ), BQW_SliderPro::VERSION );
-				wp_enqueue_script( $this->plugin_slug . '-plugin-script', plugins_url( 'sliderpro/public/assets/js/jquery.sliderPro.min.js' ), array( 'jquery' ), BQW_SliderPro::VERSION );
+				wp_enqueue_script( $this->plugin_slug . '-admin-script', plugins_url( 'admin/assets/js/sliderpro-admin.min.js', dirname( __FILE__ ) ), array( 'jquery' ), BQW_SliderPro::VERSION );
+				wp_enqueue_script( $this->plugin_slug . '-plugin-script', plugins_url( 'public/assets/js/jquery.sliderPro.min.js', dirname( __FILE__ ) ), array( 'jquery' ), BQW_SliderPro::VERSION );
+				wp_enqueue_script( $this->plugin_slug . '-lightbox-script', plugins_url( 'public/assets/libs/fancybox/jquery.fancybox.min.js', dirname( __FILE__ ) ), array(), BQW_SliderPro::VERSION );
 			}
 
-			wp_enqueue_script( $this->plugin_slug . '-lightbox-script', plugins_url( 'sliderpro/public/assets/libs/fancybox/jquery.fancybox.pack.js' ), array(), BQW_SliderPro::VERSION );
-
-			if ( get_option( 'sliderpro_is_custom_js' ) == true && get_option( 'sliderpro_load_custom_css_js' ) === 'in_files' ) {
-				global $blog_id;
-				$file_suffix = '';
-
-				if ( ! is_main_site( $blog_id ) ) {
-					$file_suffix = '-' . $blog_id;
-				}
-
-				$custom_js_path = plugins_url( 'sliderpro-custom/custom' . $file_suffix . '.js' );
-				$custom_js_dir_path = WP_PLUGIN_DIR . '/sliderpro-custom/custom' . $file_suffix . '.js';
-
-				if ( file_exists( $custom_js_dir_path ) ) {
-					wp_enqueue_script( $this->plugin_slug . '-plugin-custom-script', $custom_js_path, array(), BQW_SliderPro::VERSION );
-				}
-			}
-
-			$id = isset( $_GET['id'] ) ? $_GET['id'] : -1;
+			$id = isset( $_GET['id'] ) ? intval( $_GET['id'] ) : -1;
 
 			wp_localize_script( $this->plugin_slug . '-admin-script', 'sp_js_vars', array(
 				'admin' => admin_url( 'admin.php' ),
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
-				'plugin' => plugins_url( 'sliderpro' ),
+				'plugin' => plugins_url( '', dirname( __FILE__ ) ),
 				'page' => isset( $_GET['page'] ) && ( $_GET['page'] === 'sliderpro-new' || ( isset( $_GET['id'] ) && isset( $_GET['action'] ) && $_GET['action'] === 'edit' ) ) ? 'single' : 'all',
 				'id' => $id,
 				'lad_nonce' => wp_create_nonce( 'load-slider-data' . $id ),
@@ -238,7 +207,7 @@ class BQW_SliderPro_Admin {
 			$access,
 			$this->plugin_slug,
 			array( $this, 'render_slider_page' ),
-			plugins_url( '/sliderpro/admin/assets/css/images/sp-icon.png' )
+			plugins_url( 'admin/assets/css/images/sp-icon.png', dirname( __FILE__ ) )
 		);
 
 		if ( ! in_array( $this->plugin_slug, $restricted_pages ) ) {
@@ -260,17 +229,6 @@ class BQW_SliderPro_Admin {
 				$access,
 				$this->plugin_slug . '-new',
 				array( $this, 'render_new_slider_page' )
-			);
-		}
-
-		if ( ! in_array( $this->plugin_slug . '-custom', $restricted_pages ) ) {
-			$this->plugin_screen_hook_suffixes[] = add_submenu_page(
-				$this->plugin_slug,
-				__( 'Custom CSS and JavaScript', $this->plugin_slug ),
-				__( 'Custom CSS & JS', $this->plugin_slug ),
-				$access,
-				$this->plugin_slug . '-custom',
-				array( $this, 'render_custom_css_js_page' )
 			);
 		}
 
@@ -312,7 +270,7 @@ class BQW_SliderPro_Admin {
 	 */
 	public function render_slider_page() {
 		if ( isset( $_GET['id'] ) && isset( $_GET['action'] ) && $_GET['action'] === 'edit' ) {
-			$slider = $this->plugin->get_slider( $_GET['id'] );
+			$slider = $this->plugin->get_slider( intval( $_GET['id'] ) );
 
 			if ( $slider !== false ) {
 				$slider_id = $slider['id'];
@@ -353,65 +311,16 @@ class BQW_SliderPro_Admin {
 	}
 
 	/**
-	 * Renders the custom CSS and JavaScript page.
-	 *
-	 * It also checks if new data was posted, and saves
-	 * it in the options table.
-	 * 
-	 * @since 4.0.0
-	 */
-	public function render_custom_css_js_page() {
-		$custom_css = get_option( 'sliderpro_custom_css', '' );
-		$custom_js = get_option( 'sliderpro_custom_js', '' );
-
-		if ( isset( $_POST['custom_css_update'] ) || isset( $_POST['custom_js_update'] ) ) {
-			check_admin_referer( 'custom-css-js-update', 'custom-css-js-nonce' );
-
-			if ( isset( $_POST['custom_css'] ) ) {
-				$custom_css = $_POST['custom_css'];
-				update_option( 'sliderpro_custom_css', $custom_css );
-
-				if ( $custom_css !== '' ) {
-					update_option( 'sliderpro_is_custom_css', true );
-				} else {
-					update_option( 'sliderpro_is_custom_css', false );
-				}
-			}
-
-			if ( isset( $_POST['custom_js'] ) ) {
-				$custom_js = $_POST['custom_js'];
-				update_option( 'sliderpro_custom_js', $custom_js );
-
-				if ( $custom_js !== '' ) {
-					update_option( 'sliderpro_is_custom_js', true );
-				} else {
-					update_option( 'sliderpro_is_custom_js', false );
-				}
-			}
-
-			if ( get_option( 'sliderpro_load_custom_css_js' ) === 'in_files' ) {
-				$this->save_custom_css_js_in_files( $custom_css, $custom_js );
-			}
-		}
-
-		include_once( 'views/custom-css-js.php' );
-	}
-
-	/**
 	 * Renders the plugin settings page.
 	 *
 	 * It also checks if new data was posted, and saves
 	 * it in the options table.
-	 *
-	 * It verifies the purchase code supplied and displays
-	 * if it's valid.
 	 * 
 	 * @since 4.0.0
 	 */
 	public function render_plugin_settings_page() {
 		$plugin_settings = BQW_SliderPro_Settings::getPluginSettings();
 		$load_stylesheets = get_option( 'sliderpro_load_stylesheets', $plugin_settings['load_stylesheets']['default_value'] );
-		$load_custom_css_js = get_option( 'sliderpro_load_custom_css_js', $plugin_settings['load_custom_css_js']['default_value'] );
 		$load_js_in_all_pages = get_option( 'sliderpro_load_js_in_all_pages', $plugin_settings['load_js_in_all_pages']['default_value'] );
 		$load_unminified_scripts = get_option( 'sliderpro_load_unminified_scripts', $plugin_settings['load_unminified_scripts']['default_value'] );
 		$cache_expiry_interval = get_option( 'sliderpro_cache_expiry_interval', $plugin_settings['cache_expiry_interval']['default_value'] );
@@ -424,14 +333,9 @@ class BQW_SliderPro_Admin {
 		if ( isset( $_POST['plugin_settings_update'] ) ) {
 			check_admin_referer( 'plugin-settings-update', 'plugin-settings-nonce' );
 
-			if ( isset( $_POST['load_stylesheets'] ) ) {
+			if ( isset( $_POST['load_stylesheets'] ) && array_key_exists( $_POST['load_stylesheets'] , $plugin_settings['load_stylesheets']['available_values'] ) ) {
 				$load_stylesheets = $_POST['load_stylesheets'];
 				update_option( 'sliderpro_load_stylesheets', $load_stylesheets );
-			}
-
-			if ( isset( $_POST['load_custom_css_js'] ) ) {
-				$load_custom_css_js = $_POST['load_custom_css_js'];
-				update_option( 'sliderpro_load_custom_css_js', $load_custom_css_js );
 			}
 
 			if ( isset( $_POST['load_js_in_all_pages'] ) ) {
@@ -451,12 +355,12 @@ class BQW_SliderPro_Admin {
 			}
 
 			if ( isset( $_POST['cache_expiry_interval'] ) ) {
-				$cache_expiry_interval = $_POST['cache_expiry_interval'];
+				$cache_expiry_interval = intval( $_POST['cache_expiry_interval'] );
 				update_option( 'sliderpro_cache_expiry_interval', $cache_expiry_interval );
 			}
 
 			if ( isset( $_POST['max_sliders_on_page'] ) ) {
-				$max_sliders_on_page = $_POST['max_sliders_on_page'];
+				$max_sliders_on_page = intval( $_POST['max_sliders_on_page'] );
 				update_option( 'sliderpro_max_sliders_on_page', $max_sliders_on_page );
 			}
 
@@ -484,39 +388,9 @@ class BQW_SliderPro_Admin {
 				update_option( 'sliderpro_hide_image_size_warning', false );
 			}
 
-			if ( isset( $_POST['access'] ) ) {
+			if ( isset( $_POST['access'] ) && array_key_exists( $_POST['access'], $plugin_settings['access']['available_values'] ) ) {
 				$access = $_POST['access'];
 				update_option( 'sliderpro_access', $access );
-			}
-		}
-
-		$purchase_code = get_option( 'sliderpro_purchase_code', '' );
-		$purchase_code_status = get_option( 'sliderpro_purchase_code_status', '0' );
-		
-		if ( isset( $_POST['purchase_code_update'] ) ) {
-			check_admin_referer( 'purchase-code-update', 'purchase-code-nonce' );
-
-			if ( isset( $_POST['purchase_code'] ) ) {
-				$purchase_code = $_POST['purchase_code'];
-				update_option( 'sliderpro_purchase_code', $purchase_code );
-
-				if ( $_POST['purchase_code'] === '' ) {
-					$purchase_code_status = '0';
-				} else {
-					$api = BQW_SliderPro_API::get_instance();
-
-					$verification_result = $api->verify_purchase_code( $purchase_code );
-
-					if ( $verification_result === 'yes' ) {
-						$purchase_code_status = '1';
-					} else if ( $verification_result === 'no' ) {
-						$purchase_code_status = '2';
-					} else if ( $verification_result === 'error' ) {
-						$purchase_code_status = '3';
-					}
-				}
-
-				update_option( 'sliderpro_purchase_code_status', $purchase_code_status );
 			}
 		}
 		
@@ -529,50 +403,7 @@ class BQW_SliderPro_Admin {
 	 * @since 4.0.0
 	 */
 	public function render_documentation_page() {
-		echo '<iframe class="sliderpro-documentation" src="' . plugins_url( 'sliderpro/documentation/documentation.html' ) . '" width="100%" height="100%"></iframe>';
-	}
-
-	/**
-	 * Add the custom CSS and JS in files, using the WP Filesystem API.
-	 *
-	 * @since 4.0.0
-	 * 
-	 * @param  string $custom_css The custom CSS.
-	 * @param  string $custom_js  The custom JavaScript.
-	 */
-	private function save_custom_css_js_in_files ( $custom_css, $custom_js ) {
-		$url = wp_nonce_url( 'admin.php?page=sliderpro-custom', 'custom-css-js-update', 'custom-css-js-nonce' );
-		$context = WP_PLUGIN_DIR;
-
-		// get the credentials and if there aren't any credentials stored,
-		// display a form for the user to provide the credentials
-		if ( ( $credentials = request_filesystem_credentials( $url, '', false, $context, null ) ) === false  ) {			
-			return;
-		}
-
-		// check the credentials if they are valid
-		// if they aren't, display the form again
-		if ( ! WP_Filesystem( $credentials, $context ) ) {
-			request_filesystem_credentials( $url, '', true, $context, null );
-			return;
-		}
-
-		global $wp_filesystem;
-
-		// create the 'sliderpro-custom' folder if it doesn't exist
-		if ( ! $wp_filesystem->exists( $context . '/sliderpro-custom' ) ) {
-			$wp_filesystem->mkdir( $context . '/sliderpro-custom' );
-		}
-
-		global $blog_id;
-		$file_suffix = '';
-
-		if ( ! is_main_site( $blog_id ) ) {
-			$file_suffix = '-' . $blog_id;
-		}
-
-		$wp_filesystem->put_contents( $context . '/sliderpro-custom/custom' . $file_suffix . '.css', stripslashes( $custom_css ), FS_CHMOD_FILE );
-		$wp_filesystem->put_contents( $context . '/sliderpro-custom/custom' . $file_suffix . '.js', stripslashes( $custom_js ), FS_CHMOD_FILE );
+		echo '<iframe class="sliderpro-documentation" src="' . plugins_url( 'documentation/documentation.html', dirname( __FILE__ ) ) . '" width="100%" height="100%"></iframe>';
 	}
 
 	/**
@@ -584,13 +415,13 @@ class BQW_SliderPro_Admin {
 	 */
 	public function ajax_get_slider_data() {
 		$nonce = $_GET['nonce'];
-		$id = $_GET['id'];
+		$id = intval( $_GET['id'] );
 
 		if ( ! wp_verify_nonce( $nonce, 'load-slider-data' . $id ) ) {
 			die( 'This action was stopped for security purposes.' );
 		}
 
-		$slider = $this->get_slider_data( $_GET['id'] );
+		$slider = $this->get_slider_data( $id );
 
 		echo json_encode( $slider );
 
@@ -619,10 +450,12 @@ class BQW_SliderPro_Admin {
 	 * @since 4.0.0
 	 */
 	public function ajax_save_slider() {
-		$slider_data = json_decode( stripslashes( $_POST['data'] ), true );
-		$nonce = $slider_data['nonce'];
-		$id = intval( $slider_data['id'] );
-		$action = $slider_data['action'];
+		$data = json_decode( stripslashes( $_POST['data'] ), true );
+		$nonce = $data['nonce'];
+		$action = $data['action'];
+
+		$slider_data = BQW_SliderPro_Validation::validate_slider_data( $data );
+		$id = $slider_data['id'];
 
 		if ( ! wp_verify_nonce( $nonce, 'save-slider' . $id ) ) {
 			die( 'This action was stopped for security purposes.' );
@@ -631,7 +464,7 @@ class BQW_SliderPro_Admin {
 		$slider_id = $this->save_slider( $slider_data );
 
 		if ( $action === 'save' ) {
-			echo $slider_id;
+			echo json_encode( $slider_id );
 		} else if ( $action === 'import' ) {
 			$slider_name = $slider_data['name'];
 			$slider_created = date( 'm-d-Y' );
@@ -661,7 +494,7 @@ class BQW_SliderPro_Admin {
 	public function save_slider( $slider_data ) {
 		global $wpdb;
 
-		$id = intval( $slider_data['id'] );
+		$id = $slider_data['id'];
 		$slides_data = $slider_data['slides'];
 
 		if ( $id === -1 ) {
@@ -772,8 +605,7 @@ class BQW_SliderPro_Admin {
 	 * @since 4.0.0
 	 */
 	public function ajax_preview_slider() {
-		$slider = json_decode( stripslashes( $_POST['data'] ), true );
-		$slider_name = $slider['name'];
+		$slider = BQW_SliderPro_Validation::validate_slider_data( json_decode( stripslashes( $_POST['data'] ), true ) );
 		$slider_output = $this->plugin->output_slider( $slider, false ) . $this->plugin->get_inline_scripts();
 
 		echo $slider_output;
@@ -787,10 +619,11 @@ class BQW_SliderPro_Admin {
 	 * @since 4.0.0
 	 */
 	public function ajax_update_presets() {
+		$allowed_methods = array( 'save-new', 'update', 'delete' );
 		$nonce = $_POST['nonce'];
-		$method = $_POST['method'];
-		$name = $_POST['name'];
-		$settings = $_POST['settings'];
+		$method = in_array( $_POST['method'], $allowed_methods ) ? $_POST['method'] : '';
+		$name = sanitize_text_field( $_POST['name'] );
+		$settings = BQW_SliderPro_Validation::validate_slider_settings( json_decode( stripslashes( $_POST['settings'] ), true ) );
 
 		if ( ! wp_verify_nonce( $nonce, 'update-presets' ) ) {
 			die( 'This action was stopped for security purposes.' );
@@ -803,7 +636,7 @@ class BQW_SliderPro_Admin {
 		}
 
 		if ( $method === 'save-new' || $method === 'update' ) {
-			$presets[ $name ] = json_decode( stripslashes( $settings ), true );
+			$presets[ $name ] = $settings;
 		} else if ( $method === 'delete' ) {
 			unset( $presets[ $name ] );
 		}
@@ -819,7 +652,7 @@ class BQW_SliderPro_Admin {
 	 * @since 4.0.0
 	 */
 	public function ajax_get_preset_settings() {
-		$name = $_GET['name'];
+		$name = sanitize_text_field( $_GET['name'] );
 
 		$presets = get_option( 'sliderpro_setting_presets' );
 
@@ -836,7 +669,7 @@ class BQW_SliderPro_Admin {
 	 * @since 4.0.0
 	 */
 	public function ajax_get_breakpoints_preset() {
-		$breakpoints_data = json_decode( stripslashes( $_GET['data'] ), true );
+		$breakpoints_data = BQW_SliderPro_Validation::validate_slider_breakpoint_settings( json_decode( stripslashes( $_GET['data'] ), true ) );
 
 		foreach ( $breakpoints_data as $breakpoint_settings ) {
 			include( 'views/breakpoint.php' );
@@ -858,7 +691,7 @@ class BQW_SliderPro_Admin {
 	 */
 	public function ajax_duplicate_slider() {
 		$nonce = $_POST['nonce'];
-		$original_slider_id = $_POST['id'];
+		$original_slider_id = intval( $_POST['id'] );
 
 		if ( ! wp_verify_nonce( $nonce, 'duplicate-slider' . $original_slider_id ) ) {
 			die( 'This action was stopped for security purposes.' );
@@ -990,7 +823,7 @@ class BQW_SliderPro_Admin {
 	 * AJAX call for adding multiple or a single slide.
 	 *
 	 * If it receives any data, it tries to create multiple
-	 * slides by padding the data that was received, and if
+	 * slides by passing the data that was received, and if
 	 * it doesn't receive any data it tries to create a
 	 * single slide.
 	 *
@@ -998,7 +831,7 @@ class BQW_SliderPro_Admin {
 	 */
 	public function ajax_add_slides() {
 		if ( isset( $_POST['data'] ) ) {
-			$slides_data = json_decode( stripslashes( $_POST['data'] ), true );
+			$slides_data = BQW_SliderPro_Validation::validate_slider_slides( json_decode( stripslashes( $_POST['data'] ), true ) );
 
 			foreach ( $slides_data as $slide_data ) {
 				$this->create_slide( $slide_data );
@@ -1022,8 +855,8 @@ class BQW_SliderPro_Admin {
 	public function ajax_load_main_image_editor() {
 		$slide_default_settings = BQW_SliderPro_Settings::getSlideSettings();
 
-		$data = json_decode( stripslashes( $_POST['data'] ), true );
-		$content_type = isset( $_POST['content_type'] ) ? $_POST['content_type'] : $slide_default_settings['content_type']['default_value'];
+		$data = reset( BQW_SliderPro_Validation::validate_slider_slides( array( json_decode( stripslashes( $_POST['data'] ), true ) ) ) );
+		$content_type = isset( $_POST['content_type'] ) && array_key_exists( $_POST['content_type'], $slide_default_settings['content_type']['available_values'] ) ? $_POST['content_type'] : $slide_default_settings['content_type']['default_value'];
 		$content_class = $content_type === 'custom' ? 'custom' : 'dynamic';
 
 		include( 'views/main-image-editor.php' );
@@ -1043,8 +876,8 @@ class BQW_SliderPro_Admin {
 	public function ajax_load_thumbnail_editor() {
 		$slide_default_settings = BQW_SliderPro_Settings::getSlideSettings();
 
-		$data = json_decode( stripslashes( $_POST['data'] ), true );
-		$content_type = isset( $_POST['content_type'] ) ? $_POST['content_type'] : $slide_default_settings['content_type']['default_value'];
+		$data = reset( BQW_SliderPro_Validation::validate_slider_slides( array( json_decode( stripslashes( $_POST['data'] ), true ) ) ) );
+		$content_type = isset( $_POST['content_type'] ) && array_key_exists( $_POST['content_type'], $slide_default_settings['content_type']['available_values'] ) ? $_POST['content_type'] : $slide_default_settings['content_type']['default_value'];
 		$content_class = $content_type === 'custom' ? 'custom' : 'dynamic';
 
 		include( 'views/thumbnail-editor.php' );
@@ -1060,8 +893,8 @@ class BQW_SliderPro_Admin {
 	public function ajax_load_caption_editor() {
 		$slide_default_settings = BQW_SliderPro_Settings::getSlideSettings();
 
-		$caption_content = $_POST['data'];
-		$content_type = isset( $_POST['content_type'] ) ? $_POST['content_type'] : $slide_default_settings['content_type']['default_value'];
+		$caption_content = wp_kses_post( $_POST['data'] );
+		$content_type = isset( $_POST['content_type'] ) && array_key_exists( $_POST['content_type'], $slide_default_settings['content_type']['available_values'] ) ? $_POST['content_type'] : $slide_default_settings['content_type']['default_value'];
 
 		include( 'views/caption-editor.php' );
 
@@ -1075,9 +908,29 @@ class BQW_SliderPro_Admin {
 	 */
 	public function ajax_load_html_editor() {
 		$slide_default_settings = BQW_SliderPro_Settings::getSlideSettings();
+		global $allowedposttags;
 
-		$html_content = $_POST['data'];
-		$content_type = isset( $_POST['content_type'] ) ? $_POST['content_type'] : $slide_default_settings['content_type']['default_value'];
+		$allowed_html = array_merge(
+			$allowedposttags,
+			array(
+				'iframe' => array(
+					'src' => true,
+					'width' => true,
+					'height' => true,
+					'allow' => true,
+					'allowfullscreen' => true,
+					'class' => true,
+					'id' => true
+				),
+				'source' => array(
+					'src' => true,
+					'type' => true
+				)
+			)
+		);
+
+		$html_content = wp_kses( $_POST['data'], $allowed_html );
+		$content_type = isset( $_POST['content_type'] ) && array_key_exists( $_POST['content_type'], $slide_default_settings['content_type']['available_values'] ) ? $_POST['content_type'] : $slide_default_settings['content_type']['default_value'];
 
 		include( 'views/html-editor.php' );
 
@@ -1093,8 +946,8 @@ class BQW_SliderPro_Admin {
 		$slide_default_settings = BQW_SliderPro_Settings::getSlideSettings();
 		$layer_default_settings = BQW_SliderPro_Settings::getLayerSettings();
 
-		$layers = json_decode( stripslashes( $_POST['data'] ), true );
-		$content_type = isset( $_POST['content_type'] ) ? $_POST['content_type'] : $slide_default_settings['content_type']['default_value'];
+		$layers = BQW_SliderPro_Validation::validate_slide_layers( json_decode( stripslashes( $_POST['data'] ), true ) );
+		$content_type = isset( $_POST['content_type'] ) && array_key_exists( $_POST['content_type'], $slide_default_settings['content_type']['available_values'] ) ? $_POST['content_type'] : $slide_default_settings['content_type']['default_value'];
 		
 		include( 'views/layers-editor.php' );
 
@@ -1110,40 +963,59 @@ class BQW_SliderPro_Admin {
 	 * @since 4.0.0
 	 */
 	public function ajax_add_layer_settings() {
+		$layer_default_settings = BQW_SliderPro_Settings::getLayerSettings();
 		$layer = array();
-		$layer_id = $_POST['id'];
-		$layer_type = $_POST['type'];
+		$layer_id = intval( $_POST['id'] );
+		$layer_type = isset( $_POST['type'] ) && array_key_exists( $_POST['type'], $layer_default_settings['type']['available_values'] ) ? $_POST['type'] : $layer_default_settings['type']['default_value'];
 		$layer_settings;
-
+		global $allowedposttags;
+		
 		if ( isset( $_POST['settings'] ) ) {
-			$layer_settings = json_decode( stripslashes( $_POST['settings'] ), true );
+			$layer_settings = BQW_SliderPro_Validation::validate_layer_settings( json_decode( stripslashes( $_POST['settings'] ), true ) );
 		}
 
 		if ( isset( $_POST['text'] ) ) {
-			$layer['text'] = $_POST['text'];
+			$allowed_html = array_merge(
+				$allowedposttags,
+				array(
+					'iframe' => array(
+						'src' => true,
+						'width' => true,
+						'height' => true,
+						'allow' => true,
+						'allowfullscreen' => true,
+						'class' => true,
+						'id' => true
+					),
+					'source' => array(
+						'src' => true,
+						'type' => true
+					)
+				)
+			);
+			
+			$layer['text'] = wp_kses( $_POST['text'], $allowed_html );
 		}
 
 		if ( isset( $_POST['heading_type'] ) ) {
-			$layer['heading_type'] = $_POST['heading_type'];
+			$layer['heading_type'] = array_key_exists( $_POST['heading_type'], $layer_default_settings['heading_type']['available_values'] ) ? $_POST['heading_type'] : $layer_default_settings['heading_type']['default_value'];
 		}
 
 		if ( isset( $_POST['image_source'] ) ) {
-			$layer['image_source'] = $_POST['image_source'];
+			$layer['image_source'] = sanitize_text_field( $_POST['image_source'] );
 		}
 
 		if ( isset( $_POST['image_alt'] ) ) {
-			$layer['image_alt'] = $_POST['image_alt'];
+			$layer['image_alt'] = sanitize_text_field( $_POST['image_alt'] );
 		}
 
 		if ( isset( $_POST['image_link'] ) ) {
-			$layer['image_link'] = $_POST['image_link'];
+			$layer['image_link'] = sanitize_text_field( $_POST['image_link'] );
 		}
 
 		if ( isset( $_POST['image_retina'] ) ) {
-			$layer['image_retina'] = $_POST['image_retina'];
+			$layer['image_retina'] = sanitize_text_field( $_POST['image_retina'] );
 		}
-
-		$layer_default_settings = BQW_SliderPro_Settings::getLayerSettings();
 
 		include( 'views/layer-settings.php' );
 
@@ -1156,12 +1028,10 @@ class BQW_SliderPro_Admin {
 	 * @since 4.0.0
 	 */
 	public function ajax_load_settings_editor() {
-		$slide_settings = json_decode( stripslashes( $_POST['data'] ), true );
-
 		$slide_default_settings = BQW_SliderPro_Settings::getSlideSettings();
-
-		$content_type = isset( $slide_settings['content_type'] ) ? $slide_settings['content_type'] : $slide_default_settings['content_type']['default_value'];
-
+		$slide_settings = BQW_SliderPro_Validation::validate_slide_settings( json_decode( stripslashes( $_POST['data'] ), true ) );
+		$content_type = isset( $slide_settings['content_type'] ) && array_key_exists( $slide_settings['content_type'], $slide_default_settings['content_type']['available_values'] ) ? $slide_settings['content_type'] : $slide_default_settings['content_type']['default_value'];
+		
 		include( 'views/settings-editor.php' );
 
 		die();
@@ -1177,8 +1047,9 @@ class BQW_SliderPro_Admin {
 	 * @since 4.0.0
 	 */
 	public function ajax_load_content_type_settings() {
-		$type = $_POST['type'];
-		$slide_settings = json_decode( stripslashes( $_POST['data'] ), true );
+		$slide_default_settings = BQW_SliderPro_Settings::getSlideSettings();
+		$type = isset( $_POST['type'] ) && array_key_exists( $_POST['type'], $slide_default_settings['content_type']['available_values'] ) ? $_POST['type'] : $slide_default_settings['content_type']['default_value'];
+		$slide_settings = BQW_SliderPro_Validation::validate_slide_settings( json_decode( stripslashes( $_POST['data'] ), true ) );
 
 		echo $this->load_content_type_settings( $type, $slide_settings );
 
@@ -1196,10 +1067,8 @@ class BQW_SliderPro_Admin {
 	public function load_content_type_settings( $type, $slide_settings = NULL ) {
 		$slide_default_settings = BQW_SliderPro_Settings::getSlideSettings();
 
-		if ( array_key_exists( $type, $slide_default_settings['content_type']['available_values'] ) ) {
-			$path = 'views/' . $slide_default_settings['content_type']['available_values'][ $type ]['file_name'];
-			include( $path );
-		}
+		$path = 'views/' . $slide_default_settings['content_type']['available_values'][ $type ]['file_name'];
+		include( $path );
 	}
 
 	/**
@@ -1251,7 +1120,12 @@ class BQW_SliderPro_Admin {
 	 * @since 4.0.0
 	 */
 	public function ajax_get_taxonomies() {
-		$post_names = json_decode( stripslashes( $_GET['post_names'] ), true );
+		$post_names_raw = json_decode( stripslashes( $_GET['post_names'] ), true );
+		$post_names = array();
+
+		foreach ( $post_names_raw as $post_name ) {
+			array_push( $post_names, sanitize_text_field( $post_name ) );
+		}
 
 		echo json_encode( $this->get_taxonomies_for_posts( $post_names ) );
 
@@ -1336,7 +1210,7 @@ class BQW_SliderPro_Admin {
 	 * @since 4.0.0
 	 */
 	public function ajax_add_breakpoint() {
-		$width = $_GET['data'];
+		$width = floatval( $_GET['data'] );
 
 		include( 'views/breakpoint.php' );
 
@@ -1349,7 +1223,7 @@ class BQW_SliderPro_Admin {
 	 * @since 4.0.0
 	 */
 	public function ajax_add_breakpoint_setting() {
-		$setting_name = $_GET['data'];
+		$setting_name = sanitize_text_field( $_GET['data'] );
 
 		echo $this->create_breakpoint_setting( $setting_name, false );
 
@@ -1436,7 +1310,7 @@ class BQW_SliderPro_Admin {
 
 		global $wpdb;
 
-		$wpdb->query( "DELETE FROM " . $wpdb->prefix . "options WHERE option_name LIKE '%sliderpro_cache%'" );
+		$wpdb->query( "DELETE FROM " . $wpdb->prefix . "options WHERE option_name LIKE '%sliderpro_cache%' AND NOT option_name = 'sliderpro_cache_expiry_interval'" );
 
 		if ( get_option( 'sliderpro_lightbox_sliders' ) !== false ) {
 			update_option( 'sliderpro_lightbox_sliders', array() );
@@ -1454,6 +1328,17 @@ class BQW_SliderPro_Admin {
 	 */
 	public function ajax_close_getting_started() {
 		update_option( 'sliderpro_hide_getting_started_info', true );
+
+		die();
+	}
+
+	/**
+	 * AJAX call for closing the Custom CSS & JS warning box.
+	 *
+	 * @since 4.7.0
+	 */
+	public function ajax_close_custom_css_js_warning() {
+		update_option( 'sliderpro_hide_custom_css_js_warning', true );
 
 		die();
 	}

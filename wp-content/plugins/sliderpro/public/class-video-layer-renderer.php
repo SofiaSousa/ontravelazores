@@ -30,7 +30,7 @@ class BQW_SP_Video_Layer_Renderer extends BQW_SP_Layer_Renderer {
 		$video_poster = isset( $this->data['video_poster'] ) && $this->data['video_poster'] !== '' ? $this->data['video_poster'] : '';
 		$video_retina_poster = isset( $this->data['video_retina_poster'] ) && $this->data['video_retina_poster'] !== '' ? ' data-retina="' . esc_attr( $this->data['video_retina_poster'] ) . '"' : '';
 
-		$poster_src = $this->lazy_loading === true ? ' src="' . plugins_url( 'sliderpro/public/assets/css/images/blank.gif' ) . '" data-src="' . esc_attr( $video_poster ) . '"' : ' src="' . esc_attr( $video_poster ) . '"';
+		$poster_src = $this->lazy_loading === true ? ' src="' . plugins_url( 'public/assets/css/images/blank.gif', dirname( __FILE__ ) ) . '" data-src="' . esc_attr( $video_poster ) . '"' : ' src="' . esc_attr( $video_poster ) . '"';
 
 		$video_html = '';
 
@@ -38,17 +38,17 @@ class BQW_SP_Video_Layer_Renderer extends BQW_SP_Layer_Renderer {
 			$params = $video_params !== '' ? '&' . $video_params : '';
 
 			if ( $video_load_mode === 'poster' ) {
-				$video_html = '<div class="' .  $this->get_classes() . '"' . $this->get_attributes() . '><a class="sp-video" href="http://www.youtube.com/watch?v=' . $video_id . '&rel=0' . $params . '"><img' . $poster_src . $video_retina_poster . ' width="100%" height="100%" /></a></div>';
+				$video_html = '<div class="' . esc_attr( $this->get_classes() ) . '"' . $this->get_attributes() . '><a class="sp-video" href="http://www.youtube.com/watch?v=' . esc_attr( $video_id ) . '&rel=0' . esc_attr( $params ) . '"><img' . $poster_src . $video_retina_poster . ' width="100%" height="100%" /></a></div>';
 			} else if ( $video_load_mode === 'video' ) {
-				$video_html = '<iframe class="sp-video ' .  $this->get_classes() . '"' . $this->get_attributes() . ' src="//www.youtube.com/embed/' . $video_id . '?enablejsapi=1&wmode=opaque&rel=0' . $params . '" frameborder="0" allowfullscreen></iframe>';
+				$video_html = '<iframe class="sp-video ' . esc_attr( $this->get_classes() ) . '"' . $this->get_attributes() . ' src="//www.youtube.com/embed/' . esc_attr( $video_id ) . '?enablejsapi=1&wmode=opaque&rel=0' . esc_attr( $params ) . '" frameborder="0" allowfullscreen></iframe>';
 			}
 		} else if ( $video_source === 'vimeo' ) {
 			$params = $video_params !== '' ? '?' . $video_params : '';
 
 			if ( $video_load_mode === 'poster' ) {
-				$video_html = '<div class="' .  $this->get_classes() . '"' . $this->get_attributes() . '><a class="sp-video" href="http://vimeo.com/' . $video_id . $params . '"><img' . $poster_src . $video_retina_poster . ' width="100%" height="100%" /></a></div>';
+				$video_html = '<div class="' . esc_attr( $this->get_classes() ) . '"' . $this->get_attributes() . '><a class="sp-video" href="http://vimeo.com/' . esc_attr( $video_id ) . esc_attr( $params ) . '"><img' . $poster_src . $video_retina_poster . ' width="100%" height="100%" /></a></div>';
 			} else if ( $video_load_mode === 'video' ) {
-				$video_html = '<iframe class="sp-video ' .  $this->get_classes() . '"' . $this->get_attributes() . ' src="//player.vimeo.com/video/' . $video_id . $params . '" frameborder="0" allowfullscreen></iframe>';
+				$video_html = '<iframe class="sp-video ' . esc_attr( $this->get_classes() ) . '"' . $this->get_attributes() . ' src="//player.vimeo.com/video/' . esc_attr( $video_id ). esc_attr( $params ) . '" frameborder="0" allowfullscreen></iframe>';
 			}
 		}
 

@@ -2,7 +2,7 @@ html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-
 
 body{
   color:#444;
-  font-family: 'Open Sans', Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman',
+  font-family: Arial, Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman',
               "Hiragino Sans GB", "STXihei", "微软雅黑", serif;
   font-size:12px;
   line-height:1.5em;
@@ -252,9 +252,12 @@ table {
 }
 
 .menu li:hover .submenu {
-  
+  max-height: 300px;
 }
 
 .submenu {
+  overflow: hidden;
   margin: 0;
+  max-height: 0;
+  transition: max-height 0.5s;
 }

@@ -13,7 +13,7 @@ class BQW_SliderPro {
 	 * 
 	 * @var string
 	 */
-	const VERSION = '4.6.0';
+	const VERSION = '4.7.6';
 
 	/**
 	 * Plugin slug.
@@ -146,13 +146,14 @@ class BQW_SliderPro {
 	 */
 	public function register_styles() {
 		if ( get_option( 'sliderpro_load_unminified_scripts' ) == true ) {
-			wp_register_style( $this->plugin_slug . '-plugin-style', plugins_url( 'sliderpro/public/assets/css/slider-pro.css' ), array(), self::VERSION );
+			wp_register_style( $this->plugin_slug . '-plugin-style', plugins_url( 'public/assets/css/slider-pro.css', dirname( __FILE__ ) ), array(), self::VERSION );
+			wp_register_style( $this->plugin_slug . '-lightbox-style', plugins_url( 'public/assets/libs/fancybox/jquery.fancybox.css', dirname( __FILE__ ) ), array(), self::VERSION );
 		} else {
-			wp_register_style( $this->plugin_slug . '-plugin-style', plugins_url( 'sliderpro/public/assets/css/slider-pro.min.css' ), array(), self::VERSION );
+			wp_register_style( $this->plugin_slug . '-plugin-style', plugins_url( 'public/assets/css/slider-pro.min.css', dirname( __FILE__ ) ), array(), self::VERSION );
+			wp_register_style( $this->plugin_slug . '-lightbox-style', plugins_url( 'public/assets/libs/fancybox/jquery.fancybox.min.css', dirname( __FILE__ ) ), array(), self::VERSION );
 		}
-
-		wp_register_style( $this->plugin_slug . '-lightbox-style', plugins_url( 'sliderpro/public/assets/libs/fancybox/jquery.fancybox.css' ), array(), self::VERSION );
-		wp_register_style( $this->plugin_slug . '-lightbox-slider-style', plugins_url( 'sliderpro/public/assets/css/lightbox-slider.css' ), array(), self::VERSION );
+		
+		wp_register_style( $this->plugin_slug . '-lightbox-slider-style', plugins_url( 'public/assets/css/lightbox-slider.css', dirname( __FILE__ ) ), array(), self::VERSION );
 	}
 
 	/**
@@ -162,14 +163,14 @@ class BQW_SliderPro {
 	 */
 	public function register_scripts() {
 		if ( get_option( 'sliderpro_load_unminified_scripts' ) == true ) {
-			wp_register_script( $this->plugin_slug . '-plugin-script', plugins_url( 'sliderpro/public/assets/js/jquery.sliderPro.js' ), array( 'jquery' ), self::VERSION );
-			wp_register_script( $this->plugin_slug . '-lightbox-slider-script', plugins_url( 'sliderpro/public/assets/js/lightbox-slider.js' ), array(), self::VERSION );
+			wp_register_script( $this->plugin_slug . '-plugin-script', plugins_url( 'public/assets/js/jquery.sliderPro.js', dirname( __FILE__ ) ), array( 'jquery' ), self::VERSION );
+			wp_register_script( $this->plugin_slug . '-lightbox-slider-script', plugins_url( 'public/assets/js/lightbox-slider.js', dirname( __FILE__ ) ), array(), self::VERSION );
+			wp_register_script( $this->plugin_slug . '-lightbox-script', plugins_url( 'public/assets/libs/fancybox/jquery.fancybox.js', dirname( __FILE__ ) ), array(), self::VERSION );
 		} else {
-			wp_register_script( $this->plugin_slug . '-plugin-script', plugins_url( 'sliderpro/public/assets/js/jquery.sliderPro.min.js' ), array( 'jquery' ), self::VERSION );
-			wp_register_script( $this->plugin_slug . '-lightbox-slider-script', plugins_url( 'sliderpro/public/assets/js/lightbox-slider.min.js' ), array(), self::VERSION );
+			wp_register_script( $this->plugin_slug . '-plugin-script', plugins_url( 'public/assets/js/jquery.sliderPro.min.js', dirname( __FILE__ ) ), array( 'jquery' ), self::VERSION );
+			wp_register_script( $this->plugin_slug . '-lightbox-slider-script', plugins_url( 'public/assets/js/lightbox-slider.min.js', dirname( __FILE__ ) ), array(), self::VERSION );
+			wp_register_script( $this->plugin_slug . '-lightbox-script', plugins_url( 'public/assets/libs/fancybox/jquery.fancybox.min.js', dirname( __FILE__ ) ), array(), self::VERSION );
 		}
-		
-		wp_register_script( $this->plugin_slug . '-lightbox-script', plugins_url( 'sliderpro/public/assets/libs/fancybox/jquery.fancybox.pack.js' ), array(), self::VERSION );
 	}
 
 	/**
@@ -297,7 +298,7 @@ class BQW_SliderPro {
 			}
 		}
 
-		return $slider;
+		return BQW_SliderPro_Validation::validate_slider_data( $slider );
 	}
 
 	/**
@@ -409,16 +410,7 @@ class BQW_SliderPro {
 			wp_enqueue_style( $this->plugin_slug . '-plugin-style' );
 
 			if ( get_option( 'sliderpro_is_custom_css') == true ) {
-				if ( get_option( 'sliderpro_load_custom_css_js' ) === 'in_files' ) {
-					$custom_css_path = plugins_url( 'sliderpro-custom/custom.css' );
-					$custom_css_dir_path = WP_PLUGIN_DIR . '/sliderpro-custom/custom.css';
-
-					if ( file_exists( $custom_css_dir_path ) ) {
-						wp_enqueue_style( $this->plugin_slug . '-plugin-custom-style', $custom_css_path, array(), self::VERSION );
-					}
-				} else {
-					wp_add_inline_style( $this->plugin_slug . '-plugin-style', stripslashes( get_option( 'sliderpro_custom_css' ) ) );
-				}
+				wp_add_inline_style( $this->plugin_slug . '-plugin-style', stripslashes( get_option( 'sliderpro_custom_css' ) ) );
 			}
 
 			do_action( 'sliderpro_enqueue_styles' );
@@ -438,16 +430,6 @@ class BQW_SliderPro {
 			return;
 		} else if ( empty( $this->scripts_to_load ) && $load_js_in_all_pages == true ) {
 			$this->add_script_to_load( $this->plugin_slug . '-plugin-script' );
-		}
-
-		if ( get_option( 'sliderpro_is_custom_js' ) == true && get_option( 'sliderpro_load_custom_css_js' ) === 'in_files' ) {
-			$custom_js_path = plugins_url( 'sliderpro-custom/custom.js' );
-			$custom_js_dir_path = WP_PLUGIN_DIR . '/sliderpro-custom/custom.js';
-
-			if ( file_exists( $custom_js_dir_path ) ) {
-				wp_register_script( $this->plugin_slug . '-plugin-custom-script', $custom_js_path, array(), self::VERSION );
-				$this->add_script_to_load( $this->plugin_slug . '-plugin-custom-script' );
-			}
 		}
 
 		foreach ( $this->scripts_to_load as $key => $value ) {
@@ -477,7 +459,7 @@ class BQW_SliderPro {
 					"\r\n" . '	jQuery( document ).ready(function( $ ) {' .
 					$this->js_output;
 
-		if ( get_option( 'sliderpro_is_custom_js' ) == true && get_option( 'sliderpro_load_custom_css_js' ) !== 'in_files' ) {
+		if ( get_option( 'sliderpro_is_custom_js' ) ) {
 			$custom_js = "\r\n" . '	' . stripslashes( get_option( 'sliderpro_custom_js' ) );
 
 			$inline_js .= $custom_js;
@@ -531,7 +513,7 @@ class BQW_SliderPro {
 		}
 
 		// get the id specified in the shortcode
-		$id = isset( $atts['id'] ) ? $atts['id'] : -1;
+		$id = isset( $atts['id'] ) ? intval( $atts['id'] ) : -1;
 
 		// check whether cache is allowed
 		$allow_cache = ( isset( $atts['allow_cache'] ) && $atts['allow_cache'] === 'false' ) ? false : true;
