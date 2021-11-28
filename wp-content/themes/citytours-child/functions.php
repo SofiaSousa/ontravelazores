@@ -508,3 +508,24 @@ if ( ! function_exists( 'ct_tour_get_search_result_count' ) ) {
 		return $result;
 	}
 }
+
+// Disables the block editor from managing widgets in the Gutenberg plugin.
+add_filter( 'gutenberg_use_widgets_block_editor', '__return_false', 100 );
+// Disables the block editor from managing widgets.
+add_filter( 'use_widgets_block_editor', '__return_false' );
+
+// Remove WooCommerce Marketing Hub & Analytics Menu from the sidebar - for WooCommerce v4.3+
+add_filter( 'woocommerce_admin_features', function( $features ) {
+	/**
+	 * Filter the list of features and get rid of the features not needed.
+	 *
+	 * array_values() are being used to ensure that the filtered array returned by array_filter()
+	 * does not preserve the keys of initial $features array. As key preservation is a default feature
+	 * of array_filter().
+	 */
+	return array_values(
+		array_filter( $features, function($feature) {
+			return ! in_array( $feature, [ 'marketing', 'analytics', 'analytics-dashboard', 'analytics-dashboard/customizable' ] );
+		} )
+	);
+} );
