@@ -30,6 +30,10 @@ global $ct_options;
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
+        gtag('consent', 'default', {
+            'analytics_storage': 'denied'
+        });
+
         gtag('config', 'G-BYSDXF5Y4W');
     </script>
 
@@ -40,7 +44,19 @@ global $ct_options;
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
+        gtag('consent', 'default', {
+            'ad_storage': 'denied'
+        });
+
         gtag('config', 'AW-954412331');
+    </script>
+
+    <script>
+        function consentGranted() {
+            gtag('consent', 'update', {
+                'ad_storage': 'granted'
+            });
+        }
     </script>
 </head>
 
@@ -50,6 +66,7 @@ global $ct_options;
 <!--[if lte IE 8]>
     <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="//browsehappy.com/">upgrade your browser</a>.</p>
 <![endif]-->
+    <button onclick="consentGranted">Yes</button>
 
     <?php if ( ! empty( $ct_options['preload'] ) ) : ?>
     <div id="preloader">
