@@ -31,7 +31,7 @@ function ot_add_discount_category( $cart_item_data, $product_id, $variation_id )
 	$cats = wp_get_post_terms( $product_id, 'product_cat', array( 'fields' => 'slugs' ) );
 
 	// Isn't it a tour product?
-	if ( ! in_array( 'tour', $cats, true ) ) {
+	if ( ! in_array( 'tour', $cats, true ) && ! in_array( 'tour-pt-pt', $cats, true ) && ! in_array( 'tour-es-es', $cats, true ) ) {
 		return $cart_item_data;
 	}
 
